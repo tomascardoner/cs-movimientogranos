@@ -302,7 +302,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   84803585
+            Format          =   109641729
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -324,7 +324,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   84803585
+            Format          =   109641729
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -2449,13 +2449,13 @@ End Sub
 
 '============================================================
 'FORMULARIO 1116A
-Private Sub cboFormulario1116A_Click()
+Private Sub cboCertificadoDeposito_Click()
     Call LoadData(0)
 End Sub
 
 '============================================================
 'FORMULARIO 1116RT
-Private Sub cboFormulario1116RT_Click()
+Private Sub cboCertificadoRT_Click()
     Call LoadData(0)
 End Sub
 

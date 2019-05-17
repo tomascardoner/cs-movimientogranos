@@ -33,7 +33,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   87818241
+      Format          =   109641729
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -97,7 +97,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   87818241
+      Format          =   109641729
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -191,6 +191,7 @@ Private Sub cmdExport_Click()
     Dim TextStream_Analisis As String
     
     Dim DeclaraIPRO As Boolean
+    Dim ExportarAnalisis As Boolean
     
     Const CARTASPORTE_FILENAME As String = "CartasPorte.csv"
     Const ANALISIS_FILENAME As String = "Analisis.csv"
@@ -309,7 +310,8 @@ Private Sub cmdExport_Click()
             TextStream_CartasPorte = TextStream_CartasPorte & "," & CSM_String.CleanNotNumericChars(recData("Cosecha").Value)
             TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("ContratoNumero").Value
         End If
-        If chkExportarAnalisis.Value = vbChecked And Not DeclaraIPRO Then
+        ExportarAnalisis = (chkExportarAnalisis.Value = vbChecked And (Not DeclaraIPRO) And Not IsNull(recData("ResultadoIPRO").Value))
+        If ExportarAnalisis Then
             TextStream_Analisis = TextStream_Analisis & recData("MuestraNumero").Value
             TextStream_Analisis = TextStream_Analisis & "," & recData("Destino_CUIT").Value
             TextStream_Analisis = TextStream_Analisis & ",CUALITATIVO"
@@ -336,7 +338,7 @@ Private Sub cmdExport_Click()
             If chkExportarCartasDePorte.Value = vbChecked Then
                 TextStream_CartasPorte = TextStream_CartasPorte & vbCrLf
             End If
-            If chkExportarAnalisis.Value = vbChecked And Not DeclaraIPRO Then
+            If ExportarAnalisis Then
                 TextStream_Analisis = TextStream_Analisis & vbCrLf
             End If
         End If
