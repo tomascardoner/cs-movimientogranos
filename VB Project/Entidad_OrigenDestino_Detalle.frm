@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "msdatlst.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
 Begin VB.Form frmEntidad_OrigenDestino_Detalle 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Detalle del Orígen / Destino de la Entidad"
@@ -56,7 +56,7 @@ Begin VB.Form frmEntidad_OrigenDestino_Detalle
    Begin VB.TextBox txtONCCA_Codigo 
       Height          =   315
       Left            =   1200
-      MaxLength       =   6
+      MaxLength       =   7
       TabIndex        =   13
       Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
       Top             =   3180
