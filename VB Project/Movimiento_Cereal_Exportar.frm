@@ -33,7 +33,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   109641729
+      Format          =   83361793
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -67,7 +67,6 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       Left            =   2220
       TabIndex        =   11
       Top             =   3180
-      Value           =   1  'Checked
       Width           =   2655
    End
    Begin VB.CheckBox chkExportarAnalisis 
@@ -97,7 +96,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   109641729
+      Format          =   83361793
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
