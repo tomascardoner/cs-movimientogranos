@@ -1053,7 +1053,7 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         'RECEPTOR
         mReceptorIDEntidad = Val(recData("ReceptorIDEntidad").Value & "")
         mReceptorRazonSocial = recData("ReceptorRazonSocial").Value & ""
-        mReceptorDomicilioTipo = recData("ReceptorDomicilioTipo").Value & ""
+        mReceptorDomicilioTipo = Val(recData("ReceptorDomicilioTipo").Value & "")
         mReceptorDomicilioCalle = recData("ReceptorDomicilioCalle").Value & ""
         mReceptorDomicilioNumero = recData("ReceptorDomicilioNumero").Value & ""
         mReceptorDomicilioPiso = recData("ReceptorDomicilioPiso").Value & ""
