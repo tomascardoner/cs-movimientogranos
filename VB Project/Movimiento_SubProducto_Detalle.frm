@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Object = "{562E3E04-2C31-4ECE-83F4-4017EEE51D40}#8.0#0"; "todg8.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
@@ -27,22 +27,83 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
    MDIChild        =   -1  'True
    ScaleHeight     =   7320
    ScaleWidth      =   9300
+   Begin VB.Frame fraDatosFacturacion 
+      Caption         =   "Facturación:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   1035
+      Left            =   4680
+      TabIndex        =   53
+      Top             =   3780
+      Width           =   4515
+      Begin VB.TextBox textboxFacturaNumero 
+         Alignment       =   2  'Center
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   1200
+         MaxLength       =   12
+         TabIndex        =   57
+         Tag             =   "STRING|NOTEMPTY|NUMBERS|12"
+         Top             =   600
+         Width           =   1755
+      End
+      Begin VB.CheckBox checkboxEsCanje 
+         Height          =   210
+         Left            =   1200
+         TabIndex        =   55
+         Top             =   300
+         Width           =   195
+      End
+      Begin VB.Label labelFacturaNumero 
+         AutoSize        =   -1  'True
+         Caption         =   "Factura nº:"
+         Height          =   210
+         Left            =   120
+         TabIndex        =   56
+         Top             =   660
+         Width           =   810
+      End
+      Begin VB.Label labelEsCanje 
+         AutoSize        =   -1  'True
+         Caption         =   "Es canje:"
+         Height          =   210
+         Left            =   120
+         TabIndex        =   54
+         Top             =   300
+         Width           =   660
+      End
+   End
    Begin VB.PictureBox picDetailSingle 
       BorderStyle     =   0  'None
-      Height          =   1875
+      Height          =   1635
       Left            =   480
-      ScaleHeight     =   1875
+      ScaleHeight     =   1635
       ScaleWidth      =   8595
-      TabIndex        =   54
+      TabIndex        =   59
       TabStop         =   0   'False
-      Top             =   4740
+      Top             =   4920
       Width           =   8595
       Begin VB.TextBox txtKilogramo 
          Alignment       =   1  'Right Justify
          Height          =   330
          Left            =   1500
          MaxLength       =   7
-         TabIndex        =   58
+         TabIndex        =   63
          Tag             =   "INTEGER|EMPTY|ZERO|POSITIVE"
          Top             =   420
          Width           =   1095
@@ -52,7 +113,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Height          =   330
          Left            =   1500
          MaxLength       =   15
-         TabIndex        =   60
+         TabIndex        =   65
          Tag             =   "CURRENCY|EMPTY|NOTZERO|POSITIVE"
          Top             =   840
          Width           =   1095
@@ -62,7 +123,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Height          =   330
          Left            =   1500
          MaxLength       =   15
-         TabIndex        =   68
+         TabIndex        =   73
          Tag             =   "CURRENCY|EMPTY|NOTZERO|POSITIVE"
          Top             =   1260
          Width           =   1095
@@ -72,7 +133,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Left            =   3660
          Picture         =   "Movimiento_SubProducto_Detalle.frx":0CCA
          Style           =   1  'Graphical
-         TabIndex        =   62
+         TabIndex        =   67
          TabStop         =   0   'False
          ToolTipText     =   "Anterior"
          Top             =   840
@@ -83,7 +144,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Left            =   5400
          Picture         =   "Movimiento_SubProducto_Detalle.frx":1254
          Style           =   1  'Graphical
-         TabIndex        =   64
+         TabIndex        =   69
          TabStop         =   0   'False
          ToolTipText     =   "Siguiente"
          Top             =   840
@@ -94,7 +155,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Left            =   5700
          Picture         =   "Movimiento_SubProducto_Detalle.frx":17DE
          Style           =   1  'Graphical
-         TabIndex        =   65
+         TabIndex        =   70
          TabStop         =   0   'False
          ToolTipText     =   "Hoy"
          Top             =   840
@@ -105,7 +166,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Height          =   330
          Left            =   6120
          MaxLength       =   15
-         TabIndex        =   66
+         TabIndex        =   71
          Tag             =   "DECIMAL|EMPTY|NOTZERO|POSITIVE|999.9999"
          Top             =   840
          Width           =   1095
@@ -113,7 +174,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
       Begin MSDataListLib.DataCombo datcboSubProducto 
          Height          =   330
          Left            =   1500
-         TabIndex        =   56
+         TabIndex        =   61
          Top             =   0
          Width           =   4215
          _ExtentX        =   7435
@@ -126,13 +187,13 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
       Begin MSComCtl2.DTPicker dtpCotizacionDolarFecha 
          Height          =   315
          Left            =   3960
-         TabIndex        =   63
+         TabIndex        =   68
          Top             =   840
          Width           =   1455
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   116391937
+         Format          =   120389633
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -142,7 +203,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "&SubProducto:"
          Height          =   210
          Left            =   0
-         TabIndex        =   55
+         TabIndex        =   60
          Top             =   60
          Width           =   975
       End
@@ -151,7 +212,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "&Kilogramos:"
          Height          =   210
          Left            =   0
-         TabIndex        =   57
+         TabIndex        =   62
          Top             =   480
          Width           =   840
       End
@@ -160,7 +221,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "Precio x Tn. (USD):"
          Height          =   210
          Left            =   0
-         TabIndex        =   59
+         TabIndex        =   64
          Top             =   900
          Width           =   1380
       End
@@ -169,7 +230,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "Precio x Tn. ($):"
          Height          =   210
          Left            =   0
-         TabIndex        =   67
+         TabIndex        =   72
          Top             =   1320
          Width           =   1155
       End
@@ -178,25 +239,25 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "Cotización:"
          Height          =   210
          Left            =   2760
-         TabIndex        =   61
+         TabIndex        =   66
          Top             =   900
          Width           =   795
       End
    End
    Begin VB.PictureBox picDetailGrid 
       BorderStyle     =   0  'None
-      Height          =   1875
+      Height          =   1335
       Left            =   480
-      ScaleHeight     =   1875
+      ScaleHeight     =   1335
       ScaleWidth      =   8595
-      TabIndex        =   69
-      Top             =   4740
+      TabIndex        =   74
+      Top             =   4920
       Width           =   8595
       Begin VB.CommandButton cmdDelete 
          Caption         =   "Borrar"
          Height          =   315
          Left            =   7740
-         TabIndex        =   73
+         TabIndex        =   78
          Top             =   720
          Width           =   855
       End
@@ -204,7 +265,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "Editar"
          Height          =   315
          Left            =   7740
-         TabIndex        =   72
+         TabIndex        =   77
          Top             =   360
          Width           =   855
       End
@@ -212,18 +273,18 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "Agregar"
          Height          =   315
          Left            =   7740
-         TabIndex        =   71
+         TabIndex        =   76
          Top             =   0
          Width           =   855
       End
       Begin TrueOleDBGrid80.TDBGrid tdbgrdData 
-         Height          =   1875
+         Height          =   1635
          Left            =   0
-         TabIndex        =   70
+         TabIndex        =   75
          Top             =   0
          Width           =   7695
          _ExtentX        =   13573
-         _ExtentY        =   3307
+         _ExtentY        =   2884
          _LayoutType     =   4
          _RowHeight      =   -2147483647
          _WasPersistedAsPixels=   0
@@ -419,14 +480,14 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
       End
    End
    Begin MSComctlLib.TabStrip tabDetalle 
-      Height          =   2115
+      Height          =   1815
       Left            =   60
-      TabIndex        =   53
+      TabIndex        =   58
       TabStop         =   0   'False
-      Top             =   4620
+      Top             =   4920
       Width           =   9135
       _ExtentX        =   16113
-      _ExtentY        =   3731
+      _ExtentY        =   3201
       MultiRow        =   -1  'True
       Style           =   1
       Placement       =   2
@@ -450,7 +511,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
       Default         =   -1  'True
       Height          =   375
       Left            =   7260
-      TabIndex        =   74
+      TabIndex        =   79
       Top             =   6840
       Width           =   915
    End
@@ -459,7 +520,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
       Caption         =   "Cancelar"
       Height          =   375
       Left            =   8280
-      TabIndex        =   75
+      TabIndex        =   80
       Top             =   6840
       Width           =   915
    End
@@ -899,7 +960,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          Caption         =   "…"
          Height          =   315
          Left            =   3300
-         TabIndex        =   76
+         TabIndex        =   81
          TabStop         =   0   'False
          ToolTipText     =   "Entidades"
          Top             =   1380
@@ -1005,7 +1066,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   116391937
+         Format          =   120389633
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1141,6 +1202,10 @@ Public Function LoadData() As Boolean
         txtTransporteTarifaReferencia.Text = .TransporteTarifaReferencia_Formatted
         txtTransporteTarifa.Text = .TransporteTarifa_Formatted
         
+        'FACTURACIÓN
+        checkboxEsCanje.Value = IIf(.EsCanje, vbChecked, vbUnchecked)
+        textboxFacturaNumero.Text = .FacturaNumero
+        
         'SI ES UN SÓLO ITEM, LO MUESTRO PLANO, SI NO, EN GRILLA
         If Not .IsNew Then
             If .LoadDetalles Then
@@ -1258,12 +1323,12 @@ End Sub
 
 Private Sub cmdVerificarDuplicado_Click()
    If Trim(txtComprobanteNumero.Text) = "" Then
-        MsgBox "Debe especificar el Número de Carta de Porte.", vbInformation, App.Title
+        MsgBox "Debe especificar el Número de Comprobante.", vbInformation, App.Title
         txtComprobanteNumero.SetFocus
         Exit Sub
     End If
     If Len(Trim(txtComprobanteNumero.Text)) < 12 Then
-        MsgBox "El Número de Carta de Porte debe contener 12 dígitos (sin guiones).", vbInformation, App.Title
+        MsgBox "El Número de Comprobante debe contener 12 dígitos (sin guiones).", vbInformation, App.Title
         txtComprobanteNumero.SetFocus
         Exit Sub
     End If
@@ -1556,6 +1621,18 @@ Private Sub txtTransporteTarifa_LostFocus()
     Call FormatValue_ByTag(txtTransporteTarifa)
 End Sub
 
+'============================================================
+'FACTURA NUMERO
+Private Sub textboxFacturaNumero_GotFocus()
+    CSM_Control_TextBox.SelAllText textboxFacturaNumero
+End Sub
+
+Private Sub textboxFacturaNumero_LostFocus()
+    CSM_Control_TextBox.FormatValue_ByTag textboxFacturaNumero
+End Sub
+
+'============================================================
+
 Private Sub tabDetalle_Click()
     picDetailSingle.Visible = (tabDetalle.SelectedItem.Key = TABS_KEY_SIMPLE)
     picDetailGrid.Visible = (tabDetalle.SelectedItem.Key = TABS_KEY_GRILLA)
@@ -1818,6 +1895,10 @@ Private Sub cmdAceptar_Click()
         .TransporteKilometro_Formatted = txtTransporteKilometro.Text
         .TransporteTarifaReferencia_Formatted = txtTransporteTarifaReferencia.Text
         .TransporteTarifa_Formatted = txtTransporteTarifa.Text
+        
+        'FACTURACIÓN
+        .EsCanje = checkboxEsCanje.Value
+        .FacturaNumero = Trim(textboxFacturaNumero.Text)
 
         'EXTRAS
         '.Notas = txtNotas.Text

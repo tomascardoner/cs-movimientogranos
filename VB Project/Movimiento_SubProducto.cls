@@ -46,6 +46,10 @@ Private mTransporteKilometro As Long
 Private mTransporteTarifaReferencia As Currency
 Private mTransporteTarifa As Currency
 
+'FACTURACIÓN
+Private mEsCanje As Boolean
+Private mFacturaNumero As String
+
 'DATOS EXTRAS
 Private mNotas As String
 
@@ -549,6 +553,34 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get EsCanje() As Boolean
+    EsCanje = mEsCanje
+End Property
+
+Public Property Let EsCanje(ByVal Value As Boolean)
+    If Value <> mEsCanje Then
+        mIsDirty = True
+    End If
+    mEsCanje = Value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get FacturaNumero() As String
+    FacturaNumero = mFacturaNumero
+End Property
+
+Public Property Let FacturaNumero(ByVal Value As String)
+    If Value <> mFacturaNumero Then
+        mIsDirty = True
+    End If
+    mFacturaNumero = Value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Property Get Notas() As String
     Notas = mNotas
 End Property
@@ -881,6 +913,10 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         mTransporteKilometro = Val(recData("TransporteKilometro").Value & "")
         mTransporteTarifaReferencia = IIf(IsNull(recData("TransporteTarifaReferencia").Value), 0, recData("TransporteTarifaReferencia").Value)
         mTransporteTarifa = IIf(IsNull(recData("TransporteTarifa").Value), 0, recData("TransporteTarifa").Value)
+        
+        'FACTURACIÓN
+        mEsCanje = recData("EsCanje").Value
+        mFacturaNumero = recData("FacturaNumero").Value & ""
                 
         'DATOS EXTRAS
         mNotas = recData("Notas").Value & ""
@@ -993,7 +1029,7 @@ Public Function Update() As Boolean
             .Parameters.Append .CreateParameter("IDMovimiento_SubProducto", adInteger, adParamInput, , mIDMovimiento_SubProducto)
         End If
         .Parameters.Append .CreateParameter("Tipo", adChar, adParamInput, 1, mTipo)
-        .Parameters.Append .CreateParameter("ComprobanteNumero", adVarChar, adParamInput, 12, mComprobanteNumero)
+        .Parameters.Append .CreateParameter("ComprobanteNumero", adVarChar, adParamInput, 13, mComprobanteNumero)
         .Parameters.Append .CreateParameter("Fecha", adDate, adParamInput, , mFecha)
         .Parameters.Append .CreateParameter("COTNumero", adVarChar, adParamInput, 16, IIf(Trim(mCOTNumero) = "", Null, Trim(mCOTNumero)))
         
@@ -1018,6 +1054,10 @@ Public Function Update() As Boolean
         .Parameters.Append .CreateParameter("TransporteKilometro", adSmallInt, adParamInput, , IIf(mTransporteKilometro = 0, Null, mTransporteKilometro))
         .Parameters.Append .CreateParameter("TransporteTarifaReferencia", adCurrency, adParamInput, , IIf(mTransporteTarifaReferencia = 0, Null, mTransporteTarifaReferencia))
         .Parameters.Append .CreateParameter("TransporteTarifa", adCurrency, adParamInput, , IIf(mTransporteTarifa = 0, Null, mTransporteTarifa))
+        
+        'FACTURACIÓN
+        .Parameters.Append .CreateParameter("EsCanje", adBoolean, adParamInput, , mEsCanje)
+        .Parameters.Append .CreateParameter("FacturaNumero", adVarChar, adParamInput, 13, IIf(Trim(mFacturaNumero) = "", Null, mFacturaNumero))
         
         'DATOS EXTRAS
         .Parameters.Append .CreateParameter("Notas", adVarChar, adParamInput, 1000, IIf(Trim(mNotas) = "", Null, Trim(mNotas)))
@@ -1108,6 +1148,10 @@ Private Sub InitializeValues()
     mTransporteKilometro = 0
     mTransporteTarifaReferencia = 0
     mTransporteTarifa = 0
+    
+    'FACTURACIÓN
+    mEsCanje = 0
+    mFacturaNumero = ""
     
     'DATOS EXTRAS
     mNotas = ""

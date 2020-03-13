@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Object = "{38911DA0-E448-11D0-84A3-00DD01104159}#1.1#0"; "COMCT332.OCX"
 Object = "{562E3E04-2C31-4ECE-83F4-4017EEE51D40}#8.0#0"; "todg8.ocx"
@@ -34,7 +34,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       Width           =   14085
       _ExtentX        =   24844
       _ExtentY        =   3175
-      BandCount       =   7
+      BandCount       =   9
       FixedOrder      =   -1  'True
       _CBWidth        =   14085
       _CBHeight       =   1800
@@ -95,6 +95,76 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       Key7            =   "Entidad_Transportista"
       NewRow7         =   0   'False
       AllowVertical7  =   0   'False
+      Child8          =   "picEsCanje"
+      MinWidth8       =   1830
+      MinHeight8      =   360
+      Width8          =   1830
+      FixedBackground8=   0   'False
+      Key8            =   "EsCanje"
+      NewRow8         =   0   'False
+      AllowVertical8  =   0   'False
+      Child9          =   "picFacturaNumero"
+      MinWidth9       =   2130
+      MinHeight9      =   360
+      Width9          =   2130
+      FixedBackground9=   0   'False
+      Key9            =   "FacturaNumero"
+      NewRow9         =   0   'False
+      AllowVertical9  =   0   'False
+      Begin VB.PictureBox picFacturaNumero 
+         BorderStyle     =   0  'None
+         Height          =   360
+         Left            =   11865
+         ScaleHeight     =   360
+         ScaleWidth      =   2130
+         TabIndex        =   43
+         Top             =   1410
+         Width           =   2130
+         Begin VB.ComboBox comboboxFacturaNumero 
+            Height          =   330
+            Left            =   960
+            Style           =   2  'Dropdown List
+            TabIndex        =   44
+            Top             =   0
+            Width           =   1155
+         End
+         Begin VB.Label labelFacturaNumero 
+            AutoSize        =   -1  'True
+            Caption         =   "Nº Factura:"
+            Height          =   210
+            Left            =   0
+            TabIndex        =   45
+            Top             =   60
+            Width           =   825
+         End
+      End
+      Begin VB.PictureBox picEsCanje 
+         BorderStyle     =   0  'None
+         Height          =   360
+         Left            =   9810
+         ScaleHeight     =   360
+         ScaleWidth      =   1830
+         TabIndex        =   40
+         Top             =   1410
+         Width           =   1830
+         Begin VB.ComboBox comboboxEsCanje 
+            Height          =   330
+            Left            =   660
+            Style           =   2  'Dropdown List
+            TabIndex        =   41
+            Top             =   0
+            Width           =   1155
+         End
+         Begin VB.Label labelEsCanje 
+            AutoSize        =   -1  'True
+            Caption         =   "Canje:"
+            Height          =   210
+            Left            =   0
+            TabIndex        =   42
+            Top             =   60
+            Width           =   450
+         End
+      End
       Begin VB.PictureBox picTipo 
          BorderStyle     =   0  'None
          BeginProperty Font 
@@ -302,10 +372,10 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
          Height          =   360
          Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   13830
+         ScaleWidth      =   9420
          TabIndex        =   25
          Top             =   1410
-         Width           =   13830
+         Width           =   9420
          Begin VB.ComboBox cboEntidad_Transportista 
             Height          =   330
             Left            =   1140
@@ -442,7 +512,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   100859905
+            Format          =   90439681
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFecha_Hasta 
@@ -464,7 +534,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   100859905
+            Format          =   90439681
             CurrentDate     =   36950
          End
          Begin VB.Label lblFecha 
@@ -630,7 +700,17 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       Columns(6).Caption=   "Transportista"
       Columns(6).DataField=   "Entidad_Transportista_Nombre"
       Columns(6)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
-      Columns.Count   =   7
+      Columns(7)._VlistStyle=   20
+      Columns(7)._MaxComboItems=   5
+      Columns(7).Caption=   "Canje"
+      Columns(7).DataField=   "EsCanje"
+      Columns(7)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
+      Columns(8)._VlistStyle=   0
+      Columns(8)._MaxComboItems=   5
+      Columns(8).Caption=   "Nº Factura"
+      Columns(8).DataField=   "FacturaNumero"
+      Columns(8)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
+      Columns.Count   =   9
       Splits(0)._UserFlags=   0
       Splits(0).Locked=   -1  'True
       Splits(0).MarqueeStyle=   3
@@ -642,7 +722,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       Splits(0).DividerColor=   14215660
       Splits(0).SpringMode=   0   'False
       Splits(0)._PropDict=   "_ColumnProps,515,0;_UserFlags,518,3"
-      Splits(0)._ColumnProps(0)=   "Columns.Count=7"
+      Splits(0)._ColumnProps(0)=   "Columns.Count=9"
       Splits(0)._ColumnProps(1)=   "Column(0).Width=3254"
       Splits(0)._ColumnProps(2)=   "Column(0).DividerColor=0"
       Splits(0)._ColumnProps(3)=   "Column(0)._WidthInPix=3175"
@@ -694,6 +774,20 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       Splits(0)._ColumnProps(49)=   "Column(6)._ColStyle=8704"
       Splits(0)._ColumnProps(50)=   "Column(6).AllowFocus=0"
       Splits(0)._ColumnProps(51)=   "Column(6).Order=7"
+      Splits(0)._ColumnProps(52)=   "Column(7).Width=979"
+      Splits(0)._ColumnProps(53)=   "Column(7).DividerColor=0"
+      Splits(0)._ColumnProps(54)=   "Column(7)._WidthInPix=900"
+      Splits(0)._ColumnProps(55)=   "Column(7)._EditAlways=0"
+      Splits(0)._ColumnProps(56)=   "Column(7)._ColStyle=8705"
+      Splits(0)._ColumnProps(57)=   "Column(7).AllowFocus=0"
+      Splits(0)._ColumnProps(58)=   "Column(7).Order=8"
+      Splits(0)._ColumnProps(59)=   "Column(8).Width=2461"
+      Splits(0)._ColumnProps(60)=   "Column(8).DividerColor=0"
+      Splits(0)._ColumnProps(61)=   "Column(8)._WidthInPix=2381"
+      Splits(0)._ColumnProps(62)=   "Column(8)._EditAlways=0"
+      Splits(0)._ColumnProps(63)=   "Column(8)._ColStyle=8704"
+      Splits(0)._ColumnProps(64)=   "Column(8).AllowFocus=0"
+      Splits(0)._ColumnProps(65)=   "Column(8).Order=9"
       Splits.Count    =   1
       PrintInfos(0)._StateFlags=   3
       PrintInfos(0).Name=   "piInternal 0"
@@ -781,27 +875,35 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       _StyleDefs(61)  =   "Splits(0).Columns(6).HeadingStyle:id=29,.parent=14,.alignment=2"
       _StyleDefs(62)  =   "Splits(0).Columns(6).FooterStyle:id=30,.parent=15"
       _StyleDefs(63)  =   "Splits(0).Columns(6).EditorStyle:id=31,.parent=17"
-      _StyleDefs(64)  =   "Named:id=33:Normal"
-      _StyleDefs(65)  =   ":id=33,.parent=0"
-      _StyleDefs(66)  =   "Named:id=34:Heading"
-      _StyleDefs(67)  =   ":id=34,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
-      _StyleDefs(68)  =   ":id=34,.wraptext=-1"
-      _StyleDefs(69)  =   "Named:id=35:Footing"
-      _StyleDefs(70)  =   ":id=35,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
-      _StyleDefs(71)  =   "Named:id=36:Selected"
-      _StyleDefs(72)  =   ":id=36,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
-      _StyleDefs(73)  =   "Named:id=37:Caption"
-      _StyleDefs(74)  =   ":id=37,.parent=34,.alignment=2"
-      _StyleDefs(75)  =   "Named:id=38:HighlightRow"
-      _StyleDefs(76)  =   ":id=38,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
-      _StyleDefs(77)  =   "Named:id=39:EvenRow"
-      _StyleDefs(78)  =   ":id=39,.parent=33,.bgcolor=&HFFFF00&"
-      _StyleDefs(79)  =   "Named:id=40:OddRow"
-      _StyleDefs(80)  =   ":id=40,.parent=33"
-      _StyleDefs(81)  =   "Named:id=41:RecordSelector"
-      _StyleDefs(82)  =   ":id=41,.parent=34"
-      _StyleDefs(83)  =   "Named:id=42:FilterBar"
-      _StyleDefs(84)  =   ":id=42,.parent=33"
+      _StyleDefs(64)  =   "Splits(0).Columns(7).Style:id=28,.parent=13,.alignment=2,.locked=-1"
+      _StyleDefs(65)  =   "Splits(0).Columns(7).HeadingStyle:id=25,.parent=14,.alignment=2"
+      _StyleDefs(66)  =   "Splits(0).Columns(7).FooterStyle:id=26,.parent=15"
+      _StyleDefs(67)  =   "Splits(0).Columns(7).EditorStyle:id=27,.parent=17"
+      _StyleDefs(68)  =   "Splits(0).Columns(8).Style:id=58,.parent=13,.alignment=0,.locked=-1"
+      _StyleDefs(69)  =   "Splits(0).Columns(8).HeadingStyle:id=55,.parent=14,.alignment=2"
+      _StyleDefs(70)  =   "Splits(0).Columns(8).FooterStyle:id=56,.parent=15"
+      _StyleDefs(71)  =   "Splits(0).Columns(8).EditorStyle:id=57,.parent=17"
+      _StyleDefs(72)  =   "Named:id=33:Normal"
+      _StyleDefs(73)  =   ":id=33,.parent=0"
+      _StyleDefs(74)  =   "Named:id=34:Heading"
+      _StyleDefs(75)  =   ":id=34,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
+      _StyleDefs(76)  =   ":id=34,.wraptext=-1"
+      _StyleDefs(77)  =   "Named:id=35:Footing"
+      _StyleDefs(78)  =   ":id=35,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
+      _StyleDefs(79)  =   "Named:id=36:Selected"
+      _StyleDefs(80)  =   ":id=36,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
+      _StyleDefs(81)  =   "Named:id=37:Caption"
+      _StyleDefs(82)  =   ":id=37,.parent=34,.alignment=2"
+      _StyleDefs(83)  =   "Named:id=38:HighlightRow"
+      _StyleDefs(84)  =   ":id=38,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
+      _StyleDefs(85)  =   "Named:id=39:EvenRow"
+      _StyleDefs(86)  =   ":id=39,.parent=33,.bgcolor=&HFFFF00&"
+      _StyleDefs(87)  =   "Named:id=40:OddRow"
+      _StyleDefs(88)  =   ":id=40,.parent=33"
+      _StyleDefs(89)  =   "Named:id=41:RecordSelector"
+      _StyleDefs(90)  =   ":id=41,.parent=34"
+      _StyleDefs(91)  =   "Named:id=42:FilterBar"
+      _StyleDefs(92)  =   ":id=42,.parent=33"
    End
 End
 Attribute VB_Name = "frmMovimiento_SubProducto_Lista"
@@ -863,7 +965,7 @@ Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
     
     Set recData = New ADODB.Recordset
         
-    strSQLSelect = "SELECT Movimiento_SubProducto.IDMovimiento_SubProducto, Movimiento_SubProducto.Tipo, Movimiento_SubProducto.ComprobanteNumero, Movimiento_SubProducto.Fecha, Entidad_OrigenDestino_Origen.Nombre AS Planta_Nombre, Entidad_Destinatario.Nombre AS Entidad_Destinatario_Nombre, Entidad_Transportista.Nombre AS Entidad_Transportista_Nombre" & vbCr
+    strSQLSelect = "SELECT Movimiento_SubProducto.IDMovimiento_SubProducto, Movimiento_SubProducto.Tipo, Movimiento_SubProducto.ComprobanteNumero, Movimiento_SubProducto.Fecha, Entidad_OrigenDestino_Origen.Nombre AS Planta_Nombre, Entidad_Destinatario.Nombre AS Entidad_Destinatario_Nombre, Entidad_Transportista.Nombre AS Entidad_Transportista_Nombre, Movimiento_SubProducto.EsCanje, Movimiento_SubProducto.FacturaNumero" & vbCr
     strSQLFrom = "FROM ((Movimiento_SubProducto INNER JOIN Entidad_OrigenDestino AS Entidad_OrigenDestino_Origen ON Movimiento_SubProducto.IDEntidad_Titular = Entidad_OrigenDestino_Origen.IDEntidad AND Movimiento_SubProducto.IDOrigenDestino_Origen = Entidad_OrigenDestino_Origen.IDOrigenDestino) LEFT JOIN Entidad AS Entidad_Destinatario ON Movimiento_SubProducto.IDEntidad_Destinatario = Entidad_Destinatario.IDEntidad) LEFT JOIN Entidad AS Entidad_Transportista ON Movimiento_SubProducto.IDEntidad_Transportista = Entidad_Transportista.IDEntidad" & vbCr
     
     'WHERE
@@ -955,6 +1057,28 @@ Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
         mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.IDEntidad_Transportista = " & cboEntidad_Transportista.ItemData(cboEntidad_Transportista.ListIndex)
         mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.IDEntidad_Transportista} = " & cboEntidad_Transportista.ItemData(cboEntidad_Transportista.ListIndex)
     End If
+    
+    'ES CANJE
+    Select Case comboboxEsCanje.ListIndex
+        Case 0
+        Case 1
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.EsCanje = 1"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.EsCanje} = True"
+        Case 2
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.EsCanje = 0"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.EsCanje} = False"
+    End Select
+    
+    'NÚMERO DE FACTURA
+    Select Case comboboxFacturaNumero.ListIndex
+        Case 0  'TODOS
+        Case 1  'VACIO
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.FacturaNumero IS NULL"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "IsNull({Movimiento_SubProducto.FacturaNumero})"
+        Case 2  'COMPLETO
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "(NOT Movimiento_SubProducto.FacturaNumero IS NULL)"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(NOT IsNull({Movimiento_SubProducto.FacturaNumero}))"
+    End Select
         
     If mstrSQLWhere <> "" Then
         mstrSQLWhere = mstrSQLWhere & vbCr
@@ -1078,7 +1202,17 @@ Private Sub Form_Load()
     Call FillComboBox_Planta
     Call FillComboBox_Entidad_Destinatario
     Call FillComboBox_Entidad_Transportista
-        
+    
+    comboboxEsCanje.AddItem CSM_Constant.ITEM_ALL_MALE
+    comboboxEsCanje.AddItem CSM_Constant.BOOLEAN_STRING_YES
+    comboboxEsCanje.AddItem CSM_Constant.BOOLEAN_STRING_NO
+    comboboxEsCanje.ListIndex = 0
+    
+    comboboxFacturaNumero.AddItem CSM_Constant.ITEM_ALL_MALE
+    comboboxFacturaNumero.AddItem CSM_Constant.ITEM_EMPTY_MALE
+    comboboxFacturaNumero.AddItem CSM_Constant.ITEM_COMPLETE_MALE
+    comboboxFacturaNumero.ListIndex = 0
+    
     'AGREGO LOS VALUE ITEMS DE LA COLUMNA TIPO
     Set ValueItem = New TrueOleDBGrid80.ValueItem
     ValueItem.Value = MOVIMIENTO_SUBPRODUCTO_TIPO_ENTRADAPRODUCCION
@@ -1486,6 +1620,18 @@ End Sub
 Private Sub cboEntidad_Transportista_Click()
     Call LoadData(0)
 End Sub
+
+'============================================================
+'FACTURACIÓN
+Private Sub comboboxEsCanje_Click()
+    Call LoadData(0)
+End Sub
+
+Private Sub comboboxFacturaNumero_Click()
+    Call LoadData(0)
+End Sub
+
+'============================================================
 
 Private Sub tdbgrdData_ColResize(ByVal ColIndex As Integer, Cancel As Integer)
     mColumnsResized = True

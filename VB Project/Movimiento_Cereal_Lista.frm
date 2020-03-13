@@ -120,17 +120,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       NewRow10        =   0   'False
       AllowVertical10 =   0   'False
       Child11         =   "picPesoBruto"
-      MinWidth11      =   3435
+      MinWidth11      =   3315
       MinHeight11     =   360
-      Width11         =   3435
+      Width11         =   3315
       FixedBackground11=   0   'False
       Key11           =   "PesoBruto"
       NewRow11        =   0   'False
       AllowVertical11 =   0   'False
       Child12         =   "picPesoNeto"
-      MinWidth12      =   3435
+      MinWidth12      =   3315
       MinHeight12     =   360
-      Width12         =   3435
+      Width12         =   3315
       FixedBackground12=   0   'False
       Key12           =   "PesoNeto"
       NewRow12        =   0   'False
@@ -302,7 +302,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   109641729
+            Format          =   90374145
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -324,7 +324,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   109641729
+            Format          =   90374145
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -607,13 +607,13 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          Height          =   360
          Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   5235
+         ScaleWidth      =   5355
          TabIndex        =   34
          Top             =   2280
-         Width           =   5235
+         Width           =   5355
          Begin VB.ComboBox cboPesoBruto 
             Height          =   330
-            Left            =   1080
+            Left            =   960
             Style           =   2  'Dropdown List
             TabIndex        =   36
             Top             =   0
@@ -622,7 +622,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          Begin VB.TextBox txtPesoBruto 
             Alignment       =   1  'Right Justify
             Height          =   315
-            Left            =   2340
+            Left            =   2220
             MaxLength       =   12
             TabIndex        =   35
             Tag             =   "STRING|EMPTY|NUMBERS|12"
@@ -633,7 +633,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             AutoSize        =   -1  'True
             Caption         =   "Peso Bruto:"
             Height          =   210
-            Left            =   60
+            Left            =   0
             TabIndex        =   37
             Top             =   60
             Width           =   840
@@ -642,16 +642,16 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picPesoNeto 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   5625
+         Left            =   5745
          ScaleHeight     =   360
-         ScaleWidth      =   3435
+         ScaleWidth      =   3315
          TabIndex        =   38
          Top             =   2280
-         Width           =   3435
+         Width           =   3315
          Begin VB.TextBox txtPesoNeto 
             Alignment       =   1  'Right Justify
             Height          =   315
-            Left            =   2340
+            Left            =   2220
             MaxLength       =   12
             TabIndex        =   40
             Tag             =   "STRING|EMPTY|NUMBERS|12"
@@ -660,7 +660,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          End
          Begin VB.ComboBox cboPesoNeto 
             Height          =   330
-            Left            =   1080
+            Left            =   960
             Style           =   2  'Dropdown List
             TabIndex        =   39
             Top             =   0
