@@ -1128,8 +1128,8 @@ BEGIN
 
 			--INSERTO EL MOVIMIENTO
 			INSERT INTO Movimiento_SubProducto
-				(IDMovimiento_SubProducto, Tipo, ComprobanteNumero, Fecha, IDEntidad_Titular, IDOrigenDestino_Origen, IDMovimiento_Cereal, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion)
-				VALUES (@IDMovimiento_SubProducto, 'E', @ComprobanteNumero, @Fecha, @IDEntidad_Titular, @IDOrigenDestino_Origen, @IDMovimiento_Cereal, @IDUsuario, GETDATE(), @IDUsuario, GETDATE())
+				(IDMovimiento_SubProducto, Tipo, ComprobanteNumero, Fecha, IDEntidad_Titular, IDOrigenDestino_Origen, IDMovimiento_Cereal, EsCanje, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion)
+				VALUES (@IDMovimiento_SubProducto, 'E', @ComprobanteNumero, @Fecha, @IDEntidad_Titular, @IDOrigenDestino_Origen, @IDMovimiento_Cereal, 0, @IDUsuario, GETDATE(), @IDUsuario, GETDATE())
 		
 			--PARSEO LOS ITEMS Y LOS AGREGO A LA TABLA DE DETALLE DE SUBPRODUCTOS
 			WHILE CHARINDEX('|', @StringListOfIDSubProductoPorcentajeAndKilogramo, @SeparatorPos + 1) > 0
