@@ -991,6 +991,8 @@ Public Function Copy() As Boolean
 
         mIDMovimiento_SubProducto = 0
         mCOTNumero = ""
+        
+        mFacturaNumero = ""
 
         Set mCMovimiento_SubProducto_Detalle = New Collection
 
