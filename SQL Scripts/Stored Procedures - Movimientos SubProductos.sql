@@ -25,7 +25,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT Movimiento_SubProducto.IDMovimiento_SubProducto, Movimiento_SubProducto.Tipo, Movimiento_SubProducto.ComprobanteNumero, Movimiento_SubProducto.Fecha, Movimiento_SubProducto.COTNumero, Movimiento_SubProducto.IDEntidad_Titular, Movimiento_SubProducto.IDEntidad_Destinatario, Movimiento_SubProducto.IDEntidad_Transportista, Movimiento_SubProducto.IDEntidad_Chofer, Movimiento_SubProducto.IDOrigenDestino_Origen, Movimiento_SubProducto.IDOrigenDestino_Destino, Movimiento_SubProducto.IDMovimiento_Cereal, Movimiento_SubProducto.CotizacionDolarFecha, Movimiento_SubProducto.CotizacionDolarImporte, Movimiento_SubProducto.TransporteDominioCamion, Movimiento_SubProducto.TransporteDominioAcoplado, Movimiento_SubProducto.TransporteKilometro, Movimiento_SubProducto.TransporteTarifaReferencia, Movimiento_SubProducto.TransporteTarifa, Movimiento_SubProducto.Notas, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion
+	SELECT Movimiento_SubProducto.IDMovimiento_SubProducto, Movimiento_SubProducto.Tipo, Movimiento_SubProducto.ComprobanteNumero, Movimiento_SubProducto.Fecha, Movimiento_SubProducto.COTNumero, Movimiento_SubProducto.IDEntidad_Titular, Movimiento_SubProducto.IDEntidad_Destinatario, Movimiento_SubProducto.IDEntidad_Transportista, Movimiento_SubProducto.IDEntidad_Chofer, Movimiento_SubProducto.IDOrigenDestino_Origen, Movimiento_SubProducto.IDOrigenDestino_Destino, Movimiento_SubProducto.IDMovimiento_Cereal, Movimiento_SubProducto.CotizacionDolarFecha, Movimiento_SubProducto.CotizacionDolarImporte, Movimiento_SubProducto.TransporteDominioCamion, Movimiento_SubProducto.TransporteDominioAcoplado, Movimiento_SubProducto.TransporteKilometro, Movimiento_SubProducto.TransporteTarifaReferencia, Movimiento_SubProducto.TransporteTarifa, Movimiento_SubProducto.EsCanje, Movimiento_SubProducto.FacturaNumero, Movimiento_SubProducto.Notas, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion
 		FROM Movimiento_SubProducto
 		WHERE Movimiento_SubProducto.IDMovimiento_SubProducto = @IDMovimiento_SubProducto 
 
@@ -63,7 +63,9 @@ CREATE PROCEDURE dbo.usp_Movimiento_SubProducto_Add
 	@TransporteDominioAcoplado char(7),
 	@TransporteKilometro smallint, 
 	@TransporteTarifaReferencia money, 
-	@TransporteTarifa money, 
+	@TransporteTarifa money,
+	@EsCanje bit,
+	@FacturaNumero varchar(13),
 	@Notas varchar(1000),
 	@IDUsuario tinyint,
 	@StringList varchar(1000)
@@ -92,8 +94,8 @@ BEGIN
 
 			--INSERTO EL MOVIMIENTO
 			INSERT INTO Movimiento_SubProducto
-				(IDMovimiento_SubProducto, Tipo, ComprobanteNumero, Fecha, COTNumero, IDEntidad_Titular, IDEntidad_Destinatario, IDEntidad_Transportista, IDEntidad_Chofer, IDOrigenDestino_Origen, IDOrigenDestino_Destino, IDMovimiento_Cereal, CotizacionDolarFecha, CotizacionDolarImporte, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, Notas, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion)
-				VALUES (@IDMovimiento_SubProducto, @Tipo, @ComprobanteNumero, @Fecha, @COTNumero, @IDEntidad_Titular, @IDEntidad_Destinatario, @IDEntidad_Transportista, @IDEntidad_Chofer, @IDOrigenDestino_Origen, @IDOrigenDestino_Destino, @IDMovimiento_Cereal, @CotizacionDolarFecha, @CotizacionDolarImporte, @TransporteDominioCamion, @TransporteDominioAcoplado, @TransporteKilometro, @TransporteTarifaReferencia, @TransporteTarifa, @Notas, @IDUsuario, GETDATE(), @IDUsuario, GETDATE())
+				(IDMovimiento_SubProducto, Tipo, ComprobanteNumero, Fecha, COTNumero, IDEntidad_Titular, IDEntidad_Destinatario, IDEntidad_Transportista, IDEntidad_Chofer, IDOrigenDestino_Origen, IDOrigenDestino_Destino, IDMovimiento_Cereal, CotizacionDolarFecha, CotizacionDolarImporte, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, EsCanje, FacturaNumero, Notas, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion)
+				VALUES (@IDMovimiento_SubProducto, @Tipo, @ComprobanteNumero, @Fecha, @COTNumero, @IDEntidad_Titular, @IDEntidad_Destinatario, @IDEntidad_Transportista, @IDEntidad_Chofer, @IDOrigenDestino_Origen, @IDOrigenDestino_Destino, @IDMovimiento_Cereal, @CotizacionDolarFecha, @CotizacionDolarImporte, @TransporteDominioCamion, @TransporteDominioAcoplado, @TransporteKilometro, @TransporteTarifaReferencia, @TransporteTarifa, @EsCanje, @FacturaNumero, @Notas, @IDUsuario, GETDATE(), @IDUsuario, GETDATE())
 		
 			--PARSEO LOS ITEMS Y LOS AGREGO A LA TABLA DE DETALLE DE SUBPRODUCTOS
 			WHILE CHARINDEX('|', @StringList, @SeparatorPos + 1) > 0
@@ -188,6 +190,8 @@ CREATE PROCEDURE dbo.usp_Movimiento_SubProducto_Update
 	@TransporteKilometro smallint,
 	@TransporteTarifaReferencia money,
 	@TransporteTarifa money,
+	@EsCanje bit,
+	@FacturaNumero varchar(13),
 	@Notas varchar(1000),
 	@IDUsuario tinyint,
 	@StringList varchar(1000)
@@ -213,7 +217,7 @@ BEGIN
 		BEGIN TRANSACTION
 			--ACTUALIZO EL MOVIMIENTO
 			UPDATE Movimiento_SubProducto
-				SET ComprobanteNumero = @ComprobanteNumero, Fecha = @Fecha, COTNumero = @COTNumero, IDEntidad_Titular = @IDEntidad_Titular, IDEntidad_Destinatario = @IDEntidad_Destinatario, IDEntidad_Transportista = @IDEntidad_Transportista, IDEntidad_Chofer = @IDEntidad_Chofer, IDOrigenDestino_Origen = @IDOrigenDestino_Origen, IDOrigenDestino_Destino = @IDOrigenDestino_Destino, IDMovimiento_Cereal = @IDMovimiento_Cereal, CotizacionDolarFecha = @CotizacionDolarFecha, CotizacionDolarImporte = @CotizacionDolarImporte, TransporteDominioCamion = @TransporteDominioCamion, TransporteDominioAcoplado = @TransporteDominioAcoplado, TransporteKilometro = @TransporteKilometro, TransporteTarifaReferencia = @TransporteTarifaReferencia, TransporteTarifa = @TransporteTarifa, Notas = @Notas, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
+				SET ComprobanteNumero = @ComprobanteNumero, Fecha = @Fecha, COTNumero = @COTNumero, IDEntidad_Titular = @IDEntidad_Titular, IDEntidad_Destinatario = @IDEntidad_Destinatario, IDEntidad_Transportista = @IDEntidad_Transportista, IDEntidad_Chofer = @IDEntidad_Chofer, IDOrigenDestino_Origen = @IDOrigenDestino_Origen, IDOrigenDestino_Destino = @IDOrigenDestino_Destino, IDMovimiento_Cereal = @IDMovimiento_Cereal, CotizacionDolarFecha = @CotizacionDolarFecha, CotizacionDolarImporte = @CotizacionDolarImporte, TransporteDominioCamion = @TransporteDominioCamion, TransporteDominioAcoplado = @TransporteDominioAcoplado, TransporteKilometro = @TransporteKilometro, TransporteTarifaReferencia = @TransporteTarifaReferencia, TransporteTarifa = @TransporteTarifa, EsCanje = @EsCanje, FacturaNumero = @FacturaNumero, Notas = @Notas, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
 				WHERE IDMovimiento_SubProducto = @IDMovimiento_SubProducto 
 
 			--ELIMINO LOS DETALLES DE SUBPRODUCTOS, AUNQUE NO ES LO MÁS EFICIENTE, ES LO MÁS SIMPLE
