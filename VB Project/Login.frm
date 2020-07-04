@@ -163,7 +163,7 @@ Private Sub cmdOK_Click()
     mUsuario.NoMatchRaiseError = True
     If mUsuario.NoMatch Then
         mIntentos = mIntentos + 1
-        WriteLogEvent "User Login Failed: User Unknown - Username: " & mUsuario.Nombre, vbLogEventTypeWarning
+        WriteLogEvent "User Login Failed: User Unknown - Username: " & mUsuario.Nombre, vbLogEventTypeWarning, pParametro.LogAccion_Enabled
         MsgBox "El Usuario ingresado no existe.", vbExclamation, App.Title
         txtNombre.SetFocus
         txtNombre_GotFocus
@@ -177,7 +177,7 @@ Private Sub cmdOK_Click()
     
     If Not mUsuario.Activo Then
         mIntentos = mIntentos + 1
-        WriteLogEvent "User Login Failed: User Not Active - Username: " & mUsuario.Nombre, vbLogEventTypeWarning
+        WriteLogEvent "User Login Failed: User Not Active - Username: " & mUsuario.Nombre, vbLogEventTypeWarning, pParametro.LogAccion_Enabled
         MsgBox "El Usuario está desactivado.", vbExclamation, App.Title
         txtNombre.SetFocus
         txtNombre_GotFocus
@@ -191,7 +191,7 @@ Private Sub cmdOK_Click()
     
     If txtPassword.Text <> mUsuario.Password Then
         mIntentos = mIntentos + 1
-        WriteLogEvent "User Login Failed: Wrong Password - Username: " & mUsuario.Nombre, vbLogEventTypeWarning
+        WriteLogEvent "User Login Failed: Wrong Password - Username: " & mUsuario.Nombre, vbLogEventTypeWarning, pParametro.LogAccion_Enabled
         MsgBox "La Contraseña ingresada es incorrecta.", vbExclamation, App.Title
         txtPassword.SetFocus
         txtPassword_GotFocus
@@ -211,7 +211,7 @@ Private Sub cmdOK_Click()
     End If
     If Not UsuarioGrupo.Activo Then
         mIntentos = mIntentos + 1
-        WriteLogEvent "User Login Failed: User Group Not Active - Username: " & mUsuario.Nombre, vbLogEventTypeWarning
+        WriteLogEvent "User Login Failed: User Group Not Active - Username: " & mUsuario.Nombre, vbLogEventTypeWarning, pParametro.LogAccion_Enabled
         MsgBox "El Grupo de Usuarios está desactivado.", vbExclamation, App.Title
         txtNombre.SetFocus
         txtNombre_GotFocus

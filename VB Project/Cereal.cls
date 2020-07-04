@@ -24,6 +24,7 @@ Private mONCCA_EspecieCodigo As String
 Private mONCCA_EspecieNombre As String
 Private mONCCA_GranoTipoCodigo As String
 Private mONCCA_GranoTipoNombre As String
+Private mRealizaAnalisisIPRO As Boolean
 Private mActivo As Boolean
 
 'STATE VARIABLES
@@ -233,6 +234,20 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get RealizaAnalisisIPRO() As Boolean
+    RealizaAnalisisIPRO = mRealizaAnalisisIPRO
+End Property
+
+Public Property Let RealizaAnalisisIPRO(ByVal Value As Boolean)
+    If Value <> mRealizaAnalisisIPRO Then
+        mIsDirty = True
+    End If
+    mRealizaAnalisisIPRO = Value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Property Get Activo() As Boolean
     Activo = mActivo
 End Property
@@ -367,6 +382,7 @@ Public Function Load() As Boolean
         mONCCA_EspecieNombre = mrecData("ONCCA_EspecieNombre").Value & ""
         mONCCA_GranoTipoCodigo = mrecData("ONCCA_GranoTipoCodigo").Value & ""
         mONCCA_GranoTipoNombre = mrecData("ONCCA_GranoTipoNombre").Value & ""
+        mRealizaAnalisisIPRO = mrecData("RealizaAnalisisIPRO").Value
         mActivo = mrecData("Activo").Value
     End If
     
@@ -441,6 +457,7 @@ Public Function Update() As Boolean
     mrecData("ONCCA_EspecieNombre").Value = IIf(Trim(mONCCA_EspecieNombre) = "", Null, mONCCA_EspecieNombre)
     mrecData("ONCCA_GranoTipoCodigo").Value = IIf(Trim(mONCCA_GranoTipoCodigo) = "", Null, mONCCA_GranoTipoCodigo)
     mrecData("ONCCA_GranoTipoNombre").Value = IIf(Trim(mONCCA_GranoTipoNombre) = "", Null, mONCCA_GranoTipoNombre)
+    mrecData("RealizaAnalisisIPRO").Value = mRealizaAnalisisIPRO
     mrecData("Activo").Value = mActivo
     mrecData.Update
 
@@ -523,7 +540,8 @@ Private Sub InitializeValues()
     mONCCA_EspecieNombre = ""
     mONCCA_GranoTipoCodigo = ""
     mONCCA_GranoTipoNombre = ""
-    mActivo = 1
+    mRealizaAnalisisIPRO = False
+    mActivo = True
 
     mIsNew = True
     mIsCopy = False
@@ -544,4 +562,3 @@ Private Sub Class_Terminate()
         Set mrecData = Nothing
     End If
 End Sub
-

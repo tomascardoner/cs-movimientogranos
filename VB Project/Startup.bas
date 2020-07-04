@@ -43,7 +43,7 @@ Private Sub Main()
     
     Screen.MousePointer = vbHourglass
     
-    CSM_ApplicationLog.WriteLogEvent "*** Application Starts ***", vbLogEventTypeInformation
+    CSM_ApplicationLog.WriteLogEvent "*** Application Starts ***", vbLogEventTypeInformation, False
     
     '//////////////////////////////////////////////////////////////////
     'OBTENGO LOS PARAMETROS DE LA REGISTRY
@@ -142,9 +142,9 @@ DATABASEOPEN:
         Exit Sub
     End If
     
-    CSM_ApplicationLog.WriteLogEvent "Load MDI Form: INIT", vbLogEventTypeInformation
+    CSM_ApplicationLog.WriteLogEvent "Load MDI Form: INIT", vbLogEventTypeInformation, pParametro.LogAccion_Enabled
     Load frmMDI
-    CSM_ApplicationLog.WriteLogEvent "Load MDI Form: DONE", vbLogEventTypeInformation
+    CSM_ApplicationLog.WriteLogEvent "Load MDI Form: DONE", vbLogEventTypeInformation, pParametro.LogAccion_Enabled
         
     frmMDI.Caption = App.Title & IIf(pParametro.DatabaseDescription = "", "", " - " & pParametro.DatabaseDescription)
     
@@ -250,7 +250,7 @@ Public Sub TerminateApplication()
     Set pParametro = Nothing
     Set pCRAXDRTApplication = Nothing
     
-    CSM_ApplicationLog.WriteLogEvent "*** Application Terminate ***", vbLogEventTypeInformation
+    CSM_ApplicationLog.WriteLogEvent "*** Application Terminate ***", vbLogEventTypeInformation, False
     Running = False
 End Sub
 

@@ -11,7 +11,7 @@ GO
 -- =============================================
 -- Author:	  Tomás A. Cardoner
 -- Created: 11/06/2014 22:47:30
--- Updated: 
+-- Updated: 03/07/2020 - se agregó el campo RealizaAnalisisIPRO
 -- Description: Obtiene los datos del Origen/Destino de la Entidad
 -- =============================================
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_OrigenDestino_Get') AND type in (N'P', N'PC'))
@@ -26,7 +26,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT Entidad_OrigenDestino.IDEntidad, Entidad_OrigenDestino.IDOrigenDestino, Entidad_OrigenDestino.Nombre, Entidad_OrigenDestino.Direccion, Entidad_OrigenDestino.IDLocalidad, Entidad_OrigenDestino.Kilometro, Entidad_OrigenDestino.ONCCA_Codigo, Entidad_OrigenDestino.ControlaStock, Entidad_OrigenDestino.ConvierteEnSubProducto, Entidad_OrigenDestino.Activo
+	SELECT IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
 		FROM Entidad_OrigenDestino
 		WHERE Entidad_OrigenDestino.IDEntidad = @IDEntidad AND Entidad_OrigenDestino.IDOrigenDestino = @IDOrigenDestino 
 
@@ -38,7 +38,7 @@ GO
 -- =============================================
 -- Author:	  Tomás A. Cardoner
 -- Created: 11/06/2014 22:47:30
--- Updated: 
+-- Updated: 03/07/2020 - se agregó el campo RealizaAnalisisIPRO
 -- Description: Agrega un Origen/Destino a la Entidad
 -- =============================================
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_OrigenDestino_Add') AND type in (N'P', N'PC'))
@@ -55,6 +55,7 @@ CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_Add
 	@ONCCA_Codigo int,
 	@ControlaStock bit,
 	@ConvierteEnSubProducto bit,
+	@RealizaAnalisisIPRO bit,
 	@Activo bit
 AS
 
@@ -68,8 +69,8 @@ BEGIN
 			SET @IDOrigenDestino = (SELECT ISNULL(MAX(Entidad_OrigenDestino.IDOrigenDestino), 0) + 1 FROM Entidad_OrigenDestino WHERE IDEntidad = @IDEntidad)
 		
 			INSERT INTO Entidad_OrigenDestino
-				(IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, Activo)
-				VALUES (@IDEntidad, @IDOrigenDestino, @Nombre, @Direccion, @IDLocalidad, @Kilometro, @ONCCA_Codigo, @ControlaStock, @ConvierteEnSubProducto, @Activo)
+				(IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo)
+				VALUES (@IDEntidad, @IDOrigenDestino, @Nombre, @Direccion, @IDLocalidad, @Kilometro, @ONCCA_Codigo, @ControlaStock, @ConvierteEnSubProducto, @RealizaAnalisisIPRO, @Activo)
 	
 		COMMIT TRANSACTION
 	END TRY
@@ -95,7 +96,7 @@ GO
 -- =============================================
 -- Author:	  Tomás A. Cardoner
 -- Created: 11/06/2014 22:47:30
--- Updated: 
+-- Updated: 03/07/2020 - se agregó el campo RealizaAnalisisIPRO
 -- Description: Actualiza los datos del Origen/Destino de la Entidad
 -- =============================================
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_OrigenDestino_Update') AND type in (N'P', N'PC'))
@@ -112,6 +113,7 @@ CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_Update
 	@ONCCA_Codigo int,
 	@ControlaStock bit,
 	@ConvierteEnSubProducto bit,
+	@RealizaAnalisisIPRO bit,
 	@Activo bit
 AS
 
@@ -123,7 +125,7 @@ BEGIN
 		BEGIN TRANSACTION	
 
 				UPDATE Entidad_OrigenDestino
-					SET Nombre = @Nombre, Direccion = @Direccion, IDLocalidad = @IDLocalidad, Kilometro = @Kilometro, ONCCA_Codigo = @ONCCA_Codigo, ControlaStock = @ControlaStock, ConvierteEnSubProducto = @ConvierteEnSubProducto, Activo = @Activo
+					SET Nombre = @Nombre, Direccion = @Direccion, IDLocalidad = @IDLocalidad, Kilometro = @Kilometro, ONCCA_Codigo = @ONCCA_Codigo, ControlaStock = @ControlaStock, ConvierteEnSubProducto = @ConvierteEnSubProducto, RealizaAnalisisIPRO = @RealizaAnalisisIPRO, Activo = @Activo
 					WHERE IDEntidad = @IDEntidad AND IDOrigenDestino = @IDOrigenDestino 
 
 		COMMIT TRANSACTION

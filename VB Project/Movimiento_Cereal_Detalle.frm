@@ -1023,7 +1023,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   85458947
+         Format          =   85393411
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1069,7 +1069,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   85458945
+         Format          =   85393409
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1083,7 +1083,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   85458945
+         Format          =   85393409
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1098,7 +1098,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   85458947
+         Format          =   85393411
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2020,7 +2020,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   85458945
+         Format          =   85393409
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2190,7 +2190,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   85458945
+         Format          =   85393409
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2768,6 +2768,7 @@ Private Sub datcboCereal_Change()
                     txtVolatil.Text = Cereal.MermaVolatilidad_Formatted
                 End If
             End If
+            Set Cereal = Nothing
         End If
     End If
     
@@ -3332,432 +3333,33 @@ End Sub
 'ACEPTAR
 Private Sub cmdAceptar_Click()
     If mMovimiento_Cereal.Certificado Then
-        Aceptar_Analisis
+        If VerificarDatosAnalisis() Then
+            Aceptar_Analisis
+        End If
     Else
-        Aceptar_Todos
+        If VerificarDatosEncabezado() Then
+            If VerificarDatosIntervinientesTraslado() Then
+                If VerificarDatosGranos() Then
+                    If VerificarDatosProcedenciaYDestino() Then
+                        If VerificarDatosTransporte() Then
+                            If VerificarDatosDescarga() Then
+                                If VerificarDatosPesadas() Then
+                                    If VerificarDatosAnalisis() Then
+                                        Aceptar_Todos
+                                    End If
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        End If
     End If
 End Sub
     
 Private Sub Aceptar_Todos()
     Dim Index As Integer
-    Dim SubIndex As Integer
     
-    Dim RemitenteMercaderia As Long
-    Dim SumaPesoNetoPesadas As Long
-    
-    Dim Entidad_OrigDest As Entidad_OrigDest
-    
-    If Val(datcboEntidad_Titular.BoundText) = 0 Then
-        MsgBox "Debe especificar el Titular del Comprobante.", vbInformation, App.Title
-        datcboEntidad_Titular.SetFocus
-        Exit Sub
-    End If
-    If DateDiff("d", dtpFechaCarga.Value, Date) < 0 Then
-        MsgBox "La Fecha de Carga no debe ser posterior al día de hoy.", vbInformation, App.Title
-        dtpFechaCarga.SetFocus
-        Exit Sub
-    End If
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If Val(datcboCartaPorte_Talonario.BoundText) = 0 Then
-            MsgBox "Debe especificar el C.E.E. Nro.", vbInformation, App.Title
-            datcboCartaPorte_Talonario.SetFocus
-            Exit Sub
-        End If
-        If DateDiff("d", dtpFechaCarga.Value, CDate(Right(datcboCartaPorte_Talonario.Text, 10))) < 0 Then
-            MsgBox "La Fecha de Carga no puede ser mayor a la Fecha de Vencimiento de la Carta de Porte.", vbInformation, App.Title
-            dtpFechaCarga.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    ' Verifico el Número de Comprobante
-    If Trim(txtComprobanteNumero.Text) = "" Then
-        MsgBox "Debe especificar el Número de Comprobante.", vbInformation, App.Title
-        txtComprobanteNumero.SetFocus
-        Exit Sub
-    End If
-    If Len(Trim(txtComprobanteNumero.Text)) < 12 Then
-        MsgBox "El Número de Comprobante debe contener 12 dígitos (sin guiones).", vbInformation, App.Title
-        txtComprobanteNumero.SetFocus
-        Exit Sub
-    End If
-    
-    ' Verifico el C.T.G.
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If Trim(txtCTGNumero.Text) = "" Then
-            MsgBox "Debe especificar el Número de C.T.G.", vbInformation, App.Title
-            txtCTGNumero.SetFocus
-            Exit Sub
-        End If
-        If Len(CSM_String.CleanNotNumericChars(txtCTGNumero.Text)) < 8 Then
-            MsgBox "El Número de C.T.G. debe contener 8 dígitos.", vbInformation, App.Title
-            txtCTGNumero.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If Val(datcboEntidad_RemitenteComercial.BoundText) = 0 Then
-            MsgBox "Al ser un Comprobante de Salida, debe tener especificado al menos el Remitente Comercial.", vbInformation, App.Title
-            datcboEntidad_RemitenteComercial.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If Val(datcboEntidad_Destinatario.BoundText) = 0 Then
-            MsgBox "Debe especificar el Destinatario del Comprobante.", vbInformation, App.Title
-            datcboEntidad_Destinatario.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-'   ================================
-'   COMENTADO TODO EL 30/08/2015 - YA QUE EXISTEN LAS 2 POSIBILIDADES
-'   ACTUALIZADO EL DÍA 04/05/2015 - YA QUE EL DESTINATARIO DEBE SER EL TITULAR DE LA PLANTA EN TODOS LOS CASOS
-    'ENTRADA: SI EL DESTINATARIO ES DIFERENTE AL DESTINO, RESTRINJO O CONSULTO SI ES CORRECTO
-'    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA) Then
-'        If Val(datcboEntidad_Destinatario.BoundText) <> Val(datcboEntidad_Destino.BoundText) Then
-'            If pParametro.Movimiento_Cereal_PermiteEntradaConDestinatarioDiferente Then
-'                If MsgBox("El Destinatario de la Carta de Porte especificado es diferente al Destino de la Mercadería." & vbCr & vbCr & "¿Desea continuar?", vbQuestion + vbYesNo, App.Title) = vbNo Then
-'                    datcboEntidad_Destinatario.SetFocus
-'                    Exit Sub
-'                End If
-'            Else
-'                MsgBox "El Destinatario de la Carta de Porte especificado no puede ser diferente al Destino de la Mercadería.", vbExclamation, App.Title
-'                datcboEntidad_Destinatario.SetFocus
-'                Exit Sub
-'            End If
-'        End If
-'    End If
-    'SALIDA: REM.COM./INTERM. DEBE SER UN TITULAR
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If Val(datcboEntidad_Intermediario.BoundText) = 0 Then
-            RemitenteMercaderia = Val(datcboEntidad_RemitenteComercial.BoundText)
-        Else
-            RemitenteMercaderia = Val(datcboEntidad_Intermediario.BoundText)
-        End If
-        Dim Entidad As Entidad
-        Set Entidad = New Entidad
-        Entidad.IDEntidad = RemitenteMercaderia
-        If Entidad.Load() Then
-            If Not Entidad.EsTitular Then
-                If Val(datcboEntidad_Intermediario.BoundText) = 0 Then
-                    MsgBox "El Remitente Comercial debe ser algún Titular de la Mercadería.", vbInformation, App.Title
-                    datcboEntidad_RemitenteComercial.SetFocus
-                    Exit Sub
-                Else
-                    MsgBox "El Intermediario debe ser algún Titular de la Mercadería.", vbInformation, App.Title
-                    datcboEntidad_Intermediario.SetFocus
-                    Exit Sub
-                End If
-            End If
-        End If
-    End If
-    
-    If datcboEntidad_Destino.Visible Then
-        If Val(datcboEntidad_Destino.BoundText) = 0 Then
-            MsgBox "Debe especificar el Destino de la Carta de Porte.", vbInformation, App.Title
-            datcboEntidad_Destino.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If Val(datcboProcedencia.BoundText) = 0 Then
-        MsgBox "Debe especificar la Procedencia de la Mercadería.", vbInformation, App.Title
-        datcboProcedencia.SetFocus
-        Exit Sub
-    End If
-        
-    'VERIFICO QUE LA LOCALIDAD DE ORIGEN Y LA DE DESTINO, TENGAN ESPECIFICADO EL PARTIDO,
-    'PERO SÓLO PARA LAS C.P. DE ENTRADA
-    If pParametro.Localidad_VerificarPartido Then
-        If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
-            Set Entidad_OrigDest = New Entidad_OrigDest
-            Entidad_OrigDest.IDEntidad = Val(datcboEntidad_Titular.BoundText)
-            Entidad_OrigDest.IDOrigenDestino = Val(datcboProcedencia.BoundText)
-            If Entidad_OrigDest.Load() Then
-                If Entidad_OrigDest.Localidad.IDPartido = 0 Then
-                    MsgBox "La Localidad de Procedencia de la Mercadería (" & Entidad_OrigDest.Localidad.Nombre & "), no tiene especificado el Partido al cual pertenece." & vbCr & "Por favor, especifíquelo en la tabla de Localidades.", vbExclamation, App.Title
-                    Set Entidad_OrigDest = Nothing
-                    Exit Sub
-                End If
-            End If
-            Set Entidad_OrigDest = Nothing
-        End If
-    End If
-    
-    If datcboEntidad_Transportista.Visible Then
-        If Val(datcboEntidad_Transportista.BoundText) = 0 Then
-            MsgBox "Debe especificar el Transportista de la Carta de Porte.", vbInformation, App.Title
-            datcboEntidad_Transportista.SetFocus
-            Exit Sub
-        End If
-    End If
-    If datcboEntidad_Chofer.Visible Then
-        If Val(datcboEntidad_Chofer.BoundText) = 0 Then
-            MsgBox "Debe especificar el Chofer de la Carta de Porte.", vbInformation, App.Title
-            datcboEntidad_Chofer.SetFocus
-            Exit Sub
-        End If
-    End If
-    If Val(datcboCosecha.BoundText) = 0 Then
-        MsgBox "Debe especificar la Cosecha.", vbInformation, App.Title
-        datcboCosecha.SetFocus
-        Exit Sub
-    End If
-    If Val(datcboCereal.BoundText) = 0 Then
-        MsgBox "Debe especificar el Cereal.", vbInformation, App.Title
-        datcboCereal.SetFocus
-        Exit Sub
-    End If
-    
-    If Not IsNumeric(txtPesoBruto.Text) Then
-        If Trim(txtPesoBruto.Text) = "" Then
-            MsgBox "Debe especificar el Peso Bruto.", vbInformation, App.Title
-            txtPesoBruto.SetFocus
-            Exit Sub
-        Else
-            MsgBox "El Peso Bruto debe ser un valor numérico.", vbInformation, App.Title
-            txtPesoBruto.SetFocus
-            Exit Sub
-        End If
-    Else
-        If CLng(txtPesoBruto.Text) <= 0 Then
-            MsgBox "El Peso Bruto debe ser mayor a cero.", vbInformation, App.Title
-            txtPesoBruto.SetFocus
-            Exit Sub
-        End If
-        If pParametro.Movimiento_Cereal_PermiteBrutoMayor45000 = False And (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) And CLng(txtPesoBruto.Text) > 45000 Then
-            MsgBox "El Peso Bruto es mayor a 45.000 kgs. que es el límite permitido.", vbInformation, App.Title
-            txtPesoBruto.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If Not IsNumeric(txtPesoTara.Text) Then
-        If Trim(txtPesoTara.Text) = "" Then
-            MsgBox "Debe especificar el Peso Tara.", vbInformation, App.Title
-            txtPesoTara.SetFocus
-            Exit Sub
-        Else
-            MsgBox "El Peso Tara debe ser un valor numérico.", vbInformation, App.Title
-            txtPesoTara.SetFocus
-            Exit Sub
-        End If
-    Else
-        If CLng(txtPesoTara.Text) <= 0 Then
-            MsgBox "El Peso Tara debe ser mayor a cero.", vbInformation, App.Title
-            txtPesoTara.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If Not IsNumeric(txtPesoNeto.Text) Then
-        If Trim(txtPesoNeto.Text) = "" Then
-            MsgBox "Debe especificar el Peso Neto.", vbInformation, App.Title
-            txtPesoNeto.SetFocus
-            Exit Sub
-        Else
-            MsgBox "El Peso Neto debe ser un valor numérico.", vbInformation, App.Title
-            txtPesoNeto.SetFocus
-            Exit Sub
-        End If
-    Else
-        If CLng(txtPesoNeto.Text) <= 0 Then
-            MsgBox "El Peso Neto debe ser mayor a cero.", vbInformation, App.Title
-            txtPesoNeto.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If Trim(txtHumedad.Text) <> "" Then
-        If Not IsNumeric(txtHumedad.Text) Then
-            MsgBox "La Humedad debe ser un valor numérico.", vbInformation, App.Title
-            txtHumedad.SetFocus
-            Exit Sub
-        End If
-        If CSng(txtHumedad.Text) < 0 Then
-            MsgBox "La Humedad debe ser mayor o igual a cero.", vbInformation, App.Title
-            txtHumedad.SetFocus
-            Exit Sub
-        End If
-        If CSng(txtHumedad.Text) > 50 Then
-            MsgBox "La Humedad debe ser menor o igual a 50.", vbInformation, App.Title
-            txtHumedad.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If Trim(txtZaranda.Text) <> "" Then
-        If Not IsNumeric(txtZaranda.Text) Then
-            MsgBox "El Zarandeo debe ser un valor numérico.", vbInformation, App.Title
-            txtZaranda.SetFocus
-            Exit Sub
-        End If
-        If CSng(txtZaranda.Text) < 0 Then
-            MsgBox "El Zarandeo debe ser mayor o igual a cero.", vbInformation, App.Title
-            txtZaranda.SetFocus
-            Exit Sub
-        End If
-        If CSng(txtZaranda.Text) > 50 Then
-            MsgBox "El Zarandeo debe ser menor o igual a 50.", vbInformation, App.Title
-            txtZaranda.SetFocus
-            Exit Sub
-        End If
-    End If
-        
-    If mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION And mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA And mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE Then
-        If Val(datcboDestino.BoundText) = 0 Then
-            MsgBox "Debe especificar el Destino de los Granos.", vbInformation, App.Title
-            datcboDestino.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA Then
-        If Val(datcboProcedencia.BoundText) = Val(datcboDestino.BoundText) Then
-            MsgBox "La Procedencia y el Destino de los granos deben ser diferentes.", vbInformation, App.Title
-            datcboProcedencia.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
-        If DateDiff("d", dtpFechaArribo.Value, dtpFechaCarga.Value) > 0 Then
-            MsgBox "La Fecha de Arribo no debe ser anterior a la Fecha de Carga.", vbInformation, App.Title
-            dtpFechaArribo.SetFocus
-            Exit Sub
-        End If
-        If DateDiff("d", CDate(Format(dtpFechaDescarga.Value, "Short Date") & " " & Format(dtpHoraDescarga.Value, "Short Time")), CDate(Format(dtpFechaArribo.Value, "Short Date") & " " & Format(dtpHoraArribo.Value, "Short Time"))) > 0 Then
-            MsgBox "La Fecha/Hora de Descarga no debe ser anterior a la Fecha/Hora de Arribo.", vbInformation, App.Title
-            dtpFechaDescarga.SetFocus
-            Exit Sub
-        End If
-    End If
-    
-    'TICKETS DE PESADAS
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA) Then
-        'VERIFICO LAS PESADAS COMPLETAS
-        If Not fraPesadasCompletas.Visible Then
-            Call CopiarPesadasReducidasACompletas
-        End If
-        SumaPesoNetoPesadas = 0
-        For Index = 0 To 5
-            'TICKET
-            If Trim(txtPesadaCompleta_Ticket(Index).Text) <> "" Then
-                If Not IsNumeric(txtPesadaCompleta_Ticket(Index).Text) Then
-                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser un valor numérico.", vbInformation, App.Title
-                    fraPesadasCompletas.Visible = True
-                    txtPesadaCompleta_Ticket(Index).SetFocus
-                    Exit Sub
-                End If
-                If Val(txtPesadaCompleta_Ticket(Index).Text) > CSM_Constant.DATATYPE_LONG_VALUE_MAX Then
-                    MsgBox "La Pesada Nº " & (Index + 1) & " es un número muy grande y no se puede guardar.", vbInformation, App.Title
-                    fraPesadasCompletas.Visible = True
-                    txtPesadaCompleta_Ticket(Index).SetFocus
-                    Exit Sub
-                End If
-                If CLng(txtPesadaCompleta_Ticket(Index).Text) <= 0 Then
-                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser mayor a cero.", vbInformation, App.Title
-                    fraPesadasCompletas.Visible = True
-                    txtPesadaCompleta_Ticket(Index).SetFocus
-                    Exit Sub
-                End If
-            End If
-            'PESO NETO
-            If Trim(txtPesadaCompleta_PesoNeto(Index).Text) <> "" Then
-                If Not IsNumeric(txtPesadaCompleta_PesoNeto(Index).Text) Then
-                    MsgBox "El Peso Neto de la Pesada Nº " & (Index + 1) & " debe ser un valor numérico.", vbInformation, App.Title
-                    txtPesadaCompleta_PesoNeto(Index).SetFocus
-                    Exit Sub
-                End If
-                If CLng(txtPesadaCompleta_PesoNeto(Index).Text) < 0 Then
-                    MsgBox "El Peso Neto de la Pesada Nº " & (Index + 1) & " debe ser mayor a cero.", vbInformation, App.Title
-                    txtPesadaCompleta_PesoNeto(Index).SetFocus
-                    Exit Sub
-                End If
-                SumaPesoNetoPesadas = SumaPesoNetoPesadas + CLng(txtPesadaCompleta_PesoNeto(Index).Text)
-            End If
-        Next Index
-    Else
-        'VERIFICO LAS PESADAS REDUCIDAS
-        For Index = 0 To 5
-            If Trim(txtPesada(Index).Text) <> "" Then
-                If Not IsNumeric(txtPesada(Index).Text) Then
-                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser un valor numérico.", vbInformation, App.Title
-                    txtPesada(Index).SetFocus
-                    Exit Sub
-                End If
-                If Val(txtPesada(Index).Text) > CSM_Constant.DATATYPE_LONG_VALUE_MAX Then
-                    MsgBox "La Pesada Nº " & (Index + 1) & " es un número muy grande y no se puede guardar.", vbInformation, App.Title
-                    txtPesada(Index).SetFocus
-                    Exit Sub
-                End If
-                If CLng(txtPesada(Index).Text) <= 0 Then
-                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser mayor a cero.", vbInformation, App.Title
-                    txtPesada(Index).SetFocus
-                    Exit Sub
-                End If
-            End If
-        Next Index
-    End If
-    
-    'VERIFICO QUE NO HAYA DOS PESADAS IGUALES
-    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA) Then
-        'VERIFICO LAS PESADAS COMPLETAS
-        For Index = 0 To 5
-            For SubIndex = Index + 1 To 5
-                If Trim(txtPesadaCompleta_Ticket(Index).Text) <> "" And Trim(txtPesadaCompleta_Ticket(SubIndex).Text) <> "" Then
-                    If CLng(txtPesadaCompleta_Ticket(Index).Text) = CLng(txtPesadaCompleta_Ticket(SubIndex).Text) Then
-                        MsgBox "El Ticket de la Pesada Nº " & (Index + 1) & " es igual al de la Pesada Nº " & (SubIndex + 1) & ".", vbInformation, App.Title
-                        txtPesadaCompleta_Ticket(SubIndex).SetFocus
-                        Exit Sub
-                    End If
-                End If
-            Next SubIndex
-        Next Index
-    Else
-        'VERIFICO LAS PESADAS REDUCIDAS
-        For Index = 0 To 5
-            For SubIndex = Index + 1 To 5
-                If Trim(txtPesada(Index).Text) <> "" And Trim(txtPesada(SubIndex).Text) <> "" Then
-                    If CLng(txtPesada(Index).Text) = CLng(txtPesada(SubIndex).Text) Then
-                        MsgBox "El Ticket de la Pesada Nº " & (Index + 1) & " es igual al de la Pesada Nº " & (SubIndex + 1) & ".", vbInformation, App.Title
-                        txtPesada(SubIndex).SetFocus
-                        Exit Sub
-                    End If
-                End If
-            Next SubIndex
-        Next Index
-    End If
-    If SumaPesoNetoPesadas > 0 And SumaPesoNetoPesadas <> CLng(txtPesoNeto.Text) Then
-        If MsgBox("Hay diferencia entre la suma de los Pesos Netos de las Pesadas y el Peso Neto de la Carta de Porte." & vbCr & vbCr & "Suma Pesadas: " & Format(SumaPesoNetoPesadas, "#,###") & vbCr & "Peso Neto C.P.: " & txtPesoNeto.Text & vbCr & vbCr & "¿Desea continuar de todos modos?", vbExclamation + vbYesNo, App.Title) = vbNo Then
-            Exit Sub
-        End If
-    End If
-    
-    ' VERIFICO LOS DATOS DEL ANÁLISIS
-    If Not IsNull(dtpAnalisis_Fecha.Value) Then
-        If DateDiff("d", dtpAnalisis_Fecha.Value, dtpFechaArribo.Value) > 0 Then
-            MsgBox "La Fecha de Análisis no debe ser anterior a la Fecha de Arribo.", vbInformation, App.Title
-            dtpAnalisis_Fecha.SetFocus
-            Exit Sub
-        End If
-    End If
-    If Trim(txtAnalisis_MuestraNumero.Text) <> "" Then
-        If Not IsNumeric(txtAnalisis_MuestraNumero.Text) Then
-            MsgBox "El Número de Muestra debe ser un valor numérico.", vbInformation, App.Title
-            txtAnalisis_MuestraNumero.SetFocus
-            Exit Sub
-        End If
-        If CLng(txtAnalisis_MuestraNumero.Text) < 1 Then
-            MsgBox "El Número de Muestra debe ser mayor a cero.", vbInformation, App.Title
-            txtAnalisis_MuestraNumero.SetFocus
-            Exit Sub
-        End If
-    End If
-        
     With mMovimiento_Cereal
         'ENCABEZADO
         .ComprobanteNumero = Trim(txtComprobanteNumero.Text)
@@ -3861,27 +3463,508 @@ Private Sub Aceptar_Todos()
     Unload Me
 End Sub
 
-Private Sub Aceptar_Analisis()
+Private Function VerificarDatosEncabezado() As Boolean
+    If Val(datcboEntidad_Titular.BoundText) = 0 Then
+        MsgBox "Debe especificar el Titular del Comprobante.", vbInformation, App.Title
+        datcboEntidad_Titular.SetFocus
+        Exit Function
+    End If
+    If DateDiff("d", dtpFechaCarga.Value, Date) < 0 Then
+        MsgBox "La Fecha de Carga no debe ser posterior al día de hoy.", vbInformation, App.Title
+        dtpFechaCarga.SetFocus
+        Exit Function
+    End If
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
+        If Val(datcboCartaPorte_Talonario.BoundText) = 0 Then
+            MsgBox "Debe especificar el C.E.E. Nro.", vbInformation, App.Title
+            datcboCartaPorte_Talonario.SetFocus
+            Exit Function
+        End If
+        If DateDiff("d", dtpFechaCarga.Value, CDate(Right(datcboCartaPorte_Talonario.Text, 10))) < 0 Then
+            MsgBox "La Fecha de Carga no puede ser mayor a la Fecha de Vencimiento de la Carta de Porte.", vbInformation, App.Title
+            dtpFechaCarga.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    ' Verifico el Número de Comprobante
+    If Trim(txtComprobanteNumero.Text) = "" Then
+        MsgBox "Debe especificar el Número de Comprobante.", vbInformation, App.Title
+        txtComprobanteNumero.SetFocus
+        Exit Function
+    End If
+    If Len(Trim(txtComprobanteNumero.Text)) < 12 Then
+        MsgBox "El Número de Comprobante debe contener 12 dígitos (sin guiones).", vbInformation, App.Title
+        txtComprobanteNumero.SetFocus
+        Exit Function
+    End If
+    
+    ' Verifico el C.T.G.
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
+        If Trim(txtCTGNumero.Text) = "" Then
+            MsgBox "Debe especificar el Número de C.T.G.", vbInformation, App.Title
+            txtCTGNumero.SetFocus
+            Exit Function
+        End If
+        If Len(CSM_String.CleanNotNumericChars(txtCTGNumero.Text)) < 8 Then
+            MsgBox "El Número de C.T.G. debe contener 8 dígitos.", vbInformation, App.Title
+            txtCTGNumero.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    VerificarDatosEncabezado = True
+End Function
+
+Private Function VerificarDatosIntervinientesTraslado() As Boolean
+    Dim RemitenteMercaderia As Long
+    
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
+        If Val(datcboEntidad_RemitenteComercial.BoundText) = 0 Then
+            MsgBox "Al ser un Comprobante de Salida, debe tener especificado al menos el Remitente Comercial.", vbInformation, App.Title
+            datcboEntidad_RemitenteComercial.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
+        If Val(datcboEntidad_Destinatario.BoundText) = 0 Then
+            MsgBox "Debe especificar el Destinatario del Comprobante.", vbInformation, App.Title
+            datcboEntidad_Destinatario.SetFocus
+            Exit Function
+        End If
+    End If
+    
+'   ================================
+'   COMENTADO TODO EL 30/08/2015 - YA QUE EXISTEN LAS 2 POSIBILIDADES
+'   ACTUALIZADO EL DÍA 04/05/2015 - YA QUE EL DESTINATARIO DEBE SER EL TITULAR DE LA PLANTA EN TODOS LOS CASOS
+    'ENTRADA: SI EL DESTINATARIO ES DIFERENTE AL DESTINO, RESTRINJO O CONSULTO SI ES CORRECTO
+'    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA) Then
+'        If Val(datcboEntidad_Destinatario.BoundText) <> Val(datcboEntidad_Destino.BoundText) Then
+'            If pParametro.Movimiento_Cereal_PermiteEntradaConDestinatarioDiferente Then
+'                If MsgBox("El Destinatario de la Carta de Porte especificado es diferente al Destino de la Mercadería." & vbCr & vbCr & "¿Desea continuar?", vbQuestion + vbYesNo, App.Title) = vbNo Then
+'                    datcboEntidad_Destinatario.SetFocus
+'                    Exit Sub
+'                End If
+'            Else
+'                MsgBox "El Destinatario de la Carta de Porte especificado no puede ser diferente al Destino de la Mercadería.", vbExclamation, App.Title
+'                datcboEntidad_Destinatario.SetFocus
+'                Exit Sub
+'            End If
+'        End If
+'    End If
+    'SALIDA: REM.COM./INTERM. DEBE SER UN TITULAR
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
+        If Val(datcboEntidad_Intermediario.BoundText) = 0 Then
+            RemitenteMercaderia = Val(datcboEntidad_RemitenteComercial.BoundText)
+        Else
+            RemitenteMercaderia = Val(datcboEntidad_Intermediario.BoundText)
+        End If
+        Dim Entidad As Entidad
+        Set Entidad = New Entidad
+        Entidad.IDEntidad = RemitenteMercaderia
+        If Entidad.Load() Then
+            If Not Entidad.EsTitular Then
+                If Val(datcboEntidad_Intermediario.BoundText) = 0 Then
+                    MsgBox "El Remitente Comercial debe ser algún Titular de la Mercadería.", vbInformation, App.Title
+                    datcboEntidad_RemitenteComercial.SetFocus
+                    Exit Function
+                Else
+                    MsgBox "El Intermediario debe ser algún Titular de la Mercadería.", vbInformation, App.Title
+                    datcboEntidad_Intermediario.SetFocus
+                    Exit Function
+                End If
+            End If
+        End If
+    End If
+    
+    If datcboEntidad_Destino.Visible Then
+        If Val(datcboEntidad_Destino.BoundText) = 0 Then
+            MsgBox "Debe especificar el Destino de la Carta de Porte.", vbInformation, App.Title
+            datcboEntidad_Destino.SetFocus
+            Exit Function
+        End If
+    End If
+
+    VerificarDatosIntervinientesTraslado = True
+End Function
+
+Private Function VerificarDatosGranos() As Boolean
+    If Val(datcboCosecha.BoundText) = 0 Then
+        MsgBox "Debe especificar la Cosecha.", vbInformation, App.Title
+        datcboCosecha.SetFocus
+        Exit Function
+    End If
+    If Val(datcboCereal.BoundText) = 0 Then
+        MsgBox "Debe especificar el Cereal.", vbInformation, App.Title
+        datcboCereal.SetFocus
+        Exit Function
+    End If
+    
+    If Not IsNumeric(txtPesoBruto.Text) Then
+        If Trim(txtPesoBruto.Text) = "" Then
+            MsgBox "Debe especificar el Peso Bruto.", vbInformation, App.Title
+            txtPesoBruto.SetFocus
+            Exit Function
+        Else
+            MsgBox "El Peso Bruto debe ser un valor numérico.", vbInformation, App.Title
+            txtPesoBruto.SetFocus
+            Exit Function
+        End If
+    Else
+        If CLng(txtPesoBruto.Text) <= 0 Then
+            MsgBox "El Peso Bruto debe ser mayor a cero.", vbInformation, App.Title
+            txtPesoBruto.SetFocus
+            Exit Function
+        End If
+        If pParametro.Movimiento_Cereal_PermiteBrutoMayor45000 = False And (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) And CLng(txtPesoBruto.Text) > 45000 Then
+            MsgBox "El Peso Bruto es mayor a 45.000 kgs. que es el límite permitido.", vbInformation, App.Title
+            txtPesoBruto.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    If Not IsNumeric(txtPesoTara.Text) Then
+        If Trim(txtPesoTara.Text) = "" Then
+            MsgBox "Debe especificar el Peso Tara.", vbInformation, App.Title
+            txtPesoTara.SetFocus
+            Exit Function
+        Else
+            MsgBox "El Peso Tara debe ser un valor numérico.", vbInformation, App.Title
+            txtPesoTara.SetFocus
+            Exit Function
+        End If
+    Else
+        If CLng(txtPesoTara.Text) <= 0 Then
+            MsgBox "El Peso Tara debe ser mayor a cero.", vbInformation, App.Title
+            txtPesoTara.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    If Not IsNumeric(txtPesoNeto.Text) Then
+        If Trim(txtPesoNeto.Text) = "" Then
+            MsgBox "Debe especificar el Peso Neto.", vbInformation, App.Title
+            txtPesoNeto.SetFocus
+            Exit Function
+        Else
+            MsgBox "El Peso Neto debe ser un valor numérico.", vbInformation, App.Title
+            txtPesoNeto.SetFocus
+            Exit Function
+        End If
+    Else
+        If CLng(txtPesoNeto.Text) <= 0 Then
+            MsgBox "El Peso Neto debe ser mayor a cero.", vbInformation, App.Title
+            txtPesoNeto.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    If Trim(txtHumedad.Text) <> "" Then
+        If Not IsNumeric(txtHumedad.Text) Then
+            MsgBox "La Humedad debe ser un valor numérico.", vbInformation, App.Title
+            txtHumedad.SetFocus
+            Exit Function
+        End If
+        If CSng(txtHumedad.Text) < 0 Then
+            MsgBox "La Humedad debe ser mayor o igual a cero.", vbInformation, App.Title
+            txtHumedad.SetFocus
+            Exit Function
+        End If
+        If CSng(txtHumedad.Text) > 50 Then
+            MsgBox "La Humedad debe ser menor o igual a 50.", vbInformation, App.Title
+            txtHumedad.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    If Trim(txtZaranda.Text) <> "" Then
+        If Not IsNumeric(txtZaranda.Text) Then
+            MsgBox "El Zarandeo debe ser un valor numérico.", vbInformation, App.Title
+            txtZaranda.SetFocus
+            Exit Function
+        End If
+        If CSng(txtZaranda.Text) < 0 Then
+            MsgBox "El Zarandeo debe ser mayor o igual a cero.", vbInformation, App.Title
+            txtZaranda.SetFocus
+            Exit Function
+        End If
+        If CSng(txtZaranda.Text) > 50 Then
+            MsgBox "El Zarandeo debe ser menor o igual a 50.", vbInformation, App.Title
+            txtZaranda.SetFocus
+            Exit Function
+        End If
+    End If
+
+    VerificarDatosGranos = True
+End Function
+
+Private Function VerificarDatosProcedenciaYDestino() As Boolean
+    Dim ent_od As Entidad_OrigDest
+    
+    If Val(datcboProcedencia.BoundText) = 0 Then
+        MsgBox "Debe especificar la Procedencia de la Mercadería.", vbInformation, App.Title
+        datcboProcedencia.SetFocus
+        Exit Function
+    End If
+        
+    ' Verificar que la localidad de origen tenga especificado el Partido
+    If pParametro.Localidad_VerificarPartido Then
+        If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
+            Set ent_od = New Entidad_OrigDest
+            ent_od.IDEntidad = Val(datcboEntidad_Titular.BoundText)
+            ent_od.IDOrigenDestino = Val(datcboProcedencia.BoundText)
+            If ent_od.Load() Then
+                If ent_od.Localidad.IDPartido = 0 Then
+                    MsgBox "La Localidad de Procedencia de la Mercadería (" & ent_od.Localidad.Nombre & "), no tiene especificado el Partido al cual pertenece." & vbCr & "Por favor, especifíquelo en la tabla de Localidades.", vbExclamation, App.Title
+                    Set ent_od = Nothing
+                    Exit Function
+                End If
+            End If
+            Set ent_od = Nothing
+        End If
+    End If
+    
+    If mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION And mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA And mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE Then
+        If Val(datcboDestino.BoundText) = 0 Then
+            MsgBox "Debe especificar el Destino de los Granos.", vbInformation, App.Title
+            datcboDestino.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA Then
+        If Val(datcboProcedencia.BoundText) = Val(datcboDestino.BoundText) Then
+            MsgBox "La Procedencia y el Destino de los granos deben ser diferentes.", vbInformation, App.Title
+            datcboProcedencia.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    VerificarDatosProcedenciaYDestino = True
+End Function
+
+Private Function VerificarDatosTransporte() As Boolean
+    If datcboEntidad_Transportista.Visible Then
+        If Val(datcboEntidad_Transportista.BoundText) = 0 Then
+            MsgBox "Debe especificar el Transportista de la Carta de Porte.", vbInformation, App.Title
+            datcboEntidad_Transportista.SetFocus
+            Exit Function
+        End If
+    End If
+    If datcboEntidad_Chofer.Visible Then
+        If Val(datcboEntidad_Chofer.BoundText) = 0 Then
+            MsgBox "Debe especificar el Chofer de la Carta de Porte.", vbInformation, App.Title
+            datcboEntidad_Chofer.SetFocus
+            Exit Function
+        End If
+    End If
+    
+    VerificarDatosTransporte = True
+End Function
+
+Private Function VerificarDatosDescarga() As Boolean
+    If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
+        If DateDiff("d", dtpFechaArribo.Value, dtpFechaCarga.Value) > 0 Then
+            MsgBox "La Fecha de Arribo no debe ser anterior a la Fecha de Carga.", vbInformation, App.Title
+            dtpFechaArribo.SetFocus
+            Exit Function
+        End If
+        If DateDiff("d", CDate(Format(dtpFechaDescarga.Value, "Short Date") & " " & Format(dtpHoraDescarga.Value, "Short Time")), CDate(Format(dtpFechaArribo.Value, "Short Date") & " " & Format(dtpHoraArribo.Value, "Short Time"))) > 0 Then
+            MsgBox "La Fecha/Hora de Descarga no debe ser anterior a la Fecha/Hora de Arribo.", vbInformation, App.Title
+            dtpFechaDescarga.SetFocus
+            Exit Function
+        End If
+    End If
+
+    VerificarDatosDescarga = True
+End Function
+
+Private Function VerificarDatosPesadas() As Boolean
+    Dim SumaPesoNetoPesadas As Long
+    Dim Index As Integer
+    Dim SubIndex As Integer
+
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA) Then
+        'VERIFICO LAS PESADAS COMPLETAS
+        If Not fraPesadasCompletas.Visible Then
+            Call CopiarPesadasReducidasACompletas
+        End If
+        SumaPesoNetoPesadas = 0
+        For Index = 0 To 5
+            'TICKET
+            If Trim(txtPesadaCompleta_Ticket(Index).Text) <> "" Then
+                If Not IsNumeric(txtPesadaCompleta_Ticket(Index).Text) Then
+                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser un valor numérico.", vbInformation, App.Title
+                    fraPesadasCompletas.Visible = True
+                    txtPesadaCompleta_Ticket(Index).SetFocus
+                    Exit Function
+                End If
+                If Val(txtPesadaCompleta_Ticket(Index).Text) > CSM_Constant.DATATYPE_LONG_VALUE_MAX Then
+                    MsgBox "La Pesada Nº " & (Index + 1) & " es un número muy grande y no se puede guardar.", vbInformation, App.Title
+                    fraPesadasCompletas.Visible = True
+                    txtPesadaCompleta_Ticket(Index).SetFocus
+                    Exit Function
+                End If
+                If CLng(txtPesadaCompleta_Ticket(Index).Text) <= 0 Then
+                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser mayor a cero.", vbInformation, App.Title
+                    fraPesadasCompletas.Visible = True
+                    txtPesadaCompleta_Ticket(Index).SetFocus
+                    Exit Function
+                End If
+            End If
+            'PESO NETO
+            If Trim(txtPesadaCompleta_PesoNeto(Index).Text) <> "" Then
+                If Not IsNumeric(txtPesadaCompleta_PesoNeto(Index).Text) Then
+                    MsgBox "El Peso Neto de la Pesada Nº " & (Index + 1) & " debe ser un valor numérico.", vbInformation, App.Title
+                    txtPesadaCompleta_PesoNeto(Index).SetFocus
+                    Exit Function
+                End If
+                If CLng(txtPesadaCompleta_PesoNeto(Index).Text) < 0 Then
+                    MsgBox "El Peso Neto de la Pesada Nº " & (Index + 1) & " debe ser mayor a cero.", vbInformation, App.Title
+                    txtPesadaCompleta_PesoNeto(Index).SetFocus
+                    Exit Function
+                End If
+                SumaPesoNetoPesadas = SumaPesoNetoPesadas + CLng(txtPesadaCompleta_PesoNeto(Index).Text)
+            End If
+        Next Index
+    Else
+        'VERIFICO LAS PESADAS REDUCIDAS
+        For Index = 0 To 5
+            If Trim(txtPesada(Index).Text) <> "" Then
+                If Not IsNumeric(txtPesada(Index).Text) Then
+                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser un valor numérico.", vbInformation, App.Title
+                    txtPesada(Index).SetFocus
+                    Exit Function
+                End If
+                If Val(txtPesada(Index).Text) > CSM_Constant.DATATYPE_LONG_VALUE_MAX Then
+                    MsgBox "La Pesada Nº " & (Index + 1) & " es un número muy grande y no se puede guardar.", vbInformation, App.Title
+                    txtPesada(Index).SetFocus
+                    Exit Function
+                End If
+                If CLng(txtPesada(Index).Text) <= 0 Then
+                    MsgBox "La Pesada Nº " & (Index + 1) & " debe ser mayor a cero.", vbInformation, App.Title
+                    txtPesada(Index).SetFocus
+                    Exit Function
+                End If
+            End If
+        Next Index
+    End If
+    
+    'VERIFICO QUE NO HAYA DOS PESADAS IGUALES
+    If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA) Then
+        'VERIFICO LAS PESADAS COMPLETAS
+        For Index = 0 To 5
+            For SubIndex = Index + 1 To 5
+                If Trim(txtPesadaCompleta_Ticket(Index).Text) <> "" And Trim(txtPesadaCompleta_Ticket(SubIndex).Text) <> "" Then
+                    If CLng(txtPesadaCompleta_Ticket(Index).Text) = CLng(txtPesadaCompleta_Ticket(SubIndex).Text) Then
+                        MsgBox "El Ticket de la Pesada Nº " & (Index + 1) & " es igual al de la Pesada Nº " & (SubIndex + 1) & ".", vbInformation, App.Title
+                        txtPesadaCompleta_Ticket(SubIndex).SetFocus
+                        Exit Function
+                    End If
+                End If
+            Next SubIndex
+        Next Index
+    Else
+        'VERIFICO LAS PESADAS REDUCIDAS
+        For Index = 0 To 5
+            For SubIndex = Index + 1 To 5
+                If Trim(txtPesada(Index).Text) <> "" And Trim(txtPesada(SubIndex).Text) <> "" Then
+                    If CLng(txtPesada(Index).Text) = CLng(txtPesada(SubIndex).Text) Then
+                        MsgBox "El Ticket de la Pesada Nº " & (Index + 1) & " es igual al de la Pesada Nº " & (SubIndex + 1) & ".", vbInformation, App.Title
+                        txtPesada(SubIndex).SetFocus
+                        Exit Function
+                    End If
+                End If
+            Next SubIndex
+        Next Index
+    End If
+    If SumaPesoNetoPesadas > 0 And SumaPesoNetoPesadas <> CLng(txtPesoNeto.Text) Then
+        If MsgBox("Hay diferencia entre la suma de los Pesos Netos de las Pesadas y el Peso Neto de la Carta de Porte." & vbCr & vbCr & "Suma Pesadas: " & Format(SumaPesoNetoPesadas, "#,###") & vbCr & "Peso Neto C.P.: " & txtPesoNeto.Text & vbCr & vbCr & "¿Desea continuar de todos modos?", vbExclamation + vbYesNo, App.Title) = vbNo Then
+            Exit Function
+        End If
+    End If
+
+    VerificarDatosPesadas = True
+End Function
+
+Private Function VerificarDatosAnalisis() As Boolean
+    Dim cer As Cereal
+    Dim ent_od As Entidad_OrigDest
+    
+    If mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
+        VerificarDatosAnalisis = True
+        Exit Function
+    End If
+    
+    Set cer = New Cereal
+    cer.IDCereal = Val(datcboCereal.BoundText)
+    If Not cer.Load() Then
+        Set cer = Nothing
+        Exit Function
+    Else
+        If cer.RealizaAnalisisIPRO Then
+            Set ent_od = New Entidad_OrigDest
+            ent_od.IDEntidad = Val(datcboEntidad_Destino.BoundText)
+            ent_od.IDOrigenDestino = Val(datcboDestino.BoundText)
+            If Not ent_od.Load() Then
+                Set ent_od = Nothing
+                Set cer = Nothing
+                Exit Function
+            Else
+                If ent_od.RealizaAnalisisIPRO Then
+                    If IsNull(dtpAnalisis_Fecha.Value) Then
+                        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+                        MsgBox "Debe ingresar la Fecha de Análisis.", vbInformation, App.Title
+                        dtpAnalisis_Fecha.SetFocus
+                        Exit Function
+                    End If
+                    If Trim(txtAnalisis_MuestraNumero.Text) = "" Then
+                        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+                        MsgBox "Debe ingresar el Número de Muestra del Análisis.", vbInformation, App.Title
+                        txtAnalisis_MuestraNumero.SetFocus
+                        Exit Function
+                    End If
+                    If cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
+                        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+                        MsgBox "Debe especificar el Resultado IPRO del Análisis.", vbInformation, App.Title
+                        cboAnalisis_ResultadoIPRO.SetFocus
+                        Exit Function
+                    End If
+                End If
+            End If
+            Set ent_od = Nothing
+        End If
+    End If
+    Set cer = Nothing
+    
     If Not IsNull(dtpAnalisis_Fecha.Value) Then
         If DateDiff("d", dtpAnalisis_Fecha.Value, dtpFechaArribo.Value) > 0 Then
+            tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
             MsgBox "La Fecha de Análisis no debe ser anterior a la Fecha de Arribo.", vbInformation, App.Title
             dtpAnalisis_Fecha.SetFocus
-            Exit Sub
+            Exit Function
         End If
     End If
     If Trim(txtAnalisis_MuestraNumero.Text) <> "" Then
         If Not IsNumeric(txtAnalisis_MuestraNumero.Text) Then
-            MsgBox "El Número de Muestra debe ser un valor numérico.", vbInformation, App.Title
+            tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+            MsgBox "El Número de Muestra del Análisis debe ser un valor numérico.", vbInformation, App.Title
             txtAnalisis_MuestraNumero.SetFocus
-            Exit Sub
+            Exit Function
         End If
         If CLng(txtAnalisis_MuestraNumero.Text) < 1 Then
-            MsgBox "El Número de Muestra debe ser mayor a cero.", vbInformation, App.Title
+            tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+            MsgBox "El Número de Muestra del Análisis debe ser mayor a cero.", vbInformation, App.Title
             txtAnalisis_MuestraNumero.SetFocus
-            Exit Sub
+            Exit Function
         End If
     End If
-    
+
+    VerificarDatosAnalisis = True
+End Function
+
+Private Sub Aceptar_Analisis()
     Dim Movimiento_Cereal_Analisis_Actual As Movimiento_Cereal_Analisis
     
     If IsNull(dtpAnalisis_Fecha.Value) And Trim(txtAnalisis_MuestraNumero.Text) = "" And cboAnalisis_ResultadoIPRO.ListIndex = 0 Then

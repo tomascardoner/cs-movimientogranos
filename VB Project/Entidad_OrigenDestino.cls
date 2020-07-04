@@ -23,6 +23,7 @@ Private mKilometro As Integer
 Private mONCCA_Codigo As Long
 Private mControlaStock As Boolean
 Private mConvierteEnSubProducto As Boolean
+Private mRealizaAnalisisIPRO As Boolean
 Private mActivo As Boolean
 
 'STATE VARIABLES
@@ -250,6 +251,20 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get RealizaAnalisisIPRO() As Boolean
+    RealizaAnalisisIPRO = mRealizaAnalisisIPRO
+End Property
+
+Public Property Let RealizaAnalisisIPRO(ByVal Value As Boolean)
+    If Value <> mRealizaAnalisisIPRO Then
+        mIsDirty = True
+    End If
+    mRealizaAnalisisIPRO = Value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Property Get Activo() As Boolean
     Activo = mActivo
 End Property
@@ -362,6 +377,7 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         mONCCA_Codigo = CSM_Function.IfIsNull_Zero(recData("ONCCA_Codigo").Value)
         mControlaStock = recData("ControlaStock").Value
         mConvierteEnSubProducto = recData("ConvierteEnSubProducto").Value
+        mRealizaAnalisisIPRO = recData("RealizaAnalisisIPRO").Value
         mActivo = recData("Activo").Value
     End If
 
@@ -417,6 +433,7 @@ Public Function Update() As Boolean
         .Parameters.Append .CreateParameter("ONCCA_Codigo", adInteger, adParamInput, , CSM_Function.IfIsZero_Null(mONCCA_Codigo))
         .Parameters.Append .CreateParameter("ControlaStock", adBoolean, adParamInput, , mControlaStock)
         .Parameters.Append .CreateParameter("ConvierteEnSubProducto", adBoolean, adParamInput, , mConvierteEnSubProducto)
+        .Parameters.Append .CreateParameter("RealizaAnalisisIPRO", adBoolean, adParamInput, , mRealizaAnalisisIPRO)
         .Parameters.Append .CreateParameter("Activo", adBoolean, adParamInput, , mActivo)
 
         .Execute
@@ -492,6 +509,7 @@ Private Sub InitializeValues()
     mONCCA_Codigo = 0
     mControlaStock = False
     mConvierteEnSubProducto = False
+    mRealizaAnalisisIPRO = False
     mActivo = True
 
     mIsNew = True

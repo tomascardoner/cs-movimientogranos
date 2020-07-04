@@ -294,7 +294,7 @@ Begin VB.Form frmFormularioA_Detalle
       _ExtentX        =   2566
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   98566145
+      Format          =   93782017
       CurrentDate     =   40659
       MaxDate         =   55153
       MinDate         =   40179
@@ -715,7 +715,7 @@ Begin VB.Form frmFormularioA_Detalle
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   98566145
+      Format          =   93782017
       CurrentDate     =   40544
       MinDate         =   40179
    End
@@ -737,7 +737,7 @@ Begin VB.Form frmFormularioA_Detalle
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   98566145
+      Format          =   93782017
       CurrentDate     =   42480.5029861111
       MinDate         =   40179
    End
@@ -934,7 +934,7 @@ Public Function Startup(ByRef Formulario1116A_Cabecera As F1116A_Cabecera) As Bo
         
     dtpFecha.Value = Date
     
-    Call CSM_ApplicationLog.WriteLogEvent("Populating ComboBox Planta...", vbLogEventTypeInformation)
+    Call CSM_ApplicationLog.WriteLogEvent("Populating ComboBox Planta...", vbLogEventTypeInformation, pParametro.LogAccion_Enabled)
     Call CSM_Control_DataCombo.FillFromSQL(datcboPlanta, "usp_Entidad_OrigenDestino_List 0, " & IIf(pParametro.Planta_MostrarNombreEmpresa, "1", "0") & ", 1, 1, NULL, NULL, NULL ", "ID", "Nombre", "Plantas", cscpItemOrFirstIfUnique, pParametro.Planta_IDDefault)
     Call CSM_Control_DataCombo.FillFromSQL(datcboDepositante, "usp_Entidad_Titular_List 0, 1, " & mFormulario1116A_Cabecera.DepositanteIDEntidad, "IDEntidad", "Nombre", "Depositantes", cscpNone)
     Call CSM_Control_DataCombo.FillFromSQL(datcboCosecha, "usp_Cosecha_List 0, 1, " & mFormulario1116A_Cabecera.IDCosecha, "IDCosecha", "Nombre", "Cosechas", cscpItemOrFirst, pParametro.Cosecha_IDDefault)

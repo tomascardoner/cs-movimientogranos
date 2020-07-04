@@ -3,7 +3,7 @@ Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
 Begin VB.Form frmEntidad_OrigenDestino_Detalle 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Detalle del Orígen / Destino de la Entidad"
-   ClientHeight    =   4620
+   ClientHeight    =   4995
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   6180
@@ -22,22 +22,30 @@ Begin VB.Form frmEntidad_OrigenDestino_Detalle
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   4620
+   ScaleHeight     =   4995
    ScaleWidth      =   6180
+   Begin VB.CheckBox chkRealizaAnalisisIPRO 
+      Caption         =   "Realiza análisis de IPRO"
+      Height          =   210
+      Left            =   120
+      TabIndex        =   16
+      Top             =   4560
+      Width           =   2415
+   End
    Begin VB.CheckBox chkConvierteEnSubProducto 
       Caption         =   "Convierte en SubProducto"
       Height          =   210
-      Left            =   180
+      Left            =   120
       TabIndex        =   15
-      Top             =   4200
+      Top             =   4140
       Width           =   2415
    End
    Begin VB.CheckBox chkControlaStock 
       Caption         =   "Controla Stock"
       Height          =   210
-      Left            =   180
+      Left            =   120
       TabIndex        =   14
-      Top             =   3840
+      Top             =   3720
       Width           =   1515
    End
    Begin MSDataListLib.DataCombo datcboProvincia 
@@ -92,8 +100,8 @@ Begin VB.Form frmEntidad_OrigenDestino_Detalle
       Default         =   -1  'True
       Height          =   375
       Left            =   3480
-      TabIndex        =   16
-      Top             =   4080
+      TabIndex        =   17
+      Top             =   4440
       Width           =   1215
    End
    Begin VB.CommandButton cmdCancelar 
@@ -101,8 +109,8 @@ Begin VB.Form frmEntidad_OrigenDestino_Detalle
       Caption         =   "Cancelar"
       Height          =   375
       Left            =   4800
-      TabIndex        =   17
-      Top             =   4080
+      TabIndex        =   18
+      Top             =   4440
       Width           =   1215
    End
    Begin MSDataListLib.DataCombo datcboLocalidad 
@@ -241,6 +249,7 @@ Public Function LoadData() As Boolean
         
         chkControlaStock.Value = IIf(.ControlaStock, vbChecked, vbUnchecked)
         chkConvierteEnSubProducto.Value = IIf(.ConvierteEnSubProducto, vbChecked, vbUnchecked)
+        chkRealizaAnalisisIPRO.Value = IIf(.RealizaAnalisisIPRO, vbChecked, vbUnchecked)
         
         Call CSM_Control_TextBox.FormatAll(Me)
     End With
@@ -325,6 +334,7 @@ Private Sub cmdAceptar_Click()
         
         .ControlaStock = (chkControlaStock.Value = vbChecked)
         .ConvierteEnSubProducto = (chkConvierteEnSubProducto.Value = vbChecked)
+        .RealizaAnalisisIPRO = (chkRealizaAnalisisIPRO.Value = vbChecked)
         
         If .Update Then
             Unload Me

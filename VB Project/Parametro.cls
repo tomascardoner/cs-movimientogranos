@@ -18,6 +18,8 @@ Option Explicit
 '/////////////////////////////////////////////////////////////
 Private mCompanyName As String
 
+Public LogAccion_Enabled As Boolean
+
 'FOR COMPATIBILITY
 Public Database_CommandTimeout As Long
 Public Database_Database As String
@@ -67,7 +69,7 @@ Public Refresh As Boolean
 '/////////////////////////////////////////////////////////////
 
 Public Function LoadParametersRegistry() As Boolean
-    WriteLogEvent "Load Parameters From Registry: INIT", vbLogEventTypeInformation
+    WriteLogEvent "Load Parameters From Registry: INIT", vbLogEventTypeInformation, pParametro.LogAccion_Enabled
     
     mGridEvenRowBackColor = CSM_Registry.GetValue_FromApplication_LocalMachine("Interface", "GridEvenRowBackColor", &HFFC0C0, csrdtNumberInteger)
     mGridEvenRowForeColor = CSM_Registry.GetValue_FromApplication_LocalMachine("Interface", "GridEvenRowForeColor", vbWindowText, csrdtNumberInteger)
@@ -79,13 +81,13 @@ Public Function LoadParametersRegistry() As Boolean
     mMovimiento_Cereal_Lista_Columna_KilogramoFinal_Mostrar = CSM_Registry.GetValue_FromApplication_LocalMachine("Interface\Movimiento_Cereal_Lista", "Grid_Column_KilogramoFinal_Visible", False, csrdtBoolean)
     
     LoadParametersRegistry = True
-    WriteLogEvent "Load Parameters From Registry: DONE", vbLogEventTypeInformation
+    WriteLogEvent "Load Parameters From Registry: DONE", vbLogEventTypeInformation, pParametro.LogAccion_Enabled
 End Function
 
 Public Function LoadParametersDatabase() As Boolean
     Dim DES As CSC_Encryption_DES
     
-    WriteLogEvent "Load Parameters From Database: INIT", vbLogEventTypeInformation
+    WriteLogEvent "Load Parameters From Database: INIT", vbLogEventTypeInformation, pParametro.LogAccion_Enabled
     
     'COMPANY NAME
     Set DES = New CSC_Encryption_DES
@@ -129,7 +131,7 @@ Public Function LoadParametersDatabase() As Boolean
     mAFIP_ConsultaReFOG_POST_PostData = pCSC_Parameter.GetParameterText("AFIP_ConsultaReFOG_POST_PostData", "")
     
     LoadParametersDatabase = True
-    WriteLogEvent "Load Parameters From Database: DONE", vbLogEventTypeInformation
+    WriteLogEvent "Load Parameters From Database: DONE", vbLogEventTypeInformation, pParametro.LogAccion_Enabled
 End Function
 
 '/////////////////////////////////////////////////////////////////////////////
@@ -241,7 +243,7 @@ Public Property Let Planta_MostrarNombreEmpresa(ByVal Value As Boolean)
 End Property
 
 '/////////////////////////////////////////////////////////////////////////////
-'AFIP
+' AFIP
 
 Public Property Get AFIP_ConstanciaInscripcion_Link() As String
     AFIP_ConstanciaInscripcion_Link = mAFIP_ConstanciaInscripcion_Link
@@ -264,7 +266,7 @@ Public Property Get AFIP_ConsultaReFOG_POST_PostData() As String
 End Property
 
 '/////////////////////////////////////////////////////////////////////////////
-'RESTRICCIONES
+' RESTRICCIONES
 Public Property Get Movimiento_Cereal_PermiteBrutoMayor45000() As Boolean
     Movimiento_Cereal_PermiteBrutoMayor45000 = mMovimiento_Cereal_PermiteBrutoMayor45000
 End Property
@@ -354,3 +356,6 @@ Public Property Let Movimiento_Cereal_Lista_Columna_KilogramoFinal_Mostrar(ByVal
     Call CSM_Registry.SetValue_ToApplication_LocalMachine("Interface\Movimiento_Cereal_Lista", "Grid_Column_KilogramoFinal_Visible", mMovimiento_Cereal_Lista_Columna_KilogramoFinal_Mostrar)
 End Property
 
+Private Sub Class_Initialize()
+    LogAccion_Enabled = False
+End Sub
