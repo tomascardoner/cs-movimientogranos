@@ -319,7 +319,7 @@ End Sub
 Private Sub Form_Load()
     Me.Caption = "Acerca de " & App.Title
     lblTitle.Caption = App.Title
-    lblVersion.Caption = "Versión " & App.Major & "." & App.Minor & "     Revisión: " & App.Revision
+    lblVersion.Caption = "Versión " & App.Major & "." & App.Minor & "." & App.Revision & " - (" & Format(FileSystem.FileDateTime(App.Path & "\" & App.EXEName & ".exe"), "yyyyMMdd") & ")"
     lblCopyright.Caption = App.LegalCopyright
     
     lblCompanyName.Caption = pParametro.CompanyName
