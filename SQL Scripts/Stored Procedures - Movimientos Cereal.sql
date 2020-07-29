@@ -28,11 +28,58 @@ BEGIN
 	SELECT IDCartaPorte_Talonario, CEENumero + ISNULL(' - ' + CONVERT(char(10), FechaVencimiento, 103), '') AS Nombre
 		FROM CartaPorte_Talonario
 		WHERE IDCartaPorte_Talonario = @IDCartaPorte_Talonario
-			OR (
-				(@IDEntidad = IDEntidad OR @IDEntidad IS NULL)
-				AND ((DATEDIFF(day, @FechaCarga, FechaVencimiento) >= 0) OR @FechaCarga IS NULL)
-				)
+			OR ((@IDEntidad = IDEntidad OR @IDEntidad IS NULL)
+				AND
+				((DATEDIFF(day, @FechaCarga, FechaVencimiento) >= 0) OR @FechaCarga IS NULL))
 		ORDER BY CEENumero DESC
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
+-- Create date: 2020-07-29
+-- Description:	Lista los motivos de anulación de las Cartas de Porte
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_CartaPorte_MotivoAnulacion_List') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_CartaPorte_MotivoAnulacion_List
+GO
+
+CREATE PROCEDURE usp_CartaPorte_MotivoAnulacion_List
+	@MostrarTodos bit,
+	@MostrarNo bit,
+	@MostrarSi bit
+AS
+BEGIN
+	DECLARE @MotivosAnulacion TABLE (IDCartaPorte_MotivoAnulacion tinyint, Nombre varchar(50), Orden tinyint)
+
+	SET NOCOUNT ON;
+	
+	IF @MostrarTodos = 1
+		INSERT INTO @MotivosAnulacion
+			VALUES(0, '«Todas»', 1)
+
+	IF @MostrarNo = 1
+		IF @MostrarTodos = 1
+			INSERT INTO @MotivosAnulacion
+				VALUES(254, '«No»', 2)
+		ELSE
+			INSERT INTO @MotivosAnulacion
+				VALUES(0, '«No»', 1)
+
+	IF @MostrarSi = 1
+		INSERT INTO @MotivosAnulacion
+			VALUES(255, '«Si»', 3)
+
+	INSERT INTO @MotivosAnulacion
+		SELECT IDCartaPorte_MotivoAnulacion, Nombre, 4
+			FROM CartaPorte_MotivoAnulacion
+			WHERE Activo = 1
+
+	SELECT IDCartaPorte_MotivoAnulacion, Nombre
+		FROM @MotivosAnulacion
+		ORDER BY Orden, IDCartaPorte_MotivoAnulacion
 END
 GO
 

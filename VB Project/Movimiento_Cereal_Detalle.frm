@@ -685,13 +685,18 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Top             =   840
          Width           =   3015
       End
-      Begin VB.ComboBox cboAnulada 
+      Begin MSDataListLib.DataCombo datcboAnulada 
          Height          =   330
          Left            =   1260
-         Style           =   2  'Dropdown List
          TabIndex        =   133
          Top             =   420
-         Width           =   2115
+         Width           =   3015
+         _ExtentX        =   5318
+         _ExtentY        =   582
+         _Version        =   393216
+         MatchEntry      =   -1  'True
+         Style           =   2
+         Text            =   ""
       End
       Begin VB.Label lblDeclaraIPRO 
          AutoSize        =   -1  'True
@@ -1023,7 +1028,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   85393411
+         Format          =   102367235
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1069,7 +1074,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   85393409
+         Format          =   102367233
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1083,7 +1088,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   85393409
+         Format          =   102367233
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1098,7 +1103,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   85393411
+         Format          =   102367235
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2020,7 +2025,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   85393409
+         Format          =   102367233
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2190,7 +2195,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   85393409
+         Format          =   102367233
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2337,6 +2342,8 @@ Public Function Startup(ByRef Movimiento_Cereal As Movimiento_Cereal) As Boolean
     dtpAnalisis_Fecha.Value = dtpFechaArribo.Value
     dtpAnalisis_Fecha.Value = Null
     
+    Call CSM_Control_DataCombo.FillFromSQL(datcboAnulada, "usp_CartaPorte_MotivoAnulacion_List 0, 1, 0", "IDCartaPorte_MotivoAnulacion", "Nombre", "Motivos de anulación", cscpCurrentOrFirst)
+    
     Startup = True
     mLoading = False
 End Function
@@ -2452,7 +2459,7 @@ Public Function LoadData() As Boolean
         
         'EXTRAS
         chkDeclaraIPRO.Value = IIf(.DeclaraIPRO, vbChecked, vbUnchecked)
-        cboAnulada.ListIndex = .IDCartaPorte_MotivoAnulacion
+        datcboAnulada.BoundText = .IDCartaPorte_MotivoAnulacion
         txtNotas.Text = .Notas
         
         'INFORMACION
@@ -2525,14 +2532,6 @@ Private Sub Form_Load()
     cboAnalisis_ResultadoIPRO.AddItem CSM_Constant.ITEM_POSITIVE_MALE
     cboAnalisis_ResultadoIPRO.AddItem CSM_Constant.ITEM_NEGATIVE_MALE
     cboAnalisis_ResultadoIPRO.ListIndex = 0
-    
-    'EXTRAS
-    cboAnulada.AddItem CSM_Constant.ITEM_START_CHAR & " No " & CSM_Constant.ITEM_END_CHAR
-    cboAnulada.AddItem "Carta de Porte Vencida"
-    cboAnulada.AddItem "Mercadería Rechazada"
-    cboAnulada.AddItem "Error en C.T.G."
-    cboAnulada.AddItem "Cambio de Destino"
-    cboAnulada.ListIndex = 0
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -3424,7 +3423,7 @@ Private Sub Aceptar_Todos()
         
         'EXTRAS
         .DeclaraIPRO = (chkDeclaraIPRO.Value = vbChecked)
-        .IDCartaPorte_MotivoAnulacion = cboAnulada.ListIndex
+        .IDCartaPorte_MotivoAnulacion = Val(datcboAnulada.BoundText)
         .Notas = txtNotas.Text
         
         If Not .Update Then

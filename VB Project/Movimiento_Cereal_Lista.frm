@@ -302,7 +302,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   90374145
+            Format          =   113115137
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -324,7 +324,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   90374145
+            Format          =   113115137
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -1815,14 +1815,7 @@ Private Sub Form_Load()
     cboCertificadoRT.AddItem CSM_Constant.BOOLEAN_STRING_NO
     cboCertificadoRT.ListIndex = 0
     
-    cboAnulada.AddItem CSM_Constant.ITEM_ALL_FEMALE
-    cboAnulada.AddItem CSM_Constant.BOOLEAN_STRING_NO
-    cboAnulada.AddItem CSM_Constant.BOOLEAN_STRING_YES
-    cboAnulada.AddItem "Carta de Porte Vencida"
-    cboAnulada.AddItem "Mercadería Rechazada"
-    cboAnulada.AddItem "Error en C.T.G."
-    cboAnulada.AddItem "Cambio de Destino"
-    cboAnulada.ListIndex = 1
+    Call FillComboBox_MotivoAnulacion
     
     'AGREGO LOS VALUE ITEMS DE LA COLUMNA TIPO
     Set ValueItem = New TrueOleDBGrid80.ValueItem
@@ -2602,6 +2595,17 @@ Public Function FillComboBox_Cereal() As Boolean
         SaveItemData = cboCereal.ItemData(cboCereal.ListIndex)
     End If
     Call CSM_Control_ComboBox.FillFromSQL(cboCereal, "usp_Cereal_List 0, 0, 1, NULL", "IDCereal", "Nombre", "Cereales", cscpItemOrFirst, SaveItemData, False)
+End Function
+
+Public Function FillComboBox_MotivoAnulacion() As Boolean
+    Dim SaveItemData As Byte
+    
+    If cboAnulada.ListIndex > -1 Then
+        SaveItemData = cboAnulada.ItemData(cboAnulada.ListIndex)
+    Else
+        SaveItemData = 254
+    End If
+    Call CSM_Control_ComboBox.FillFromSQL(cboAnulada, "usp_CartaPorte_MotivoAnulacion_List 1, 1, 1", "IDCartaPorte_MotivoAnulacion", "Nombre", "Motivos de anulación", cscpItemOrFirstIfUnique, SaveItemData)
 End Function
 
 Private Function ExportCartasPorteRecibidas30(ByVal ExportPath As String) As Boolean
