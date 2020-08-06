@@ -1028,7 +1028,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   102367235
+         Format          =   61865987
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1074,7 +1074,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   102367233
+         Format          =   61865985
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1088,7 +1088,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   102367233
+         Format          =   61865985
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1103,7 +1103,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   102367235
+         Format          =   61865987
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2025,7 +2025,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   102367233
+         Format          =   61865985
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2195,7 +2195,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   102367233
+         Format          =   61865985
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2305,7 +2305,6 @@ Public Function Startup(ByRef Movimiento_Cereal As Movimiento_Cereal) As Boolean
     Select Case mMovimiento_Cereal.Tipo
         Case MOVIMIENTO_CEREAL_TIPO_ENTRADA
             Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Titular, "usp_Entidad_Titular_List 0, 1, " & mMovimiento_Cereal.IDEntidad_Titular, "IDEntidad", "Nombre", "Titulares", cscpFirstIfUnique)
-            'Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Destinatario, "usp_Entidad_ControlaStock_List 0, 1, NULL, " & mMovimiento_Cereal.IDEntidad_Destino, "IDEntidad", "Nombre", "Destinatarios", cscpFirstIfUnique)
             Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Destinatario, "usp_Entidad_Destinatario_List 0, 1, " & mMovimiento_Cereal.IDEntidad_Destinatario, "IDEntidad", "Nombre", "Destinatarios", cscpItemOrFirstIfUnique, CLng(pParametro.Planta_IDDefault \ 100000))
             Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Destino, "usp_Entidad_ControlaStock_List 0, 1, NULL, " & mMovimiento_Cereal.IDEntidad_Destino, "IDEntidad", "Nombre", "Destinos", cscpFirstIfUnique)
         Case MOVIMIENTO_CEREAL_TIPO_SALIDA
@@ -2487,7 +2486,7 @@ Public Function LoadData() As Boolean
         
         'VERIFICO QUE NO ESTÉ CERTIFICADO
         If .Certificado Then
-            Call CSM_Forms.ControlsChangeEnabledState(Me, False, False, False, "cmdPesadasReducidas", "picPesadas", "cmdPesadasCompletas", "tabExtras", "picAnalisis", "lblAnalisis_Fecha", "dtpAnalisis_Fecha", "lblAnalisis_MuestraNumero", "txtAnalisis_MuestraNumero", "lblAnalisis_ResultadoIPRO", "cboAnalisis_ResultadoIPRO", "picInformacion", "lblFormulariosAplicados", "cboFormulariosAplicados", "cmdAceptar", "cmdCancelar", "picNavegador", "cmdNavegador_Primero", "cmdNavegador_Anterior", "lblNavegador_RowNumber", "lblNavegador_RowCount", "cmdNavegador_Siguiente", "cmdNavegador_Ultimo")
+            Call CSM_Forms.ControlsChangeEnabledState(Me, False, False, False, "cmdPesadasReducidas", "picPesadas", "cmdPesadasCompletas", "tabExtras", "picAnalisis", "lblAnalisis_Fecha", "dtpAnalisis_Fecha", "lblAnalisis_MuestraNumero", "txtAnalisis_MuestraNumero", "lblAnalisis_ResultadoIPRO", "cboAnalisis_ResultadoIPRO", "picExtras", "chkDeclaraIPRO", "picInformacion", "lblFormulariosAplicados", "cboFormulariosAplicados", "cmdAceptar", "cmdCancelar", "picNavegador", "cmdNavegador_Primero", "cmdNavegador_Anterior", "lblNavegador_RowNumber", "lblNavegador_RowCount", "cmdNavegador_Siguiente", "cmdNavegador_Ultimo")
         Else
             Call CSM_Forms.ControlsChangeEnabledState(Me, True, False, False, "txtProcedenciaDireccion", "txtProcedenciaLocalidad", "txtProcedenciaProvincia", "txtDestinoDireccion", "txtDestinoLocalidad", "txtDestinoProvincia")
         End If
@@ -3924,7 +3923,7 @@ Private Function VerificarDatosAnalisis() As Boolean
                         txtAnalisis_MuestraNumero.SetFocus
                         Exit Function
                     End If
-                    If cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
+                    If chkDeclaraIPRO.Value = vbUnchecked And cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
                         tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
                         MsgBox "Debe especificar el Resultado IPRO del Análisis.", vbInformation, App.Title
                         cboAnalisis_ResultadoIPRO.SetFocus
@@ -3966,6 +3965,15 @@ End Function
 Private Sub Aceptar_Analisis()
     Dim Movimiento_Cereal_Analisis_Actual As Movimiento_Cereal_Analisis
     
+    ' EXTRAS
+    If mMovimiento_Cereal.DeclaraIPRO <> (chkDeclaraIPRO.Value = vbChecked) Then
+        mMovimiento_Cereal.DeclaraIPRO = (chkDeclaraIPRO.Value = vbChecked)
+        If Not mMovimiento_Cereal.Update Then
+            Exit Sub
+        End If
+    End If
+    
+    ' ANALISIS
     If IsNull(dtpAnalisis_Fecha.Value) And Trim(txtAnalisis_MuestraNumero.Text) = "" And cboAnalisis_ResultadoIPRO.ListIndex = 0 Then
         ' No se ingresaron datos de análisis
         If Not mMovimiento_Cereal.IsNew Then
