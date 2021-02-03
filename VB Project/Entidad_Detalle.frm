@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
 Begin VB.Form frmEntidad_Detalle 
    BorderStyle     =   1  'Fixed Single
@@ -51,8 +51,94 @@ Begin VB.Form frmEntidad_Detalle
       TabIndex        =   55
       Top             =   1380
       Width           =   5655
+      Begin VB.PictureBox picAuditoria 
+         BorderStyle     =   0  'None
+         Height          =   1395
+         Left            =   60
+         ScaleHeight     =   1395
+         ScaleWidth      =   5475
+         TabIndex        =   69
+         Top             =   1320
+         Width           =   5475
+         Begin VB.TextBox txtFechaHora_Modificacion 
+            BackColor       =   &H8000000F&
+            ForeColor       =   &H8000000D&
+            Height          =   315
+            Left            =   2100
+            TabIndex        =   65
+            TabStop         =   0   'False
+            Top             =   1080
+            Width           =   1575
+         End
+         Begin VB.TextBox txtUsuario_Creacion 
+            BackColor       =   &H8000000F&
+            ForeColor       =   &H8000000D&
+            Height          =   315
+            Left            =   2100
+            TabIndex        =   59
+            TabStop         =   0   'False
+            Top             =   0
+            Width           =   3375
+         End
+         Begin VB.TextBox txtFechaHora_Creacion 
+            BackColor       =   &H8000000F&
+            ForeColor       =   &H8000000D&
+            Height          =   315
+            Left            =   2100
+            TabIndex        =   61
+            TabStop         =   0   'False
+            Top             =   360
+            Width           =   1575
+         End
+         Begin VB.TextBox txtUsuario_Modificacion 
+            BackColor       =   &H8000000F&
+            ForeColor       =   &H8000000D&
+            Height          =   315
+            Left            =   2100
+            TabIndex        =   63
+            TabStop         =   0   'False
+            Top             =   720
+            Width           =   3375
+         End
+         Begin VB.Label lblUsuario_Modificacion 
+            AutoSize        =   -1  'True
+            Caption         =   "Usuario Modificación:"
+            Height          =   210
+            Left            =   120
+            TabIndex        =   62
+            Top             =   780
+            Width           =   1545
+         End
+         Begin VB.Label lblFechaHora_Modificacion 
+            AutoSize        =   -1  'True
+            Caption         =   "Fecha/Hora Modificación:"
+            Height          =   210
+            Left            =   120
+            TabIndex        =   64
+            Top             =   1140
+            Width           =   1830
+         End
+         Begin VB.Label lblFechaHora_Creacion 
+            AutoSize        =   -1  'True
+            Caption         =   "Fecha/Hora Creación:"
+            Height          =   210
+            Left            =   120
+            TabIndex        =   60
+            Top             =   420
+            Width           =   1575
+         End
+         Begin VB.Label lblUsuario_Creacion 
+            AutoSize        =   -1  'True
+            Caption         =   "Usuario Creación:"
+            Height          =   210
+            Left            =   120
+            TabIndex        =   58
+            Top             =   60
+            Width           =   1290
+         End
+      End
       Begin VB.TextBox txtNotas 
-         Height          =   2475
+         Height          =   975
          Left            =   840
          MaxLength       =   8000
          MultiLine       =   -1  'True
@@ -199,7 +285,7 @@ Begin VB.Form frmEntidad_Detalle
       Caption         =   "Activo:"
       Height          =   210
       Left            =   120
-      TabIndex        =   58
+      TabIndex        =   66
       Top             =   4500
       Width           =   1215
    End
@@ -216,7 +302,7 @@ Begin VB.Form frmEntidad_Detalle
       Default         =   -1  'True
       Height          =   375
       Left            =   3480
-      TabIndex        =   59
+      TabIndex        =   67
       Top             =   4800
       Width           =   1215
    End
@@ -225,7 +311,7 @@ Begin VB.Form frmEntidad_Detalle
       Caption         =   "Cancelar"
       Height          =   375
       Left            =   4800
-      TabIndex        =   60
+      TabIndex        =   68
       Top             =   4800
       Width           =   1215
    End
@@ -684,6 +770,12 @@ Public Function LoadData() As Boolean
         
         txtNotas.Text = .Notas
         
+        'AUDITORÍA
+        txtUsuario_Creacion.Text = .UsuarioCreacion.Nombre
+        txtFechaHora_Creacion.Text = .FechaHoraCreacion_Formatted
+        txtUsuario_Modificacion.Text = .UsuarioModificacion.Nombre
+        txtFechaHora_Modificacion.Text = .FechaHoraModificacion_Formatted
+    
         chkActivo.Value = IIf(.Activo, vbChecked, vbUnchecked)
         
         Call CSM_Control_TextBox.FormatAll(Me)

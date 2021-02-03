@@ -25,7 +25,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT Entidad.IDEntidad, Entidad.Nombre, Entidad.CUIT, Entidad.EsTitular, Entidad.EsIntermediario, Entidad.EsRemitenteComercial, Entidad.EsCorredor, Entidad.EsEntregador, Entidad.EsDestinatario, Entidad.EsDestino, Entidad.EsTransportista, Entidad.EsChofer, Entidad.EsClienteSubProducto, Entidad.Notas, Entidad.Activo
+	SELECT Entidad.IDEntidad, Entidad.Nombre, Entidad.CUIT, Entidad.EsTitular, Entidad.EsIntermediario, Entidad.EsRemitenteComercial, Entidad.EsCorredor, Entidad.EsEntregador, Entidad.EsDestinatario, Entidad.EsDestino, Entidad.EsTransportista, Entidad.EsChofer, Entidad.EsClienteSubProducto, Entidad.Notas, Entidad.Activo, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion
 		FROM Entidad
 		WHERE Entidad.IDEntidad = @IDEntidad 
 
@@ -59,7 +59,8 @@ CREATE PROCEDURE dbo.usp_Entidad_Add
 	@EsChofer bit,
 	@EsClienteSubProducto bit,
 	@Notas varchar(8000),
-	@Activo bit
+	@Activo bit,
+    @IDUsuario tinyint
 AS
 
 BEGIN
@@ -72,8 +73,8 @@ BEGIN
 			SET @IDEntidad = (SELECT ISNULL(MAX(Entidad.IDEntidad), 0) + 1 FROM Entidad)
 		
 			INSERT INTO Entidad
-				(IDEntidad, Nombre, CUIT, EsTitular, EsIntermediario, EsRemitenteComercial, EsCorredor, EsEntregador,EsDestinatario, EsDestino, EsTransportista, EsChofer, EsClienteSubProducto, Notas, Activo)
-				VALUES (@IDEntidad, @Nombre, @CUIT, @EsTitular, @EsIntermediario, @EsRemitenteComercial, @EsCorredor, @EsEntregador, @EsDestinatario, @EsDestino, @EsTransportista, @EsChofer, @EsClienteSubProducto, @Notas, @Activo)
+				(IDEntidad, Nombre, CUIT, EsTitular, EsIntermediario, EsRemitenteComercial, EsCorredor, EsEntregador,EsDestinatario, EsDestino, EsTransportista, EsChofer, EsClienteSubProducto, Notas, Activo, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion)
+				VALUES (@IDEntidad, @Nombre, @CUIT, @EsTitular, @EsIntermediario, @EsRemitenteComercial, @EsCorredor, @EsEntregador, @EsDestinatario, @EsDestino, @EsTransportista, @EsChofer, @EsClienteSubProducto, @Notas, @Activo, @IDUsuario, GETDATE(), @IDUsuario, GETDATE())
 	
 		COMMIT TRANSACTION
 	END TRY
@@ -121,7 +122,8 @@ CREATE PROCEDURE dbo.usp_Entidad_Update
 	@EsChofer bit,
 	@EsClienteSubProducto bit,
 	@Notas varchar(8000),
-	@Activo bit
+	@Activo bit,
+    @IDUsuario tinyint
 AS
 
 BEGIN
@@ -132,7 +134,7 @@ BEGIN
 		BEGIN TRANSACTION	
 
 				UPDATE Entidad
-					SET Nombre = @Nombre, CUIT = @CUIT, EsTitular = @EsTitular, EsIntermediario = @EsIntermediario, EsRemitenteComercial = @EsRemitenteComercial, EsCorredor = @EsCorredor, EsEntregador = @EsEntregador, EsDestinatario = @EsDestinatario, EsDestino = @EsDestino, EsTransportista = @EsTransportista, EsChofer = @EsChofer, EsClienteSubProducto = @EsClienteSubProducto, Notas = @Notas, Activo = @Activo
+					SET Nombre = @Nombre, CUIT = @CUIT, EsTitular = @EsTitular, EsIntermediario = @EsIntermediario, EsRemitenteComercial = @EsRemitenteComercial, EsCorredor = @EsCorredor, EsEntregador = @EsEntregador, EsDestinatario = @EsDestinatario, EsDestino = @EsDestino, EsTransportista = @EsTransportista, EsChofer = @EsChofer, EsClienteSubProducto = @EsClienteSubProducto, Notas = @Notas, Activo = @Activo, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
 					WHERE IDEntidad = @IDEntidad
 
 		COMMIT TRANSACTION

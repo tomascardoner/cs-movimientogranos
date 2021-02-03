@@ -30,6 +30,12 @@ Private mEsClienteSubProducto As Boolean
 Private mNotas As String
 Private mActivo As Boolean
 
+'DATOS DEL REGISTRO
+Private mIDUsuarioCreacion As Byte
+Private mFechaHoraCreacion As Date
+Private mIDUsuarioModificacion As Byte
+Private mFechaHoraModificacion As Date
+
 'STATE VARIABLES
 Private mIsNew As Boolean
 Private mIsCopy As Boolean
@@ -329,6 +335,112 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get IDUsuarioCreacion() As Byte
+    IDUsuarioCreacion = mIDUsuarioCreacion
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get UsuarioCreacion() As Usuario
+    Static oUsuario As Usuario
+    
+    If oUsuario Is Nothing Then
+        Set oUsuario = New Usuario
+    End If
+    If oUsuario.IDUsuario <> IDUsuarioCreacion Then
+        If IDUsuarioCreacion = 0 Then
+            Set oUsuario = New Usuario
+        Else
+            oUsuario.IDUsuario = IDUsuarioCreacion
+            Call oUsuario.Load
+        End If
+    End If
+    Set UsuarioCreacion = oUsuario
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get FechaHoraCreacion() As Date
+    FechaHoraCreacion = mFechaHoraCreacion
+End Property
+
+Public Property Get FechaHoraCreacion_Formatted() As String
+    FechaHoraCreacion_Formatted = Format(mFechaHoraCreacion, "Short Date") & " " & Format(mFechaHoraCreacion, "Short Time")
+End Property
+
+Public Property Get FechaHoraCreacion_FormattedAsDate() As String
+    FechaHoraCreacion_FormattedAsDate = Format(mFechaHoraCreacion, "Short Date")
+End Property
+
+Public Property Get FechaHoraCreacion_FormattedAsTime() As String
+    FechaHoraCreacion_FormattedAsTime = Format(mFechaHoraCreacion, "Short Time")
+End Property
+
+Public Property Let FechaHoraCreacion(ByVal Value As Date)
+    If Value <> mFechaHoraCreacion Then
+        mIsDirty = True
+    End If
+    mFechaHoraCreacion = Value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get IDUsuarioModificacion() As Byte
+    IDUsuarioModificacion = mIDUsuarioModificacion
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get UsuarioModificacion() As Usuario
+    Static oUsuario As Usuario
+    
+    If oUsuario Is Nothing Then
+        Set oUsuario = New Usuario
+    End If
+    If oUsuario.IDUsuario <> IDUsuarioModificacion Then
+        If IDUsuarioModificacion = 0 Then
+            Set oUsuario = New Usuario
+        Else
+            oUsuario.IDUsuario = IDUsuarioModificacion
+            Call oUsuario.Load
+        End If
+    End If
+    Set UsuarioModificacion = oUsuario
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get FechaHoraModificacion() As Date
+    FechaHoraModificacion = mFechaHoraModificacion
+End Property
+
+Public Property Get FechaHoraModificacion_Formatted() As String
+    FechaHoraModificacion_Formatted = Format(mFechaHoraModificacion, "Short Date") & " " & Format(mFechaHoraModificacion, "Short Time")
+End Property
+
+Public Property Get FechaHoraModificacion_FormattedAsDate() As String
+    FechaHoraModificacion_FormattedAsDate = Format(mFechaHoraModificacion, "Short Date")
+End Property
+
+Public Property Get FechaHoraModificacion_FormattedAsTime() As String
+    FechaHoraModificacion_FormattedAsTime = Format(mFechaHoraModificacion, "Short Time")
+End Property
+
+Public Property Let FechaHoraModificacion(ByVal Value As Date)
+    If Value <> mFechaHoraModificacion Then
+        mIsDirty = True
+    End If
+    mFechaHoraModificacion = Value
+End Property
+
+''////////////////////////////////////////////////////////////////////////
+''\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Property Get IsNew() As Boolean
     IsNew = mIsNew
 End Property
@@ -434,6 +546,12 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         mEsClienteSubProducto = recData("EsClienteSubProducto").Value
         mNotas = recData("Notas").Value & ""
         mActivo = recData("Activo").Value
+        
+        'DATOS DEL REGISTRO
+        mIDUsuarioCreacion = recData("IDUsuarioCreacion").Value
+        mFechaHoraCreacion = recData("FechaHoraCreacion").Value
+        mIDUsuarioModificacion = recData("IDUsuarioModificacion").Value
+        mFechaHoraModificacion = recData("FechaHoraModificacion").Value
     End If
 
     Screen.MousePointer = vbDefault
@@ -494,6 +612,7 @@ Public Function Update() As Boolean
         .Parameters.Append .CreateParameter("EsClienteSubProducto", adBoolean, adParamInput, , mEsClienteSubProducto)
         .Parameters.Append .CreateParameter("Notas", adVarChar, adParamInput, 8000, CSM_Function.IfIsZeroLenghtString_Null(mNotas))
         .Parameters.Append .CreateParameter("Activo", adBoolean, adParamInput, , mActivo)
+        .Parameters.Append .CreateParameter("IDUsuario", adTinyInt, adParamInput, , pIDUsuario)
 
         .Execute
 
@@ -566,6 +685,12 @@ Private Sub InitializeValues()
     mEsClienteSubProducto = False
     mNotas = ""
     mActivo = 1
+
+    'DATOS DEL REGISTRO
+    mIDUsuarioCreacion = 0
+    mFechaHoraCreacion = CSM_Constant.DATE_TIME_FIELD_NULL_VALUE
+    mIDUsuarioModificacion = 0
+    mFechaHoraModificacion = CSM_Constant.DATE_TIME_FIELD_NULL_VALUE
 
     mIsNew = True
     mIsCopy = False
