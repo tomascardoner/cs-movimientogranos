@@ -1028,7 +1028,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   61865987
+         Format          =   114229251
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1074,7 +1074,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   61865985
+         Format          =   114229249
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1088,7 +1088,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   61865985
+         Format          =   114229249
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1103,7 +1103,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   61865987
+         Format          =   114229251
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2025,7 +2025,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   61865985
+         Format          =   114229249
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2195,7 +2195,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   61865985
+         Format          =   114229249
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -3762,17 +3762,37 @@ Private Function VerificarDatosTransporte() As Boolean
 End Function
 
 Private Function VerificarDatosDescarga() As Boolean
+    Dim FechaHoraArribo As Date
+    Dim FechaHoraDescarga As Date
+    
     If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
-        If DateDiff("d", dtpFechaArribo.Value, dtpFechaCarga.Value) > 0 Then
-            MsgBox "La Fecha de Arribo no debe ser anterior a la Fecha de Carga.", vbInformation, App.Title
-            dtpFechaArribo.SetFocus
-            Exit Function
-        End If
-        If DateDiff("d", CDate(Format(dtpFechaDescarga.Value, "Short Date") & " " & Format(dtpHoraDescarga.Value, "Short Time")), CDate(Format(dtpFechaArribo.Value, "Short Date") & " " & Format(dtpHoraArribo.Value, "Short Time"))) > 0 Then
-            MsgBox "La Fecha/Hora de Descarga no debe ser anterior a la Fecha/Hora de Arribo.", vbInformation, App.Title
-            dtpFechaDescarga.SetFocus
-            Exit Function
-        End If
+        ' Fecha/hora de arribo
+        Select Case DateDiff("d", dtpFechaCarga.Value, dtpFechaArribo.Value)
+            Case Is < 0
+                MsgBox "La Fecha de Arribo no debe ser anterior a la Fecha de Carga.", vbInformation, App.Title
+                dtpFechaArribo.SetFocus
+                Exit Function
+            Case Is > pParametro.Movimiento_Cereal_FechaArriboDiasMaximo
+                MsgBox "La Fecha de Arribo no debe ser mayor a " & pParametro.Movimiento_Cereal_FechaArriboDiasMaximo & " días de la Fecha de Carga.", vbInformation, App.Title
+                dtpFechaArribo.SetFocus
+                Exit Function
+        End Select
+        
+        ' Fecha/hora de descarga
+        FechaHoraArribo = CDate(Format(dtpFechaArribo.Value, "Short Date") & " " & Format(dtpHoraArribo.Value, "Short Time"))
+        FechaHoraDescarga = CDate(Format(dtpFechaDescarga.Value, "Short Date") & " " & Format(dtpHoraDescarga.Value, "Short Time"))
+        Select Case DateDiff("d", FechaHoraArribo, FechaHoraDescarga)
+            Case Is < 0
+                MsgBox "La Fecha/Hora de Descarga no debe ser anterior a la Fecha/Hora de Arribo.", vbInformation, App.Title
+                dtpFechaDescarga.SetFocus
+                Exit Function
+            Case Is > pParametro.Movimiento_Cereal_FechaDescargaDiasMaximo
+                MsgBox "La Fecha de Descarga no debe ser mayor a " & pParametro.Movimiento_Cereal_FechaDescargaDiasMaximo & " días de la Fecha de Arribo.", vbInformation, App.Title
+                dtpFechaDescarga.SetFocus
+                Exit Function
+        End Select
+        
+        
     End If
 
     VerificarDatosDescarga = True
@@ -3937,12 +3957,17 @@ Private Function VerificarDatosAnalisis() As Boolean
     Set cer = Nothing
     
     If Not IsNull(dtpAnalisis_Fecha.Value) Then
-        If DateDiff("d", dtpAnalisis_Fecha.Value, dtpFechaArribo.Value) > 0 Then
-            tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
-            MsgBox "La Fecha de Análisis no debe ser anterior a la Fecha de Arribo.", vbInformation, App.Title
-            dtpAnalisis_Fecha.SetFocus
-            Exit Function
-        End If
+        ' Fecha de análisis
+        Select Case DateDiff("d", dtpFechaArribo.Value, dtpAnalisis_Fecha.Value)
+            Case Is < 0
+                MsgBox "La Fecha de Análisis no debe ser anterior a la Fecha de Arribo.", vbInformation, App.Title
+                dtpFechaArribo.SetFocus
+                Exit Function
+            Case Is > pParametro.Movimiento_Cereal_FechaAnalisisDiasMaximo
+                MsgBox "La Fecha de Análisis no debe ser mayor a " & pParametro.Movimiento_Cereal_FechaAnalisisDiasMaximo & " días de la Fecha de Arribo.", vbInformation, App.Title
+                dtpFechaArribo.SetFocus
+                Exit Function
+        End Select
     End If
     If Trim(txtAnalisis_MuestraNumero.Text) <> "" Then
         If Not IsNumeric(txtAnalisis_MuestraNumero.Text) Then

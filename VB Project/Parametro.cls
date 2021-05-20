@@ -47,6 +47,10 @@ Private mGridHighlightRowForeColor As Long
 Private mMovimiento_Cereal_PermiteBrutoMayor45000 As Boolean
 Private mMovimiento_Cereal_PermiteEntradaConDestinatarioDiferente As Boolean
 
+Public Movimiento_Cereal_FechaArriboDiasMaximo As Byte
+Public Movimiento_Cereal_FechaDescargaDiasMaximo As Byte
+Public Movimiento_Cereal_FechaAnalisisDiasMaximo As Byte
+
 Private mMovimiento_Cereal_Lista_Columna_KilogramoFinal_Mostrar As Boolean
 
 Private mLocalidad_VerificarPartido As Boolean
@@ -117,8 +121,12 @@ Public Function LoadParametersDatabase() As Boolean
     mMoneda_Dolar_ID = pCSC_Parameter.GetParameterNumberInteger("Moneda_Dolar_ID")
     mMoneda_Euro_ID = pCSC_Parameter.GetParameterNumberInteger("Moneda_Euro_ID")
     
+    'MOVIMIENTOS DE CEREALOS
     mMovimiento_Cereal_PermiteBrutoMayor45000 = pCSC_Parameter.GetParameterBoolean("Movimiento_Cereal_PermiteBrutoMayor45000", False)
     mMovimiento_Cereal_PermiteEntradaConDestinatarioDiferente = pCSC_Parameter.GetParameterBoolean("Movimiento_Cereal_PermiteEntradaConDestinatarioDiferente", False)
+    Movimiento_Cereal_FechaArriboDiasMaximo = pCSC_Parameter.GetParameterNumberInteger("Movimiento_Cereal_FechaArriboDiasMaximo", 10)
+    Movimiento_Cereal_FechaDescargaDiasMaximo = pCSC_Parameter.GetParameterNumberInteger("Movimiento_Cereal_FechaDescargaDiasMaximo", 10)
+    Movimiento_Cereal_FechaAnalisisDiasMaximo = pCSC_Parameter.GetParameterNumberInteger("Movimiento_Cereal_FechaAnalisisDiasMaximo", 10)
     
     mLocalidad_VerificarPartido = pCSC_Parameter.GetParameterBoolean("Localidad_VerificarPartido", True)
     
