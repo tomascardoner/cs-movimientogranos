@@ -82,6 +82,7 @@ Private mFechaHoraCreacion As Date
 Private mIDUsuarioModificacion As Byte
 Private mFechaHoraModificacion As Date
 Private mFechaHoraLiquidacionServicio As Date
+Private mFechaHoraEnvioBolsaTech As Date
 Private mCertificado As Boolean
 Private mKilogramoAplicado As Long
 
@@ -1487,6 +1488,32 @@ End Property
 ''////////////////////////////////////////////////////////////////////////
 ''\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get FechaHoraEnvioBolsaTech() As Date
+    FechaHoraEnvioBolsaTech = mFechaHoraEnvioBolsaTech
+End Property
+
+Public Property Get FechaHoraEnvioBolsaTech_Formatted() As String
+    FechaHoraEnvioBolsaTech_Formatted = Format(mFechaHoraEnvioBolsaTech, "Short Date") & " " & Format(mFechaHoraEnvioBolsaTech, "Short Time")
+End Property
+
+Public Property Get FechaHoraEnvioBolsaTech_FormattedAsDate() As String
+    FechaHoraEnvioBolsaTech_FormattedAsDate = Format(mFechaHoraEnvioBolsaTech, "Short Date")
+End Property
+
+Public Property Get FechaHoraEnvioBolsaTech_FormattedAsTime() As String
+    FechaHoraEnvioBolsaTech_FormattedAsTime = Format(mFechaHoraEnvioBolsaTech, "Short Time")
+End Property
+
+Public Property Let FechaHoraEnvioBolsaTech(ByVal Value As Date)
+    If Value <> mFechaHoraEnvioBolsaTech Then
+        mIsDirty = True
+    End If
+    mFechaHoraEnvioBolsaTech = Value
+End Property
+
+''////////////////////////////////////////////////////////////////////////
+''\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Property Get Certificado() As Boolean
     Certificado = mCertificado
 End Property
@@ -1825,6 +1852,7 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         mIDUsuarioModificacion = recData("IDUsuarioModificacion").Value
         mFechaHoraModificacion = recData("FechaHoraModificacion").Value
         mFechaHoraLiquidacionServicio = IIf(IsNull(recData("FechaHoraLiquidacionServicio").Value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraLiquidacionServicio").Value)
+        mFechaHoraEnvioBolsaTech = IIf(IsNull(recData("FechaHoraEnvioBolsaTech").Value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraEnvioBolsaTech").Value)
         
         mCertificado = IIf(mTipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA, recData("Certificado").Value, False)
         mKilogramoAplicado = Val(recData("KilogramoAplicado").Value & "")
@@ -1909,6 +1937,8 @@ Public Function Copy() As Boolean
         
         mFechaHoraArribo = DATE_TIME_FIELD_NULL_VALUE
         mFechaHoraDescarga = DATE_TIME_FIELD_NULL_VALUE
+        mFechaHoraLiquidacionServicio = DATE_TIME_FIELD_NULL_VALUE
+        mFechaHoraEnvioBolsaTech = DATE_TIME_FIELD_NULL_VALUE
         
         Set mCMovimiento_Cereal_Pesada = New Collection
         Set mCMovimiento_Cereal_Pesada_Updated = New Collection
@@ -2179,6 +2209,7 @@ Private Sub InitializeValues()
     mIDUsuarioModificacion = 0
     mFechaHoraModificacion = CSM_Constant.DATE_TIME_FIELD_NULL_VALUE
     mFechaHoraLiquidacionServicio = CSM_Constant.DATE_TIME_FIELD_NULL_VALUE
+    mFechaHoraEnvioBolsaTech = CSM_Constant.DATE_TIME_FIELD_NULL_VALUE
     mCertificado = False
     mKilogramoAplicado = 0
     

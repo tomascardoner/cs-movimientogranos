@@ -33,7 +33,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   107544577
+      Format          =   92340225
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -96,7 +96,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   107544577
+      Format          =   92340225
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -214,7 +214,7 @@ Private Sub cmdExport_Click()
     End If
     
     If pTrapErrors Then
-        On Error GoTo ErrorHandler
+        On Error GoTo ErrorHandlerExport
     End If
     
     CarpetaDestino = Trim(txtCarpeta.Text)
@@ -392,12 +392,34 @@ Private Sub cmdExport_Click()
     Else
         MsgBox "Se han exportado " & RecordCount & " Análisis.", vbInformation, App.Title
     End If
+    
+    If MsgBox("¿Desea marcar las cartas de porte como exportadas?", vbQuestion + vbYesNo, App.Title) = vbYes Then
+        Set cmdData = New ADODB.command
+        With cmdData
+            Set .ActiveConnection = pDatabase.Connection
+            .CommandText = "usp_Movimiento_Cereal_UpdateExport"
+            .CommandType = adCmdStoredProc
+            
+            .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
+            .Parameters.Append .CreateParameter("IDDepositario", adInteger, adParamInput, , CLng(pParametro.Planta_IDDefault \ 100000))
+            .Parameters.Append .CreateParameter("IDPlanta", adSmallInt, adParamInput, , Val(Right(pParametro.Planta_IDDefault, 5)))
+            .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDesde.Value)
+            .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaHasta.Value)
+            
+            .Execute
+        End With
+        Set cmdData = Nothing
+    End If
 
     Screen.MousePointer = vbDefault
     Exit Sub
     
-ErrorHandler:
+ErrorHandlerExport:
     CSM_Error.ShowErrorMessage "Forms.Formulario_Exportar.Export", "Error al exportar los archivos."
+    Exit Sub
+
+ErrorHandlerUpdate:
+    CSM_Error.ShowErrorMessage "Forms.Formulario_Exportar.Export", "Error al actualizar las cartas de porte."
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
