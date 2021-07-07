@@ -302,7 +302,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   113115137
+            Format          =   94109697
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -324,7 +324,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   113115137
+            Format          =   94109697
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -1533,7 +1533,7 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     'ENTIDAD REMITENTE
     If cboEntidad_Remitente.ListIndex > 0 Then
         mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "dbo.udf_GetRemitenteCereal(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) = " & cboEntidad_Remitente.ItemData(cboEntidad_Remitente.ListIndex)
-        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{@IDRemitenteCereal} = " & cboEntidad_Remitente.ItemData(cboEntidad_Remitente.ListIndex)
+        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{@IDTitularCereal} = " & cboEntidad_Remitente.ItemData(cboEntidad_Remitente.ListIndex)
     End If
     
     'ENTIDAD DESTINATARIO
@@ -2025,6 +2025,8 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                     
                     Screen.MousePointer = vbHourglass
                     
+                    On Error GoTo ErrorHandlerPrint
+                    
                     Set Report = New CSC_Report
                     With Report
                         .ParentForm_hWnd = frmMDI.hwnd
@@ -2139,8 +2141,8 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
     End Select
     Exit Sub
     
-ErrorHandler:
-    CSM_Error.ShowErrorMessage "Forms.Movimiento_Cereal_Lista.Print", "Error al mostrar un Reporte."
+ErrorHandlerPrint:
+    CSM_Error.ShowErrorMessage "Forms.Movimiento_Cereal_Lista.Print", "Error al mostrar el Reporte." & vbCrLf & vbCrLf & Err.Description
 End Sub
 
 '============================================================
