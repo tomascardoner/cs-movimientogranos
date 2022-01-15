@@ -33,7 +33,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   92340225
+      Format          =   91553793
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -96,7 +96,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   92340225
+      Format          =   91553793
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -415,11 +415,11 @@ Private Sub cmdExport_Click()
     Exit Sub
     
 ErrorHandlerExport:
-    CSM_Error.ShowErrorMessage "Forms.Formulario_Exportar.Export", "Error al exportar los archivos."
+    CSM_Error.ShowErrorMessage "Forms.Movimiento_Cereal_Exportar.Export", "Error al exportar los archivos."
     Exit Sub
 
 ErrorHandlerUpdate:
-    CSM_Error.ShowErrorMessage "Forms.Formulario_Exportar.Export", "Error al actualizar las cartas de porte."
+    CSM_Error.ShowErrorMessage "Forms.Movimiento_Cereal_Exportar.Export", "Error al actualizar las cartas de porte."
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

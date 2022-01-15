@@ -3,12 +3,13 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Object = "{38911DA0-E448-11D0-84A3-00DD01104159}#1.1#0"; "COMCT332.OCX"
 Object = "{562E3E04-2C31-4ECE-83F4-4017EEE51D40}#8.0#0"; "todg8.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmMovimiento_Cereal_Lista 
    Caption         =   "Movimientos de Cereal"
-   ClientHeight    =   7740
+   ClientHeight    =   6825
    ClientLeft      =   60
    ClientTop       =   450
-   ClientWidth     =   14490
+   ClientWidth     =   13245
    BeginProperty Font 
       Name            =   "Arial"
       Size            =   8.25
@@ -23,21 +24,21 @@ Begin VB.Form frmMovimiento_Cereal_Lista
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
    MDIChild        =   -1  'True
-   ScaleHeight     =   7740
-   ScaleWidth      =   14490
+   ScaleHeight     =   6825
+   ScaleWidth      =   13245
    Begin ComCtl3.CoolBar cbrMain 
       Align           =   1  'Align Top
-      Height          =   3060
+      Height          =   3450
       Left            =   0
       TabIndex        =   1
       Top             =   0
-      Width           =   14490
-      _ExtentX        =   25559
-      _ExtentY        =   5398
-      BandCount       =   17
+      Width           =   13245
+      _ExtentX        =   23363
+      _ExtentY        =   6085
+      BandCount       =   18
       FixedOrder      =   -1  'True
-      _CBWidth        =   14490
-      _CBHeight       =   3060
+      _CBWidth        =   13245
+      _CBHeight       =   3450
       _Version        =   "6.7.9782"
       Child1          =   "tlbMain"
       MinWidth1       =   9165
@@ -71,123 +72,166 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Key4            =   "ComprobanteNumero"
       NewRow4         =   0   'False
       AllowVertical4  =   0   'False
-      Child5          =   "picFechaCargaDescarga"
-      MinWidth5       =   7200
+      Child5          =   "picCtgNumero"
+      MinWidth5       =   2055
       MinHeight5      =   360
-      Width5          =   6420
+      Width5          =   2055
       FixedBackground5=   0   'False
-      Key5            =   "FechaCargaDescarga"
+      Key5            =   "CtgNumero"
       NewRow5         =   0   'False
       AllowVertical5  =   0   'False
-      Child6          =   "picEntidad_Remitente"
-      MinWidth6       =   5070
+      Child6          =   "picFechaCargaDescarga"
+      MinWidth6       =   7200
       MinHeight6      =   360
-      Width6          =   5070
+      Width6          =   6420
       FixedBackground6=   0   'False
-      Key6            =   "Entidad_Remitente"
+      Key6            =   "FechaCargaDescarga"
       NewRow6         =   0   'False
       AllowVertical6  =   0   'False
-      Child7          =   "picEntidad_Destinatario"
-      MinWidth7       =   5370
+      Child7          =   "picEntidad_Remitente"
+      MinWidth7       =   5070
       MinHeight7      =   360
-      Width7          =   5370
+      Width7          =   5070
       FixedBackground7=   0   'False
-      Key7            =   "Entidad_Destinatario"
+      Key7            =   "Entidad_Remitente"
       NewRow7         =   0   'False
       AllowVertical7  =   0   'False
-      Child8          =   "picEntidad_Transportista"
+      Child8          =   "picEntidad_Destinatario"
       MinWidth8       =   5370
       MinHeight8      =   360
       Width8          =   5370
       FixedBackground8=   0   'False
-      Key8            =   "Entidad_Transportista"
+      Key8            =   "Entidad_Destinatario"
       NewRow8         =   0   'False
       AllowVertical8  =   0   'False
-      Child9          =   "picCosecha"
-      MinWidth9       =   3030
+      Child9          =   "picEntidad_Transportista"
+      MinWidth9       =   5370
       MinHeight9      =   360
-      Width9          =   3030
+      Width9          =   5370
       FixedBackground9=   0   'False
-      Key9            =   "Cosecha"
+      Key9            =   "Entidad_Transportista"
       NewRow9         =   0   'False
       AllowVertical9  =   0   'False
-      Child10         =   "picCereal"
+      Child10         =   "picCosecha"
       MinWidth10      =   3030
       MinHeight10     =   360
       Width10         =   3030
       FixedBackground10=   0   'False
-      Key10           =   "Cereal"
+      Key10           =   "Cosecha"
       NewRow10        =   0   'False
       AllowVertical10 =   0   'False
-      Child11         =   "picPesoBruto"
-      MinWidth11      =   3315
+      Child11         =   "picCereal"
+      MinWidth11      =   3030
       MinHeight11     =   360
-      Width11         =   3315
+      Width11         =   3030
       FixedBackground11=   0   'False
-      Key11           =   "PesoBruto"
+      Key11           =   "Cereal"
       NewRow11        =   0   'False
       AllowVertical11 =   0   'False
-      Child12         =   "picPesoNeto"
+      Child12         =   "picPesoBruto"
       MinWidth12      =   3315
       MinHeight12     =   360
       Width12         =   3315
       FixedBackground12=   0   'False
-      Key12           =   "PesoNeto"
+      Key12           =   "PesoBruto"
       NewRow12        =   0   'False
       AllowVertical12 =   0   'False
-      Child13         =   "picHumedad"
-      MinWidth13      =   3015
+      Child13         =   "picPesoNeto"
+      MinWidth13      =   3315
       MinHeight13     =   360
-      Width13         =   3015
+      Width13         =   3315
       FixedBackground13=   0   'False
-      Key13           =   "Humedad"
+      Key13           =   "PesoNeto"
       NewRow13        =   0   'False
       AllowVertical13 =   0   'False
-      Child14         =   "picAnalisis"
-      MinWidth14      =   1875
+      Child14         =   "picHumedad"
+      MinWidth14      =   3015
       MinHeight14     =   360
-      Width14         =   1875
+      Width14         =   3015
       FixedBackground14=   0   'False
+      Key14           =   "Humedad"
       NewRow14        =   0   'False
       AllowVertical14 =   0   'False
-      Child15         =   "picCertificadoDeposito"
-      MinWidth15      =   2415
+      Child15         =   "picAnalisis"
+      MinWidth15      =   1875
       MinHeight15     =   360
-      Width15         =   2415
+      Width15         =   1875
       FixedBackground15=   0   'False
-      Key15           =   "CertificadoDeposito"
       NewRow15        =   0   'False
       AllowVertical15 =   0   'False
-      Child16         =   "picCertificadoRT"
-      MinWidth16      =   2955
+      Child16         =   "picCertificadoDeposito"
+      MinWidth16      =   2415
       MinHeight16     =   360
-      Width16         =   2955
+      Width16         =   2415
       FixedBackground16=   0   'False
-      Key16           =   "CertificadoRT"
+      Key16           =   "CertificadoDeposito"
       NewRow16        =   0   'False
       AllowVertical16 =   0   'False
-      Child17         =   "picAnulada"
-      MinWidth17      =   2895
+      Child17         =   "picCertificadoRT"
+      MinWidth17      =   2955
       MinHeight17     =   360
-      Width17         =   2895
+      Width17         =   2955
       FixedBackground17=   0   'False
-      Key17           =   "Anulada"
+      Key17           =   "CertificadoRT"
       NewRow17        =   0   'False
       AllowVertical17 =   0   'False
+      Child18         =   "picAnulada"
+      MinWidth18      =   2895
+      MinHeight18     =   360
+      Width18         =   2895
+      FixedBackground18=   0   'False
+      Key18           =   "Anulada"
+      NewRow18        =   0   'False
+      AllowVertical18 =   0   'False
+      Begin VB.PictureBox picCtgNumero 
+         BorderStyle     =   0  'None
+         Height          =   360
+         Left            =   11100
+         ScaleHeight     =   360
+         ScaleWidth      =   2055
+         TabIndex        =   76
+         Top             =   1110
+         Width           =   2055
+         Begin MSMask.MaskEdBox maskedtextboxCtgNumero 
+            Height          =   315
+            Left            =   780
+            TabIndex        =   77
+            Top             =   0
+            Width           =   1215
+            _ExtentX        =   2143
+            _ExtentY        =   556
+            _Version        =   393216
+            ClipMode        =   1
+            PromptInclude   =   0   'False
+            AllowPrompt     =   -1  'True
+            MaxLength       =   11
+            Mask            =   "###########"
+            PromptChar      =   "_"
+         End
+         Begin VB.Label labelCtgNumero 
+            AutoSize        =   -1  'True
+            Caption         =   "Nº CTG:"
+            Height          =   210
+            Left            =   60
+            TabIndex        =   78
+            Top             =   60
+            Width           =   585
+         End
+      End
       Begin VB.PictureBox picFechaCargaDescarga 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   5925
+         Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   8475
-         TabIndex        =   62
-         Top             =   1110
-         Width           =   8475
+         ScaleWidth      =   7695
+         TabIndex        =   60
+         Top             =   1500
+         Width           =   7695
          Begin VB.ComboBox cboFechaCargaDescargaOperacion 
             Height          =   330
             Left            =   1920
             Style           =   2  'Dropdown List
-            TabIndex        =   71
+            TabIndex        =   69
             Top             =   0
             Width           =   1035
          End
@@ -196,7 +240,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   4740
             Picture         =   "Movimiento_Cereal_Lista.frx":0CCA
             Style           =   1  'Graphical
-            TabIndex        =   70
+            TabIndex        =   68
             TabStop         =   0   'False
             ToolTipText     =   "Siguiente"
             Top             =   0
@@ -208,7 +252,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   5040
             Picture         =   "Movimiento_Cereal_Lista.frx":1254
             Style           =   1  'Graphical
-            TabIndex        =   69
+            TabIndex        =   67
             TabStop         =   0   'False
             ToolTipText     =   "Hoy"
             Top             =   0
@@ -220,7 +264,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   5640
             Picture         =   "Movimiento_Cereal_Lista.frx":139E
             Style           =   1  'Graphical
-            TabIndex        =   68
+            TabIndex        =   66
             TabStop         =   0   'False
             ToolTipText     =   "Anterior"
             Top             =   0
@@ -232,7 +276,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   7380
             Picture         =   "Movimiento_Cereal_Lista.frx":1928
             Style           =   1  'Graphical
-            TabIndex        =   67
+            TabIndex        =   65
             TabStop         =   0   'False
             ToolTipText     =   "Siguiente"
             Top             =   0
@@ -244,7 +288,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   7680
             Picture         =   "Movimiento_Cereal_Lista.frx":1EB2
             Style           =   1  'Graphical
-            TabIndex        =   66
+            TabIndex        =   64
             TabStop         =   0   'False
             ToolTipText     =   "Hoy"
             Top             =   0
@@ -255,7 +299,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Height          =   315
             Left            =   3000
             Locked          =   -1  'True
-            TabIndex        =   65
+            TabIndex        =   63
             TabStop         =   0   'False
             Top             =   0
             Visible         =   0   'False
@@ -266,7 +310,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   3000
             Picture         =   "Movimiento_Cereal_Lista.frx":1FFC
             Style           =   1  'Graphical
-            TabIndex        =   64
+            TabIndex        =   62
             TabStop         =   0   'False
             ToolTipText     =   "Anterior"
             Top             =   0
@@ -279,14 +323,14 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Left            =   540
             List            =   "Movimiento_Cereal_Lista.frx":2588
             Style           =   2  'Dropdown List
-            TabIndex        =   63
+            TabIndex        =   61
             Top             =   0
             Width           =   1350
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Desde 
             Height          =   315
             Left            =   3300
-            TabIndex        =   72
+            TabIndex        =   70
             Top             =   0
             Visible         =   0   'False
             Width           =   1455
@@ -302,13 +346,13 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   94109697
+            Format          =   86114305
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
             Height          =   315
             Left            =   5940
-            TabIndex        =   73
+            TabIndex        =   71
             Top             =   0
             Visible         =   0   'False
             Width           =   1455
@@ -324,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   94109697
+            Format          =   86114305
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -332,7 +376,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Fecha"
             Height          =   210
             Left            =   0
-            TabIndex        =   75
+            TabIndex        =   73
             Top             =   60
             Width           =   450
          End
@@ -341,7 +385,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "y"
             Height          =   210
             Left            =   5460
-            TabIndex        =   74
+            TabIndex        =   72
             Top             =   60
             Visible         =   0   'False
             Width           =   90
@@ -350,17 +394,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picAnalisis 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   12525
+         Left            =   8640
          ScaleHeight     =   360
          ScaleWidth      =   1875
-         TabIndex        =   59
-         Top             =   2280
+         TabIndex        =   57
+         Top             =   2670
          Width           =   1875
          Begin VB.ComboBox cboAnalisis 
             Height          =   330
             Left            =   720
             Style           =   2  'Dropdown List
-            TabIndex        =   60
+            TabIndex        =   58
             Top             =   0
             Width           =   1155
          End
@@ -369,7 +413,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Análisis:"
             Height          =   210
             Left            =   0
-            TabIndex        =   61
+            TabIndex        =   59
             Top             =   60
             Width           =   615
          End
@@ -388,10 +432,10 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          Height          =   450
          Left            =   165
          ScaleHeight     =   450
-         ScaleWidth      =   10140
+         ScaleWidth      =   8895
          TabIndex        =   3
          Top             =   630
-         Width           =   10140
+         Width           =   8895
          Begin VB.CheckBox chkTipo_AjusteSube 
             Height          =   210
             Left            =   3360
@@ -487,17 +531,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picPlanta 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   10530
+         Left            =   9285
          ScaleHeight     =   360
          ScaleWidth      =   3870
-         TabIndex        =   56
+         TabIndex        =   54
          Top             =   675
          Width           =   3870
          Begin VB.ComboBox cboPlanta 
             Height          =   330
             Left            =   660
             Style           =   2  'Dropdown List
-            TabIndex        =   57
+            TabIndex        =   55
             Top             =   0
             Width           =   3195
          End
@@ -506,7 +550,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Planta:"
             Height          =   210
             Left            =   0
-            TabIndex        =   58
+            TabIndex        =   56
             Top             =   60
             Width           =   480
          End
@@ -514,17 +558,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picCertificadoRT 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   2805
+         Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   2955
-         TabIndex        =   53
-         Top             =   2670
-         Width           =   2955
+         ScaleWidth      =   9870
+         TabIndex        =   51
+         Top             =   3060
+         Width           =   9870
          Begin VB.ComboBox cboCertificadoRT 
             Height          =   330
             Left            =   1800
             Style           =   2  'Dropdown List
-            TabIndex        =   54
+            TabIndex        =   52
             Top             =   0
             Width           =   1155
          End
@@ -533,7 +577,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Kgs. Pendientes de RT:"
             Height          =   210
             Left            =   0
-            TabIndex        =   55
+            TabIndex        =   53
             Top             =   60
             Width           =   1680
          End
@@ -541,17 +585,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picAnulada 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   5985
+         Left            =   10260
          ScaleHeight     =   360
-         ScaleWidth      =   8415
-         TabIndex        =   50
-         Top             =   2670
-         Width           =   8415
+         ScaleWidth      =   2895
+         TabIndex        =   48
+         Top             =   3060
+         Width           =   2895
          Begin VB.ComboBox cboAnulada 
             Height          =   330
             Left            =   780
             Style           =   2  'Dropdown List
-            TabIndex        =   51
+            TabIndex        =   49
             Top             =   0
             Width           =   2115
          End
@@ -560,7 +604,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Anulada:"
             Height          =   210
             Left            =   0
-            TabIndex        =   52
+            TabIndex        =   50
             Top             =   60
             Width           =   645
          End
@@ -568,18 +612,18 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picHumedad 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   9285
+         Left            =   5400
          ScaleHeight     =   360
          ScaleWidth      =   3015
-         TabIndex        =   42
-         Top             =   2280
+         TabIndex        =   40
+         Top             =   2670
          Width           =   3015
          Begin VB.TextBox txtHumedad 
             Alignment       =   1  'Right Justify
             Height          =   315
             Left            =   2340
             MaxLength       =   4
-            TabIndex        =   44
+            TabIndex        =   42
             Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
             Top             =   0
             Width           =   675
@@ -588,7 +632,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Height          =   330
             Left            =   1080
             Style           =   2  'Dropdown List
-            TabIndex        =   43
+            TabIndex        =   41
             Top             =   0
             Width           =   1215
          End
@@ -597,7 +641,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Humedad:"
             Height          =   195
             Left            =   60
-            TabIndex        =   45
+            TabIndex        =   43
             Top             =   60
             Width           =   735
          End
@@ -605,17 +649,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picPesoBruto 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   165
+         Left            =   6675
          ScaleHeight     =   360
-         ScaleWidth      =   5355
-         TabIndex        =   34
+         ScaleWidth      =   6480
+         TabIndex        =   32
          Top             =   2280
-         Width           =   5355
+         Width           =   6480
          Begin VB.ComboBox cboPesoBruto 
             Height          =   330
             Left            =   960
             Style           =   2  'Dropdown List
-            TabIndex        =   36
+            TabIndex        =   34
             Top             =   0
             Width           =   1215
          End
@@ -624,7 +668,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Height          =   315
             Left            =   2220
             MaxLength       =   12
-            TabIndex        =   35
+            TabIndex        =   33
             Tag             =   "STRING|EMPTY|NUMBERS|12"
             Top             =   0
             Width           =   1095
@@ -634,7 +678,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Peso Bruto:"
             Height          =   210
             Left            =   0
-            TabIndex        =   37
+            TabIndex        =   35
             Top             =   60
             Width           =   840
          End
@@ -642,18 +686,18 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picPesoNeto 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   5745
+         Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   3315
-         TabIndex        =   38
-         Top             =   2280
-         Width           =   3315
+         ScaleWidth      =   5010
+         TabIndex        =   36
+         Top             =   2670
+         Width           =   5010
          Begin VB.TextBox txtPesoNeto 
             Alignment       =   1  'Right Justify
             Height          =   315
             Left            =   2220
             MaxLength       =   12
-            TabIndex        =   40
+            TabIndex        =   38
             Tag             =   "STRING|EMPTY|NUMBERS|12"
             Top             =   0
             Width           =   1095
@@ -662,7 +706,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Height          =   330
             Left            =   960
             Style           =   2  'Dropdown List
-            TabIndex        =   39
+            TabIndex        =   37
             Top             =   0
             Width           =   1215
          End
@@ -671,7 +715,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Peso Neto:"
             Height          =   195
             Left            =   60
-            TabIndex        =   41
+            TabIndex        =   39
             Top             =   60
             Width           =   795
          End
@@ -679,17 +723,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picCertificadoDeposito 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   165
+         Left            =   10740
          ScaleHeight     =   360
          ScaleWidth      =   2415
-         TabIndex        =   46
+         TabIndex        =   44
          Top             =   2670
          Width           =   2415
          Begin VB.ComboBox cboCertificadoDeposito 
             Height          =   330
             Left            =   1260
             Style           =   2  'Dropdown List
-            TabIndex        =   48
+            TabIndex        =   46
             Top             =   0
             Width           =   1155
          End
@@ -698,7 +742,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Cert. Depósito:"
             Height          =   210
             Left            =   0
-            TabIndex        =   47
+            TabIndex        =   45
             Top             =   60
             Width           =   1065
          End
@@ -708,35 +752,49 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          Height          =   360
          Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   5535
+         ScaleWidth      =   10710
          TabIndex        =   13
          Top             =   1110
-         Width           =   5535
-         Begin VB.TextBox txtComprobanteNumero_Hasta 
-            Height          =   315
-            Left            =   4200
-            MaxLength       =   12
-            TabIndex        =   18
-            Tag             =   "STRING|EMPTY|NUMBERS|12"
-            Top             =   0
-            Width           =   1335
-         End
+         Width           =   10710
          Begin VB.ComboBox cboComprobanteNumero 
             Height          =   330
-            Left            =   1320
+            Left            =   1200
             Style           =   2  'Dropdown List
             TabIndex        =   15
             Top             =   0
             Width           =   1215
          End
-         Begin VB.TextBox txtComprobanteNumero_Desde 
+         Begin MSMask.MaskEdBox maskedtextboxComprobanteNumeroDesde 
             Height          =   315
-            Left            =   2580
-            MaxLength       =   12
-            TabIndex        =   16
-            Tag             =   "STRING|EMPTY|NUMBERS|12"
+            Left            =   2460
+            TabIndex        =   74
             Top             =   0
-            Width           =   1335
+            Width           =   1455
+            _ExtentX        =   2566
+            _ExtentY        =   556
+            _Version        =   393216
+            ClipMode        =   1
+            PromptInclude   =   0   'False
+            AllowPrompt     =   -1  'True
+            MaxLength       =   14
+            Mask            =   "#####-########"
+            PromptChar      =   "_"
+         End
+         Begin MSMask.MaskEdBox maskedtextboxComprobanteNumeroHasta 
+            Height          =   315
+            Left            =   4140
+            TabIndex        =   75
+            Top             =   0
+            Width           =   1455
+            _ExtentX        =   2566
+            _ExtentY        =   556
+            _Version        =   393216
+            ClipMode        =   1
+            PromptInclude   =   0   'False
+            AllowPrompt     =   -1  'True
+            MaxLength       =   14
+            Mask            =   "#####-########"
+            PromptChar      =   "_"
          End
          Begin VB.Label lblComprobanteNumero 
             AutoSize        =   -1  'True
@@ -747,12 +805,12 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Top             =   60
             Width           =   1005
          End
-         Begin VB.Label lblComprobanteNumero_Y 
+         Begin VB.Label labelComprobanteNumeroHasta 
             AutoSize        =   -1  'True
             Caption         =   "y"
             Height          =   210
-            Left            =   4020
-            TabIndex        =   17
+            Left            =   3960
+            TabIndex        =   16
             Top             =   60
             Width           =   90
          End
@@ -760,17 +818,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picEntidad_Destinatario 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   5460
+         Left            =   165
          ScaleHeight     =   360
-         ScaleWidth      =   8940
-         TabIndex        =   22
-         Top             =   1500
-         Width           =   8940
+         ScaleWidth      =   7395
+         TabIndex        =   20
+         Top             =   1890
+         Width           =   7395
          Begin VB.ComboBox cboEntidad_Destinatario 
             Height          =   330
             Left            =   1140
             Style           =   2  'Dropdown List
-            TabIndex        =   24
+            TabIndex        =   22
             Top             =   0
             Width           =   4215
          End
@@ -779,7 +837,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Destinatario:"
             Height          =   210
             Left            =   0
-            TabIndex        =   23
+            TabIndex        =   21
             Top             =   60
             Width           =   900
          End
@@ -787,17 +845,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picCereal 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   11370
+         Left            =   3420
          ScaleHeight     =   360
          ScaleWidth      =   3030
-         TabIndex        =   31
-         Top             =   1890
+         TabIndex        =   29
+         Top             =   2280
          Width           =   3030
          Begin VB.ComboBox cboCereal 
             Height          =   330
             Left            =   840
             Style           =   2  'Dropdown List
-            TabIndex        =   33
+            TabIndex        =   31
             Top             =   0
             Width           =   2175
          End
@@ -806,7 +864,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Cereal:"
             Height          =   210
             Left            =   0
-            TabIndex        =   32
+            TabIndex        =   30
             Top             =   60
             Width           =   510
          End
@@ -814,17 +872,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picCosecha 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   8115
+         Left            =   165
          ScaleHeight     =   360
          ScaleWidth      =   3030
-         TabIndex        =   28
-         Top             =   1890
+         TabIndex        =   26
+         Top             =   2280
          Width           =   3030
          Begin VB.ComboBox cboCosecha 
             Height          =   330
             Left            =   840
             Style           =   2  'Dropdown List
-            TabIndex        =   30
+            TabIndex        =   28
             Top             =   0
             Width           =   2175
          End
@@ -833,7 +891,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Cosecha:"
             Height          =   210
             Left            =   0
-            TabIndex        =   29
+            TabIndex        =   27
             Top             =   60
             Width           =   690
          End
@@ -841,17 +899,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picEntidad_Transportista 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   165
+         Left            =   7785
          ScaleHeight     =   360
-         ScaleWidth      =   7725
-         TabIndex        =   25
+         ScaleWidth      =   5370
+         TabIndex        =   23
          Top             =   1890
-         Width           =   7725
+         Width           =   5370
          Begin VB.ComboBox cboEntidad_Transportista 
             Height          =   330
             Left            =   1140
             Style           =   2  'Dropdown List
-            TabIndex        =   27
+            TabIndex        =   25
             Top             =   0
             Width           =   4215
          End
@@ -860,7 +918,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Transportista:"
             Height          =   210
             Left            =   0
-            TabIndex        =   26
+            TabIndex        =   24
             Top             =   60
             Width           =   1005
          End
@@ -868,17 +926,17 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Begin VB.PictureBox picEntidad_Remitente 
          BorderStyle     =   0  'None
          Height          =   360
-         Left            =   165
+         Left            =   8085
          ScaleHeight     =   360
          ScaleWidth      =   5070
-         TabIndex        =   19
+         TabIndex        =   17
          Top             =   1500
          Width           =   5070
          Begin VB.ComboBox cboEntidad_Remitente 
             Height          =   330
             Left            =   840
             Style           =   2  'Dropdown List
-            TabIndex        =   21
+            TabIndex        =   19
             Top             =   0
             Width           =   4215
          End
@@ -887,7 +945,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
             Caption         =   "Remitente:"
             Height          =   210
             Left            =   0
-            TabIndex        =   20
+            TabIndex        =   18
             Top             =   60
             Width           =   750
          End
@@ -897,8 +955,8 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          Left            =   30
          TabIndex        =   2
          Top             =   30
-         Width           =   14370
-         _ExtentX        =   25347
+         Width           =   13125
+         _ExtentX        =   23151
          _ExtentY        =   1005
          ButtonWidth     =   2170
          ButtonHeight    =   1005
@@ -963,10 +1021,10 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Align           =   2  'Align Bottom
       Height          =   360
       Left            =   0
-      TabIndex        =   49
-      Top             =   7380
-      Width           =   14490
-      _ExtentX        =   25559
+      TabIndex        =   47
+      Top             =   6465
+      Width           =   13245
+      _ExtentX        =   23363
       _ExtentY        =   635
       Style           =   1
       _Version        =   393216
@@ -974,7 +1032,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          NumPanels       =   1
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   25030
+            Object.Width           =   22834
             Key             =   "TEXT"
          EndProperty
       EndProperty
@@ -989,13 +1047,13 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       EndProperty
    End
    Begin TrueOleDBGrid80.TDBGrid tdbgrdData 
-      Height          =   3135
+      Height          =   2775
       Left            =   120
       TabIndex        =   0
-      Top             =   3120
+      Top             =   3600
       Width           =   13035
       _ExtentX        =   22992
-      _ExtentY        =   5530
+      _ExtentY        =   4895
       _LayoutType     =   4
       _RowHeight      =   -2147483647
       _WasPersistedAsPixels=   0
@@ -1011,77 +1069,82 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Columns(1)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(2)._VlistStyle=   0
       Columns(2)._MaxComboItems=   5
-      Columns(2).Caption=   "N° Comprobante"
-      Columns(2).DataField=   "ComprobanteNumero"
+      Columns(2).Caption=   "Fecha"
+      Columns(2).DataField=   "FechaCarga"
+      Columns(2).NumberFormat=   "Short Date"
       Columns(2)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(3)._VlistStyle=   0
       Columns(3)._MaxComboItems=   5
-      Columns(3).Caption=   "Fecha Carga"
-      Columns(3).DataField=   "FechaCarga"
-      Columns(3).NumberFormat=   "Short Date"
+      Columns(3).Caption=   "Nº comprobante"
+      Columns(3).DataField=   "ComprobanteNumeroConFormato"
       Columns(3)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(4)._VlistStyle=   0
       Columns(4)._MaxComboItems=   5
-      Columns(4).Caption=   "Remitente"
-      Columns(4).DataField=   "Entidad_Remitente_Nombre"
+      Columns(4).Caption=   "C.T.G."
+      Columns(4).DataField=   "CTGNumero"
       Columns(4)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(5)._VlistStyle=   0
       Columns(5)._MaxComboItems=   5
-      Columns(5).Caption=   "Destinatario"
-      Columns(5).DataField=   "Entidad_Destinatario_Nombre"
+      Columns(5).Caption=   "Remitente"
+      Columns(5).DataField=   "Entidad_Remitente_Nombre"
       Columns(5)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(6)._VlistStyle=   0
       Columns(6)._MaxComboItems=   5
-      Columns(6).Caption=   "Transportista"
-      Columns(6).DataField=   "Entidad_Transportista_Nombre"
+      Columns(6).Caption=   "Destinatario"
+      Columns(6).DataField=   "Entidad_Destinatario_Nombre"
       Columns(6)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(7)._VlistStyle=   0
       Columns(7)._MaxComboItems=   5
-      Columns(7).Caption=   "Cosecha"
-      Columns(7).DataField=   "Cosecha_Nombre"
+      Columns(7).Caption=   "Transportista"
+      Columns(7).DataField=   "Entidad_Transportista_Nombre"
       Columns(7)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(8)._VlistStyle=   0
       Columns(8)._MaxComboItems=   5
-      Columns(8).Caption=   "Cereal"
-      Columns(8).DataField=   "Cereal_Nombre"
+      Columns(8).Caption=   "Cosecha"
+      Columns(8).DataField=   "Cosecha_Nombre"
       Columns(8)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(9)._VlistStyle=   0
       Columns(9)._MaxComboItems=   5
-      Columns(9).Caption=   "Bruto"
-      Columns(9).DataField=   "PesoBruto"
-      Columns(9).NumberFormat=   "#,###"
+      Columns(9).Caption=   "Cereal"
+      Columns(9).DataField=   "Cereal_Nombre"
       Columns(9)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(10)._VlistStyle=   0
       Columns(10)._MaxComboItems=   5
-      Columns(10).Caption=   "Tara"
-      Columns(10).DataField=   "PesoTara"
+      Columns(10).Caption=   "Bruto"
+      Columns(10).DataField=   "PesoBruto"
       Columns(10).NumberFormat=   "#,###"
       Columns(10)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(11)._VlistStyle=   0
       Columns(11)._MaxComboItems=   5
-      Columns(11).Caption=   "Neto"
-      Columns(11).DataField=   "PesoNeto"
+      Columns(11).Caption=   "Tara"
+      Columns(11).DataField=   "PesoTara"
       Columns(11).NumberFormat=   "#,###"
       Columns(11)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(12)._VlistStyle=   0
       Columns(12)._MaxComboItems=   5
-      Columns(12).Caption=   "Final"
-      Columns(12).DataField=   "PesoFinal"
+      Columns(12).Caption=   "Neto"
+      Columns(12).DataField=   "PesoNeto"
       Columns(12).NumberFormat=   "#,###"
       Columns(12)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(13)._VlistStyle=   0
       Columns(13)._MaxComboItems=   5
-      Columns(13).Caption=   "Hum."
-      Columns(13).DataField=   "Humedad"
-      Columns(13).NumberFormat=   "0.0"
+      Columns(13).Caption=   "Final"
+      Columns(13).DataField=   "PesoFinal"
+      Columns(13).NumberFormat=   "#,###"
       Columns(13)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
       Columns(14)._VlistStyle=   0
       Columns(14)._MaxComboItems=   5
-      Columns(14).Caption=   "Zar."
-      Columns(14).DataField=   "Zaranda"
+      Columns(14).Caption=   "Hum."
+      Columns(14).DataField=   "Humedad"
       Columns(14).NumberFormat=   "0.0"
       Columns(14)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
-      Columns.Count   =   15
+      Columns(15)._VlistStyle=   0
+      Columns(15)._MaxComboItems=   5
+      Columns(15).Caption=   "Zar."
+      Columns(15).DataField=   "Zaranda"
+      Columns(15).NumberFormat=   "0.0"
+      Columns(15)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
+      Columns.Count   =   16
       Splits(0)._UserFlags=   0
       Splits(0).Locked=   -1  'True
       Splits(0).MarqueeStyle=   3
@@ -1093,7 +1156,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Splits(0).DividerColor=   14215660
       Splits(0).SpringMode=   0   'False
       Splits(0)._PropDict=   "_ColumnProps,515,0;_UserFlags,518,3"
-      Splits(0)._ColumnProps(0)=   "Columns.Count=15"
+      Splits(0)._ColumnProps(0)=   "Columns.Count=16"
       Splits(0)._ColumnProps(1)=   "Column(0).Width=3254"
       Splits(0)._ColumnProps(2)=   "Column(0).DividerColor=0"
       Splits(0)._ColumnProps(3)=   "Column(0)._WidthInPix=3175"
@@ -1110,60 +1173,60 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Splits(0)._ColumnProps(14)=   "Column(1)._ColStyle=8705"
       Splits(0)._ColumnProps(15)=   "Column(1).AllowFocus=0"
       Splits(0)._ColumnProps(16)=   "Column(1).Order=2"
-      Splits(0)._ColumnProps(17)=   "Column(2).Width=2805"
+      Splits(0)._ColumnProps(17)=   "Column(2).Width=1588"
       Splits(0)._ColumnProps(18)=   "Column(2).DividerColor=0"
-      Splits(0)._ColumnProps(19)=   "Column(2)._WidthInPix=2725"
+      Splits(0)._ColumnProps(19)=   "Column(2)._WidthInPix=1508"
       Splits(0)._ColumnProps(20)=   "Column(2)._EditAlways=0"
-      Splits(0)._ColumnProps(21)=   "Column(2)._ColStyle=8704"
+      Splits(0)._ColumnProps(21)=   "Column(2)._ColStyle=8708"
       Splits(0)._ColumnProps(22)=   "Column(2).AllowFocus=0"
       Splits(0)._ColumnProps(23)=   "Column(2).Order=3"
-      Splits(0)._ColumnProps(24)=   "Column(3).Width=2249"
+      Splits(0)._ColumnProps(24)=   "Column(3).Width=2461"
       Splits(0)._ColumnProps(25)=   "Column(3).DividerColor=0"
-      Splits(0)._ColumnProps(26)=   "Column(3)._WidthInPix=2170"
+      Splits(0)._ColumnProps(26)=   "Column(3)._WidthInPix=2381"
       Splits(0)._ColumnProps(27)=   "Column(3)._EditAlways=0"
       Splits(0)._ColumnProps(28)=   "Column(3)._ColStyle=8708"
       Splits(0)._ColumnProps(29)=   "Column(3).AllowFocus=0"
       Splits(0)._ColumnProps(30)=   "Column(3).Order=4"
-      Splits(0)._ColumnProps(31)=   "Column(4).Width=5450"
+      Splits(0)._ColumnProps(31)=   "Column(4).Width=2117"
       Splits(0)._ColumnProps(32)=   "Column(4).DividerColor=0"
-      Splits(0)._ColumnProps(33)=   "Column(4)._WidthInPix=5371"
+      Splits(0)._ColumnProps(33)=   "Column(4)._WidthInPix=2037"
       Splits(0)._ColumnProps(34)=   "Column(4)._EditAlways=0"
       Splits(0)._ColumnProps(35)=   "Column(4)._ColStyle=8708"
       Splits(0)._ColumnProps(36)=   "Column(4).AllowFocus=0"
       Splits(0)._ColumnProps(37)=   "Column(4).Order=5"
-      Splits(0)._ColumnProps(38)=   "Column(5).Width=5265"
+      Splits(0)._ColumnProps(38)=   "Column(5).Width=5450"
       Splits(0)._ColumnProps(39)=   "Column(5).DividerColor=0"
-      Splits(0)._ColumnProps(40)=   "Column(5)._WidthInPix=5186"
+      Splits(0)._ColumnProps(40)=   "Column(5)._WidthInPix=5371"
       Splits(0)._ColumnProps(41)=   "Column(5)._EditAlways=0"
       Splits(0)._ColumnProps(42)=   "Column(5)._ColStyle=8708"
       Splits(0)._ColumnProps(43)=   "Column(5).AllowFocus=0"
       Splits(0)._ColumnProps(44)=   "Column(5).Order=6"
-      Splits(0)._ColumnProps(45)=   "Column(6).Width=5292"
+      Splits(0)._ColumnProps(45)=   "Column(6).Width=5265"
       Splits(0)._ColumnProps(46)=   "Column(6).DividerColor=0"
-      Splits(0)._ColumnProps(47)=   "Column(6)._WidthInPix=5212"
+      Splits(0)._ColumnProps(47)=   "Column(6)._WidthInPix=5186"
       Splits(0)._ColumnProps(48)=   "Column(6)._EditAlways=0"
       Splits(0)._ColumnProps(49)=   "Column(6)._ColStyle=8708"
       Splits(0)._ColumnProps(50)=   "Column(6).AllowFocus=0"
       Splits(0)._ColumnProps(51)=   "Column(6).Order=7"
-      Splits(0)._ColumnProps(52)=   "Column(7).Width=3254"
+      Splits(0)._ColumnProps(52)=   "Column(7).Width=5292"
       Splits(0)._ColumnProps(53)=   "Column(7).DividerColor=0"
-      Splits(0)._ColumnProps(54)=   "Column(7)._WidthInPix=3175"
+      Splits(0)._ColumnProps(54)=   "Column(7)._WidthInPix=5212"
       Splits(0)._ColumnProps(55)=   "Column(7)._EditAlways=0"
       Splits(0)._ColumnProps(56)=   "Column(7)._ColStyle=8708"
       Splits(0)._ColumnProps(57)=   "Column(7).AllowFocus=0"
       Splits(0)._ColumnProps(58)=   "Column(7).Order=8"
-      Splits(0)._ColumnProps(59)=   "Column(8).Width=2619"
+      Splits(0)._ColumnProps(59)=   "Column(8).Width=3254"
       Splits(0)._ColumnProps(60)=   "Column(8).DividerColor=0"
-      Splits(0)._ColumnProps(61)=   "Column(8)._WidthInPix=2540"
+      Splits(0)._ColumnProps(61)=   "Column(8)._WidthInPix=3175"
       Splits(0)._ColumnProps(62)=   "Column(8)._EditAlways=0"
       Splits(0)._ColumnProps(63)=   "Column(8)._ColStyle=8708"
       Splits(0)._ColumnProps(64)=   "Column(8).AllowFocus=0"
       Splits(0)._ColumnProps(65)=   "Column(8).Order=9"
-      Splits(0)._ColumnProps(66)=   "Column(9).Width=1244"
+      Splits(0)._ColumnProps(66)=   "Column(9).Width=2619"
       Splits(0)._ColumnProps(67)=   "Column(9).DividerColor=0"
-      Splits(0)._ColumnProps(68)=   "Column(9)._WidthInPix=1164"
+      Splits(0)._ColumnProps(68)=   "Column(9)._WidthInPix=2540"
       Splits(0)._ColumnProps(69)=   "Column(9)._EditAlways=0"
-      Splits(0)._ColumnProps(70)=   "Column(9)._ColStyle=8706"
+      Splits(0)._ColumnProps(70)=   "Column(9)._ColStyle=8708"
       Splits(0)._ColumnProps(71)=   "Column(9).AllowFocus=0"
       Splits(0)._ColumnProps(72)=   "Column(9).Order=10"
       Splits(0)._ColumnProps(73)=   "Column(10).Width=1244"
@@ -1187,9 +1250,9 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Splits(0)._ColumnProps(91)=   "Column(12)._ColStyle=8706"
       Splits(0)._ColumnProps(92)=   "Column(12).AllowFocus=0"
       Splits(0)._ColumnProps(93)=   "Column(12).Order=13"
-      Splits(0)._ColumnProps(94)=   "Column(13).Width=847"
+      Splits(0)._ColumnProps(94)=   "Column(13).Width=1244"
       Splits(0)._ColumnProps(95)=   "Column(13).DividerColor=0"
-      Splits(0)._ColumnProps(96)=   "Column(13)._WidthInPix=767"
+      Splits(0)._ColumnProps(96)=   "Column(13)._WidthInPix=1164"
       Splits(0)._ColumnProps(97)=   "Column(13)._EditAlways=0"
       Splits(0)._ColumnProps(98)=   "Column(13)._ColStyle=8706"
       Splits(0)._ColumnProps(99)=   "Column(13).AllowFocus=0"
@@ -1201,6 +1264,13 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Splits(0)._ColumnProps(105)=   "Column(14)._ColStyle=8706"
       Splits(0)._ColumnProps(106)=   "Column(14).AllowFocus=0"
       Splits(0)._ColumnProps(107)=   "Column(14).Order=15"
+      Splits(0)._ColumnProps(108)=   "Column(15).Width=847"
+      Splits(0)._ColumnProps(109)=   "Column(15).DividerColor=0"
+      Splits(0)._ColumnProps(110)=   "Column(15)._WidthInPix=767"
+      Splits(0)._ColumnProps(111)=   "Column(15)._EditAlways=0"
+      Splits(0)._ColumnProps(112)=   "Column(15)._ColStyle=8706"
+      Splits(0)._ColumnProps(113)=   "Column(15).AllowFocus=0"
+      Splits(0)._ColumnProps(114)=   "Column(15).Order=16"
       Splits.Count    =   1
       PrintInfos(0)._StateFlags=   3
       PrintInfos(0).Name=   "piInternal 0"
@@ -1268,79 +1338,83 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       _StyleDefs(41)  =   "Splits(0).Columns(1).HeadingStyle:id=51,.parent=14,.alignment=2"
       _StyleDefs(42)  =   "Splits(0).Columns(1).FooterStyle:id=52,.parent=15"
       _StyleDefs(43)  =   "Splits(0).Columns(1).EditorStyle:id=53,.parent=17"
-      _StyleDefs(44)  =   "Splits(0).Columns(2).Style:id=90,.parent=13,.alignment=0,.locked=-1"
-      _StyleDefs(45)  =   "Splits(0).Columns(2).HeadingStyle:id=87,.parent=14,.alignment=2"
-      _StyleDefs(46)  =   "Splits(0).Columns(2).FooterStyle:id=88,.parent=15"
-      _StyleDefs(47)  =   "Splits(0).Columns(2).EditorStyle:id=89,.parent=17"
-      _StyleDefs(48)  =   "Splits(0).Columns(3).Style:id=46,.parent=13,.locked=-1"
-      _StyleDefs(49)  =   "Splits(0).Columns(3).HeadingStyle:id=43,.parent=14,.alignment=2"
-      _StyleDefs(50)  =   "Splits(0).Columns(3).FooterStyle:id=44,.parent=15"
-      _StyleDefs(51)  =   "Splits(0).Columns(3).EditorStyle:id=45,.parent=17"
-      _StyleDefs(52)  =   "Splits(0).Columns(4).Style:id=110,.parent=13,.locked=-1"
-      _StyleDefs(53)  =   "Splits(0).Columns(4).HeadingStyle:id=107,.parent=14,.alignment=2"
-      _StyleDefs(54)  =   "Splits(0).Columns(4).FooterStyle:id=108,.parent=15"
-      _StyleDefs(55)  =   "Splits(0).Columns(4).EditorStyle:id=109,.parent=17"
-      _StyleDefs(56)  =   "Splits(0).Columns(5).Style:id=98,.parent=13,.locked=-1"
-      _StyleDefs(57)  =   "Splits(0).Columns(5).HeadingStyle:id=95,.parent=14,.alignment=2"
-      _StyleDefs(58)  =   "Splits(0).Columns(5).FooterStyle:id=96,.parent=15"
-      _StyleDefs(59)  =   "Splits(0).Columns(5).EditorStyle:id=97,.parent=17"
-      _StyleDefs(60)  =   "Splits(0).Columns(6).Style:id=62,.parent=13,.alignment=3,.locked=-1"
-      _StyleDefs(61)  =   "Splits(0).Columns(6).HeadingStyle:id=59,.parent=14,.alignment=2"
-      _StyleDefs(62)  =   "Splits(0).Columns(6).FooterStyle:id=60,.parent=15"
-      _StyleDefs(63)  =   "Splits(0).Columns(6).EditorStyle:id=61,.parent=17"
-      _StyleDefs(64)  =   "Splits(0).Columns(7).Style:id=94,.parent=13,.locked=-1"
-      _StyleDefs(65)  =   "Splits(0).Columns(7).HeadingStyle:id=91,.parent=14,.alignment=2"
-      _StyleDefs(66)  =   "Splits(0).Columns(7).FooterStyle:id=92,.parent=15"
-      _StyleDefs(67)  =   "Splits(0).Columns(7).EditorStyle:id=93,.parent=17"
-      _StyleDefs(68)  =   "Splits(0).Columns(8).Style:id=28,.parent=13,.locked=-1"
-      _StyleDefs(69)  =   "Splits(0).Columns(8).HeadingStyle:id=25,.parent=14,.alignment=2"
-      _StyleDefs(70)  =   "Splits(0).Columns(8).FooterStyle:id=26,.parent=15"
-      _StyleDefs(71)  =   "Splits(0).Columns(8).EditorStyle:id=27,.parent=17"
-      _StyleDefs(72)  =   "Splits(0).Columns(9).Style:id=118,.parent=13,.alignment=1,.locked=-1"
-      _StyleDefs(73)  =   "Splits(0).Columns(9).HeadingStyle:id=115,.parent=14,.alignment=2"
-      _StyleDefs(74)  =   "Splits(0).Columns(9).FooterStyle:id=116,.parent=15"
-      _StyleDefs(75)  =   "Splits(0).Columns(9).EditorStyle:id=117,.parent=17"
-      _StyleDefs(76)  =   "Splits(0).Columns(10).Style:id=114,.parent=13,.alignment=1,.locked=-1"
-      _StyleDefs(77)  =   "Splits(0).Columns(10).HeadingStyle:id=111,.parent=14,.alignment=2"
-      _StyleDefs(78)  =   "Splits(0).Columns(10).FooterStyle:id=112,.parent=15"
-      _StyleDefs(79)  =   "Splits(0).Columns(10).EditorStyle:id=113,.parent=17"
-      _StyleDefs(80)  =   "Splits(0).Columns(11).Style:id=58,.parent=13,.alignment=1,.locked=-1"
-      _StyleDefs(81)  =   "Splits(0).Columns(11).HeadingStyle:id=55,.parent=14,.alignment=2"
-      _StyleDefs(82)  =   "Splits(0).Columns(11).FooterStyle:id=56,.parent=15"
-      _StyleDefs(83)  =   "Splits(0).Columns(11).EditorStyle:id=57,.parent=17"
-      _StyleDefs(84)  =   "Splits(0).Columns(12).Style:id=32,.parent=13,.alignment=1,.locked=-1"
-      _StyleDefs(85)  =   "Splits(0).Columns(12).HeadingStyle:id=29,.parent=14,.alignment=2"
-      _StyleDefs(86)  =   "Splits(0).Columns(12).FooterStyle:id=30,.parent=15"
-      _StyleDefs(87)  =   "Splits(0).Columns(12).EditorStyle:id=31,.parent=17"
-      _StyleDefs(88)  =   "Splits(0).Columns(13).Style:id=78,.parent=13,.alignment=1,.locked=-1"
-      _StyleDefs(89)  =   "Splits(0).Columns(13).HeadingStyle:id=75,.parent=14,.alignment=2"
-      _StyleDefs(90)  =   "Splits(0).Columns(13).FooterStyle:id=76,.parent=15"
-      _StyleDefs(91)  =   "Splits(0).Columns(13).EditorStyle:id=77,.parent=17"
-      _StyleDefs(92)  =   "Splits(0).Columns(14).Style:id=74,.parent=13,.alignment=1,.locked=-1"
-      _StyleDefs(93)  =   "Splits(0).Columns(14).HeadingStyle:id=71,.parent=14,.alignment=2"
-      _StyleDefs(94)  =   "Splits(0).Columns(14).FooterStyle:id=72,.parent=15"
-      _StyleDefs(95)  =   "Splits(0).Columns(14).EditorStyle:id=73,.parent=17"
-      _StyleDefs(96)  =   "Named:id=33:Normal"
-      _StyleDefs(97)  =   ":id=33,.parent=0"
-      _StyleDefs(98)  =   "Named:id=34:Heading"
-      _StyleDefs(99)  =   ":id=34,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
-      _StyleDefs(100) =   ":id=34,.wraptext=-1"
-      _StyleDefs(101) =   "Named:id=35:Footing"
-      _StyleDefs(102) =   ":id=35,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
-      _StyleDefs(103) =   "Named:id=36:Selected"
-      _StyleDefs(104) =   ":id=36,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
-      _StyleDefs(105) =   "Named:id=37:Caption"
-      _StyleDefs(106) =   ":id=37,.parent=34,.alignment=2"
-      _StyleDefs(107) =   "Named:id=38:HighlightRow"
-      _StyleDefs(108) =   ":id=38,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
-      _StyleDefs(109) =   "Named:id=39:EvenRow"
-      _StyleDefs(110) =   ":id=39,.parent=33,.bgcolor=&HFFFF00&"
-      _StyleDefs(111) =   "Named:id=40:OddRow"
-      _StyleDefs(112) =   ":id=40,.parent=33"
-      _StyleDefs(113) =   "Named:id=41:RecordSelector"
-      _StyleDefs(114) =   ":id=41,.parent=34"
-      _StyleDefs(115) =   "Named:id=42:FilterBar"
-      _StyleDefs(116) =   ":id=42,.parent=33"
+      _StyleDefs(44)  =   "Splits(0).Columns(2).Style:id=46,.parent=13,.locked=-1"
+      _StyleDefs(45)  =   "Splits(0).Columns(2).HeadingStyle:id=43,.parent=14,.alignment=2"
+      _StyleDefs(46)  =   "Splits(0).Columns(2).FooterStyle:id=44,.parent=15"
+      _StyleDefs(47)  =   "Splits(0).Columns(2).EditorStyle:id=45,.parent=17"
+      _StyleDefs(48)  =   "Splits(0).Columns(3).Style:id=66,.parent=13,.locked=-1"
+      _StyleDefs(49)  =   "Splits(0).Columns(3).HeadingStyle:id=63,.parent=14,.alignment=2"
+      _StyleDefs(50)  =   "Splits(0).Columns(3).FooterStyle:id=64,.parent=15"
+      _StyleDefs(51)  =   "Splits(0).Columns(3).EditorStyle:id=65,.parent=17"
+      _StyleDefs(52)  =   "Splits(0).Columns(4).Style:id=50,.parent=13,.locked=-1"
+      _StyleDefs(53)  =   "Splits(0).Columns(4).HeadingStyle:id=47,.parent=14,.alignment=2"
+      _StyleDefs(54)  =   "Splits(0).Columns(4).FooterStyle:id=48,.parent=15"
+      _StyleDefs(55)  =   "Splits(0).Columns(4).EditorStyle:id=49,.parent=17"
+      _StyleDefs(56)  =   "Splits(0).Columns(5).Style:id=110,.parent=13,.locked=-1"
+      _StyleDefs(57)  =   "Splits(0).Columns(5).HeadingStyle:id=107,.parent=14,.alignment=2"
+      _StyleDefs(58)  =   "Splits(0).Columns(5).FooterStyle:id=108,.parent=15"
+      _StyleDefs(59)  =   "Splits(0).Columns(5).EditorStyle:id=109,.parent=17"
+      _StyleDefs(60)  =   "Splits(0).Columns(6).Style:id=98,.parent=13,.locked=-1"
+      _StyleDefs(61)  =   "Splits(0).Columns(6).HeadingStyle:id=95,.parent=14,.alignment=2"
+      _StyleDefs(62)  =   "Splits(0).Columns(6).FooterStyle:id=96,.parent=15"
+      _StyleDefs(63)  =   "Splits(0).Columns(6).EditorStyle:id=97,.parent=17"
+      _StyleDefs(64)  =   "Splits(0).Columns(7).Style:id=62,.parent=13,.alignment=3,.locked=-1"
+      _StyleDefs(65)  =   "Splits(0).Columns(7).HeadingStyle:id=59,.parent=14,.alignment=2"
+      _StyleDefs(66)  =   "Splits(0).Columns(7).FooterStyle:id=60,.parent=15"
+      _StyleDefs(67)  =   "Splits(0).Columns(7).EditorStyle:id=61,.parent=17"
+      _StyleDefs(68)  =   "Splits(0).Columns(8).Style:id=94,.parent=13,.locked=-1"
+      _StyleDefs(69)  =   "Splits(0).Columns(8).HeadingStyle:id=91,.parent=14,.alignment=2"
+      _StyleDefs(70)  =   "Splits(0).Columns(8).FooterStyle:id=92,.parent=15"
+      _StyleDefs(71)  =   "Splits(0).Columns(8).EditorStyle:id=93,.parent=17"
+      _StyleDefs(72)  =   "Splits(0).Columns(9).Style:id=28,.parent=13,.locked=-1"
+      _StyleDefs(73)  =   "Splits(0).Columns(9).HeadingStyle:id=25,.parent=14,.alignment=2"
+      _StyleDefs(74)  =   "Splits(0).Columns(9).FooterStyle:id=26,.parent=15"
+      _StyleDefs(75)  =   "Splits(0).Columns(9).EditorStyle:id=27,.parent=17"
+      _StyleDefs(76)  =   "Splits(0).Columns(10).Style:id=118,.parent=13,.alignment=1,.locked=-1"
+      _StyleDefs(77)  =   "Splits(0).Columns(10).HeadingStyle:id=115,.parent=14,.alignment=2"
+      _StyleDefs(78)  =   "Splits(0).Columns(10).FooterStyle:id=116,.parent=15"
+      _StyleDefs(79)  =   "Splits(0).Columns(10).EditorStyle:id=117,.parent=17"
+      _StyleDefs(80)  =   "Splits(0).Columns(11).Style:id=114,.parent=13,.alignment=1,.locked=-1"
+      _StyleDefs(81)  =   "Splits(0).Columns(11).HeadingStyle:id=111,.parent=14,.alignment=2"
+      _StyleDefs(82)  =   "Splits(0).Columns(11).FooterStyle:id=112,.parent=15"
+      _StyleDefs(83)  =   "Splits(0).Columns(11).EditorStyle:id=113,.parent=17"
+      _StyleDefs(84)  =   "Splits(0).Columns(12).Style:id=58,.parent=13,.alignment=1,.locked=-1"
+      _StyleDefs(85)  =   "Splits(0).Columns(12).HeadingStyle:id=55,.parent=14,.alignment=2"
+      _StyleDefs(86)  =   "Splits(0).Columns(12).FooterStyle:id=56,.parent=15"
+      _StyleDefs(87)  =   "Splits(0).Columns(12).EditorStyle:id=57,.parent=17"
+      _StyleDefs(88)  =   "Splits(0).Columns(13).Style:id=32,.parent=13,.alignment=1,.locked=-1"
+      _StyleDefs(89)  =   "Splits(0).Columns(13).HeadingStyle:id=29,.parent=14,.alignment=2"
+      _StyleDefs(90)  =   "Splits(0).Columns(13).FooterStyle:id=30,.parent=15"
+      _StyleDefs(91)  =   "Splits(0).Columns(13).EditorStyle:id=31,.parent=17"
+      _StyleDefs(92)  =   "Splits(0).Columns(14).Style:id=78,.parent=13,.alignment=1,.locked=-1"
+      _StyleDefs(93)  =   "Splits(0).Columns(14).HeadingStyle:id=75,.parent=14,.alignment=2"
+      _StyleDefs(94)  =   "Splits(0).Columns(14).FooterStyle:id=76,.parent=15"
+      _StyleDefs(95)  =   "Splits(0).Columns(14).EditorStyle:id=77,.parent=17"
+      _StyleDefs(96)  =   "Splits(0).Columns(15).Style:id=74,.parent=13,.alignment=1,.locked=-1"
+      _StyleDefs(97)  =   "Splits(0).Columns(15).HeadingStyle:id=71,.parent=14,.alignment=2"
+      _StyleDefs(98)  =   "Splits(0).Columns(15).FooterStyle:id=72,.parent=15"
+      _StyleDefs(99)  =   "Splits(0).Columns(15).EditorStyle:id=73,.parent=17"
+      _StyleDefs(100) =   "Named:id=33:Normal"
+      _StyleDefs(101) =   ":id=33,.parent=0"
+      _StyleDefs(102) =   "Named:id=34:Heading"
+      _StyleDefs(103) =   ":id=34,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
+      _StyleDefs(104) =   ":id=34,.wraptext=-1"
+      _StyleDefs(105) =   "Named:id=35:Footing"
+      _StyleDefs(106) =   ":id=35,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
+      _StyleDefs(107) =   "Named:id=36:Selected"
+      _StyleDefs(108) =   ":id=36,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
+      _StyleDefs(109) =   "Named:id=37:Caption"
+      _StyleDefs(110) =   ":id=37,.parent=34,.alignment=2"
+      _StyleDefs(111) =   "Named:id=38:HighlightRow"
+      _StyleDefs(112) =   ":id=38,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
+      _StyleDefs(113) =   "Named:id=39:EvenRow"
+      _StyleDefs(114) =   ":id=39,.parent=33,.bgcolor=&HFFFF00&"
+      _StyleDefs(115) =   "Named:id=40:OddRow"
+      _StyleDefs(116) =   ":id=40,.parent=33"
+      _StyleDefs(117) =   "Named:id=41:RecordSelector"
+      _StyleDefs(118) =   ":id=41,.parent=34"
+      _StyleDefs(119) =   "Named:id=42:FilterBar"
+      _StyleDefs(120) =   ":id=42,.parent=33"
    End
 End
 Attribute VB_Name = "frmMovimiento_Cereal_Lista"
@@ -1403,7 +1477,7 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     Set recData = New ADODB.Recordset
     
     'VERSION 14/03/2012 - MOSTRAR LA ENTIDAD REMITENTE DE LA MERCADERIA SEGUN CORRESPONDA
-    strSQLSelect = "SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.Tipo, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.FechaCarga, dbo.udf_GetRemitenteCereal(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) AS Entidad_Remitente_ID, dbo.udf_GetRemitenteCerealNombre(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) AS Entidad_Remitente_Nombre, Entidad_Destinatario.Nombre AS Entidad_Destinatario_Nombre, Entidad_Transportista.Nombre AS Entidad_Transportista_Nombre, Cosecha.Nombre AS Cosecha_Nombre, Cereal.Nombre AS Cereal_Nombre, Movimiento_Cereal.PesoBruto, Movimiento_Cereal.PesoTara, Movimiento_Cereal.PesoNeto, Movimiento_Cereal.PesoFinal, Movimiento_Cereal.Humedad, Movimiento_Cereal.Zaranda" & vbCr
+    strSQLSelect = "SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.Tipo, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.ComprobanteNumeroConFormato, Movimiento_Cereal.FechaCarga, Movimiento_Cereal.CTGNumero, dbo.udf_GetRemitenteCereal(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) AS Entidad_Remitente_ID, dbo.udf_GetRemitenteCerealNombre(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) AS Entidad_Remitente_Nombre, Entidad_Destinatario.Nombre AS Entidad_Destinatario_Nombre, Entidad_Transportista.Nombre AS Entidad_Transportista_Nombre, Cosecha.Nombre AS Cosecha_Nombre, Cereal.Nombre AS Cereal_Nombre, Movimiento_Cereal.PesoBruto, Movimiento_Cereal.PesoTara, Movimiento_Cereal.PesoNeto, Movimiento_Cereal.PesoFinal, Movimiento_Cereal.Humedad, Movimiento_Cereal.Zaranda" & vbCr
     strSQLFrom = "FROM ((((Movimiento_Cereal INNER JOIN Cosecha ON Movimiento_Cereal.IDCosecha = Cosecha.IDCosecha) INNER JOIN Cereal ON Movimiento_Cereal.IDCereal = Cereal.IDCereal) LEFT JOIN Entidad AS Entidad_Destinatario ON Movimiento_Cereal.IDEntidad_Destinatario = Entidad_Destinatario.IDEntidad) LEFT JOIN Entidad AS Entidad_Transportista ON Movimiento_Cereal.IDEntidad_Transportista = Entidad_Transportista.IDEntidad) LEFT JOIN Movimiento_Cereal_Analisis ON Movimiento_Cereal.IDMovimiento_Cereal = Movimiento_Cereal_Analisis.IDMovimiento_Cereal" & vbCr
     
     'WHERE
@@ -1455,16 +1529,22 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     Select Case cboComprobanteNumero.ListIndex
         Case 0  'ALL
         Case 1 To 6
-            If Len(Trim(txtComprobanteNumero_Desde.Text)) = 12 Then
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.ComprobanteNumero " & cboComprobanteNumero.Text & " '" & CSM_String.ReplaceQuote(txtComprobanteNumero_Desde.Text) & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.ComprobanteNumero} " & cboComprobanteNumero.Text & " '" & CSM_String.ReplaceQuote(txtComprobanteNumero_Desde.Text) & "'"
+            If maskedtextboxComprobanteNumeroDesde.Text <> "" Then
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.ComprobanteNumero " & cboComprobanteNumero.Text & " " & maskedtextboxComprobanteNumeroDesde.Text
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.ComprobanteNumero} " & cboComprobanteNumero.Text & " " & maskedtextboxComprobanteNumeroDesde.Text
             End If
         Case 7  'BETWEEN
-            If Len(Trim(txtComprobanteNumero_Desde.Text)) = 12 And Len(Trim(txtComprobanteNumero_Hasta.Text)) = 12 Then
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.ComprobanteNumero BETWEEN '" & CSM_String.ReplaceQuote(txtComprobanteNumero_Desde.Text) & "' AND '" & CSM_String.ReplaceQuote(txtComprobanteNumero_Hasta.Text) & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.ComprobanteNumero} >= '" & CSM_String.ReplaceQuote(txtComprobanteNumero_Desde.Text) & "' AND {Movimiento_Cereal.ComprobanteNumero} <= '" & CSM_String.ReplaceQuote(txtComprobanteNumero_Hasta.Text) & "'"
+            If maskedtextboxComprobanteNumeroHasta.Text <> "" Then
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.ComprobanteNumero BETWEEN " & maskedtextboxComprobanteNumeroDesde.Text & " AND " & maskedtextboxComprobanteNumeroHasta.Text
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.ComprobanteNumero} >= " & maskedtextboxComprobanteNumeroDesde.Text & " AND {Movimiento_Cereal.ComprobanteNumero} <= " & maskedtextboxComprobanteNumeroHasta.Text
             End If
     End Select
+    
+    'CTG NUMERO
+    If maskedtextboxCtgNumero.Text <> "" Then
+        mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.CTGNumero = " & maskedtextboxCtgNumero.Text
+        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.CTGNumero} = " & maskedtextboxCtgNumero.Text
+    End If
     
     'PLANTA
     If cboPlanta.ListIndex > 0 Then
@@ -2206,43 +2286,62 @@ End Sub
 '============================================================
 'CARTA PORTE NUMERO
 Private Sub cboComprobanteNumero_Click()
-    txtComprobanteNumero_Desde.Visible = (cboComprobanteNumero.ListIndex > 0)
-    lblComprobanteNumero_Y.Visible = (cboComprobanteNumero.ListIndex = 7)
-    txtComprobanteNumero_Hasta.Visible = (cboComprobanteNumero.ListIndex = 7)
+    maskedtextboxComprobanteNumeroDesde.Visible = (cboComprobanteNumero.ListIndex > 0)
+    labelComprobanteNumeroHasta.Visible = (cboComprobanteNumero.ListIndex = 7)
+    maskedtextboxComprobanteNumeroHasta.Visible = (cboComprobanteNumero.ListIndex = 7)
     
     Call LoadData(0)
 End Sub
 
 '============================================================
 'CARTA PORTE NUMERO DESDE
-Private Sub txtComprobanteNumero_Desde_GotFocus()
-    Call CSM_Control_TextBox.SelAllText(txtComprobanteNumero_Desde)
+Private Sub maskedtextboxComprobanteNumeroDesde_GotFocus()
+    maskedtextboxComprobanteNumeroDesde.SelStart = 0
+    maskedtextboxComprobanteNumeroDesde.SelLength = Len(maskedtextboxComprobanteNumeroDesde.Text)
 End Sub
 
-Private Sub txtComprobanteNumero_Desde_KeyPress(KeyAscii As Integer)
+Private Sub maskedtextboxComprobanteNumeroDesde_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Then
+        Call maskedtextboxComprobanteNumeroDesde_LostFocus
         Call LoadData(0)
     End If
 End Sub
 
-Private Sub txtComprobanteNumero_Desde_LostFocus()
-    CSM_Control_TextBox.FormatValue_ByTag txtComprobanteNumero_Desde
+Private Sub maskedtextboxComprobanteNumeroDesde_LostFocus()
+    maskedtextboxComprobanteNumeroDesde.Text = PadStringLeft(maskedtextboxComprobanteNumeroDesde.Text, "0", 13)
+    Call LoadData(0)
 End Sub
 
 '============================================================
 'CARTA PORTE NUMERO HASTA
-Private Sub txtComprobanteNumero_Hasta_GotFocus()
-    Call CSM_Control_TextBox.SelAllText(txtComprobanteNumero_Hasta)
+Private Sub maskedtextboxComprobanteNumeroHasta_GotFocus()
+    maskedtextboxComprobanteNumeroHasta.SelStart = 0
+    maskedtextboxComprobanteNumeroHasta.SelLength = Len(maskedtextboxComprobanteNumeroHasta.Text)
 End Sub
 
-Private Sub txtComprobanteNumero_Hasta_KeyPress(KeyAscii As Integer)
+Private Sub maskedtextboxComprobanteNumeroHasta_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Then
+        Call maskedtextboxComprobanteNumeroHasta_LostFocus
         Call LoadData(0)
     End If
 End Sub
 
-Private Sub txtComprobanteNumero_Hasta_LostFocus()
-    CSM_Control_TextBox.FormatValue_ByTag txtComprobanteNumero_Hasta
+Private Sub maskedtextboxComprobanteNumeroHasta_LostFocus()
+    maskedtextboxComprobanteNumeroHasta.Text = PadStringLeft(maskedtextboxComprobanteNumeroHasta.Text, "0", 13)
+    Call LoadData(0)
+End Sub
+
+'============================================================
+'CTG NUMERO
+Private Sub maskedtextboxCtgNumero_GotFocus()
+    maskedtextboxCtgNumero.SelStart = 0
+    maskedtextboxCtgNumero.SelLength = Len(maskedtextboxCtgNumero.Text)
+End Sub
+
+Private Sub maskedtextboxCtgNumero_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        Call LoadData(0)
+    End If
 End Sub
 
 '============================================================

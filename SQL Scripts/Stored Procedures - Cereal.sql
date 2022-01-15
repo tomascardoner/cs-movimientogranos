@@ -9,6 +9,31 @@ GO
 
 
 -- =============================================
+-- Author:	Tomás A. Cardoner
+-- Created: 11/01/2022 11:15
+-- Updated: 
+-- Description: Obtiene un Cereal por nombre
+-- =============================================
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Cereal_GetPorNombre') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_Cereal_GetPorNombre
+GO
+
+CREATE PROCEDURE dbo.usp_Cereal_GetPorNombre
+	@Nombre varchar(50)
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT IDCereal, Nombre, Tipo, MermaVolatil, MermaHumedadBase, MermaHumedadManipuleo, ONCCA_EspecieCodigo, ONCCA_EspecieNombre, ONCCA_GranoTipoCodigo, ONCCA_GranoTipoNombre, RealizaAnalisisIPRO, Activo
+		FROM Cereal
+		WHERE Nombre = @Nombre
+END
+GO
+
+
+
+-- =============================================
 -- Author:		Tomás A. Cardoner
 -- Created:	2013-11-17
 -- Description:	Lista los Cereales

@@ -35,6 +35,32 @@ GO
 
 
 -- =============================================
+-- Author:	Tomás A. Cardoner
+-- Created: 09/01/2022 18:38
+-- Updated: 
+-- Description: Obtiene una Entidad por número de CUIT
+-- =============================================
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_GetPorCuit') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_Entidad_GetPorCuit
+GO
+
+CREATE PROCEDURE dbo.usp_Entidad_GetPorCuit
+	@Cuit bigint
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT *
+		FROM Entidad
+		WHERE CUIT = @Cuit
+
+END
+GO
+
+
+
+-- =============================================
 -- Author:	  Tomás A. Cardoner
 -- Created: 11/06/2014 22:43:00
 -- Updated: 
@@ -45,7 +71,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_A
 GO
 
 CREATE PROCEDURE dbo.usp_Entidad_Add
-	@IDEntidad int OUTPUT, 
+	@IDEntidad int OUTPUT,
 	@Nombre varchar(100),
 	@CUIT char(11),
 	@EsTitular bit,

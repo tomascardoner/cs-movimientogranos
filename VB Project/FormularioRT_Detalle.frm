@@ -501,7 +501,7 @@ Begin VB.Form frmFormularioRT_Detalle
       _ExtentX        =   2566
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   98566145
+      Format          =   86638593
       CurrentDate     =   40659
       MaxDate         =   55153
       MinDate         =   40513
@@ -907,7 +907,7 @@ Begin VB.Form frmFormularioRT_Detalle
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Format          =   98566145
+         Format          =   86638593
          CurrentDate     =   40544
          MinDate         =   40179
       End
@@ -929,7 +929,7 @@ Begin VB.Form frmFormularioRT_Detalle
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Format          =   98566145
+         Format          =   86638593
          CurrentDate     =   42480.5029861111
          MinDate         =   40179
       End
@@ -1528,8 +1528,6 @@ Private Sub tdbgrdCartaPorte_Fill()
         .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
         .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDescarga_Desde.Value)
         .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaDescarga_Hasta.Value)
-        .Parameters.Append .CreateParameter("NumeroComprobanteFormat", adBoolean, adParamInput, , False)
-        .Parameters.Append .CreateParameter("NumeroComprobanteTrim", adBoolean, adParamInput, , True)
     End With
     Set recData = New ADODB.Recordset
     recData.Open cmdData, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc

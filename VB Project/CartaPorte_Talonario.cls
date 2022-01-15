@@ -133,7 +133,7 @@ Public Property Let RefreshListSkip(ByVal Value As Boolean)
 End Property
 
 Public Sub RefreshList()
-    RefreshList_Module.CartaPorte_Talonario IDCartaPorte_Talonario
+    ' RefreshList_Module.CartaPorte_Talonario IDCartaPorte_Talonario
 End Sub
 
 '////////////////////////////////////////////////////////////////////////

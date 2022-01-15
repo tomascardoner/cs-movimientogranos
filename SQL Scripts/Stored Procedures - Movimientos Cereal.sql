@@ -100,7 +100,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT IDMovimiento_Cereal, Tipo, ComprobanteNumero, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, MermaVolatilKilogramo, MermaHumedadPorcentaje, MermaHumedadKilogramo, MermaZarandaKilogramo, PesoFinal, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, FechaHoraEnvioBolsaTech, Certificado, KilogramoAplicado
+	SELECT IDMovimiento_Cereal, Tipo, ComprobanteNumero, ComprobanteNumeroConFormato, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, MermaVolatilKilogramo, MermaHumedadPorcentaje, MermaHumedadKilogramo, MermaZarandaKilogramo, PesoFinal, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, FechaHoraEnvioBolsaTech, Certificado, KilogramoAplicado
 		FROM Movimiento_Cereal
 		WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
 END
@@ -118,14 +118,37 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movi
 GO
 
 CREATE PROCEDURE usp_Movimiento_Cereal_GetByComprobanteNumero
-	@ComprobanteNumero char(12)
+	@ComprobanteNumero char(13)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT IDMovimiento_Cereal, Tipo, ComprobanteNumero, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, MermaVolatilKilogramo, MermaHumedadPorcentaje, MermaHumedadKilogramo, MermaZarandaKilogramo, PesoFinal, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, FechaHoraEnvioBolsaTech, Certificado, KilogramoAplicado
+	SELECT IDMovimiento_Cereal, Tipo, ComprobanteNumero, ComprobanteNumeroConFormato, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, MermaVolatilKilogramo, MermaHumedadPorcentaje, MermaHumedadKilogramo, MermaZarandaKilogramo, PesoFinal, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, FechaHoraEnvioBolsaTech, Certificado, KilogramoAplicado
 		FROM Movimiento_Cereal
 		WHERE ComprobanteNumero = @ComprobanteNumero
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
+-- Create date: 2022-01-14
+-- Description:	Obtiene los datos de un Movimiento de Cereal a partir del CTG
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movimiento_Cereal_GetByCtg') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_Movimiento_Cereal_GetByCtg
+GO
+
+CREATE PROCEDURE usp_Movimiento_Cereal_GetByCtg
+	@Ctg bigint
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	SELECT IDMovimiento_Cereal, Tipo, ComprobanteNumero, ComprobanteNumeroConFormato, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, MermaVolatilKilogramo, MermaHumedadPorcentaje, MermaHumedadKilogramo, MermaZarandaKilogramo, PesoFinal, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, FechaHoraEnvioBolsaTech, Certificado, KilogramoAplicado
+		FROM Movimiento_Cereal
+		WHERE CTGNumero = @Ctg
 END
 GO
 
@@ -240,9 +263,9 @@ GO
 CREATE PROCEDURE usp_Movimiento_Cereal_Add
 	@IDMovimiento_Cereal int OUTPUT,
 	@Tipo char(1),
-	@ComprobanteNumero varchar(12),
+	@ComprobanteNumero bigint,
 	@IDCartaPorte_Talonario int,
-	@CTGNumero int,
+	@CTGNumero bigint,
 	@FechaCarga date,
 	@IDEntidad_Titular int,
 	@IDEntidad_Intermediario int,
@@ -433,9 +456,9 @@ GO
 
 CREATE PROCEDURE usp_Movimiento_Cereal_Update
 	@IDMovimiento_Cereal int,
-	@ComprobanteNumero varchar(12),
+	@ComprobanteNumero bigint,
 	@IDCartaPorte_Talonario int,
-	@CTGNumero int,
+	@CTGNumero bigint,
 	@FechaCarga date,
 	@IDEntidad_Titular int,
 	@IDEntidad_Intermediario int,
@@ -1072,7 +1095,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-    SELECT Movimiento_Cereal.IDMovimiento_Cereal, 0 AS Selected, Movimiento_Cereal.CTGNumero, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.FechaHoraArribo, Movimiento_Cereal.PesoNeto, Movimiento_Cereal.MermaZarandaKilogramo, Movimiento_Cereal.Humedad, Movimiento_Cereal.MermaHumedadKilogramo, Movimiento_Cereal.MermaVolatilKilogramo, Movimiento_Cereal.PesoFinal
+    SELECT Movimiento_Cereal.IDMovimiento_Cereal, 0 AS Selected, Movimiento_Cereal.CTGNumero, Movimiento_Cereal.ComprobanteNumeroConFormato AS ComprobanteNumero, Movimiento_Cereal.FechaHoraArribo, Movimiento_Cereal.PesoNeto, Movimiento_Cereal.MermaZarandaKilogramo, Movimiento_Cereal.Humedad, Movimiento_Cereal.MermaHumedadKilogramo, Movimiento_Cereal.MermaVolatilKilogramo, Movimiento_Cereal.PesoFinal
 		FROM ((Movimiento_Cereal INNER JOIN Entidad AS Entidad_Transportista ON Movimiento_Cereal.IDEntidad_Transportista = Entidad_Transportista.IDEntidad) INNER JOIN Entidad_OrigenDestino AS Origen ON Movimiento_Cereal.IDEntidad_Titular = Origen.IDEntidad AND Movimiento_Cereal.IDOrigenDestino_Origen = Origen.IDOrigenDestino) INNER JOIN Localidad AS Localidad_Origen ON Origen.IDLocalidad = Localidad_Origen.IDLocalidad
 		WHERE Movimiento_Cereal.Tipo = 'E' AND Movimiento_Cereal.IDCartaPorte_MotivoAnulacion IS NULL AND Movimiento_Cereal.Certificado = 0
 			AND Movimiento_Cereal.IDEntidad_Destino = @IDEntidad_Depositario AND Movimiento_Cereal.IDOrigenDestino_Destino = @IDPlanta
@@ -1102,14 +1125,12 @@ CREATE PROCEDURE usp_Movimiento_Cereal_Salida_SinAplicar_List
 	@IDCosecha smallint,
 	@IDCereal tinyint,
 	@FechaDesde date,
-	@FechaHasta date,
-	@NumeroComprobanteFormat bit,
-	@NumeroComprobanteTrim bit
+	@FechaHasta date
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
-    SELECT Movimiento_Cereal.IDMovimiento_Cereal, (CASE @NumeroComprobanteFormat WHEN 1 THEN (LEFT(Movimiento_Cereal.ComprobanteNumero, 4) + '-' + RIGHT(Movimiento_Cereal.ComprobanteNumero, 8)) ELSE (CASE @NumeroComprobanteTrim WHEN 1 THEN RIGHT(Movimiento_Cereal.ComprobanteNumero, 9) ELSE Movimiento_Cereal.ComprobanteNumero END) END) AS ComprobanteNumero, Movimiento_Cereal.FechaCarga, Movimiento_Cereal.PesoNeto, (Movimiento_Cereal.PesoNeto - Movimiento_Cereal.KilogramoAplicado) AS KilogramoPendiente, 0 AS KilogramoAsignar
+    SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.FechaCarga, Movimiento_Cereal.PesoNeto, (Movimiento_Cereal.PesoNeto - Movimiento_Cereal.KilogramoAplicado) AS KilogramoPendiente, 0 AS KilogramoAsignar
 		FROM Movimiento_Cereal
 		WHERE Movimiento_Cereal.Tipo = 'S' AND Movimiento_Cereal.IDCartaPorte_MotivoAnulacion IS NULL
 			AND (Movimiento_Cereal.PesoNeto - Movimiento_Cereal.KilogramoAplicado) > 0

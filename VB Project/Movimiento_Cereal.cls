@@ -19,8 +19,9 @@ Private mTipo As String
 
 'ENCABEZADO
 Private mComprobanteNumero As String
+Private mComprobanteNumeroConFormato As String
 Private mIDCartaPorte_Talonario As Long
-Private mCTGNumero As Long
+Private mCTGNumero As String
 Private mFechaCarga As Date
 
 '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
@@ -169,6 +170,13 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get ComprobanteNumeroConFormato() As String
+    ComprobanteNumeroConFormato = mComprobanteNumeroConFormato
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Sub GetProximoComprobanteNumero()
     Dim cmdData As ADODB.command
     Dim recData As Recordset
@@ -179,13 +187,13 @@ Public Sub GetProximoComprobanteNumero()
     
     Set cmdData = New ADODB.command
     Set cmdData.ActiveConnection = pDatabase.Connection
-    cmdData.CommandText = "SELECT ISNULL(CAST(MAX(ComprobanteNumero) as int), 0) + 1 FROM Movimiento_Cereal WHERE Tipo = ? AND IDCosecha = ?"
+    cmdData.CommandText = "SELECT ISNULL(MAX(ComprobanteNumero), 0) + 1 FROM Movimiento_Cereal WHERE Tipo = ? AND IDCosecha = ?"
     cmdData.Parameters.Append cmdData.CreateParameter(, adChar, adParamInput, 1, mTipo)
     cmdData.Parameters.Append cmdData.CreateParameter(, adTinyInt, adParamInput, 1, mIDCosecha)
     Set recData = New ADODB.Recordset
     recData.Open cmdData, , adOpenForwardOnly, adLockReadOnly, adCmdText
     If Not recData.EOF Then
-        mComprobanteNumero = Format(recData(0).Value, String(12, "0"))
+        mComprobanteNumero = Format(recData(0).Value, String(13, "0"))
     End If
     recData.Close
     Set recData = Nothing
@@ -233,19 +241,11 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-Public Property Get CTGNumero() As Long
+Public Property Get CTGNumero() As String
     CTGNumero = mCTGNumero
 End Property
 
-Public Property Get CTGNumero_Formatted() As String
-    If mCTGNumero = 0 Then
-        CTGNumero_Formatted = ""
-    Else
-        CTGNumero_Formatted = Format(mCTGNumero, "#,###")
-    End If
-End Property
-
-Public Property Let CTGNumero(ByVal Value As Long)
+Public Property Let CTGNumero(ByVal Value As String)
     If Value <> mCTGNumero Then
         mIsDirty = True
     End If
@@ -1742,7 +1742,7 @@ Public Function LoadByComprobanteNumero() As Boolean
         .CommandText = "usp_Movimiento_Cereal_GetByComprobanteNumero"
         .CommandType = adCmdStoredProc
         
-        .Parameters.Append .CreateParameter("ComprobanteNumero", adChar, adParamInput, 12, ComprobanteNumeroSave)
+        .Parameters.Append .CreateParameter("ComprobanteNumero", adChar, adParamInput, 13, ComprobanteNumeroSave)
     End With
     
     Set recData = New ADODB.Recordset
@@ -1761,6 +1761,47 @@ ErrorHandler:
     ShowErrorMessage "Classes.Movimiento_Cereal.LoadByCartaDePorteNumero", "Error al obtener los datos del Movimiento de Cereal." & vbCr & vbCr & "Comprobante Nº: " & ComprobanteNumeroSave
 End Function
 
+Public Function LoadByCtgNumero() As Boolean
+    Dim CTGNumeroSave As String
+    
+    Dim cmdSP As ADODB.command
+    Dim recData As ADODB.Recordset
+
+    If pTrapErrors Then
+        On Error GoTo ErrorHandler
+    End If
+
+    Screen.MousePointer = vbHourglass
+    
+    CTGNumeroSave = mCTGNumero
+    Call InitializeValues
+    IDMovimiento_Cereal = 0
+    
+    Set cmdSP = New ADODB.command
+    With cmdSP
+        Set .ActiveConnection = pDatabase.Connection
+        .CommandText = "usp_Movimiento_Cereal_GetByCtg"
+        .CommandType = adCmdStoredProc
+        
+        .Parameters.Append .CreateParameter("Ctg", adBigInt, adParamInput, , CTGNumeroSave)
+    End With
+    
+    Set recData = New ADODB.Recordset
+    recData.Open cmdSP, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
+
+    Screen.MousePointer = vbHourglass
+
+    LoadByCtgNumero = GetDataFromRecordset(recData)
+    
+    recData.Close
+    Set recData = Nothing
+    Set cmdSP = Nothing
+    Exit Function
+    
+ErrorHandler:
+    ShowErrorMessage "Classes.Movimiento_Cereal.LoadByCtgNumero", "Error al obtener los datos del Movimiento de Cereal." & vbCr & vbCr & "C.T.G.: " & CTGNumeroSave
+End Function
+
 Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boolean
 
     If (Not mNoMatchRaiseError) And recData.EOF Then
@@ -1774,8 +1815,9 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         
         'ENCABEZADO
         mComprobanteNumero = recData("ComprobanteNumero").Value
+        mComprobanteNumeroConFormato = recData("ComprobanteNumeroConFormato").Value & ""
         mIDCartaPorte_Talonario = Val(recData("IDCartaPorte_Talonario").Value & "")
-        mCTGNumero = IIf(IsNull(recData("CTGNumero").Value), 0, recData("CTGNumero").Value)
+        mCTGNumero = CSM_Function.IfIsNull_ZeroLenghtString(recData("CTGNumero").Value)
         mFechaCarga = recData("FechaCarga").Value
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
@@ -1924,7 +1966,7 @@ Public Function Copy() As Boolean
         Copy = True
 
         mIDMovimiento_Cereal = 0
-        mCTGNumero = 0
+        mCTGNumero = ""
         
         mPesoBruto = 0
         mPesoTara = 0
@@ -1981,9 +2023,9 @@ Public Function Update() As Boolean
         Else
             .Parameters.Append .CreateParameter("IDMovimiento_Cereal", adInteger, adParamInput, , mIDMovimiento_Cereal)
         End If
-        .Parameters.Append .CreateParameter("ComprobanteNumero", adVarChar, adParamInput, 12, mComprobanteNumero)
+        .Parameters.Append .CreateParameter("ComprobanteNumero", adVarChar, adParamInput, 13, mComprobanteNumero)
         .Parameters.Append .CreateParameter("IDCartaPorte_Talonario", adInteger, adParamInput, , IIf(mIDCartaPorte_Talonario = 0, Null, mIDCartaPorte_Talonario))
-        .Parameters.Append .CreateParameter("CTGNumero", adInteger, adParamInput, , IIf(mCTGNumero = 0, Null, mCTGNumero))
+        .Parameters.Append .CreateParameter("CTGNumero", adBigInt, adParamInput, , IIf(mCTGNumero = "", Null, mCTGNumero))
         .Parameters.Append .CreateParameter("FechaCarga", adDate, adParamInput, , mFechaCarga)
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
@@ -2145,8 +2187,9 @@ Private Sub InitializeValues()
     
     'ENCABEZADO
     mComprobanteNumero = ""
+    mComprobanteNumeroConFormato = ""
     mIDCartaPorte_Talonario = 0
-    mCTGNumero = 0
+    mCTGNumero = ""
     mFechaCarga = DATE_TIME_FIELD_NULL_VALUE
     
     '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS

@@ -90,15 +90,6 @@ Public Function SubProducto(ByVal IDSubProducto As Byte) As Boolean
     End If
 End Function
 
-Public Function CartaPorte_Talonario(ByVal IDCartaPorte_Talonario As Long) As Boolean
-    If CSM_Forms.IsLoaded("frmCartaPorte_Talonario_Lista") Then
-        frmCartaPorte_Talonario_Lista.LoadData IDCartaPorte_Talonario
-    End If
-    If CSM_Forms.IsLoaded("frmMovimiento_Cereal_Detalle") Then
-        frmMovimiento_Cereal_Detalle.FillComboBox_CartaPorte_Talonario
-    End If
-End Function
-
 Public Function Movimiento_Cereal(ByVal IDMovimiento_Cereal As Long) As Boolean
     If CSM_Forms.IsLoaded("frmMovimiento_Cereal_Lista") Then
         frmMovimiento_Cereal_Lista.LoadData IDMovimiento_Cereal
