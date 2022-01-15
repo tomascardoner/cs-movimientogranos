@@ -1,0 +1,250 @@
+﻿using System;
+using System.IO;
+using System.Windows.Forms;
+
+namespace CS_Importador_de_cartas_de_porte
+{
+    public partial class FormImportarCartasDePorte : Form
+    {
+        string carpetaOrigen;
+        Database.Database database = new Database.Database();
+
+        public FormImportarCartasDePorte()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonCarpetaOrigenExaminar_Click(object sender, EventArgs e)
+        {
+            if (folderbrowserdialogMain.ShowDialog(this) == DialogResult.OK)
+            {
+                textboxCarpetaOrigen.Text = folderbrowserdialogMain.SelectedPath;
+            }
+        }
+
+        private void buttonBuscarCartasPorte_Click(object sender, EventArgs e)
+        {
+            carpetaOrigen = textboxCarpetaOrigen.Text.Trim();
+
+            if (carpetaOrigen == string.Empty)
+            {
+                MessageBox.Show("Debe especificar la ubicación de los archivos.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textboxCarpetaOrigen.Focus();
+                return;
+            }
+            if (!Directory.Exists(carpetaOrigen))
+            {
+                MessageBox.Show("La ubicación de los archivos especificada, no existe.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textboxCarpetaOrigen.Focus();
+                return;
+            }
+
+            checkedlistboxArchivos.Items.Clear();
+
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                foreach (string archivoFull in Directory.GetFiles(carpetaOrigen, Constantes.ArchivosPatronBusqueda))
+                {
+                    string archivo = Path.GetFileName(archivoFull);
+                    checkedlistboxArchivos.Items.Add(archivo);
+                }
+
+                Cursor.Current = Cursors.Default;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show($"Error al leer los archivos desde la ubicación especificada.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Abro la conexión a la base de datos
+            if (!database.Connect())
+            {
+                return;
+            }
+
+            // Completo el combobox de cosechas
+            comboboxCosecha.ValueMember = "IDCosecha";
+            comboboxCosecha.DisplayMember = "Nombre";
+            comboboxCosecha.DataSource = database.ObtenerCosechas();
+        }
+
+        private void buttonArchivosSeleccionarTodos_Click(object sender, EventArgs e)
+        {
+            CambiarSeleccion(1);
+        }
+
+        private void buttonArchivosInvertirSeleccion_Click(object sender, EventArgs e)
+        {
+            CambiarSeleccion(-1);
+        }
+
+        private void buttonArchivosDeseleccionarTodos_Click(object sender, EventArgs e)
+        {
+            CambiarSeleccion(0);
+        }
+
+        private void CambiarSeleccion(short accion)
+        {
+            for (int i = 0; i < checkedlistboxArchivos.Items.Count; i++)
+            {
+                if (accion == -1)
+                {
+                    // Invertir selección
+                    checkedlistboxArchivos.SetItemChecked(i, !checkedlistboxArchivos.GetItemChecked(i));
+                }
+                else if (accion == 0)
+                {
+                    // Deseleccionar
+                    checkedlistboxArchivos.SetItemChecked(i, false);
+                }
+                else if (accion == 1)
+                {
+                    // Seleccionar
+                    checkedlistboxArchivos.SetItemChecked(i, true);
+                }
+            }
+        }
+
+        private void buttonImportar_Click(object sender, EventArgs e)
+        {
+            int cartasDePorteAgregadas = 0;
+            int cartasDePorteActualizadas = 0;
+            int cartasDePorteSinCambios = 0;
+
+            if (checkedlistboxArchivos.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("No hay ninguna carta de porte seleccionada.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (comboboxCosecha.SelectedIndex == -1)
+            {
+                MessageBox.Show("No hay ninguna cosecha seleccionada.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+            progressbarMain.Value = 0;
+            progressbarMain.Maximum = checkedlistboxArchivos.CheckedItems.Count;
+            EnableControls(false);
+            ShowProgressControls(true);
+
+            foreach (int index in checkedlistboxArchivos.CheckedIndices)
+            {
+                string archivo = (string)checkedlistboxArchivos.Items[index];
+                CartaDePorteProcesador.ResultadosProcesamiento resultado = CartaDePorteProcesador.Procesar(carpetaOrigen, archivo, (byte)comboboxCosecha.SelectedValue, database);
+                if (progressbarMain.Value > 0)
+                {
+                    progressbarMain.Value--;
+                    progressbarMain.Value++;
+                }
+                progressbarMain.Value ++;
+                Application.DoEvents();
+
+                switch (resultado)
+                {
+                    case CartaDePorteProcesador.ResultadosProcesamiento.Agregada:
+                        cartasDePorteAgregadas++;
+                        break;
+                    case CartaDePorteProcesador.ResultadosProcesamiento.Modificada:
+                        cartasDePorteActualizadas++;
+                        break;
+                    case CartaDePorteProcesador.ResultadosProcesamiento.SinCambios:
+                        cartasDePorteSinCambios++;
+                        break;
+                    case CartaDePorteProcesador.ResultadosProcesamiento.Error:
+                        EnableControls(true);
+                        ShowProgressControls(false);
+                        Cursor.Current = Cursors.Default;
+                        MostrarResumenDeProceso(cartasDePorteAgregadas, cartasDePorteActualizadas, cartasDePorteSinCambios);
+                        return;
+                    default:
+                        break;
+                }
+                checkedlistboxArchivos.SetItemChecked(index, false);
+            }
+            EnableControls(true);
+            ShowProgressControls(false);
+            Cursor.Current = Cursors.Default;
+            MostrarResumenDeProceso(cartasDePorteAgregadas, cartasDePorteActualizadas, cartasDePorteSinCambios);
+        }
+
+        private void MostrarResumenDeProceso(int agregadas, int actualizadas, int sinCambios)
+        {
+            if (agregadas == 0 & actualizadas == 0 & sinCambios == 0)
+            {
+                MessageBox.Show("No se procesó ninguna carta de porte.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                string mensaje = string.Empty;
+                if (agregadas > 0)
+                {
+                    if (agregadas == 1)
+                    {
+                        mensaje = $"Se agregó 1 carta de porte.\n";
+                    }
+                    else
+                    {
+                        mensaje = $"Se agregaron {agregadas} cartas de porte.\n";
+                    }
+                }
+                if (actualizadas > 0)
+                {
+                    if (actualizadas == 1)
+                    {
+                        mensaje = $"Se actualizó 1 carta de porte.\n";
+                    }
+                    else
+                    {
+                        mensaje = $"Se actualizaron {actualizadas} cartas de porte.\n";
+                    }
+                }
+                if (sinCambios > 0)
+                {
+                    if (sinCambios == 1)
+                    {
+                        mensaje = $"1 carta de porte no sufrió cambios.\n";
+                    }
+                    else
+                    {
+                        mensaje = $"{sinCambios} cartas de porte no sufrieron cambios.\n";
+                    }
+                }
+                MessageBox.Show(mensaje, "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void FormImportarCartasDePorte_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            database.Close();
+            database = null;
+        }
+
+        private void EnableControls(bool value)
+        {
+            textboxCarpetaOrigen.Enabled = value;
+            buttonCarpetaOrigenExaminar.Enabled = value;
+            buttonBuscarCartasPorte.Enabled = value;
+            checkedlistboxArchivos.Enabled = value;
+            buttonArchivosDeseleccionarTodos.Enabled = value;
+            buttonArchivosInvertirSeleccion.Enabled = value;
+            buttonArchivosDeseleccionarTodos.Enabled = value;
+            comboboxCosecha.Enabled = value;
+            buttonImportar.Enabled = value;
+
+            buttonImportar.Focus();
+        }
+
+        private void ShowProgressControls(bool value)
+        {
+            buttonArchivosSeleccionarTodos.Visible = !value;
+            buttonArchivosInvertirSeleccion.Visible = !value;
+            buttonArchivosDeseleccionarTodos.Visible = !value;
+            progressbarMain.Visible = value;
+        }
+    }
+}
