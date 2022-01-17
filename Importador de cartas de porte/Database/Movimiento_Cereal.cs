@@ -203,6 +203,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     if (LeerDatos(reader))
                     {
                         IsFound = true;
+                        IsNew = false;
                     }
                 }
                 reader.Close();
@@ -231,7 +232,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 {
                     Connection = database.Connection,
                     CommandType = CommandType.StoredProcedure,
-                    CommandText = "usp_Movimiento_Cereal_GetPorCtg"
+                    CommandText = "usp_Movimiento_Cereal_GetByCtg"
                 };
                 command.Parameters.Add("Ctg", SqlDbType.BigInt).Value = ctg;
                 reader = command.ExecuteReader();
@@ -244,6 +245,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     if (LeerDatos(reader))
                     {
                         IsFound = true;
+                        IsNew = false;
                     }
                 }
                 reader.Close();
@@ -274,11 +276,12 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 };
 
                 SqlParameter parameterIDMovimiento_Cereal = new SqlParameter("IDMovimiento_Cereal", SqlDbType.Int);
-                if (IDMovimiento_Cereal == 0)
+                if (IsNew)
                 {
                     IsNew = true;
                     command.CommandText = "usp_Movimiento_Cereal_Add";
                     parameterIDMovimiento_Cereal.Direction = ParameterDirection.Output;
+                    command.Parameters.Add("Tipo", SqlDbType.Char).Value = Tipo;
                 }
                 else
                 {
@@ -287,7 +290,6 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     parameterIDMovimiento_Cereal.Value = IDMovimiento_Cereal;
                 }
                 command.Parameters.Add(parameterIDMovimiento_Cereal);
-                command.Parameters.Add("Tipo", SqlDbType.Char).Value = Tipo;
                 command.Parameters.Add("ComprobanteNumero", SqlDbType.Char).Value = ComprobanteNumero;
                 command.Parameters.Add("IDCartaPorte_Talonario", SqlDbType.Int).Value = DBNull.Value;
                 command.Parameters.Add("CTGNumero", SqlDbType.BigInt).Value = CTGNumero;
@@ -332,6 +334,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 {
                     IDMovimiento_Cereal = (int)parameterIDMovimiento_Cereal.Value;
                 }
+                IsNew = false;
                 command = null;
                 return true;
             }

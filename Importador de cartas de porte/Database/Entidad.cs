@@ -77,6 +77,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     IDUsuarioModificacion = reader.GetByte(reader.GetOrdinal("IDUsuarioModificacion"));
                     FechaHoraModificacion = reader.GetDateTime(reader.GetOrdinal("FechaHoraModificacion"));
                     IsFound = true;
+                    IsNew = false;
                 }
                 reader.Close();
                 reader = null;
@@ -106,7 +107,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 };
 
                 SqlParameter parameterIDEntidad = new SqlParameter("IDEntidad", SqlDbType.Int);
-                if (IDEntidad == 0)
+                if (IsNew)
                 {
                     command.CommandText = "usp_Entidad_Add";
                     parameterIDEntidad.Direction = ParameterDirection.Output;
@@ -141,10 +142,11 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 command.Parameters.Add("IDUsuario", SqlDbType.TinyInt).Value = Properties.Settings.Default.IdUsuarioImportador;
 
                 command.ExecuteNonQuery();
-                if (IDEntidad == 0)
+                if (IsNew)
                 {
                     IDEntidad = (int)parameterIDEntidad.Value;
                 }
+                IsNew = false;
                 parameterIDEntidad = null;
                 command = null;
                 return true;

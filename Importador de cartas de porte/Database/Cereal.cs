@@ -61,6 +61,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     RealizaAnalisisIPRO = SqlServerValues.GetBoolean(reader, "RealizaAnalisisIPRO");
                     Activo = SqlServerValues.GetBoolean(reader, "Activo");
                     IsFound = true;
+                    IsNew = false;
                 }
                 reader.Close();
                 reader = null;

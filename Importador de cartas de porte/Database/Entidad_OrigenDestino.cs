@@ -40,7 +40,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 {
                     CommandType = CommandType.StoredProcedure,
                     Connection = database.Connection,
-                    CommandText = "usp_Entidad_OrigenDestino_GetPorCodigoOncca"
+                    CommandText = "usp_Entidad_OrigenDestino_GetByCodigoOncca"
                 };
                 command.Parameters.Add("IDEntidad", SqlDbType.Int).Value = idEntidad;
                 command.Parameters.Add("ONCCA_Codigo", SqlDbType.Int).Value = codigoOncca;
@@ -62,6 +62,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     RealizaAnalisisIPRO = SqlServerValues.GetBoolean(reader, "RealizaAnalisisIPRO");
                     Activo = SqlServerValues.GetBoolean(reader, "Activo");
                     IsFound = true;
+                    IsNew = false;
                 }
                 reader.Close();
                 reader = null;

@@ -159,6 +159,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.progressbarMain.Name = "progressbarMain";
             this.progressbarMain.Size = new System.Drawing.Size(335, 28);
             this.progressbarMain.TabIndex = 11;
+            this.progressbarMain.Visible = false;
             // 
             // FormImportarCartasDePorte
             // 
@@ -181,7 +182,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.MaximizeBox = false;
             this.Name = "FormImportarCartasDePorte";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Importar cartas de porte";
+            this.Text = "Importar C.P.s a CS-Movimientos de granos";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormImportarCartasDePorte_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();

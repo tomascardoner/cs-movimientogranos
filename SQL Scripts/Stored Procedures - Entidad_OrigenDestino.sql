@@ -40,11 +40,11 @@ GO
 -- Created: 11/01/2022 15:21
 -- Description: Obtiene los datos del Origen/Destino de la Entidad por medio del Código ONCCA
 -- =============================================
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_OrigenDestino_GetPorCodigoOncca') AND type in (N'P', N'PC'))
-	 DROP PROCEDURE usp_Entidad_OrigenDestino_GetPorCodigoOncca
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_OrigenDestino_GetByCodigoOncca') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_Entidad_OrigenDestino_GetByCodigoOncca
 GO
 
-CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_GetPorCodigoOncca
+CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_GetByCodigoOncca
 	@IDEntidad int,
 	@ONCCA_Codigo int
 AS

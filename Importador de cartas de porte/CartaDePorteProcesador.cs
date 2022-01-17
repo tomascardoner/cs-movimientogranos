@@ -52,27 +52,7 @@ namespace CS_Importador_de_cartas_de_porte
                 return ResultadosProcesamiento.Error;
             }
 
-            bool actualizar = false;
-            if (!VerificarSiExisteCartaYCompararDatos(database, movimiento_Cereal, ref actualizar))
-            {
-                return ResultadosProcesamiento.Error;
-            }
-
-            if (actualizar)
-            {
-                if (movimiento_Cereal.Actualizar(database))
-                {
-                    return ResultadosProcesamiento.Agregada;
-                }
-                else
-                {
-                    return ResultadosProcesamiento.Error;
-                }
-            }
-            else
-            {
-                return ResultadosProcesamiento.SinCambios;
-            }
+            return VerificarSiExisteCartaCompararDatosYActualizar(database, movimiento_Cereal);
         }
 
         #endregion
@@ -970,7 +950,7 @@ namespace CS_Importador_de_cartas_de_porte
                             Database.Entidad_OrigenDestino destino = new Database.Entidad_OrigenDestino();
                             while (true)
                             {
-                                if (destino.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Destino.Value, intTemp))
+                                if (!destino.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Destino.Value, intTemp))
                                 {
                                     return false;
                                 }
@@ -1142,16 +1122,20 @@ namespace CS_Importador_de_cartas_de_porte
             return valorEnPdf;
         }
 
-        private static bool VerificarSiExisteCartaYCompararDatos(Database.Database database, Database.Movimiento_Cereal movimiento_CerealEnPdf, ref bool actualizar)
+        private static ResultadosProcesamiento VerificarSiExisteCartaCompararDatosYActualizar(Database.Database database, Database.Movimiento_Cereal movimiento_CerealEnPdf)
         {
             Database.Movimiento_Cereal movimiento_CerealEnBD = new Database.Movimiento_Cereal();
             if (!movimiento_CerealEnBD.ObtenerPorCtg(database, movimiento_CerealEnPdf.CTGNumero.Value))
             {
-                return false;
+                return ResultadosProcesamiento.Error;
             }
+
+            ResultadosProcesamiento resultado;
+
             if (movimiento_CerealEnBD.IsFound)
             {
                 // La carta ya existe en la base de datos, así que hay que comparar los datos
+                bool actualizar = false;
                 movimiento_CerealEnBD.ComprobanteNumero = VerificarValores(movimiento_CerealEnBD.ComprobanteNumero, movimiento_CerealEnPdf.ComprobanteNumero, ref actualizar).Value;
                 movimiento_CerealEnBD.FechaCarga = VerificarValores(movimiento_CerealEnBD.FechaCarga, movimiento_CerealEnPdf.FechaCarga, ref actualizar).Value;
                 movimiento_CerealEnBD.IDEntidad_Titular = VerificarValores(movimiento_CerealEnBD.IDEntidad_Titular, movimiento_CerealEnPdf.IDEntidad_Titular, ref actualizar).Value;
@@ -1179,13 +1163,29 @@ namespace CS_Importador_de_cartas_de_porte
                 movimiento_CerealEnBD.FechaHoraArribo = VerificarValores(movimiento_CerealEnBD.FechaHoraArribo, movimiento_CerealEnPdf.FechaHoraArribo, ref actualizar);
                 movimiento_CerealEnBD.FechaHoraDescarga = VerificarValores(movimiento_CerealEnBD.FechaHoraDescarga, movimiento_CerealEnPdf.FechaHoraDescarga, ref actualizar);
                 movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion = VerificarValores(movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion, movimiento_CerealEnPdf.IDCartaPorte_MotivoAnulacion, ref actualizar);
+                if (actualizar)
+                {
+                    resultado = ResultadosProcesamiento.Modificada;
+                }
+                else
+                {
+                    resultado = ResultadosProcesamiento.SinCambios;
+                }
             }
             else
             {
                 // La carta no existe, hay que crearla
-                actualizar = true;
+                resultado = ResultadosProcesamiento.Agregada;
             }
-            return true;
+
+            if (resultado == ResultadosProcesamiento.Agregada || resultado == ResultadosProcesamiento.Modificada)
+            {
+                if (!movimiento_CerealEnBD.Actualizar(database))
+                {
+                    return ResultadosProcesamiento.Error;
+                }
+            }
+            return resultado;
         }
 
         #endregion

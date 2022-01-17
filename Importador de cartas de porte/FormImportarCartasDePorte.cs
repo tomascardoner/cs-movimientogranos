@@ -13,11 +13,13 @@ namespace CS_Importador_de_cartas_de_porte
         {
             InitializeComponent();
 
+            this.Icon = CardonerSistemas.Graphics.GetIconFromBitmap(Properties.Resources.ImageImport48);
             textboxCarpetaOrigen.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFolder", string.Empty, true);
         }
 
         private void buttonCarpetaOrigenExaminar_Click(object sender, EventArgs e)
         {
+            folderbrowserdialogMain.SelectedPath = textboxCarpetaOrigen.Text;
             if (folderbrowserdialogMain.ShowDialog(this) == DialogResult.OK)
             {
                 textboxCarpetaOrigen.Text = folderbrowserdialogMain.SelectedPath;
@@ -185,40 +187,18 @@ namespace CS_Importador_de_cartas_de_porte
             }
             else
             {
-                string mensaje = string.Empty;
-                if (agregadas > 0)
+                string mensaje;
+                if (agregadas + actualizadas + sinCambios == 1)
                 {
-                    if (agregadas == 1)
-                    {
-                        mensaje = $"Se agregó 1 carta de porte.\n";
-                    }
-                    else
-                    {
-                        mensaje = $"Se agregaron {agregadas} cartas de porte.\n";
-                    }
+                    mensaje = $"Se ha procesado {agregadas + actualizadas + sinCambios} carta de porte.\n\n";
                 }
-                if (actualizadas > 0)
+                else
                 {
-                    if (actualizadas == 1)
-                    {
-                        mensaje = $"Se actualizó 1 carta de porte.\n";
-                    }
-                    else
-                    {
-                        mensaje = $"Se actualizaron {actualizadas} cartas de porte.\n";
-                    }
+                    mensaje = $"Se han procesado {agregadas + actualizadas + sinCambios} cartas de porte.\n\n";
                 }
-                if (sinCambios > 0)
-                {
-                    if (sinCambios == 1)
-                    {
-                        mensaje = $"1 carta de porte no sufrió cambios.\n";
-                    }
-                    else
-                    {
-                        mensaje = $"{sinCambios} cartas de porte no sufrieron cambios.\n";
-                    }
-                }
+                mensaje += $"Agregadas:______{agregadas}\n";
+                mensaje += $"Actualizadas:___{actualizadas}\n";
+                mensaje += $"Sin cambios:____{sinCambios}";
                 MessageBox.Show(mensaje, "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
