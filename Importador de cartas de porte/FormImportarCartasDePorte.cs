@@ -12,6 +12,8 @@ namespace CS_Importador_de_cartas_de_porte
         public FormImportarCartasDePorte()
         {
             InitializeComponent();
+
+            textboxCarpetaOrigen.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFolder", string.Empty, true);
         }
 
         private void buttonCarpetaOrigenExaminar_Click(object sender, EventArgs e)
@@ -40,6 +42,9 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             checkedlistboxArchivos.Items.Clear();
+
+            // Guardo la carpeta en el registro de windows para abrirla la seiguiente vez
+            CardonerSistemas.Registry.SaveUserValueToApplicationFolder(string.Empty, "SourceFolder", textboxCarpetaOrigen.Text.Trim(), true);
 
             try
             {

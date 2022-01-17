@@ -52,10 +52,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Data\Cardoner Sistemas\Development\framework-csharp\Database.Ado.SqlServer.Values.cs">
+    <Compile Include="..\..\..\framework-csharp\ErrorLite.cs">
+      <Link>Framework\ErrorLite.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\framework-csharp\Registry.cs">
+      <Link>Framework\Registry.cs</Link>
+    </Compile>
+    <Compile Include="C:\Data\Cardoner Sistemas\Development\framework-csharp\Database.Ado.SqlServer.Values.cs">
       <Link>Framework\Database.Ado.SqlServer.Values.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Data\Cardoner Sistemas\Development\framework-csharp\String.cs">
+    <Compile Include="C:\Data\Cardoner Sistemas\Development\framework-csharp\String.cs">
       <Link>Framework\String.cs</Link>
     </Compile>
     <Compile Include="CartaDePorte.cs" />

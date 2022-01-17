@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CS-Importador de cartas de porte")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Aplicación de importación de cartas de porte al sistema CS-Movimiento de granos")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Cardoner Sistemas")]
 [assembly: AssemblyProduct("CS-Importador de cartas de porte")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCopyright("Copyright © 2022 Cardoner Sistemas")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

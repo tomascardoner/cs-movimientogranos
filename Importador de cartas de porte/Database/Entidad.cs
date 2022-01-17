@@ -32,12 +32,16 @@ namespace CS_Importador_de_cartas_de_porte.Database
         public byte IDUsuarioModificacion { get; set; }
         public DateTime FechaHoraModificacion { get; set; }
 
+        internal bool IsNew { get; set; } = true;
+        internal bool IsFound { get; set; } = false;
+
         #endregion
 
         #region Methods
 
-        internal bool ObtenerPorCuit(Database database, long cuitABuscar)
+        internal bool ObtenerPorCuit(Database database, long cuit)
         {
+            SqlDataReader reader = null;
             try
             {
                 SqlCommand command = new SqlCommand
@@ -46,9 +50,10 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     Connection = database.Connection,
                     CommandText = "usp_Entidad_GetPorCuit"
                 };
-                command.Parameters.Add("Cuit", SqlDbType.BigInt).Value = cuitABuscar;
-                SqlDataReader reader = command.ExecuteReader();
+                command.Parameters.Add("Cuit", SqlDbType.BigInt).Value = cuit;
+                reader = command.ExecuteReader();
 
+                IsFound = false;
                 if (reader.HasRows)
                 {
                     reader.Read();
@@ -71,21 +76,19 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     FechaHoraCreacion = reader.GetDateTime(reader.GetOrdinal("FechaHoraCreacion"));
                     IDUsuarioModificacion = reader.GetByte(reader.GetOrdinal("IDUsuarioModificacion"));
                     FechaHoraModificacion = reader.GetDateTime(reader.GetOrdinal("FechaHoraModificacion"));
-                    reader.Close();
-                    reader = null;
-                    command = null;
-                    return true;
+                    IsFound = true;
                 }
-                else
-                {
-                    reader.Close();
-                    reader = null;
-                    command = null;
-                    return false;
-                }
+                reader.Close();
+                reader = null;
+                command = null;
+                return true;
             }
             catch (Exception ex)
             {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show($"Error al obtener la entidad desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;

@@ -8,6 +8,8 @@ namespace CS_Importador_de_cartas_de_porte
     internal static class CartaDePorteProcesador
     {
 
+        #region Declaraciones
+
         internal enum ResultadosProcesamiento
         {
             Agregada,
@@ -15,6 +17,21 @@ namespace CS_Importador_de_cartas_de_porte
             SinCambios,
             Error
         }
+
+        internal enum TiposEntidad
+        { 
+            Titular,
+            Intermediario,
+            RemitenteComercial,
+            Corredor,
+            Entregador,
+            Destinatario,
+            Destino,
+            Transportista,
+            Chofer
+        }
+
+        #endregion
 
         #region Procesamiento general
 
@@ -36,7 +53,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             bool actualizar = false;
-            if (!VerificarSiExisteCartaYCompararDatos(movimiento_Cereal, ref actualizar))
+            if (!VerificarSiExisteCartaYCompararDatos(database, movimiento_Cereal, ref actualizar))
             {
                 return ResultadosProcesamiento.Error;
             }
@@ -627,9 +644,18 @@ namespace CS_Importador_de_cartas_de_porte
 
         #endregion
 
-        #region Guardado en base de datos
+        #region Conversión de datos
 
-        private static int? ProcesarEntidad(Database.Database database, string valor)
+        private static bool VerificarTipoEntidad(bool valor, ref bool actualizar)
+        {
+            if (!valor)
+            {
+                actualizar = true;
+            }
+            return true;
+        }
+
+        private static int? ProcesarEntidad(Database.Database database, string valor, TiposEntidad tipoEntidad)
         {
             if (!string.IsNullOrWhiteSpace(valor))
             {
@@ -644,6 +670,57 @@ namespace CS_Importador_de_cartas_de_porte
                         // Busco la entidad en la base de datos
                         Database.Entidad entidad = new Database.Entidad();
                         if (!entidad.ObtenerPorCuit(database, cuitLong))
+                        {
+                            return null;
+                        }
+                        if (entidad.IsFound)
+                        {
+                            // La entidad existe, verifico que esté activa
+                            bool actualizar = false;
+                            if (!entidad.Activo)
+                            {
+                                entidad.Activo = true;
+                                actualizar = true;
+                            }
+                            // Verifico que sea del tipo especificado
+                            switch (tipoEntidad)
+                            {
+                                case TiposEntidad.Titular:
+                                    entidad.EsTitular = VerificarTipoEntidad(entidad.EsTitular, ref actualizar);
+                                    break;
+                                case TiposEntidad.Intermediario:
+                                    entidad.EsIntermediario = VerificarTipoEntidad(entidad.EsIntermediario, ref actualizar);
+                                    break;
+                                case TiposEntidad.RemitenteComercial:
+                                    entidad.EsRemitenteComercial = VerificarTipoEntidad(entidad.EsRemitenteComercial, ref actualizar);
+                                    break;
+                                case TiposEntidad.Corredor:
+                                    entidad.EsCorredor = VerificarTipoEntidad(entidad.EsCorredor, ref actualizar);
+                                    break;
+                                case TiposEntidad.Entregador:
+                                    entidad.EsEntregador = VerificarTipoEntidad(entidad.EsEntregador, ref actualizar);
+                                    break;
+                                case TiposEntidad.Destinatario:
+                                    entidad.EsDestinatario = VerificarTipoEntidad(entidad.EsDestinatario, ref actualizar);
+                                    break;
+                                case TiposEntidad.Destino:
+                                    entidad.EsDestino = VerificarTipoEntidad(entidad.EsDestino, ref actualizar);
+                                    break;
+                                case TiposEntidad.Transportista:
+                                    entidad.EsTransportista = VerificarTipoEntidad(entidad.EsTransportista, ref actualizar);
+                                    break;
+                                case TiposEntidad.Chofer:
+                                    entidad.EsChofer = VerificarTipoEntidad(entidad.EsChofer, ref actualizar);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if (actualizar)
+                            {
+                                entidad.Actualizar(database);
+                            }
+                        }
+                        else
                         {
                             // No se encontró la entidad, crearla
                             entidad.Cuit = cuitLong;
@@ -681,7 +758,22 @@ namespace CS_Importador_de_cartas_de_porte
                 if (long.TryParse(cartaDePorte.Ctg, out long longTemp))
                 {
                     movimiento_Cereal.CTGNumero = longTemp;
+                    if (longTemp == 0)
+                    {
+                        MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return false;
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
             }
 
             // Fecha de carga
@@ -694,7 +786,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             // Entidad titular
-            movimiento_Cereal.IDEntidad_Titular = ProcesarEntidad(database, cartaDePorte.TitularCartaDePorte).Value;
+            movimiento_Cereal.IDEntidad_Titular = ProcesarEntidad(database, cartaDePorte.TitularCartaDePorte, TiposEntidad.Titular).Value;
             // Determino el tipo de carta de acuerdo al Cuit del destinatario
             if (movimiento_Cereal.IDEntidad_Titular == Properties.Settings.Default.IdEntidadDestinatarioLocal)
             {
@@ -709,34 +801,34 @@ namespace CS_Importador_de_cartas_de_porte
             if (!string.IsNullOrWhiteSpace(cartaDePorte.RemitenteComercialProductor) && !string.IsNullOrWhiteSpace(cartaDePorte.RteComercialVentaPrimaria))
             {
                 // Entidad intermediario
-                movimiento_Cereal.IDEntidad_Intermediario = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor);
+                movimiento_Cereal.IDEntidad_Intermediario = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.Intermediario);
 
                 // Entidad remitente comercial
-                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria);
+                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
             }
             else
             {
                 // Entidad remitente comercial
-                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor);
+                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.RemitenteComercial);
             }
 
             // Entidad corredor
-            movimiento_Cereal.IDEntidad_Corredor = ProcesarEntidad(database, cartaDePorte.CorredorVentaPrimaria);
+            movimiento_Cereal.IDEntidad_Corredor = ProcesarEntidad(database, cartaDePorte.CorredorVentaPrimaria, TiposEntidad.Corredor);
 
             // Entidad entregador
-            movimiento_Cereal.IDEntidad_Entregador = ProcesarEntidad(database, cartaDePorte.RepresentanteEntregador);
+            movimiento_Cereal.IDEntidad_Entregador = ProcesarEntidad(database, cartaDePorte.RepresentanteEntregador, TiposEntidad.Entregador);
 
             // Entidad destinatario
-            movimiento_Cereal.IDEntidad_Destinatario = ProcesarEntidad(database, cartaDePorte.Destinatario);
+            movimiento_Cereal.IDEntidad_Destinatario = ProcesarEntidad(database, cartaDePorte.Destinatario, TiposEntidad.Destinatario);
 
             // Entidad destino
-            movimiento_Cereal.IDEntidad_Destino = ProcesarEntidad(database, cartaDePorte.Destino);
+            movimiento_Cereal.IDEntidad_Destino = ProcesarEntidad(database, cartaDePorte.Destino, TiposEntidad.Destino);
 
             // Entidad transportista
-            movimiento_Cereal.IDEntidad_Transportista = ProcesarEntidad(database, cartaDePorte.EmpresaTransportista);
+            movimiento_Cereal.IDEntidad_Transportista = ProcesarEntidad(database, cartaDePorte.EmpresaTransportista, TiposEntidad.Transportista);
 
             // Entidad chofer
-            movimiento_Cereal.IDEntidad_Chofer = ProcesarEntidad(database, cartaDePorte.Chofer);
+            movimiento_Cereal.IDEntidad_Chofer = ProcesarEntidad(database, cartaDePorte.Chofer, TiposEntidad.Chofer);
 
             // Cosecha
             movimiento_Cereal.IDCosecha = idCosecha;
@@ -745,11 +837,20 @@ namespace CS_Importador_de_cartas_de_porte
             if (!string.IsNullOrWhiteSpace(cartaDePorte.GranoEspecie))
             {
                 Database.Cereal cereal = new Database.Cereal();
-                if (cereal.ObtenerPorNombre(database, cartaDePorte.GranoEspecie))
+                if (!cereal.ObtenerPorNombre(database, cartaDePorte.GranoEspecie))
+                {
+                    return false;
+                }
+                if (cereal.IsFound)
                 {
                     movimiento_Cereal.IDCereal = cereal.IDCereal;
+                    movimiento_Cereal.Volatil = cereal.MermaVolatil;
                 }
-                movimiento_Cereal.Volatil = cereal.MermaVolatil;
+                else
+                {
+                    MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el cereal.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
             }
 
             // Pesos
@@ -825,7 +926,11 @@ namespace CS_Importador_de_cartas_de_porte
                             Database.Entidad_OrigenDestino origen = new Database.Entidad_OrigenDestino();
                             while (true)
                             {
-                                if (origen.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Titular, intTemp))
+                                if (!origen.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Titular, intTemp))
+                                {
+                                    return false;
+                                }
+                                if (origen.IsFound)
                                 {
                                     movimiento_Cereal.IDOrigenDestino_Origen = origen.IDOrigenDestino;
                                     break;
@@ -866,6 +971,10 @@ namespace CS_Importador_de_cartas_de_porte
                             while (true)
                             {
                                 if (destino.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Destino.Value, intTemp))
+                                {
+                                    return false;
+                                }
+                                if (destino.IsFound)
                                 {
                                     movimiento_Cereal.IDOrigenDestino_Destino = destino.IDOrigenDestino;
                                     break;
@@ -966,9 +1075,116 @@ namespace CS_Importador_de_cartas_de_porte
             return true;
         }
 
-        private static bool VerificarSiExisteCartaYCompararDatos(Database.Movimiento_Cereal movimiento_Cereal, ref bool actualizar)
+        #endregion
+
+        #region Verificación y comparación con datos existentes
+
+        private static string VerificarValores(string valorEnBD, string valorEnPdf, ref bool actualizar)
         {
-            actualizar = true;
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static long? VerificarValores(long? valorEnBD, long? valorEnPdf, ref bool actualizar)
+        {
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static int? VerificarValores(int? valorEnBD, int? valorEnPdf, ref bool actualizar)
+        {
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static short? VerificarValores(short? valorEnBD, short? valorEnPdf, ref bool actualizar)
+        {
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static byte? VerificarValores(byte? valorEnBD, byte? valorEnPdf, ref bool actualizar)
+        {
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static decimal? VerificarValores(decimal? valorEnBD, decimal? valorEnPdf, ref bool actualizar)
+        {
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static DateTime? VerificarValores(DateTime? valorEnBD, DateTime? valorEnPdf, ref bool actualizar)
+        {
+            if (valorEnBD != valorEnPdf)
+            {
+                actualizar = true;
+            }
+            return valorEnPdf;
+        }
+
+        private static bool VerificarSiExisteCartaYCompararDatos(Database.Database database, Database.Movimiento_Cereal movimiento_CerealEnPdf, ref bool actualizar)
+        {
+            Database.Movimiento_Cereal movimiento_CerealEnBD = new Database.Movimiento_Cereal();
+            if (!movimiento_CerealEnBD.ObtenerPorCtg(database, movimiento_CerealEnPdf.CTGNumero.Value))
+            {
+                return false;
+            }
+            if (movimiento_CerealEnBD.IsFound)
+            {
+                // La carta ya existe en la base de datos, así que hay que comparar los datos
+                movimiento_CerealEnBD.ComprobanteNumero = VerificarValores(movimiento_CerealEnBD.ComprobanteNumero, movimiento_CerealEnPdf.ComprobanteNumero, ref actualizar).Value;
+                movimiento_CerealEnBD.FechaCarga = VerificarValores(movimiento_CerealEnBD.FechaCarga, movimiento_CerealEnPdf.FechaCarga, ref actualizar).Value;
+                movimiento_CerealEnBD.IDEntidad_Titular = VerificarValores(movimiento_CerealEnBD.IDEntidad_Titular, movimiento_CerealEnPdf.IDEntidad_Titular, ref actualizar).Value;
+                movimiento_CerealEnBD.IDEntidad_Intermediario = VerificarValores(movimiento_CerealEnBD.IDEntidad_Intermediario, movimiento_CerealEnPdf.IDEntidad_Intermediario, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_RemitenteComercial = VerificarValores(movimiento_CerealEnBD.IDEntidad_RemitenteComercial, movimiento_CerealEnPdf.IDEntidad_RemitenteComercial, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_Corredor = VerificarValores(movimiento_CerealEnBD.IDEntidad_Corredor, movimiento_CerealEnPdf.IDEntidad_Corredor, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_Entregador = VerificarValores(movimiento_CerealEnBD.IDEntidad_Entregador, movimiento_CerealEnPdf.IDEntidad_Entregador, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_Destinatario = VerificarValores(movimiento_CerealEnBD.IDEntidad_Destinatario, movimiento_CerealEnPdf.IDEntidad_Destinatario, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_Destino = VerificarValores(movimiento_CerealEnBD.IDEntidad_Destino, movimiento_CerealEnPdf.IDEntidad_Destino, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_Transportista = VerificarValores(movimiento_CerealEnBD.IDEntidad_Transportista, movimiento_CerealEnPdf.IDEntidad_Transportista, ref actualizar);
+                movimiento_CerealEnBD.IDEntidad_Chofer = VerificarValores(movimiento_CerealEnBD.IDEntidad_Chofer, movimiento_CerealEnPdf.IDEntidad_Chofer, ref actualizar);
+                movimiento_CerealEnBD.IDCosecha = VerificarValores(movimiento_CerealEnBD.IDCosecha, movimiento_CerealEnPdf.IDCosecha, ref actualizar).Value;
+                movimiento_CerealEnBD.IDCereal = VerificarValores(movimiento_CerealEnBD.IDCereal, movimiento_CerealEnPdf.IDCereal, ref actualizar).Value;
+                movimiento_CerealEnBD.PesoBruto = VerificarValores(movimiento_CerealEnBD.PesoBruto, movimiento_CerealEnPdf.PesoBruto, ref actualizar).Value;
+                movimiento_CerealEnBD.PesoTara = VerificarValores(movimiento_CerealEnBD.PesoTara, movimiento_CerealEnPdf.PesoTara, ref actualizar).Value;
+                movimiento_CerealEnBD.PesoNeto = VerificarValores(movimiento_CerealEnBD.PesoNeto, movimiento_CerealEnPdf.PesoNeto, ref actualizar).Value;
+                movimiento_CerealEnBD.Volatil = VerificarValores(movimiento_CerealEnBD.Volatil, movimiento_CerealEnPdf.Volatil, ref actualizar);
+                movimiento_CerealEnBD.IDOrigenDestino_Origen = VerificarValores(movimiento_CerealEnBD.IDOrigenDestino_Origen, movimiento_CerealEnPdf.IDOrigenDestino_Origen, ref actualizar);
+                movimiento_CerealEnBD.IDOrigenDestino_Destino = VerificarValores(movimiento_CerealEnBD.IDOrigenDestino_Destino, movimiento_CerealEnPdf.IDOrigenDestino_Destino, ref actualizar);
+                movimiento_CerealEnBD.TransporteDominioCamion = VerificarValores(movimiento_CerealEnBD.TransporteDominioCamion, movimiento_CerealEnPdf.TransporteDominioCamion, ref actualizar);
+                movimiento_CerealEnBD.TransporteDominioAcoplado = VerificarValores(movimiento_CerealEnBD.TransporteDominioAcoplado, movimiento_CerealEnPdf.TransporteDominioAcoplado, ref actualizar);
+                movimiento_CerealEnBD.TransporteKilometro = VerificarValores(movimiento_CerealEnBD.TransporteKilometro, movimiento_CerealEnPdf.TransporteKilometro, ref actualizar);
+                movimiento_CerealEnBD.TransporteTarifaReferencia = VerificarValores(movimiento_CerealEnBD.TransporteTarifaReferencia, movimiento_CerealEnPdf.TransporteTarifaReferencia, ref actualizar);
+                movimiento_CerealEnBD.TransporteTarifa = VerificarValores(movimiento_CerealEnBD.TransporteTarifa, movimiento_CerealEnPdf.TransporteTarifa, ref actualizar);
+                movimiento_CerealEnBD.FechaHoraArribo = VerificarValores(movimiento_CerealEnBD.FechaHoraArribo, movimiento_CerealEnPdf.FechaHoraArribo, ref actualizar);
+                movimiento_CerealEnBD.FechaHoraDescarga = VerificarValores(movimiento_CerealEnBD.FechaHoraDescarga, movimiento_CerealEnPdf.FechaHoraDescarga, ref actualizar);
+                movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion = VerificarValores(movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion, movimiento_CerealEnPdf.IDCartaPorte_MotivoAnulacion, ref actualizar);
+            }
+            else
+            {
+                // La carta no existe, hay que crearla
+                actualizar = true;
+            }
             return true;
         }
 

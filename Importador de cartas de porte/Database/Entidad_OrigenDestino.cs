@@ -23,11 +23,14 @@ namespace CS_Importador_de_cartas_de_porte.Database
         public bool RealizaAnalisisIPRO { get; set; }
         public bool Activo { get; set; }
 
+        internal bool IsNew { get; set; } = true;
+        internal bool IsFound { get; set; } = false;
+
         #endregion
 
         #region Methods
 
-        internal bool ObtenerPorCodigoOncca(Database database, int idEntidadABuscar, int codigoOnccaABuscar)
+        internal bool ObtenerPorCodigoOncca(Database database, int idEntidad, int codigoOncca)
         {
             SqlDataReader reader = null;
 
@@ -39,10 +42,11 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     Connection = database.Connection,
                     CommandText = "usp_Entidad_OrigenDestino_GetPorCodigoOncca"
                 };
-                command.Parameters.Add("IDEntidad", SqlDbType.Int).Value = idEntidadABuscar;
-                command.Parameters.Add("ONCCA_Codigo", SqlDbType.Int).Value = codigoOnccaABuscar;
+                command.Parameters.Add("IDEntidad", SqlDbType.Int).Value = idEntidad;
+                command.Parameters.Add("ONCCA_Codigo", SqlDbType.Int).Value = codigoOncca;
                 reader = command.ExecuteReader();
 
+                IsFound = false;
                 if (reader.HasRows)
                 {
                     reader.Read();
@@ -57,18 +61,12 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     ConvierteEnSubProducto = SqlServerValues.GetBoolean(reader, "ConvierteEnSubProducto");
                     RealizaAnalisisIPRO = SqlServerValues.GetBoolean(reader, "RealizaAnalisisIPRO");
                     Activo = SqlServerValues.GetBoolean(reader, "Activo");
-                    reader.Close();
-                    reader = null;
-                    command = null;
-                    return true;
+                    IsFound = true;
                 }
-                else
-                {
-                    reader.Close();
-                    reader = null;
-                    command = null;
-                    return false;
-                }
+                reader.Close();
+                reader = null;
+                command = null;
+                return true;
             }
             catch (Exception ex)
             {

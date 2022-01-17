@@ -67,13 +67,124 @@ namespace CS_Importador_de_cartas_de_porte.Database
         internal int? KilogramoAplicado { get; set; }
 
         internal bool IsNew { get; set; } = true;
+        internal bool IsFound { get; set; } = false;
 
         #endregion
 
         #region Methods
 
-        internal bool ObtenerPorId(Database database)
+        private bool LeerDatos(SqlDataReader reader)
         {
+            try
+            {
+                IDMovimiento_Cereal = SqlServerValues.GetInteger(reader, "IDMovimiento_Cereal");
+                Tipo = SqlServerValues.GetString(reader, "Tipo");
+
+                // Encabezado
+                ComprobanteNumero = SqlServerValues.GetLong(reader, "ComprobanteNumero");
+                ComprobanteNumeroConFormato = SqlServerValues.GetStringSafeAsEmpty(reader, "ComprobanteNumeroConFormato");
+                IDCartaPorte_Talonario = SqlServerValues.GetIntegerSafeAsNull(reader, "IDCartaPorte_Talonario");
+                CTGNumero = SqlServerValues.GetLongSafeAsNull(reader, "CTGNumero");
+                FechaCarga = SqlServerValues.GetDateTime(reader, "FechaCarga");
+
+                // Sección A - Intervinientes
+                IDEntidad_Titular = SqlServerValues.GetInteger(reader, "IDEntidad_Titular");
+                IDEntidad_Intermediario = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Intermediario");
+                IDEntidad_RemitenteComercial = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_RemitenteComercial");
+                IDEntidad_Corredor = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Corredor");
+                IDEntidad_Entregador = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Entregador");
+                IDEntidad_Destinatario = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Destinatario");
+                IDEntidad_Destino = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Destino");
+                IDEntidad_Transportista = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Transportista");
+                IDEntidad_Chofer = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Chofer");
+
+                // Sección B - Grano / Especie
+                IDCosecha = SqlServerValues.GetByte(reader, "IDCosecha");
+                IDCereal = SqlServerValues.GetByte(reader, "IDCereal");
+                IDContrato = SqlServerValues.GetIntegerSafeAsNull(reader, "IDContrato");
+                PesoBruto = SqlServerValues.GetInteger(reader, "PesoBruto");
+                PesoTara = SqlServerValues.GetInteger(reader, "PesoTara");
+                PesoNeto = SqlServerValues.GetInteger(reader, "PesoNeto");
+
+                // Datos para mermas
+                if (Tipo == Constantes.MovimientoTipoEntrada)
+                {
+                    Volatil = SqlServerValues.GetDecimalSafeAsValue(reader, "Volatil", -1);
+                    Humedad = SqlServerValues.GetDecimalSafeAsValue(reader, "Humedad", -1);
+                    Zaranda = SqlServerValues.GetDecimalSafeAsValue(reader, "Zaranda", -1);
+                    MermaVolatilKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaVolatilKilogramo", -1);
+                    MermaHumedadPorcentaje = SqlServerValues.GetDecimalSafeAsValue(reader, "MermaHumedadPorcentaje", -1);
+                    MermaHumedadKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaHumedadKilogramo", -1);
+                    MermaZarandaKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaZarandaKilogramo", -1);
+                }
+                else
+                {
+                    Volatil = -1;
+                    Humedad = -1;
+                    Zaranda = -1;
+                    MermaVolatilKilogramo = -1;
+                    MermaHumedadPorcentaje = -1;
+                    MermaHumedadKilogramo = -1;
+                    MermaZarandaKilogramo = -1;
+                }
+                PesoFinal = SqlServerValues.GetIntegerSafeAsNull(reader, "PesoFinal");
+
+                // Sección C - Procedencia
+                IDOrigenDestino_Origen = SqlServerValues.GetShortSafeAsNull(reader, "IDOrigenDestino_Origen");
+
+                // Sección D - Destino de la mercadería
+                IDOrigenDestino_Destino = SqlServerValues.GetShortSafeAsNull(reader, "IDOrigenDestino_Destino");
+
+                // Sección E - Datos del transporte
+                CTGCancelacion = SqlServerValues.GetIntegerSafeAsNull(reader, "CTGCancelacion");
+                TransporteDominioCamion = SqlServerValues.GetStringSafeAsEmpty(reader, "TransporteDominioCamion").Trim();
+                TransporteDominioAcoplado = SqlServerValues.GetStringSafeAsEmpty(reader, "TransporteDominioAcoplado").Trim();
+                TransporteKilometro = SqlServerValues.GetShortSafeAsNull(reader, "TransporteKilometro");
+                TransporteTarifaReferencia = SqlServerValues.GetDecimalSafeAsNull(reader, "TransporteTarifaReferencia");
+                TransporteTarifa = SqlServerValues.GetDecimalSafeAsNull(reader, "TransporteTarifa");
+
+                // Sección G - Descarga
+                if (Tipo == Constantes.MovimientoTipoEntrada)
+                {
+                    FechaHoraArribo = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraArribo");
+                    FechaHoraDescarga = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraDescarga");
+                }
+                else
+                {
+                    FechaHoraArribo = null;
+                    FechaHoraDescarga = null;
+                }
+
+                // Datos extras
+                DeclaraIPRO = SqlServerValues.GetBoolean(reader, "DeclaraIPRO");
+                IDCartaPorte_MotivoAnulacion = SqlServerValues.GetByteSafeAsNull(reader, "IDCartaPorte_MotivoAnulacion");
+                Notas = SqlServerValues.GetStringSafeAsNull(reader, "Notas");
+                Calculo_TarifaIndice = SqlServerValues.GetShortSafeAsNull(reader, "Calculo_TarifaIndice");
+
+                // Datos del registro
+                IDUsuarioCreacion = SqlServerValues.GetByte(reader, "IDUsuarioCreacion");
+                FechaHoraCreacion = SqlServerValues.GetDateTime(reader, "FechaHoraCreacion");
+                IDUsuarioModificacion = SqlServerValues.GetByte(reader, "IDUsuarioModificacion");
+                FechaHoraModificacion = SqlServerValues.GetDateTime(reader, "FechaHoraModificacion");
+                FechaHoraLiquidacionServicio = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraLiquidacionServicio");
+                FechaHoraEnvioBolsaTech = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraEnvioBolsaTech");
+
+                Certificado = (Tipo == Constantes.MovimientoTipoEntrada) && SqlServerValues.GetBoolean(reader, "Certificado");
+                KilogramoAplicado = SqlServerValues.GetIntegerSafeAsNull(reader, "KilogramoAplicado");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show($"Error al leer los datos de la carta de porte desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        internal bool ObtenerPorId(Database database, int id)
+        {
+            SqlDataReader reader = null;
             try
             {
                 SqlCommand command = new SqlCommand
@@ -82,106 +193,17 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     CommandType = CommandType.StoredProcedure,
                     CommandText = "usp_Movimiento_Cereal_Get"
                 };
-                command.Parameters.Add("IDMovimiento_Cereal", SqlDbType.Int).Value = IDMovimiento_Cereal;
-                SqlDataReader reader = command.ExecuteReader();
+                command.Parameters.Add("IDMovimiento_Cereal", SqlDbType.Int).Value = id;
+                reader = command.ExecuteReader();
 
+                IsFound = false;
                 if (reader.HasRows)
                 {
                     reader.Read();
-                    IDMovimiento_Cereal = SqlServerValues.GetInteger(reader, "IDMovimiento_Cereal");
-                    Tipo = SqlServerValues.GetString(reader, "Tipo");
-
-                    // Encabezado
-                    ComprobanteNumero = SqlServerValues.GetLong(reader, "ComprobanteNumero");
-                    ComprobanteNumeroConFormato = SqlServerValues.GetStringSafeAsEmpty(reader, "ComprobanteNumeroConFormato");
-                    IDCartaPorte_Talonario = SqlServerValues.GetIntegerSafeAsNull(reader, "IDCartaPorte_Talonario");
-                    CTGNumero = SqlServerValues.GetLongSafeAsNull(reader, "CTGNumero");
-                    FechaCarga = SqlServerValues.GetDateTime(reader, "FechaCarga");
-
-                    // Sección A - Intervinientes
-                    IDEntidad_Titular = SqlServerValues.GetInteger(reader, "IDEntidad_Titular");
-                    IDEntidad_Intermediario = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Intermediario");
-                    IDEntidad_RemitenteComercial = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_RemitenteComercial");
-                    IDEntidad_Corredor = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Corredor");
-                    IDEntidad_Entregador = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Entregador");
-                    IDEntidad_Destinatario = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Destinatario");
-                    IDEntidad_Destino = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Destino");
-                    IDEntidad_Transportista = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Transportista");
-                    IDEntidad_Chofer = SqlServerValues.GetIntegerSafeAsNull(reader, "IDEntidad_Chofer");
-
-                    // Sección B - Grano / Especie
-                    IDCosecha = SqlServerValues.GetByte(reader, "IDCosecha");
-                    IDCereal = SqlServerValues.GetByte(reader, "IDCereal");
-                    IDContrato = SqlServerValues.GetIntegerSafeAsNull(reader, "IDContrato");
-                    PesoBruto = SqlServerValues.GetInteger(reader, "PesoBruto");
-                    PesoTara = SqlServerValues.GetInteger(reader, "PesoTara");
-                    PesoNeto = SqlServerValues.GetInteger(reader, "PesoNeto");
-
-                    // Datos para mermas
-                    if (Tipo == Constantes.MovimientoTipoEntrada)
+                    if (LeerDatos(reader))
                     {
-                        Volatil = SqlServerValues.GetDecimalSafeAsValue(reader, "Volatil", -1);
-                        Humedad = SqlServerValues.GetDecimalSafeAsValue(reader, "Humedad", -1); 
-                        Zaranda = SqlServerValues.GetDecimalSafeAsValue(reader, "Zaranda", -1);
-                        MermaVolatilKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaVolatilKilogramo", -1);
-                        MermaHumedadPorcentaje = SqlServerValues.GetDecimalSafeAsValue(reader, "MermaHumedadPorcentaje", -1);
-                        MermaHumedadKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaHumedadKilogramo", -1);
-                        MermaZarandaKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaZarandaKilogramo", -1);
+                        IsFound = true;
                     }
-                    else
-                    {
-                        Volatil = -1;
-                        Humedad = -1;
-                        Zaranda = -1;
-                        MermaVolatilKilogramo = -1;
-                        MermaHumedadPorcentaje = -1;
-                        MermaHumedadKilogramo = -1;
-                        MermaZarandaKilogramo = -1;
-                    }
-                    PesoFinal = SqlServerValues.GetIntegerSafeAsNull(reader, "PesoFinal");
-
-                    // Sección C - Procedencia
-                    IDOrigenDestino_Origen = SqlServerValues.GetShortSafeAsNull(reader, "IDOrigenDestino_Origen");
-
-                    // Sección D - Destino de la mercadería
-                    IDOrigenDestino_Destino = SqlServerValues.GetShortSafeAsNull(reader, "IDOrigenDestino_Destino");
-
-                    // Sección E - Datos del transporte
-                    CTGCancelacion = SqlServerValues.GetIntegerSafeAsNull(reader, "CTGCancelacion");
-                    TransporteDominioCamion = SqlServerValues.GetStringSafeAsEmpty(reader, "TransporteDominioCamion").Trim();
-                    TransporteDominioAcoplado = SqlServerValues.GetStringSafeAsEmpty(reader, "TransporteDominioAcoplado").Trim();
-                    TransporteKilometro = SqlServerValues.GetShortSafeAsNull(reader, "TransporteKilometro");
-                    TransporteTarifaReferencia = SqlServerValues.GetDecimalSafeAsNull(reader, "TransporteTarifaReferencia");
-                    TransporteTarifa = SqlServerValues.GetDecimalSafeAsNull(reader, "TransporteTarifa");
-
-                    // Sección G - Descarga
-                    if (Tipo == Constantes.MovimientoTipoEntrada)
-                    {
-                        FechaHoraArribo = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraArribo");
-                        FechaHoraDescarga = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraDescarga");
-                    }
-                    else
-                    {
-                        FechaHoraArribo = null;
-                        FechaHoraDescarga = null;
-                    }
-
-                    // Datos extras
-                    DeclaraIPRO = SqlServerValues.GetBoolean(reader, "DeclaraIPRO");
-                    IDCartaPorte_MotivoAnulacion = SqlServerValues.GetByteSafeAsNull(reader, "IDCartaPorte_MotivoAnulacion");
-                    Notas = SqlServerValues.GetStringSafeAsNull(reader, "Notas");
-                    Calculo_TarifaIndice = SqlServerValues.GetShortSafeAsNull(reader, "Calculo_TarifaIndice");
-
-                    // Datos del registro
-                    IDUsuarioCreacion = SqlServerValues.GetByte(reader, "IDUsuarioCreacion");
-                    FechaHoraCreacion = SqlServerValues.GetDateTime(reader, "FechaHoraCreacion");
-                    IDUsuarioModificacion = SqlServerValues.GetByte(reader, "IDUsuarioModificacion");
-                    FechaHoraModificacion = SqlServerValues.GetDateTime(reader, "FechaHoraModificacion");
-                    FechaHoraLiquidacionServicio = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraLiquidacionServicio");
-                    FechaHoraEnvioBolsaTech = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraEnvioBolsaTech");
-
-                    Certificado = (Tipo == Constantes.MovimientoTipoEntrada) && SqlServerValues.GetBoolean(reader, "Certificado");
-                    KilogramoAplicado = SqlServerValues.GetIntegerSafeAsNull(reader, "KilogramoAplicado");
                 }
                 reader.Close();
                 reader = null;
@@ -190,6 +212,51 @@ namespace CS_Importador_de_cartas_de_porte.Database
             }
             catch (Exception ex)
             {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show($"Error al obtener la carta de porte desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        internal bool ObtenerPorCtg(Database database, long ctg)
+        {
+            SqlDataReader reader = null;
+            try
+            {
+                SqlCommand command = new SqlCommand
+                {
+                    Connection = database.Connection,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "usp_Movimiento_Cereal_GetPorCtg"
+                };
+                command.Parameters.Add("Ctg", SqlDbType.BigInt).Value = ctg;
+                reader = command.ExecuteReader();
+                IsFound = false;
+
+                IsFound = false;
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    if (LeerDatos(reader))
+                    {
+                        IsFound = true;
+                    }
+                }
+                reader.Close();
+                reader = null;
+                command = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show($"Error al obtener la carta de porte desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;

@@ -24,11 +24,14 @@ namespace CS_Importador_de_cartas_de_porte.Database
         public bool RealizaAnalisisIPRO { get; set; }
         public bool Activo { get; set; }
 
+        internal bool IsNew { get; set; } = true;
+        internal bool IsFound { get; set; } = false;
+
         #endregion
 
         #region Methods
 
-        internal bool ObtenerPorNombre(Database database, string nombreABuscar)
+        internal bool ObtenerPorNombre(Database database, string nombre)
         {
             try
             {
@@ -38,9 +41,10 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     Connection = database.Connection,
                     CommandText = "usp_Cereal_GetPorNombre"
                 };
-                command.Parameters.Add("Nombre", SqlDbType.VarChar).Value = nombreABuscar;
+                command.Parameters.Add("Nombre", SqlDbType.VarChar).Value = nombre;
                 SqlDataReader reader = command.ExecuteReader();
 
+                IsFound = false;
                 if (reader.HasRows)
                 {
                     reader.Read();
@@ -56,18 +60,12 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     ONCCA_GranoTipoNombre = SqlServerValues.GetStringSafeAsNull(reader, "ONCCA_GranoTipoNombre");
                     RealizaAnalisisIPRO = SqlServerValues.GetBoolean(reader, "RealizaAnalisisIPRO");
                     Activo = SqlServerValues.GetBoolean(reader, "Activo");
-                    reader.Close();
-                    reader = null;
-                    command = null;
-                    return true;
+                    IsFound = true;
                 }
-                else
-                {
-                    reader.Close();
-                    reader = null;
-                    command = null;
-                    return false;
-                }
+                reader.Close();
+                reader = null;
+                command = null;
+                return true;
             }
             catch (Exception ex)
             {
