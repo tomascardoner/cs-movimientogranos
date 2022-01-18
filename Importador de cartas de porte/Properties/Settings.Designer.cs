@@ -103,5 +103,14 @@ namespace CS_Importador_de_cartas_de_porte.Properties {
                 return ((string)(this["DireccionEsUnCampoNo"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30710717946")]
+        public string CuitEntidadDestinatarioLocal {
+            get {
+                return ((string)(this["CuitEntidadDestinatarioLocal"]));
+            }
+        }
     }
 }

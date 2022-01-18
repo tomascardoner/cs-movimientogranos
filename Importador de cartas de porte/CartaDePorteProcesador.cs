@@ -135,9 +135,14 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 return false;
             }
-            if (!ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
+
+            // Si es una carta de salida, no proceso la sección de descarga
+            if (cartaDePorte.TitularCartaDePorte.Substring(0, 11) != Properties.Settings.Default.CuitEntidadDestinatarioLocal)
             {
-                return false;
+                if (!ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -564,7 +569,7 @@ namespace CS_Importador_de_cartas_de_porte
             //{
             //    return false;
             //}
-            cartaDePorte.NumeroTurno = valorEncontrado;
+            cartaDePorte.NumeroTurno = string.Empty;
 
             // Peso neto
             valorEncontrado = ObtenerValor(texto, ConstantesParsing.DescargaPesoNetoPrefijo, ref index, ConstantesParsing.DescargaPesoNetoSufijo);
@@ -1130,8 +1135,6 @@ namespace CS_Importador_de_cartas_de_porte
                 return ResultadosProcesamiento.Error;
             }
 
-            ResultadosProcesamiento resultado;
-
             if (movimiento_CerealEnBD.IsFound)
             {
                 // La carta ya existe en la base de datos, así que hay que comparar los datos
@@ -1165,27 +1168,32 @@ namespace CS_Importador_de_cartas_de_porte
                 movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion = VerificarValores(movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion, movimiento_CerealEnPdf.IDCartaPorte_MotivoAnulacion, ref actualizar);
                 if (actualizar)
                 {
-                    resultado = ResultadosProcesamiento.Modificada;
+                    if (movimiento_CerealEnBD.Actualizar(database))
+                    {
+                        return ResultadosProcesamiento.Modificada;
+                    }
+                    else
+                    {
+                        return ResultadosProcesamiento.Error;
+                    }
                 }
                 else
                 {
-                    resultado = ResultadosProcesamiento.SinCambios;
+                    return ResultadosProcesamiento.SinCambios;
                 }
             }
             else
             {
                 // La carta no existe, hay que crearla
-                resultado = ResultadosProcesamiento.Agregada;
-            }
-
-            if (resultado == ResultadosProcesamiento.Agregada || resultado == ResultadosProcesamiento.Modificada)
-            {
-                if (!movimiento_CerealEnBD.Actualizar(database))
+                if (movimiento_CerealEnPdf.Actualizar(database))
+                {
+                    return ResultadosProcesamiento.Agregada;
+                }
+                else
                 {
                     return ResultadosProcesamiento.Error;
                 }
             }
-            return resultado;
         }
 
         #endregion

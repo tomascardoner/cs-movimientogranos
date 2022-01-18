@@ -281,6 +281,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     IsNew = true;
                     command.CommandText = "usp_Movimiento_Cereal_Add";
                     parameterIDMovimiento_Cereal.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(parameterIDMovimiento_Cereal);
                     command.Parameters.Add("Tipo", SqlDbType.Char).Value = Tipo;
                 }
                 else
@@ -288,8 +289,8 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     IsNew = false;
                     command.CommandText = "usp_Movimiento_Cereal_Update";
                     parameterIDMovimiento_Cereal.Value = IDMovimiento_Cereal;
+                    command.Parameters.Add(parameterIDMovimiento_Cereal);
                 }
-                command.Parameters.Add(parameterIDMovimiento_Cereal);
                 command.Parameters.Add("ComprobanteNumero", SqlDbType.Char).Value = ComprobanteNumero;
                 command.Parameters.Add("IDCartaPorte_Talonario", SqlDbType.Int).Value = DBNull.Value;
                 command.Parameters.Add("CTGNumero", SqlDbType.BigInt).Value = CTGNumero;
