@@ -1,4 +1,4 @@
 USE CSMovimientoGranos
 GO
 
-EXEC dbo.usp_Movimiento_Cereal_MC17 1, 2, 2021, 44
+EXEC dbo.usp_Movimiento_Cereal_MC17 1, 2, 2022, 3

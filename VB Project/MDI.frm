@@ -80,7 +80,7 @@ Begin VB.MDIForm frmMDI
             AutoSize        =   2
             Object.Width           =   1693
             MinWidth        =   2
-            TextSave        =   "11/01/2022"
+            TextSave        =   "03/02/2022"
             Key             =   "DATE"
          EndProperty
          BeginProperty Panel8 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -89,7 +89,7 @@ Begin VB.MDIForm frmMDI
             AutoSize        =   2
             Object.Width           =   873
             MinWidth        =   2
-            TextSave        =   "17:36"
+            TextSave        =   "10:08"
             Key             =   "TIME"
          EndProperty
       EndProperty
@@ -317,6 +317,7 @@ Begin VB.MDIForm frmMDI
             EndProperty
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
             Caption         =   "Contratos"
             Key             =   "CONTRATOS"
          EndProperty
@@ -333,9 +334,10 @@ Begin VB.MDIForm frmMDI
                EndProperty
                BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "SUBPRODUCTO"
-                  Text            =   "SubProductos"
+                  Text            =   "Subproductos"
                EndProperty
                BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Object.Visible         =   0   'False
                   Text            =   "-"
                EndProperty
                BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
@@ -354,27 +356,31 @@ Begin VB.MDIForm frmMDI
                NumButtonMenus  =   7
                BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "1116A"
-                  Text            =   "Certificados de Depósito"
+                  Text            =   "Certificados de depósito"
                EndProperty
                BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "1116RT"
-                  Text            =   "Certificados de Retiro / Transferencia"
+                  Text            =   "Certificados de retiro / transferencia"
                EndProperty
                BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "1116B"
                   Text            =   "Liquidaciones"
                EndProperty
                BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Object.Visible         =   0   'False
                   Text            =   "-"
                EndProperty
                BeginProperty ButtonMenu5 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Object.Visible         =   0   'False
                   Key             =   "ANULADOS"
                   Text            =   "Anulados"
                EndProperty
                BeginProperty ButtonMenu6 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Object.Visible         =   0   'False
                   Text            =   "-"
                EndProperty
                BeginProperty ButtonMenu7 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Object.Visible         =   0   'False
                   Key             =   "EXPORTAR"
                   Text            =   "Exportar"
                EndProperty
