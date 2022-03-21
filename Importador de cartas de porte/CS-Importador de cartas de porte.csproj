@@ -11,7 +11,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,8 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\framework-csharp\ErrorLite.cs">
-      <Link>Framework\ErrorLite.cs</Link>
+    <Compile Include="..\..\..\framework-csharp\Error.cs">
+      <Link>Framework\Error.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Graphics.cs">
       <Link>Framework\Graphics.cs</Link>

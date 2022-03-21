@@ -342,7 +342,14 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al actualizar los datos de la carta de porte nº {ComprobanteNumero} en la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Message.Contains("FK__Entidad_OrigenDestino__Movimiento__Origen"))
+                {
+                    MessageBox.Show($"La entidad titular de la carte de porte no tiene especificado un destino. Carta de porte nº {ComprobanteNumero}.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Error al actualizar los datos de la carta de porte nº {ComprobanteNumero} en la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return false;
             }
         }
