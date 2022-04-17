@@ -344,7 +344,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 Cursor.Current = Cursors.Default;
                 if (ex.Message.Contains("FK__Entidad_OrigenDestino__Movimiento__Origen"))
                 {
-                    MessageBox.Show($"La entidad titular de la carte de porte no tiene especificado un destino. Carta de porte nº {ComprobanteNumero}.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"La entidad titular de la carta de porte no tiene especificado un origen. Carta de porte nº {ComprobanteNumero}.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {

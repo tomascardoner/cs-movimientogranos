@@ -62,6 +62,32 @@ GO
 
 
 -- =============================================
+-- Author:	Tomás A. Cardoner
+-- Created: 17/04/2022 19:20
+-- Description: Obtiene los datos del primer Origen/Destino disponible de la Entidad
+-- =============================================
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Entidad_OrigenDestino_GetFirst') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_Entidad_OrigenDestino_GetFirst
+GO
+
+CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_GetFirst
+	@IDEntidad int
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT FIRST IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
+		FROM Entidad_OrigenDestino
+		WHERE IDEntidad = @IDEntidad
+		ORDER BY IDOrigenDestino
+
+END
+GO
+
+
+
+-- =============================================
 -- Author:	  Tomás A. Cardoner
 -- Created: 11/06/2014 22:47:30
 -- Updated: 03/07/2020 - se agregó el campo RealizaAnalisisIPRO

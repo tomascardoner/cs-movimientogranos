@@ -30,6 +30,33 @@ namespace CS_Importador_de_cartas_de_porte.Database
 
         #region Methods
 
+        private bool LeerDatos(SqlDataReader reader)
+        {
+            try
+            {
+                IDEntidad = SqlServerValues.GetInteger(reader, "IDEntidad");
+                IDOrigenDestino = SqlServerValues.GetShort(reader, "IDOrigenDestino");
+                Nombre = SqlServerValues.GetString(reader, "Nombre");
+                Direccion = SqlServerValues.GetString(reader, "Direccion");
+                IDLocalidad = SqlServerValues.GetInteger(reader, "IDLocalidad");
+                Kilometro = SqlServerValues.GetShortSafeAsNull(reader, "Kilometro");
+                ONCCA_Codigo = SqlServerValues.GetIntegerSafeAsNull(reader, "ONCCA_Codigo");
+                ControlaStock = SqlServerValues.GetBoolean(reader, "ControlaStock");
+                ConvierteEnSubProducto = SqlServerValues.GetBoolean(reader, "ConvierteEnSubProducto");
+                RealizaAnalisisIPRO = SqlServerValues.GetBoolean(reader, "RealizaAnalisisIPRO");
+                Activo = SqlServerValues.GetBoolean(reader, "Activo");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show($"Error al leer los datos del origen-destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+
         internal bool ObtenerPorCodigoOncca(Database database, int idEntidad, int codigoOncca)
         {
             SqlDataReader reader = null;
@@ -50,19 +77,11 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 if (reader.HasRows)
                 {
                     reader.Read();
-                    IDEntidad = SqlServerValues.GetInteger(reader, "IDEntidad");
-                    IDOrigenDestino = SqlServerValues.GetShort(reader, "IDOrigenDestino");
-                    Nombre = SqlServerValues.GetString(reader, "Nombre");
-                    Direccion = SqlServerValues.GetString(reader, "Direccion");
-                    IDLocalidad = SqlServerValues.GetInteger(reader, "IDLocalidad");
-                    Kilometro = SqlServerValues.GetShortSafeAsNull(reader, "Kilometro");
-                    ONCCA_Codigo = SqlServerValues.GetIntegerSafeAsNull(reader, "ONCCA_Codigo");
-                    ControlaStock = SqlServerValues.GetBoolean(reader, "ControlaStock");
-                    ConvierteEnSubProducto = SqlServerValues.GetBoolean(reader, "ConvierteEnSubProducto");
-                    RealizaAnalisisIPRO = SqlServerValues.GetBoolean(reader, "RealizaAnalisisIPRO");
-                    Activo = SqlServerValues.GetBoolean(reader, "Activo");
-                    IsFound = true;
-                    IsNew = false;
+                    if (LeerDatos(reader))
+                    {
+                        IsFound = true;
+                        IsNew = false;
+                    }
                 }
                 reader.Close();
                 reader = null;
@@ -76,7 +95,49 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     reader.Close();
                 }
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener el origen / destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener el origen-destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        internal bool ObtenerPrimero(Database database, int idEntidad)
+        {
+            SqlDataReader reader = null;
+
+            try
+            {
+                SqlCommand command = new SqlCommand
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = database.Connection,
+                    CommandText = "usp_Entidad_OrigenDestino_GetFirst"
+                };
+                command.Parameters.Add("IDEntidad", SqlDbType.Int).Value = idEntidad;
+                reader = command.ExecuteReader();
+
+                IsFound = false;
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    if (LeerDatos(reader))
+                    {
+                        IsFound = true;
+                        IsNew = false;
+                    }
+                }
+                reader.Close();
+                reader = null;
+                command = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show($"Error al obtener el origen-destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

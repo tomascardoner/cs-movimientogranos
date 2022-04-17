@@ -937,8 +937,27 @@ namespace CS_Importador_de_cartas_de_porte
                 }
                 else
                 {
-                    // Ver la forma de establecer Zona Rural, por ahora, poner índice 1
-                    movimiento_Cereal.IDOrigenDestino_Origen = 1;
+                    // Ver la forma de establecer Zona Rural, por ahora, seleccionar el primer origen disponible
+                    Database.Entidad_OrigenDestino origen = new Database.Entidad_OrigenDestino();
+                    while (true)
+                    {
+                        if (!origen.ObtenerPrimero(database, movimiento_Cereal.IDEntidad_Titular))
+                        {
+                            return false;
+                        }
+                        if (origen.IsFound)
+                        {
+                            movimiento_Cereal.IDOrigenDestino_Origen = origen.IDOrigenDestino;
+                            break;
+                        }
+                        else
+                        {
+                            if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró ningún origen perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", "CS-Importador de cartas de porte", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                            {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
