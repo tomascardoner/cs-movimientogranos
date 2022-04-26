@@ -77,7 +77,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT FIRST IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
+	SELECT TOP 1 IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
 		FROM Entidad_OrigenDestino
 		WHERE IDEntidad = @IDEntidad
 		ORDER BY IDOrigenDestino
