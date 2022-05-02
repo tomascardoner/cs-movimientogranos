@@ -84,6 +84,11 @@ namespace CS_Importador_de_cartas_de_porte
             CambiarSeleccion(1);
         }
 
+        private void buttonArchivosSeleccionarHaciaAbajo_Click(object sender, EventArgs e)
+        {
+            CambiarSeleccion(2);
+        }
+
         private void buttonArchivosInvertirSeleccion_Click(object sender, EventArgs e)
         {
             CambiarSeleccion(-1);
@@ -96,7 +101,26 @@ namespace CS_Importador_de_cartas_de_porte
 
         private void CambiarSeleccion(short accion)
         {
-            for (int i = 0; i < checkedlistboxArchivos.Items.Count; i++)
+            int startIndex;
+
+            if (accion == 2)
+            {
+                // Hay que marcar desde el ítem actual hacia abajo
+                if (checkedlistboxArchivos.SelectedIndex > -1)
+                {
+                    startIndex = checkedlistboxArchivos.SelectedIndex;
+                }
+                else
+                {
+                    startIndex = 0;
+                }
+            }
+            else
+            {
+                startIndex = 0;
+            }
+
+            for (int i = startIndex; i < checkedlistboxArchivos.Items.Count; i++)
             {
                 if (accion == -1)
                 {
@@ -108,9 +132,9 @@ namespace CS_Importador_de_cartas_de_porte
                     // Deseleccionar
                     checkedlistboxArchivos.SetItemChecked(i, false);
                 }
-                else if (accion == 1)
+                else if (accion == 1 | accion == 2)
                 {
-                    // Seleccionar
+                    // Seleccionar todos o hacia abajo
                     checkedlistboxArchivos.SetItemChecked(i, true);
                 }
             }
@@ -215,7 +239,8 @@ namespace CS_Importador_de_cartas_de_porte
             buttonCarpetaOrigenExaminar.Enabled = value;
             buttonBuscarCartasPorte.Enabled = value;
             checkedlistboxArchivos.Enabled = value;
-            buttonArchivosDeseleccionarTodos.Enabled = value;
+            buttonArchivosSeleccionarTodos.Enabled = value;
+            buttonArchivosSeleccionarHaciaAbajo.Enabled = value;
             buttonArchivosInvertirSeleccion.Enabled = value;
             buttonArchivosDeseleccionarTodos.Enabled = value;
             comboboxCosecha.Enabled = value;
@@ -227,6 +252,7 @@ namespace CS_Importador_de_cartas_de_porte
         private void ShowProgressControls(bool value)
         {
             buttonArchivosSeleccionarTodos.Visible = !value;
+            buttonArchivosSeleccionarHaciaAbajo.Visible = !value;
             buttonArchivosInvertirSeleccion.Visible = !value;
             buttonArchivosDeseleccionarTodos.Visible = !value;
             progressbarMain.Visible = value;

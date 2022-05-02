@@ -70,25 +70,25 @@
     <Compile Include="C:\Data\Cardoner Sistemas\Development\framework-csharp\String.cs">
       <Link>Framework\String.cs</Link>
     </Compile>
-    <Compile Include="CartaDePorte.cs" />
-    <Compile Include="CartaDePorteProcesador.cs" />
-    <Compile Include="Constantes.cs" />
-    <Compile Include="ConstantesParsing.cs" />
+    <Compile Include="Cartas de porte\CartaDePorte.cs" />
+    <Compile Include="Cartas de porte\CartaDePorteProcesador.cs" />
+    <Compile Include="Sistema\Constantes.cs" />
+    <Compile Include="Sistema\ConstantesParsing.cs" />
     <Compile Include="Database\Cereal.cs" />
     <Compile Include="Database\Cosecha.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\Entidad.cs" />
     <Compile Include="Database\Entidad_OrigenDestino.cs" />
-    <Compile Include="FormImportarCartasDePorte.cs">
+    <Compile Include="Cartas de porte\FormImportarCartasDePorte.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormImportarCartasDePorte.Designer.cs">
+    <Compile Include="Cartas de porte\FormImportarCartasDePorte.Designer.cs">
       <DependentUpon>FormImportarCartasDePorte.cs</DependentUpon>
     </Compile>
     <Compile Include="Database\Movimiento_Cereal.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Sistema\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormImportarCartasDePorte.resx">
+    <EmbeddedResource Include="Cartas de porte\FormImportarCartasDePorte.resx">
       <DependentUpon>FormImportarCartasDePorte.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

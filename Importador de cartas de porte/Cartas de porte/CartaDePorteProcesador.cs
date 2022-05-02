@@ -141,6 +141,7 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 if (!ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
                 {
+                    MessageBox.Show($"CPE nº {cartaDePorte.Numero}: Es una carta de porte de entrada pero no tiene los datos de descarga.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -745,19 +746,19 @@ namespace CS_Importador_de_cartas_de_porte
                     movimiento_Cereal.CTGNumero = longTemp;
                     if (longTemp == 0)
                     {
-                        MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return false;
                     }
                 }
                 else
                 {
-                    MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
@@ -833,7 +834,7 @@ namespace CS_Importador_de_cartas_de_porte
                 }
                 else
                 {
-                    MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el cereal.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el cereal.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -864,7 +865,7 @@ namespace CS_Importador_de_cartas_de_porte
                 }
                 if (movimiento_Cereal.PesoBruto == 0 && movimiento_Cereal.PesoTara == 0 && movimiento_Cereal.PesoNeto == 0)
                 {
-                    MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: No se detectaron los kilogramos, es posible que esta carta esté anulada o sin confirmar.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se detectaron los kilogramos, es posible que esta carta esté anulada o sin confirmar.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -894,7 +895,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
             if (movimiento_Cereal.PesoBruto - movimiento_Cereal.PesoTara != movimiento_Cereal.PesoNeto)
             {
-                MessageBox.Show("CPE nº {movimiento_Cereal.ComprobanteNumero}: El peso neto no coincide con el peso bruto - peso tara.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: El peso neto no coincide con el peso bruto - peso tara.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
