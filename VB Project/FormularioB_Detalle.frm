@@ -8,7 +8,7 @@ Begin VB.Form frmFormularioB_Detalle
    ClientHeight    =   8310
    ClientLeft      =   120
    ClientTop       =   450
-   ClientWidth     =   9960
+   ClientWidth     =   10620
    BeginProperty Font 
       Name            =   "Arial"
       Size            =   8.25
@@ -25,7 +25,7 @@ Begin VB.Form frmFormularioB_Detalle
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    ScaleHeight     =   8310
-   ScaleWidth      =   9960
+   ScaleWidth      =   10620
    Begin VB.Frame fraCondicion 
       Caption         =   "Operación:"
       BeginProperty Font 
@@ -52,27 +52,27 @@ Begin VB.Form frmFormularioB_Detalle
          TabIndex        =   42
          TabStop         =   0   'False
          Top             =   1920
-         Width           =   1095
+         Width           =   1395
       End
       Begin VB.TextBox txtCondicionOperacionFlete 
          Alignment       =   1  'Right Justify
          Height          =   330
          Left            =   1260
-         MaxLength       =   10
+         MaxLength       =   16
          TabIndex        =   38
          Tag             =   "CURRENCY|NOTEMPTY|ZERO|POSITIVE"
          Top             =   1080
-         Width           =   1095
+         Width           =   1395
       End
       Begin VB.TextBox txtCondicionOperacionPrecioTonelada 
          Alignment       =   1  'Right Justify
          Height          =   330
          Left            =   1260
-         MaxLength       =   10
+         MaxLength       =   16
          TabIndex        =   36
          Tag             =   "CURRENCY|NOTEMPTY|NOTZERO|POSITIVE"
          Top             =   660
-         Width           =   1095
+         Width           =   1395
       End
       Begin VB.CommandButton cmdCondicionOperacionFecha_Anterior 
          Height          =   315
@@ -117,7 +117,7 @@ Begin VB.Form frmFormularioB_Detalle
          TabIndex        =   40
          TabStop         =   0   'False
          Top             =   1500
-         Width           =   1110
+         Width           =   1410
       End
       Begin MSComCtl2.DTPicker dtpCondicionOperacionFecha 
          Height          =   315
@@ -128,7 +128,7 @@ Begin VB.Form frmFormularioB_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   98566145
+         Format          =   110297089
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -194,7 +194,7 @@ Begin VB.Form frmFormularioB_Detalle
       Left            =   3960
       TabIndex        =   43
       Top             =   5880
-      Width           =   5895
+      Width           =   6555
       Begin VB.TextBox txtOperacionTotal 
          Alignment       =   1  'Right Justify
          BackColor       =   &H8000000F&
@@ -205,7 +205,7 @@ Begin VB.Form frmFormularioB_Detalle
          TabIndex        =   45
          TabStop         =   0   'False
          Top             =   300
-         Width           =   1215
+         Width           =   1515
       End
       Begin VB.TextBox txtRetencionImporteOtra 
          Alignment       =   1  'Right Justify
@@ -217,7 +217,7 @@ Begin VB.Form frmFormularioB_Detalle
          TabIndex        =   47
          TabStop         =   0   'False
          Top             =   720
-         Width           =   1215
+         Width           =   1515
       End
       Begin VB.TextBox txtRetencionImporteAFIP 
          Alignment       =   1  'Right Justify
@@ -229,43 +229,43 @@ Begin VB.Form frmFormularioB_Detalle
          TabIndex        =   49
          TabStop         =   0   'False
          Top             =   1140
-         Width           =   1215
+         Width           =   1515
       End
       Begin VB.TextBox txtTotalImporteNetoAPagar 
          Alignment       =   1  'Right Justify
          BackColor       =   &H8000000F&
          ForeColor       =   &H8000000D&
          Height          =   315
-         Left            =   4560
+         Left            =   4920
          Locked          =   -1  'True
          TabIndex        =   51
          TabStop         =   0   'False
          Top             =   300
-         Width           =   1215
+         Width           =   1515
       End
       Begin VB.TextBox txtTotalIVARG 
          Alignment       =   1  'Right Justify
          BackColor       =   &H8000000F&
          ForeColor       =   &H8000000D&
          Height          =   315
-         Left            =   4560
+         Left            =   4920
          Locked          =   -1  'True
          TabIndex        =   53
          TabStop         =   0   'False
          Top             =   720
-         Width           =   1215
+         Width           =   1515
       End
       Begin VB.TextBox txtTotalPagoSegunCondicion 
          Alignment       =   1  'Right Justify
          BackColor       =   &H8000000F&
          ForeColor       =   &H8000000D&
          Height          =   315
-         Left            =   4560
+         Left            =   4920
          Locked          =   -1  'True
          TabIndex        =   55
          TabStop         =   0   'False
          Top             =   1140
-         Width           =   1215
+         Width           =   1515
       End
       Begin VB.Label lblOperacionTotal 
          AutoSize        =   -1  'True
@@ -298,7 +298,7 @@ Begin VB.Form frmFormularioB_Detalle
          AutoSize        =   -1  'True
          Caption         =   "Importe Neto:"
          Height          =   210
-         Left            =   2940
+         Left            =   3360
          TabIndex        =   50
          Top             =   360
          Width           =   945
@@ -307,7 +307,7 @@ Begin VB.Form frmFormularioB_Detalle
          AutoSize        =   -1  'True
          Caption         =   "IVA RG 2003/2207:"
          Height          =   210
-         Left            =   2940
+         Left            =   3360
          TabIndex        =   52
          Top             =   780
          Width           =   1395
@@ -316,7 +316,7 @@ Begin VB.Form frmFormularioB_Detalle
          AutoSize        =   -1  'True
          Caption         =   "Pago según Condic.:"
          Height          =   210
-         Left            =   2940
+         Left            =   3360
          TabIndex        =   54
          Top             =   1200
          Width           =   1485
@@ -337,13 +337,13 @@ Begin VB.Form frmFormularioB_Detalle
       Left            =   60
       TabIndex        =   21
       Top             =   1920
-      Width           =   9795
+      Width           =   10455
       Begin VB.TextBox txtFormulario1116Seleccionado 
          Alignment       =   2  'Center
          BackColor       =   &H8000000F&
          ForeColor       =   &H8000000D&
          Height          =   315
-         Left            =   6060
+         Left            =   7080
          Locked          =   -1  'True
          TabIndex        =   26
          TabStop         =   0   'False
@@ -355,7 +355,7 @@ Begin VB.Form frmFormularioB_Detalle
          BackColor       =   &H8000000F&
          ForeColor       =   &H8000000D&
          Height          =   315
-         Left            =   8520
+         Left            =   9540
          Locked          =   -1  'True
          TabIndex        =   28
          TabStop         =   0   'False
@@ -367,7 +367,7 @@ Begin VB.Form frmFormularioB_Detalle
          BackColor       =   &H8000000F&
          ForeColor       =   &H8000000D&
          Height          =   315
-         Left            =   3060
+         Left            =   4080
          Locked          =   -1  'True
          TabIndex        =   24
          TabStop         =   0   'False
@@ -379,8 +379,8 @@ Begin VB.Form frmFormularioB_Detalle
          Left            =   120
          TabIndex        =   22
          Top             =   300
-         Width           =   9195
-         _ExtentX        =   16219
+         Width           =   10215
+         _ExtentX        =   18018
          _ExtentY        =   5212
          _LayoutType     =   4
          _RowHeight      =   -2147483647
@@ -605,7 +605,7 @@ Begin VB.Form frmFormularioB_Detalle
       Begin VB.Label lblFormulario1116Seleccionado 
          Caption         =   "Form. 1116 Seleccionadas:"
          Height          =   195
-         Left            =   3900
+         Left            =   4920
          TabIndex        =   25
          Top             =   3420
          Width           =   2115
@@ -613,7 +613,7 @@ Begin VB.Form frmFormularioB_Detalle
       Begin VB.Label lblKilogramoNetoSeleccionado 
          Caption         =   "Total Kgs. a Liquidar:"
          Height          =   195
-         Left            =   6840
+         Left            =   7860
          TabIndex        =   27
          Top             =   3420
          Width           =   1635
@@ -621,7 +621,7 @@ Begin VB.Form frmFormularioB_Detalle
       Begin VB.Label lblFormulario1116Total 
          Caption         =   "Form. 1116 Total:"
          Height          =   195
-         Left            =   1680
+         Left            =   2700
          TabIndex        =   23
          Top             =   3420
          Width           =   1335
@@ -708,17 +708,17 @@ Begin VB.Form frmFormularioB_Detalle
    Begin VB.CommandButton cmdCancelar 
       Caption         =   "Cancelar"
       Height          =   375
-      Left            =   8880
+      Left            =   9600
       TabIndex        =   57
-      Top             =   7800
+      Top             =   7860
       Width           =   915
    End
    Begin VB.CommandButton cmdFinalizar 
       Caption         =   "Finalizar"
       Height          =   375
-      Left            =   7680
+      Left            =   8400
       TabIndex        =   56
-      Top             =   7800
+      Top             =   7860
       Width           =   1095
    End
    Begin MSComCtl2.DTPicker dtpFecha 
@@ -730,7 +730,7 @@ Begin VB.Form frmFormularioB_Detalle
       _ExtentX        =   2566
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   98566145
+      Format          =   110297089
       CurrentDate     =   40659
       MaxDate         =   55153
       MinDate         =   40513
@@ -762,8 +762,8 @@ Begin VB.Form frmFormularioB_Detalle
       Left            =   6060
       TabIndex        =   11
       Top             =   120
-      Width           =   3735
-      _ExtentX        =   6588
+      Width           =   4455
+      _ExtentX        =   7858
       _ExtentY        =   582
       _Version        =   393216
       MatchEntry      =   -1  'True
@@ -1436,6 +1436,8 @@ Private Sub RefreshTotals()
     txtFormulario1116Seleccionado.Text = mSelectedCount
     txtKilogramoNetoSeleccionado.Text = Format(mSelectedKgsTotal, "#,##0")
     txtOperacionCantidad.Text = Format(mSelectedKgsTotal, "#,##0")
+    
+    Call CalcularDatos
 End Sub
 
 Public Sub SetTrueDBGridAppearance()
