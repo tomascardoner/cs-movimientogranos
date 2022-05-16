@@ -1063,6 +1063,7 @@ BEGIN
 			INNER JOIN Localidad ON Entidad_OrigenDestino.IDLocalidad = Localidad.IDLocalidad)
 			INNER JOIN Partido ON Localidad.IDPartido = Partido.IDPartido
 		WHERE Movimiento_Cereal.Tipo = 'E' AND Movimiento_Cereal.IDCartaPorte_MotivoAnulacion IS NULL AND Movimiento_Cereal.Certificado = 0
+			AND Movimiento_Cereal.Humedad IS NOT NULL AND Movimiento_Cereal.Zaranda IS NOT NULL
 			AND Movimiento_Cereal.IDEntidad_Destino = @IDEntidad_Depositario AND Movimiento_Cereal.IDOrigenDestino_Destino = @IDPlanta
 			AND dbo.udf_GetRemitenteCereal(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) = @IDEntidad_Depositante
 			AND Movimiento_Cereal.IDCosecha = @IDCosecha AND Movimiento_Cereal.IDCereal = @IDCereal
@@ -1098,6 +1099,7 @@ BEGIN
     SELECT Movimiento_Cereal.IDMovimiento_Cereal, 0 AS Selected, Movimiento_Cereal.CTGNumero, Movimiento_Cereal.ComprobanteNumeroConFormato AS ComprobanteNumero, Movimiento_Cereal.FechaHoraArribo, Movimiento_Cereal.PesoNeto, Movimiento_Cereal.MermaZarandaKilogramo, Movimiento_Cereal.Humedad, Movimiento_Cereal.MermaHumedadKilogramo, Movimiento_Cereal.MermaVolatilKilogramo, Movimiento_Cereal.PesoFinal
 		FROM ((Movimiento_Cereal INNER JOIN Entidad AS Entidad_Transportista ON Movimiento_Cereal.IDEntidad_Transportista = Entidad_Transportista.IDEntidad) INNER JOIN Entidad_OrigenDestino AS Origen ON Movimiento_Cereal.IDEntidad_Titular = Origen.IDEntidad AND Movimiento_Cereal.IDOrigenDestino_Origen = Origen.IDOrigenDestino) INNER JOIN Localidad AS Localidad_Origen ON Origen.IDLocalidad = Localidad_Origen.IDLocalidad
 		WHERE Movimiento_Cereal.Tipo = 'E' AND Movimiento_Cereal.IDCartaPorte_MotivoAnulacion IS NULL AND Movimiento_Cereal.Certificado = 0
+			AND Movimiento_Cereal.Humedad IS NOT NULL AND Movimiento_Cereal.Zaranda IS NOT NULL
 			AND Movimiento_Cereal.IDEntidad_Destino = @IDEntidad_Depositario AND Movimiento_Cereal.IDOrigenDestino_Destino = @IDPlanta
 			AND dbo.udf_GetRemitenteCereal(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) = @IDEntidad_Depositante
 			AND Movimiento_Cereal.IDCosecha = @IDCosecha AND Movimiento_Cereal.IDCereal = @IDCereal

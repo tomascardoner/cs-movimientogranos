@@ -792,10 +792,15 @@ namespace CS_Importador_de_cartas_de_porte
                 // Entidad remitente comercial
                 movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(cartaDePorte.RemitenteComercialProductor))
             {
                 // Entidad remitente comercial
                 movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.RemitenteComercial);
+            }
+            else if (!string.IsNullOrWhiteSpace(cartaDePorte.RteComercialVentaPrimaria))
+            {
+                // Entidad remitente comercial
+                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
             }
 
             // Entidad corredor

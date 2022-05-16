@@ -415,6 +415,46 @@ GO
 
 -- =============================================
 -- Author:		Tomás A. Cardoner
+-- Create date: 2022-05-16
+-- Description:	Lista las Entidadades Remitentes (Titulares, Intermediarios y Remitentes Comerciales)
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Entidad_Remitente_List') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_Entidad_Remitente_List
+GO
+
+CREATE PROCEDURE usp_Entidad_Remitente_List
+	@ListaNinguno bit,
+	@Activo bit,
+	@IDEntidad int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	IF @ListaNinguno = 1
+		BEGIN
+		(SELECT 0 AS IDEntidad, '--------------------' AS Nombre, 1 AS Orden)
+		UNION
+		(SELECT IDEntidad, Nombre, 2 AS Orden
+			FROM Entidad
+			WHERE EsTitular = 1 OR EsIntermediario = 1 OR EsRemitenteComercial = 1
+				AND (@Activo IS NULL OR Activo = @Activo OR IDEntidad = @IDEntidad))
+		ORDER BY Orden, Nombre
+		END
+	ELSE
+		BEGIN
+		SELECT IDEntidad, Nombre
+			FROM Entidad
+			WHERE EsTitular = 1 OR EsIntermediario = 1 OR EsRemitenteComercial = 1
+				AND (@Activo IS NULL OR Activo = @Activo OR IDEntidad = @IDEntidad)
+			ORDER BY Nombre
+		END
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
 -- Create date: 2013-02-09
 -- Description:	Lista las Entidadades Corredores
 -- =============================================

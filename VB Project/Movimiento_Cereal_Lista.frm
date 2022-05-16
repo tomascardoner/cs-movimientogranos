@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   86114305
+            Format          =   111935489
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   86114305
+            Format          =   111935489
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -2647,7 +2647,7 @@ Public Function FillComboBox_Entidad_Remitente() As Boolean
     cboEntidad_Remitente.Clear
     cboEntidad_Remitente.AddItem CSM_Constant.ITEM_ALL_MALE
     'TO FIX: 0 = pParametro.IDEntidad_Depositario
-    Call CSM_Control_ComboBox.FillFromSQL(cboEntidad_Remitente, "usp_Entidad_Titular_List 0, 1, NULL", "IDEntidad", "Nombre", "Titulares", cscpItemOrFirst, SaveItemData, False)
+    Call CSM_Control_ComboBox.FillFromSQL(cboEntidad_Remitente, "usp_Entidad_Remitente_List 0, 1, NULL", "IDEntidad", "Nombre", "Remitentes", cscpItemOrFirst, SaveItemData, False)
 End Function
 
 Public Function FillComboBox_Entidad_Destinatario() As Boolean
