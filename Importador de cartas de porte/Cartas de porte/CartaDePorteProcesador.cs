@@ -1,4 +1,5 @@
-﻿using iTextSharp.text.pdf;
+﻿using CardonerSistemas;
+using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using System;
 using System.Windows.Forms;
@@ -641,6 +642,37 @@ namespace CS_Importador_de_cartas_de_porte
             return true;
         }
 
+        private static string ProcesarNombreEntidad(string valor)
+        {
+            if (!string.IsNullOrWhiteSpace(valor))
+            {
+                // En caso de existir, elimino las comillas al inicio y al fin del nombre
+                if (valor.StartsWith("\"") && valor.EndsWith("\""))
+                {
+                    valor = valor.Substring(1, valor.Length - 2);
+                }
+
+                // Reemplazo los valores posibles de Sociedad Anónima
+                valor = valor.ReplaceEnd(" SA", " S.A.");
+                valor = valor.ReplaceEnd(" S A", " S.A.");
+                valor = valor.ReplaceEnd(" SOCIEDAD ANONIMA", " S.A.");
+                valor = valor.ReplaceEnd(" CIA S.A.", " CIA. S.A.");
+
+                // Reemplazo los valores posibles de Sociedad de Responsabilidad Limitada
+                valor = valor.ReplaceEnd(" S R L", " S.R.L.");
+                valor = valor.ReplaceEnd(" SOCIEDAD DE RESPONSABILIDAD LIMITADA", " S.R.L.");
+                valor = valor.ReplaceEnd(" CIA S.R.L.", " CIA. S.R.L.");
+
+                // Elimino espacios al inicio o al final y espacios dobles
+                valor = valor.TrimAndReduce();
+
+                // Establezco las mayúsculas y minúsculas correspondientes
+                valor = valor.ToTitleCaseAll();
+            }
+
+            return valor;
+        }
+
         private static int? ProcesarEntidad(Database.Database database, string valor, TiposEntidad tipoEntidad)
         {
             if (!string.IsNullOrWhiteSpace(valor))
@@ -653,6 +685,9 @@ namespace CS_Importador_de_cartas_de_porte
                 {
                     if (long.TryParse(cuitString, out long cuitLong))
                     {
+                        // Proceso nombre por si tiene siglas sin puntos o palabras completas reemplazables
+                        nombre = ProcesarNombreEntidad(nombre);
+
                         // Busco la entidad en la base de datos
                         Database.Entidad entidad = new Database.Entidad();
                         if (!entidad.ObtenerPorCuit(database, cuitLong))
@@ -661,13 +696,16 @@ namespace CS_Importador_de_cartas_de_porte
                         }
                         if (entidad.IsFound)
                         {
-                            // La entidad existe, verifico que esté activa
+                            // La entidad existe
                             bool actualizar = false;
-                            if (!entidad.Activo)
+
+                            // Verifico el nombre
+                            if (string.Compare(entidad.Nombre, nombre, false) != 0)
                             {
-                                entidad.Activo = true;
+                                entidad.Nombre = nombre;
                                 actualizar = true;
                             }
+
                             // Verifico que sea del tipo especificado
                             switch (tipoEntidad)
                             {
@@ -701,6 +739,15 @@ namespace CS_Importador_de_cartas_de_porte
                                 default:
                                     break;
                             }
+
+                            // Verifico que esté activa
+                            if (!entidad.Activo)
+                            {
+                                entidad.Activo = true;
+                                actualizar = true;
+                            }
+
+                            // Si corresponde, actualizo
                             if (actualizar)
                             {
                                 entidad.Actualizar(database);
@@ -711,6 +758,38 @@ namespace CS_Importador_de_cartas_de_porte
                             // No se encontró la entidad, crearla
                             entidad.Cuit = cuitLong;
                             entidad.Nombre = nombre;
+                            switch (tipoEntidad)
+                            {
+                                case TiposEntidad.Titular:
+                                    entidad.EsTitular = true;
+                                    break;
+                                case TiposEntidad.Intermediario:
+                                    entidad.EsIntermediario = true;
+                                    break;
+                                case TiposEntidad.RemitenteComercial:
+                                    entidad.EsRemitenteComercial = true;
+                                    break;
+                                case TiposEntidad.Corredor:
+                                    entidad.EsCorredor = true;
+                                    break;
+                                case TiposEntidad.Entregador:
+                                    entidad.EsEntregador = true;
+                                    break;
+                                case TiposEntidad.Destinatario:
+                                    entidad.EsDestinatario = true;
+                                    break;
+                                case TiposEntidad.Destino:
+                                    entidad.EsDestino = true;
+                                    break;
+                                case TiposEntidad.Transportista:
+                                    entidad.EsTransportista = true;
+                                    break;
+                                case TiposEntidad.Chofer:
+                                    entidad.EsChofer = true;
+                                    break;
+                                default:
+                                    break;
+                            }
                             entidad.Activo = true;
                             entidad.Actualizar(database);
                         }

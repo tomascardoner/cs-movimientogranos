@@ -118,7 +118,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     parameterIDEntidad.Value = IDEntidad;
                 }
                 command.Parameters.Add(parameterIDEntidad);
-                command.Parameters.Add("Nombre", SqlDbType.VarChar).Value = Nombre.ToTitleCaseAll();
+                command.Parameters.Add("Nombre", SqlDbType.VarChar).Value = Nombre;
                 command.Parameters.Add("CUIT", SqlDbType.BigInt).Value = Cuit;
                 command.Parameters.Add("EsTitular", SqlDbType.Bit).Value = EsTitular;
                 command.Parameters.Add("EsIntermediario", SqlDbType.Bit).Value = EsIntermediario;
