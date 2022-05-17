@@ -653,10 +653,11 @@ namespace CS_Importador_de_cartas_de_porte
                 }
 
                 // Reemplazo los valores posibles de Sociedad Anónima
+                valor = valor.Replace(" SOCIEDAD ANONIMA", " S.A.");
                 valor = valor.ReplaceEnd(" SA", " S.A.");
                 valor = valor.ReplaceEnd(" S A", " S.A.");
-                valor = valor.ReplaceEnd(" SOCIEDAD ANONIMA", " S.A.");
                 valor = valor.ReplaceEnd(" CIA S.A.", " CIA. S.A.");
+                valor = valor.ReplaceEnd(" S.A. I Y C", " S.A.I.C.");
 
                 // Reemplazo los valores posibles de Sociedad de Responsabilidad Limitada
                 valor = valor.ReplaceEnd(" S R L", " S.R.L.");
@@ -1259,7 +1260,11 @@ namespace CS_Importador_de_cartas_de_porte
                 movimiento_CerealEnBD.PesoBruto = VerificarValores(movimiento_CerealEnBD.PesoBruto, movimiento_CerealEnPdf.PesoBruto, ref actualizar).Value;
                 movimiento_CerealEnBD.PesoTara = VerificarValores(movimiento_CerealEnBD.PesoTara, movimiento_CerealEnPdf.PesoTara, ref actualizar).Value;
                 movimiento_CerealEnBD.PesoNeto = VerificarValores(movimiento_CerealEnBD.PesoNeto, movimiento_CerealEnPdf.PesoNeto, ref actualizar).Value;
-                movimiento_CerealEnBD.Volatil = VerificarValores(movimiento_CerealEnBD.Volatil, movimiento_CerealEnPdf.Volatil, ref actualizar);
+                // Sólo actualizo el porcentaje de volátil en caso de que esté completo con nu valor diferente
+                if (movimiento_CerealEnBD.Volatil.Value != -1)
+                {
+                    movimiento_CerealEnBD.Volatil = VerificarValores(movimiento_CerealEnBD.Volatil, movimiento_CerealEnPdf.Volatil, ref actualizar);
+                }
                 movimiento_CerealEnBD.IDOrigenDestino_Origen = VerificarValores(movimiento_CerealEnBD.IDOrigenDestino_Origen, movimiento_CerealEnPdf.IDOrigenDestino_Origen, ref actualizar);
                 movimiento_CerealEnBD.IDOrigenDestino_Destino = VerificarValores(movimiento_CerealEnBD.IDOrigenDestino_Destino, movimiento_CerealEnPdf.IDOrigenDestino_Destino, ref actualizar);
                 movimiento_CerealEnBD.TransporteDominioCamion = VerificarValores(movimiento_CerealEnBD.TransporteDominioCamion, movimiento_CerealEnPdf.TransporteDominioCamion, ref actualizar);
