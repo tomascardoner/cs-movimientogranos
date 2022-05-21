@@ -115,11 +115,11 @@ Public Property Get IDMovimiento_Cereal_Formatted() As String
     IDMovimiento_Cereal_Formatted = Format(mIDMovimiento_Cereal, "#,###")
 End Property
 
-Public Property Let IDMovimiento_Cereal(ByVal Value As Long)
-    If Value <> mIDMovimiento_Cereal Then
+Public Property Let IDMovimiento_Cereal(ByVal value As Long)
+    If value <> mIDMovimiento_Cereal Then
         mIsDirty = True
     End If
-    mIDMovimiento_Cereal = Value
+    mIDMovimiento_Cereal = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -146,11 +146,11 @@ Public Property Get TipoNombre() As String
     End Select
 End Property
 
-Public Property Let Tipo(ByVal Value As String)
-    If Value <> mTipo Then
+Public Property Let Tipo(ByVal value As String)
+    If value <> mTipo Then
         mIsDirty = True
     End If
-    mTipo = Value
+    mTipo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -160,11 +160,11 @@ Public Property Get ComprobanteNumero() As String
     ComprobanteNumero = mComprobanteNumero
 End Property
 
-Public Property Let ComprobanteNumero(ByVal Value As String)
-    If Value <> mComprobanteNumero Then
+Public Property Let ComprobanteNumero(ByVal value As String)
+    If value <> mComprobanteNumero Then
         mIsDirty = True
     End If
-    mComprobanteNumero = Value
+    mComprobanteNumero = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ End Property
 
 Public Sub GetProximoComprobanteNumero()
     Dim cmdData As ADODB.command
-    Dim recData As Recordset
+    Dim recData As recordset
     
     If pTrapErrors Then
         On Error GoTo ErrorHandler
@@ -190,10 +190,10 @@ Public Sub GetProximoComprobanteNumero()
     cmdData.CommandText = "SELECT ISNULL(MAX(ComprobanteNumero), 0) + 1 FROM Movimiento_Cereal WHERE Tipo = ? AND IDCosecha = ?"
     cmdData.Parameters.Append cmdData.CreateParameter(, adChar, adParamInput, 1, mTipo)
     cmdData.Parameters.Append cmdData.CreateParameter(, adTinyInt, adParamInput, 1, mIDCosecha)
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdData, , adOpenForwardOnly, adLockReadOnly, adCmdText
     If Not recData.EOF Then
-        mComprobanteNumero = Format(recData(0).Value, String(13, "0"))
+        mComprobanteNumero = Format(recData(0).value, String(13, "0"))
     End If
     recData.Close
     Set recData = Nothing
@@ -210,11 +210,11 @@ Public Property Get IDCartaPorte_Talonario() As Long
     IDCartaPorte_Talonario = mIDCartaPorte_Talonario
 End Property
 
-Public Property Let IDCartaPorte_Talonario(ByVal Value As Long)
-    If Value <> mIDCartaPorte_Talonario Then
+Public Property Let IDCartaPorte_Talonario(ByVal value As Long)
+    If value <> mIDCartaPorte_Talonario Then
         mIsDirty = True
     End If
-    mIDCartaPorte_Talonario = Value
+    mIDCartaPorte_Talonario = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@ Public Property Get CartaPorte_Talonario() As CartaPorte_Talonario
     
     If oCartaPorte_Talonario Is Nothing Then
         Set oCartaPorte_Talonario = New CartaPorte_Talonario
-        Set oCartaPorte_Talonario.Database = pDatabase
+        Set oCartaPorte_Talonario.database = pDatabase
     End If
     If oCartaPorte_Talonario.IDCartaPorte_Talonario <> mIDCartaPorte_Talonario Then
         If mIDCartaPorte_Talonario = 0 Then
@@ -245,11 +245,11 @@ Public Property Get CTGNumero() As String
     CTGNumero = mCTGNumero
 End Property
 
-Public Property Let CTGNumero(ByVal Value As String)
-    If Value <> mCTGNumero Then
+Public Property Let CTGNumero(ByVal value As String)
+    If value <> mCTGNumero Then
         mIsDirty = True
     End If
-    mCTGNumero = Value
+    mCTGNumero = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -263,11 +263,11 @@ Public Property Get FechaCarga_Formatted() As String
     FechaCarga_Formatted = Format(mFechaCarga, "Short Date")
 End Property
 
-Public Property Let FechaCarga(ByVal Value As Date)
-    If Value <> mFechaCarga Then
+Public Property Let FechaCarga(ByVal value As Date)
+    If value <> mFechaCarga Then
         mIsDirty = True
     End If
-    mFechaCarga = Value
+    mFechaCarga = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -277,11 +277,11 @@ Public Property Get IDEntidad_Titular() As Long
     IDEntidad_Titular = mIDEntidad_Titular
 End Property
 
-Public Property Let IDEntidad_Titular(ByVal Value As Long)
-    If Value <> mIDEntidad_Titular Then
+Public Property Let IDEntidad_Titular(ByVal value As Long)
+    If value <> mIDEntidad_Titular Then
         mIsDirty = True
     End If
-    mIDEntidad_Titular = Value
+    mIDEntidad_Titular = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -311,11 +311,11 @@ Public Property Get IDEntidad_Intermediario() As Long
     IDEntidad_Intermediario = mIDEntidad_Intermediario
 End Property
 
-Public Property Let IDEntidad_Intermediario(ByVal Value As Long)
-    If Value <> mIDEntidad_Intermediario Then
+Public Property Let IDEntidad_Intermediario(ByVal value As Long)
+    If value <> mIDEntidad_Intermediario Then
         mIsDirty = True
     End If
-    mIDEntidad_Intermediario = Value
+    mIDEntidad_Intermediario = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -345,11 +345,11 @@ Public Property Get IDEntidad_RemitenteComercial() As Long
     IDEntidad_RemitenteComercial = mIDEntidad_RemitenteComercial
 End Property
 
-Public Property Let IDEntidad_RemitenteComercial(ByVal Value As Long)
-    If Value <> mIDEntidad_RemitenteComercial Then
+Public Property Let IDEntidad_RemitenteComercial(ByVal value As Long)
+    If value <> mIDEntidad_RemitenteComercial Then
         mIsDirty = True
     End If
-    mIDEntidad_RemitenteComercial = Value
+    mIDEntidad_RemitenteComercial = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -379,11 +379,11 @@ Public Property Get IDEntidad_Corredor() As Long
     IDEntidad_Corredor = mIDEntidad_Corredor
 End Property
 
-Public Property Let IDEntidad_Corredor(ByVal Value As Long)
-    If Value <> mIDEntidad_Corredor Then
+Public Property Let IDEntidad_Corredor(ByVal value As Long)
+    If value <> mIDEntidad_Corredor Then
         mIsDirty = True
     End If
-    mIDEntidad_Corredor = Value
+    mIDEntidad_Corredor = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -413,11 +413,11 @@ Public Property Get IDEntidad_Entregador() As Long
     IDEntidad_Entregador = mIDEntidad_Entregador
 End Property
 
-Public Property Let IDEntidad_Entregador(ByVal Value As Long)
-    If Value <> mIDEntidad_Entregador Then
+Public Property Let IDEntidad_Entregador(ByVal value As Long)
+    If value <> mIDEntidad_Entregador Then
         mIsDirty = True
     End If
-    mIDEntidad_Entregador = Value
+    mIDEntidad_Entregador = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -447,11 +447,11 @@ Public Property Get IDEntidad_Destinatario() As Long
     IDEntidad_Destinatario = mIDEntidad_Destinatario
 End Property
 
-Public Property Let IDEntidad_Destinatario(ByVal Value As Long)
-    If Value <> mIDEntidad_Destinatario Then
+Public Property Let IDEntidad_Destinatario(ByVal value As Long)
+    If value <> mIDEntidad_Destinatario Then
         mIsDirty = True
     End If
-    mIDEntidad_Destinatario = Value
+    mIDEntidad_Destinatario = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -481,11 +481,11 @@ Public Property Get IDEntidad_Destino() As Long
     IDEntidad_Destino = mIDEntidad_Destino
 End Property
 
-Public Property Let IDEntidad_Destino(ByVal Value As Long)
-    If Value <> mIDEntidad_Destino Then
+Public Property Let IDEntidad_Destino(ByVal value As Long)
+    If value <> mIDEntidad_Destino Then
         mIsDirty = True
     End If
-    mIDEntidad_Destino = Value
+    mIDEntidad_Destino = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -515,11 +515,11 @@ Public Property Get IDEntidad_Transportista() As Long
     IDEntidad_Transportista = mIDEntidad_Transportista
 End Property
 
-Public Property Let IDEntidad_Transportista(ByVal Value As Long)
-    If Value <> mIDEntidad_Transportista Then
+Public Property Let IDEntidad_Transportista(ByVal value As Long)
+    If value <> mIDEntidad_Transportista Then
         mIsDirty = True
     End If
-    mIDEntidad_Transportista = Value
+    mIDEntidad_Transportista = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -549,11 +549,11 @@ Public Property Get IDEntidad_Chofer() As Long
     IDEntidad_Chofer = mIDEntidad_Chofer
 End Property
 
-Public Property Let IDEntidad_Chofer(ByVal Value As Long)
-    If Value <> mIDEntidad_Chofer Then
+Public Property Let IDEntidad_Chofer(ByVal value As Long)
+    If value <> mIDEntidad_Chofer Then
         mIsDirty = True
     End If
-    mIDEntidad_Chofer = Value
+    mIDEntidad_Chofer = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -636,11 +636,11 @@ Public Property Get IDCosecha() As Byte
     IDCosecha = mIDCosecha
 End Property
 
-Public Property Let IDCosecha(ByVal Value As Byte)
-    If Value <> mIDCosecha Then
+Public Property Let IDCosecha(ByVal value As Byte)
+    If value <> mIDCosecha Then
         mIsDirty = True
     End If
-    mIDCosecha = Value
+    mIDCosecha = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -651,7 +651,7 @@ Public Property Get Cosecha() As Cosecha
     
     If oCosecha Is Nothing Then
         Set oCosecha = New Cosecha
-        Set oCosecha.Database = pDatabase
+        Set oCosecha.database = pDatabase
     End If
     If oCosecha.IDCosecha <> mIDCosecha Then
         If mIDCosecha = 0 Then
@@ -671,11 +671,11 @@ Public Property Get IDCereal() As Byte
     IDCereal = mIDCereal
 End Property
 
-Public Property Let IDCereal(ByVal Value As Byte)
-    If Value <> mIDCereal Then
+Public Property Let IDCereal(ByVal value As Byte)
+    If value <> mIDCereal Then
         mIsDirty = True
     End If
-    mIDCereal = Value
+    mIDCereal = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -686,7 +686,7 @@ Public Property Get Cereal() As Cereal
     
     If oCereal Is Nothing Then
         Set oCereal = New Cereal
-        Set oCereal.Database = pDatabase
+        Set oCereal.database = pDatabase
     End If
     If oCereal.IDCereal <> mIDCereal Then
         If mIDCereal = 0 Then
@@ -706,11 +706,11 @@ Public Property Get IDContrato() As Long
     IDContrato = mIDContrato
 End Property
 
-Public Property Let IDContrato(ByVal Value As Long)
-    If Value <> mIDContrato Then
+Public Property Let IDContrato(ByVal value As Long)
+    If value <> mIDContrato Then
         mIsDirty = True
     End If
-    mIDContrato = Value
+    mIDContrato = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -724,16 +724,16 @@ Public Property Get PesoBruto_Formatted() As String
     PesoBruto_Formatted = Format(mPesoBruto, "#,###")
 End Property
 
-Public Property Let PesoBruto(ByVal Value As Long)
-    If Value <> mPesoBruto Then
+Public Property Let PesoBruto(ByVal value As Long)
+    If value <> mPesoBruto Then
         mIsDirty = True
     End If
-    mPesoBruto = Value
+    mPesoBruto = value
 End Property
 
-Public Property Let PesoBruto_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        PesoBruto = CLng(Value)
+Public Property Let PesoBruto_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        PesoBruto = CLng(value)
     Else
         PesoBruto = 0
     End If
@@ -750,16 +750,16 @@ Public Property Get PesoTara_Formatted() As String
     PesoTara_Formatted = Format(mPesoTara, "#,###")
 End Property
 
-Public Property Let PesoTara(ByVal Value As Long)
-    If Value <> mPesoTara Then
+Public Property Let PesoTara(ByVal value As Long)
+    If value <> mPesoTara Then
         mIsDirty = True
     End If
-    mPesoTara = Value
+    mPesoTara = value
 End Property
 
-Public Property Let PesoTara_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        PesoTara = CLng(Value)
+Public Property Let PesoTara_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        PesoTara = CLng(value)
     Else
         PesoTara = 0
     End If
@@ -776,16 +776,16 @@ Public Property Get PesoNeto_Formatted() As String
     PesoNeto_Formatted = Format(mPesoNeto, "#,###")
 End Property
 
-Public Property Let PesoNeto(ByVal Value As Long)
-    If Value <> mPesoNeto Then
+Public Property Let PesoNeto(ByVal value As Long)
+    If value <> mPesoNeto Then
         mIsDirty = True
     End If
-    mPesoNeto = Value
+    mPesoNeto = value
 End Property
 
-Public Property Let PesoNeto_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        PesoNeto = CLng(Value)
+Public Property Let PesoNeto_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        PesoNeto = CLng(value)
     Else
         PesoNeto = 0
     End If
@@ -806,16 +806,16 @@ Public Property Get Volatil_Formatted() As String
     End If
 End Property
 
-Public Property Let Volatil(ByVal Value As Single)
-    If Value <> mVolatil Then
+Public Property Let Volatil(ByVal value As Single)
+    If value <> mVolatil Then
         mIsDirty = True
     End If
-    mVolatil = Value
+    mVolatil = value
 End Property
 
-Public Property Let Volatil_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        Volatil = CSng(Value)
+Public Property Let Volatil_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        Volatil = CSng(value)
     Else
         Volatil = -1
     End If
@@ -844,16 +844,16 @@ Public Property Get Humedad_Formatted() As String
     End If
 End Property
 
-Public Property Let Humedad(ByVal Value As Single)
-    If Value <> mHumedad Then
+Public Property Let Humedad(ByVal value As Single)
+    If value <> mHumedad Then
         mIsDirty = True
     End If
-    mHumedad = Value
+    mHumedad = value
 End Property
 
-Public Property Let Humedad_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        Humedad = CSng(Value)
+Public Property Let Humedad_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        Humedad = CSng(value)
     Else
         Humedad = -1
     End If
@@ -882,16 +882,16 @@ Public Property Get Zaranda_Formatted() As String
     End If
 End Property
 
-Public Property Let Zaranda(ByVal Value As Single)
-    If Value <> mZaranda Then
+Public Property Let Zaranda(ByVal value As Single)
+    If value <> mZaranda Then
         mIsDirty = True
     End If
-    mZaranda = Value
+    mZaranda = value
 End Property
 
-Public Property Let Zaranda_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        Zaranda = CSng(Value)
+Public Property Let Zaranda_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        Zaranda = CSng(value)
     Else
         Zaranda = -1
     End If
@@ -908,16 +908,16 @@ Public Property Get MermaVolatilKilogramo_Formatted() As String
     MermaVolatilKilogramo_Formatted = Format(mMermaVolatilKilogramo, "#,###")
 End Property
 
-Public Property Let MermaVolatilKilogramo(ByVal Value As Long)
-    If Value <> mMermaVolatilKilogramo Then
+Public Property Let MermaVolatilKilogramo(ByVal value As Long)
+    If value <> mMermaVolatilKilogramo Then
         mIsDirty = True
     End If
-    mMermaVolatilKilogramo = Value
+    mMermaVolatilKilogramo = value
 End Property
 
-Public Property Let MermaVolatilKilogramo_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        MermaVolatilKilogramo = CLng(Value)
+Public Property Let MermaVolatilKilogramo_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        MermaVolatilKilogramo = CLng(value)
     Else
         MermaVolatilKilogramo = 0
     End If
@@ -938,11 +938,11 @@ Public Property Get MermaHumedadPorcentaje_Formatted() As String
     End If
 End Property
 
-Public Property Let MermaHumedadPorcentaje(ByVal Value As Single)
-    If Value <> mMermaHumedadPorcentaje Then
+Public Property Let MermaHumedadPorcentaje(ByVal value As Single)
+    If value <> mMermaHumedadPorcentaje Then
         mIsDirty = True
     End If
-    mMermaHumedadPorcentaje = Value
+    mMermaHumedadPorcentaje = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -956,16 +956,16 @@ Public Property Get MermaHumedadKilogramo_Formatted() As String
     MermaHumedadKilogramo_Formatted = Format(mMermaHumedadKilogramo, "#,###")
 End Property
 
-Public Property Let MermaHumedadKilogramo(ByVal Value As Long)
-    If Value <> mMermaHumedadKilogramo Then
+Public Property Let MermaHumedadKilogramo(ByVal value As Long)
+    If value <> mMermaHumedadKilogramo Then
         mIsDirty = True
     End If
-    mMermaHumedadKilogramo = Value
+    mMermaHumedadKilogramo = value
 End Property
 
-Public Property Let MermaHumedadKilogramo_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        MermaHumedadKilogramo = CLng(Value)
+Public Property Let MermaHumedadKilogramo_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        MermaHumedadKilogramo = CLng(value)
     Else
         MermaHumedadKilogramo = 0
     End If
@@ -982,16 +982,16 @@ Public Property Get MermaZarandaKilogramo_Formatted() As String
     MermaZarandaKilogramo_Formatted = Format(mMermaZarandaKilogramo, "#,###")
 End Property
 
-Public Property Let MermaZarandaKilogramo(ByVal Value As Long)
-    If Value <> mMermaZarandaKilogramo Then
+Public Property Let MermaZarandaKilogramo(ByVal value As Long)
+    If value <> mMermaZarandaKilogramo Then
         mIsDirty = True
     End If
-    mMermaZarandaKilogramo = Value
+    mMermaZarandaKilogramo = value
 End Property
 
-Public Property Let MermaZarandaKilogramo_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        MermaZarandaKilogramo = CLng(Value)
+Public Property Let MermaZarandaKilogramo_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        MermaZarandaKilogramo = CLng(value)
     Else
         MermaZarandaKilogramo = 0
     End If
@@ -1008,16 +1008,16 @@ Public Property Get PesoFinal_Formatted() As String
     PesoFinal_Formatted = Format(mPesoFinal, "#,###")
 End Property
 
-Public Property Let PesoFinal(ByVal Value As Long)
-    If Value <> mPesoFinal Then
+Public Property Let PesoFinal(ByVal value As Long)
+    If value <> mPesoFinal Then
         mIsDirty = True
     End If
-    mPesoFinal = Value
+    mPesoFinal = value
 End Property
 
-Public Property Let PesoFinal_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        PesoFinal = CLng(Value)
+Public Property Let PesoFinal_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        PesoFinal = CLng(value)
     Else
         PesoFinal = 0
     End If
@@ -1030,11 +1030,11 @@ Public Property Get IDOrigenDestino_Origen() As Integer
     IDOrigenDestino_Origen = mIDOrigenDestino_Origen
 End Property
 
-Public Property Let IDOrigenDestino_Origen(ByVal Value As Integer)
-    If Value <> mIDOrigenDestino_Origen Then
+Public Property Let IDOrigenDestino_Origen(ByVal value As Integer)
+    If value <> mIDOrigenDestino_Origen Then
         mIsDirty = True
     End If
-    mIDOrigenDestino_Origen = Value
+    mIDOrigenDestino_Origen = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1065,11 +1065,11 @@ Public Property Get IDOrigenDestino_Destino() As Integer
     IDOrigenDestino_Destino = mIDOrigenDestino_Destino
 End Property
 
-Public Property Let IDOrigenDestino_Destino(ByVal Value As Integer)
-    If Value <> mIDOrigenDestino_Destino Then
+Public Property Let IDOrigenDestino_Destino(ByVal value As Integer)
+    If value <> mIDOrigenDestino_Destino Then
         mIsDirty = True
     End If
-    mIDOrigenDestino_Destino = Value
+    mIDOrigenDestino_Destino = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1108,11 +1108,11 @@ Public Property Get CTGCancelacion_Formatted() As String
     End If
 End Property
 
-Public Property Let CTGCancelacion(ByVal Value As Long)
-    If Value <> mCTGCancelacion Then
+Public Property Let CTGCancelacion(ByVal value As Long)
+    If value <> mCTGCancelacion Then
         mIsDirty = True
     End If
-    mCTGCancelacion = Value
+    mCTGCancelacion = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1122,11 +1122,11 @@ Public Property Get TransporteDominioCamion() As String
     TransporteDominioCamion = mTransporteDominioCamion
 End Property
 
-Public Property Let TransporteDominioCamion(ByVal Value As String)
-    If Value <> mTransporteDominioCamion Then
+Public Property Let TransporteDominioCamion(ByVal value As String)
+    If value <> mTransporteDominioCamion Then
         mIsDirty = True
     End If
-    mTransporteDominioCamion = Value
+    mTransporteDominioCamion = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1136,11 +1136,11 @@ Public Property Get TransporteDominioAcoplado() As String
     TransporteDominioAcoplado = mTransporteDominioAcoplado
 End Property
 
-Public Property Let TransporteDominioAcoplado(ByVal Value As String)
-    If Value <> mTransporteDominioAcoplado Then
+Public Property Let TransporteDominioAcoplado(ByVal value As String)
+    If value <> mTransporteDominioAcoplado Then
         mIsDirty = True
     End If
-    mTransporteDominioAcoplado = Value
+    mTransporteDominioAcoplado = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1154,16 +1154,16 @@ Public Property Get TransporteKilometro_Formatted() As String
     TransporteKilometro_Formatted = Format(mTransporteKilometro, "#,###")
 End Property
 
-Public Property Let TransporteKilometro(ByVal Value As Integer)
-    If Value <> mTransporteKilometro Then
+Public Property Let TransporteKilometro(ByVal value As Integer)
+    If value <> mTransporteKilometro Then
         mIsDirty = True
     End If
-    mTransporteKilometro = Value
+    mTransporteKilometro = value
 End Property
 
-Public Property Let TransporteKilometro_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        TransporteKilometro = CInt(Value)
+Public Property Let TransporteKilometro_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        TransporteKilometro = CInt(value)
     Else
         TransporteKilometro = 0
     End If
@@ -1180,16 +1180,16 @@ Public Property Get TransporteTarifaReferencia_Formatted() As String
     TransporteTarifaReferencia_Formatted = Format(mTransporteTarifaReferencia, "Currency")
 End Property
 
-Public Property Let TransporteTarifaReferencia(ByVal Value As Currency)
-    If Value <> mTransporteTarifaReferencia Then
+Public Property Let TransporteTarifaReferencia(ByVal value As Currency)
+    If value <> mTransporteTarifaReferencia Then
         mIsDirty = True
     End If
-    mTransporteTarifaReferencia = Value
+    mTransporteTarifaReferencia = value
 End Property
 
-Public Property Let TransporteTarifaReferencia_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        TransporteTarifaReferencia = CCur(Value)
+Public Property Let TransporteTarifaReferencia_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        TransporteTarifaReferencia = CCur(value)
     Else
         TransporteTarifaReferencia = 0
     End If
@@ -1206,16 +1206,16 @@ Public Property Get TransporteTarifa_Formatted() As String
     TransporteTarifa_Formatted = Format(mTransporteTarifa, "Currency")
 End Property
 
-Public Property Let TransporteTarifa(ByVal Value As Currency)
-    If Value <> mTransporteTarifa Then
+Public Property Let TransporteTarifa(ByVal value As Currency)
+    If value <> mTransporteTarifa Then
         mIsDirty = True
     End If
-    mTransporteTarifa = Value
+    mTransporteTarifa = value
 End Property
 
-Public Property Let TransporteTarifa_Formatted(ByVal Value As String)
-    If IsNumeric(Value) Then
-        TransporteTarifa = CCur(Value)
+Public Property Let TransporteTarifa_Formatted(ByVal value As String)
+    If IsNumeric(value) Then
+        TransporteTarifa = CCur(value)
     Else
         TransporteTarifa = 0
     End If
@@ -1252,11 +1252,11 @@ Public Property Get FechaHoraArribo_FormattedAsTime() As String
     End If
 End Property
 
-Public Property Let FechaHoraArribo(ByVal Value As Date)
-    If Value <> mFechaHoraArribo Then
+Public Property Let FechaHoraArribo(ByVal value As Date)
+    If value <> mFechaHoraArribo Then
         mIsDirty = True
     End If
-    mFechaHoraArribo = Value
+    mFechaHoraArribo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1290,11 +1290,11 @@ Public Property Get FechaHoraDescarga_FormattedAsTime() As Variant
     End If
 End Property
 
-Public Property Let FechaHoraDescarga(ByVal Value As Date)
-    If Value <> mFechaHoraDescarga Then
+Public Property Let FechaHoraDescarga(ByVal value As Date)
+    If value <> mFechaHoraDescarga Then
         mIsDirty = True
     End If
-    mFechaHoraDescarga = Value
+    mFechaHoraDescarga = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1304,11 +1304,11 @@ Public Property Get DeclaraIPRO() As Boolean
     DeclaraIPRO = mDeclaraIPRO
 End Property
 
-Public Property Let DeclaraIPRO(ByVal Value As Boolean)
-    If Value <> mDeclaraIPRO Then
+Public Property Let DeclaraIPRO(ByVal value As Boolean)
+    If value <> mDeclaraIPRO Then
         mIsDirty = True
     End If
-    mDeclaraIPRO = Value
+    mDeclaraIPRO = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1318,11 +1318,11 @@ Public Property Get IDCartaPorte_MotivoAnulacion() As Byte
     IDCartaPorte_MotivoAnulacion = mIDCartaPorte_MotivoAnulacion
 End Property
 
-Public Property Let IDCartaPorte_MotivoAnulacion(ByVal Value As Byte)
-    If Value <> mIDCartaPorte_MotivoAnulacion Then
+Public Property Let IDCartaPorte_MotivoAnulacion(ByVal value As Byte)
+    If value <> mIDCartaPorte_MotivoAnulacion Then
         mIsDirty = True
     End If
-    mIDCartaPorte_MotivoAnulacion = Value
+    mIDCartaPorte_MotivoAnulacion = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1332,11 +1332,11 @@ Public Property Get Notas() As String
     Notas = mNotas
 End Property
 
-Public Property Let Notas(ByVal Value As String)
-    If Value <> mNotas Then
+Public Property Let Notas(ByVal value As String)
+    If value <> mNotas Then
         mIsDirty = True
     End If
-    mNotas = Value
+    mNotas = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1346,11 +1346,11 @@ Public Property Get Calculo_TarifaIndice() As Integer
     Calculo_TarifaIndice = mCalculo_TarifaIndice
 End Property
 
-Public Property Let Calculo_TarifaIndice(ByVal Value As Integer)
-    If Value <> mCalculo_TarifaIndice Then
+Public Property Let Calculo_TarifaIndice(ByVal value As Integer)
+    If value <> mCalculo_TarifaIndice Then
         mIsDirty = True
     End If
-    mCalculo_TarifaIndice = Value
+    mCalculo_TarifaIndice = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1399,11 +1399,11 @@ Public Property Get FechaHoraCreacion_FormattedAsTime() As String
     FechaHoraCreacion_FormattedAsTime = Format(mFechaHoraCreacion, "Short Time")
 End Property
 
-Public Property Let FechaHoraCreacion(ByVal Value As Date)
-    If Value <> mFechaHoraCreacion Then
+Public Property Let FechaHoraCreacion(ByVal value As Date)
+    If value <> mFechaHoraCreacion Then
         mIsDirty = True
     End If
-    mFechaHoraCreacion = Value
+    mFechaHoraCreacion = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1452,11 +1452,11 @@ Public Property Get FechaHoraModificacion_FormattedAsTime() As String
     FechaHoraModificacion_FormattedAsTime = Format(mFechaHoraModificacion, "Short Time")
 End Property
 
-Public Property Let FechaHoraModificacion(ByVal Value As Date)
-    If Value <> mFechaHoraModificacion Then
+Public Property Let FechaHoraModificacion(ByVal value As Date)
+    If value <> mFechaHoraModificacion Then
         mIsDirty = True
     End If
-    mFechaHoraModificacion = Value
+    mFechaHoraModificacion = value
 End Property
 
 ''////////////////////////////////////////////////////////////////////////
@@ -1478,11 +1478,11 @@ Public Property Get FechaHoraLiquidacionServicio_FormattedAsTime() As String
     FechaHoraLiquidacionServicio_FormattedAsTime = Format(mFechaHoraLiquidacionServicio, "Short Time")
 End Property
 
-Public Property Let FechaHoraLiquidacionServicio(ByVal Value As Date)
-    If Value <> mFechaHoraLiquidacionServicio Then
+Public Property Let FechaHoraLiquidacionServicio(ByVal value As Date)
+    If value <> mFechaHoraLiquidacionServicio Then
         mIsDirty = True
     End If
-    mFechaHoraLiquidacionServicio = Value
+    mFechaHoraLiquidacionServicio = value
 End Property
 
 ''////////////////////////////////////////////////////////////////////////
@@ -1504,11 +1504,11 @@ Public Property Get FechaHoraEnvioBolsaTech_FormattedAsTime() As String
     FechaHoraEnvioBolsaTech_FormattedAsTime = Format(mFechaHoraEnvioBolsaTech, "Short Time")
 End Property
 
-Public Property Let FechaHoraEnvioBolsaTech(ByVal Value As Date)
-    If Value <> mFechaHoraEnvioBolsaTech Then
+Public Property Let FechaHoraEnvioBolsaTech(ByVal value As Date)
+    If value <> mFechaHoraEnvioBolsaTech Then
         mIsDirty = True
     End If
-    mFechaHoraEnvioBolsaTech = Value
+    mFechaHoraEnvioBolsaTech = value
 End Property
 
 ''////////////////////////////////////////////////////////////////////////
@@ -1518,11 +1518,11 @@ Public Property Get Certificado() As Boolean
     Certificado = mCertificado
 End Property
 
-Public Property Let Certificado(ByVal Value As Boolean)
-    If Value <> mCertificado Then
+Public Property Let Certificado(ByVal value As Boolean)
+    If value <> mCertificado Then
         mIsDirty = True
     End If
-    mCertificado = Value
+    mCertificado = value
 End Property
 
 ''////////////////////////////////////////////////////////////////////////
@@ -1536,11 +1536,11 @@ Public Property Get KilogramoAplicado_Formatted() As String
     KilogramoAplicado_Formatted = Format(mKilogramoAplicado, "#,##0")
 End Property
 
-Public Property Let KilogramoAplicado(ByVal Value As Long)
-    If Value <> mKilogramoAplicado Then
+Public Property Let KilogramoAplicado(ByVal value As Long)
+    If value <> mKilogramoAplicado Then
         mIsDirty = True
     End If
-    mKilogramoAplicado = Value
+    mKilogramoAplicado = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1548,7 +1548,7 @@ End Property
 
 Public Property Get CFormularioAplicado() As Collection
     Dim cmdData As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     If mCFormularioAplicado Is Nothing Then
         Set mCFormularioAplicado = New Collection
@@ -1558,12 +1558,12 @@ Public Property Get CFormularioAplicado() As Collection
         cmdData.CommandText = "usp_Movimiento_Cereal_FormulariosAplicados"
         cmdData.Parameters.Append cmdData.CreateParameter("@IDMovimiento_Cereal", adInteger, adParamInput, , mIDMovimiento_Cereal)
         
-        Set recData = New ADODB.Recordset
+        Set recData = New ADODB.recordset
         recData.Open cmdData, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
         
         If recData.State <> adStateClosed Then
             Do While Not recData.EOF
-                mCFormularioAplicado.Add recData("Formulario").Value, CSM_Constant.KEY_STRINGER & recData("Formulario").Value
+                mCFormularioAplicado.Add recData("Formulario").value, CSM_Constant.KEY_STRINGER & recData("Formulario").value
                 
                 recData.MoveNext
             Loop
@@ -1606,8 +1606,8 @@ Public Property Get NoMatchRaiseError() As Boolean
     NoMatchRaiseError = mNoMatchRaiseError
 End Property
 
-Public Property Let NoMatchRaiseError(ByVal Value As Boolean)
-    mNoMatchRaiseError = Value
+Public Property Let NoMatchRaiseError(ByVal value As Boolean)
+    mNoMatchRaiseError = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -1617,8 +1617,8 @@ Public Property Get RefreshListSkip() As Boolean
     RefreshListSkip = mRefreshListSkip
 End Property
 
-Public Property Let RefreshListSkip(ByVal Value As Boolean)
-    mRefreshListSkip = Value
+Public Property Let RefreshListSkip(ByVal value As Boolean)
+    mRefreshListSkip = value
 End Property
 
 Public Sub RefreshList()
@@ -1685,7 +1685,7 @@ End Sub
 
 Public Function Load() As Boolean
     Dim cmdSP As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     If pTrapErrors Then
         On Error GoTo ErrorHandler
@@ -1704,7 +1704,7 @@ Public Function Load() As Boolean
         .Parameters.Append .CreateParameter("IDMovimiento_Cereal", adInteger, adParamInput, , mIDMovimiento_Cereal)
     End With
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdSP, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
 
     Screen.MousePointer = vbHourglass
@@ -1724,7 +1724,7 @@ Public Function LoadByComprobanteNumero() As Boolean
     Dim ComprobanteNumeroSave As String
     
     Dim cmdSP As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     If pTrapErrors Then
         On Error GoTo ErrorHandler
@@ -1745,7 +1745,7 @@ Public Function LoadByComprobanteNumero() As Boolean
         .Parameters.Append .CreateParameter("ComprobanteNumero", adChar, adParamInput, 13, ComprobanteNumeroSave)
     End With
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdSP, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
 
     Screen.MousePointer = vbHourglass
@@ -1765,7 +1765,7 @@ Public Function LoadByCtgNumero() As Boolean
     Dim CTGNumeroSave As String
     
     Dim cmdSP As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     If pTrapErrors Then
         On Error GoTo ErrorHandler
@@ -1786,7 +1786,7 @@ Public Function LoadByCtgNumero() As Boolean
         .Parameters.Append .CreateParameter("Ctg", adBigInt, adParamInput, , CTGNumeroSave)
     End With
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdSP, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
 
     Screen.MousePointer = vbHourglass
@@ -1802,7 +1802,7 @@ ErrorHandler:
     ShowErrorMessage "Classes.Movimiento_Cereal.LoadByCtgNumero", "Error al obtener los datos del Movimiento de Cereal." & vbCr & vbCr & "C.T.G.: " & CTGNumeroSave
 End Function
 
-Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boolean
+Private Function GetDataFromRecordset(ByRef recData As ADODB.recordset) As Boolean
 
     If (Not mNoMatchRaiseError) And recData.EOF Then
         mNoMatch = True
@@ -1810,44 +1810,44 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         mNoMatch = False
         mIsNew = False
     
-        mIDMovimiento_Cereal = recData("IDMovimiento_Cereal").Value
-        mTipo = recData("Tipo").Value
+        mIDMovimiento_Cereal = recData("IDMovimiento_Cereal").value
+        mTipo = recData("Tipo").value
         
         'ENCABEZADO
-        mComprobanteNumero = recData("ComprobanteNumero").Value
-        mComprobanteNumeroConFormato = recData("ComprobanteNumeroConFormato").Value & ""
-        mIDCartaPorte_Talonario = Val(recData("IDCartaPorte_Talonario").Value & "")
-        mCTGNumero = CSM_Function.IfIsNull_ZeroLenghtString(recData("CTGNumero").Value)
-        mFechaCarga = recData("FechaCarga").Value
+        mComprobanteNumero = recData("ComprobanteNumero").value
+        mComprobanteNumeroConFormato = recData("ComprobanteNumeroConFormato").value & ""
+        mIDCartaPorte_Talonario = Val(recData("IDCartaPorte_Talonario").value & "")
+        mCTGNumero = CSM_Function.IfIsNull_ZeroLenghtString(recData("CTGNumero").value)
+        mFechaCarga = recData("FechaCarga").value
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
-        mIDEntidad_Titular = recData("IDEntidad_Titular").Value
-        mIDEntidad_Intermediario = Val(recData("IDEntidad_Intermediario").Value & "")
-        mIDEntidad_RemitenteComercial = Val(recData("IDEntidad_RemitenteComercial").Value & "")
-        mIDEntidad_Corredor = Val(recData("IDEntidad_Corredor").Value & "")
-        mIDEntidad_Entregador = Val(recData("IDEntidad_Entregador").Value & "")
-        mIDEntidad_Destinatario = Val(recData("IDEntidad_Destinatario").Value & "")
-        mIDEntidad_Destino = Val(recData("IDEntidad_Destino").Value & "")
-        mIDEntidad_Transportista = Val(recData("IDEntidad_Transportista").Value & "")
-        mIDEntidad_Chofer = Val(recData("IDEntidad_Chofer").Value & "")
+        mIDEntidad_Titular = recData("IDEntidad_Titular").value
+        mIDEntidad_Intermediario = Val(recData("IDEntidad_Intermediario").value & "")
+        mIDEntidad_RemitenteComercial = Val(recData("IDEntidad_RemitenteComercial").value & "")
+        mIDEntidad_Corredor = Val(recData("IDEntidad_Corredor").value & "")
+        mIDEntidad_Entregador = Val(recData("IDEntidad_Entregador").value & "")
+        mIDEntidad_Destinatario = Val(recData("IDEntidad_Destinatario").value & "")
+        mIDEntidad_Destino = Val(recData("IDEntidad_Destino").value & "")
+        mIDEntidad_Transportista = Val(recData("IDEntidad_Transportista").value & "")
+        mIDEntidad_Chofer = Val(recData("IDEntidad_Chofer").value & "")
         
         '2 - DATOS DE LOS GRANOS / ESPECIES TRANSPORTADOS
-        mIDCosecha = recData("IDCosecha").Value
-        mIDCereal = recData("IDCereal").Value
-        mIDContrato = Val(recData("IDContrato").Value & "")
-        mPesoBruto = recData("PesoBruto").Value
-        mPesoTara = recData("PesoTara").Value
-        mPesoNeto = recData("PesoNeto").Value
+        mIDCosecha = recData("IDCosecha").value
+        mIDCereal = recData("IDCereal").value
+        mIDContrato = Val(recData("IDContrato").value & "")
+        mPesoBruto = recData("PesoBruto").value
+        mPesoTara = recData("PesoTara").value
+        mPesoNeto = recData("PesoNeto").value
         
         'DATOS PARA MERMAS
         If mTipo = "E" Then
-            mVolatil = IIf(IsNull(recData("Volatil").Value), -1, recData("Volatil").Value)
-            mHumedad = IIf(IsNull(recData("Humedad").Value), -1, recData("Humedad").Value)
-            mZaranda = IIf(IsNull(recData("Zaranda").Value), -1, recData("Zaranda").Value)
-            mMermaVolatilKilogramo = IIf(IsNull(recData("MermaVolatilKilogramo").Value), -1, recData("MermaVolatilKilogramo").Value)
-            mMermaHumedadPorcentaje = IIf(IsNull(recData("MermaHumedadPorcentaje").Value), -1, recData("MermaHumedadPorcentaje").Value)
-            mMermaHumedadKilogramo = IIf(IsNull(recData("MermaHumedadKilogramo").Value), -1, recData("MermaHumedadKilogramo").Value)
-            mMermaZarandaKilogramo = IIf(IsNull(recData("MermaZarandaKilogramo").Value), -1, recData("MermaZarandaKilogramo").Value)
+            mVolatil = IIf(IsNull(recData("Volatil").value), -1, recData("Volatil").value)
+            mHumedad = IIf(IsNull(recData("Humedad").value), -1, recData("Humedad").value)
+            mZaranda = IIf(IsNull(recData("Zaranda").value), -1, recData("Zaranda").value)
+            mMermaVolatilKilogramo = IIf(IsNull(recData("MermaVolatilKilogramo").value), -1, recData("MermaVolatilKilogramo").value)
+            mMermaHumedadPorcentaje = IIf(IsNull(recData("MermaHumedadPorcentaje").value), -1, recData("MermaHumedadPorcentaje").value)
+            mMermaHumedadKilogramo = IIf(IsNull(recData("MermaHumedadKilogramo").value), -1, recData("MermaHumedadKilogramo").value)
+            mMermaZarandaKilogramo = IIf(IsNull(recData("MermaZarandaKilogramo").value), -1, recData("MermaZarandaKilogramo").value)
         Else
             mVolatil = -1
             mHumedad = -1
@@ -1857,47 +1857,47 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
             mMermaHumedadKilogramo = -1
             mMermaZarandaKilogramo = -1
         End If
-        mPesoFinal = Val(recData("PesoFinal").Value & "")
+        mPesoFinal = Val(recData("PesoFinal").value & "")
         
         '2 - PROCEDENCIA DE LA MERCADERIA
-        mIDOrigenDestino_Origen = CSM_Function.IfIsNull_Zero(recData("IDOrigenDestino_Origen").Value)
+        mIDOrigenDestino_Origen = CSM_Function.IfIsNull_Zero(recData("IDOrigenDestino_Origen").value)
         
         '3 - LUGAR DE DESTINO DE LOS GRANOS
-        mIDOrigenDestino_Destino = CSM_Function.IfIsNull_Zero(recData("IDOrigenDestino_Destino").Value)
+        mIDOrigenDestino_Destino = CSM_Function.IfIsNull_Zero(recData("IDOrigenDestino_Destino").value)
         
         '4 - DATOS DEL TRANSPORTE
-        mCTGCancelacion = CSM_Function.IfIsNull_Zero(recData("CTGCancelacion").Value)
-        mTransporteDominioCamion = Trim(recData("TransporteDominioCamion").Value & "")
-        mTransporteDominioAcoplado = Trim(recData("TransporteDominioAcoplado").Value & "")
-        mTransporteKilometro = CSM_Function.IfIsNull_Zero(recData("TransporteKilometro").Value)
-        mTransporteTarifaReferencia = CSM_Function.IfIsNull_Zero(recData("TransporteTarifaReferencia").Value)
-        mTransporteTarifa = CSM_Function.IfIsNull_Zero(recData("TransporteTarifa").Value)
+        mCTGCancelacion = CSM_Function.IfIsNull_Zero(recData("CTGCancelacion").value)
+        mTransporteDominioCamion = Trim(recData("TransporteDominioCamion").value & "")
+        mTransporteDominioAcoplado = Trim(recData("TransporteDominioAcoplado").value & "")
+        mTransporteKilometro = CSM_Function.IfIsNull_Zero(recData("TransporteKilometro").value)
+        mTransporteTarifaReferencia = CSM_Function.IfIsNull_Zero(recData("TransporteTarifaReferencia").value)
+        mTransporteTarifa = CSM_Function.IfIsNull_Zero(recData("TransporteTarifa").value)
         
         '5 - DATOS A COMPLETAR EN EL LUGAR DE DESTINO Y DESCARGA
         If mTipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
-            mFechaHoraArribo = CSM_Function.IfIsNull_ZeroDate(recData("FechaHoraArribo").Value)
-            mFechaHoraDescarga = CSM_Function.IfIsNull_ZeroDate(recData("FechaHoraDescarga").Value)
+            mFechaHoraArribo = CSM_Function.IfIsNull_ZeroDate(recData("FechaHoraArribo").value)
+            mFechaHoraDescarga = CSM_Function.IfIsNull_ZeroDate(recData("FechaHoraDescarga").value)
         Else
             mFechaHoraArribo = DATE_TIME_FIELD_NULL_VALUE
             mFechaHoraDescarga = DATE_TIME_FIELD_NULL_VALUE
         End If
         
         'DATOS EXTRAS
-        mDeclaraIPRO = recData("DeclaraIPRO").Value
-        mIDCartaPorte_MotivoAnulacion = CSM_Function.IfIsNull_Zero(recData("IDCartaPorte_MotivoAnulacion").Value)
-        mNotas = recData("Notas").Value & ""
-        mCalculo_TarifaIndice = CSM_Function.IfIsNull_Zero(recData("Calculo_TarifaIndice").Value)
+        mDeclaraIPRO = recData("DeclaraIPRO").value
+        mIDCartaPorte_MotivoAnulacion = CSM_Function.IfIsNull_Zero(recData("IDCartaPorte_MotivoAnulacion").value)
+        mNotas = recData("Notas").value & ""
+        mCalculo_TarifaIndice = CSM_Function.IfIsNull_Zero(recData("Calculo_TarifaIndice").value)
         
         'DATOS DEL REGISTRO
-        mIDUsuarioCreacion = recData("IDUsuarioCreacion").Value
-        mFechaHoraCreacion = recData("FechaHoraCreacion").Value
-        mIDUsuarioModificacion = recData("IDUsuarioModificacion").Value
-        mFechaHoraModificacion = recData("FechaHoraModificacion").Value
-        mFechaHoraLiquidacionServicio = IIf(IsNull(recData("FechaHoraLiquidacionServicio").Value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraLiquidacionServicio").Value)
-        mFechaHoraEnvioBolsaTech = IIf(IsNull(recData("FechaHoraEnvioBolsaTech").Value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraEnvioBolsaTech").Value)
+        mIDUsuarioCreacion = recData("IDUsuarioCreacion").value
+        mFechaHoraCreacion = recData("FechaHoraCreacion").value
+        mIDUsuarioModificacion = recData("IDUsuarioModificacion").value
+        mFechaHoraModificacion = recData("FechaHoraModificacion").value
+        mFechaHoraLiquidacionServicio = IIf(IsNull(recData("FechaHoraLiquidacionServicio").value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraLiquidacionServicio").value)
+        mFechaHoraEnvioBolsaTech = IIf(IsNull(recData("FechaHoraEnvioBolsaTech").value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraEnvioBolsaTech").value)
         
-        mCertificado = IIf(mTipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA, recData("Certificado").Value, False)
-        mKilogramoAplicado = Val(recData("KilogramoAplicado").Value & "")
+        mCertificado = IIf(mTipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA, recData("Certificado").value, False)
+        mKilogramoAplicado = Val(recData("KilogramoAplicado").value & "")
     End If
     
     Screen.MousePointer = vbDefault
@@ -1909,7 +1909,7 @@ ErrorHandler:
 End Function
 
 Public Function LoadPesadas() As Boolean
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     Dim Movimiento_Cereal_Pesada As Movimiento_Cereal_Pesada
 
     If pTrapErrors Then
@@ -1918,7 +1918,7 @@ Public Function LoadPesadas() As Boolean
 
     Screen.MousePointer = vbHourglass
 
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     Set recData.ActiveConnection = pDatabase.Connection
     recData.CursorType = adOpenKeyset
     recData.LockType = adLockOptimistic
@@ -1932,12 +1932,12 @@ Public Function LoadPesadas() As Boolean
         Set Movimiento_Cereal_Pesada = New Movimiento_Cereal_Pesada
         With Movimiento_Cereal_Pesada
             .IDMovimiento_Cereal = mIDMovimiento_Cereal
-            .IDPesada = recData("IDPesada").Value
+            .IDPesada = recData("IDPesada").value
             .Movimiento_Cereal = Me
             If mTipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
-                .PesoNeto = IIf(IsNull(recData("PesoNeto").Value), 0, recData("PesoNeto").Value)
-                .Humedad = IIf(IsNull(recData("Humedad").Value), -1, recData("Humedad").Value)
-                .Zaranda = IIf(IsNull(recData("Zaranda").Value), -1, recData("Zaranda").Value)
+                .PesoNeto = IIf(IsNull(recData("PesoNeto").value), 0, recData("PesoNeto").value)
+                .Humedad = IIf(IsNull(recData("Humedad").value), -1, recData("Humedad").value)
+                .Zaranda = IIf(IsNull(recData("Zaranda").value), -1, recData("Zaranda").value)
             Else
                 .PesoNeto = 0
                 .Humedad = -1
@@ -2090,7 +2090,7 @@ Public Function Update() As Boolean
         .Execute
         
         If mIsNew Then
-            mIDMovimiento_Cereal = .Parameters("IDMovimiento_Cereal").Value
+            mIDMovimiento_Cereal = .Parameters("IDMovimiento_Cereal").value
         End If
     End With
     
@@ -2148,6 +2148,59 @@ Public Function UpdateMermas() As Boolean
     
 ErrorHandler:
     ShowErrorMessage "Classes.Movimiento_Cereal.UpdateMermas", "Error al actualizar las mermas del Movimiento de Cereal." & vbCr & vbCr & "IDMovimiento_Cereal: " & IDMovimiento_Cereal
+End Function
+
+Public Function UpdatePesadasHumedadYZarandeo() As Boolean
+    Dim cmdSP As ADODB.command
+    
+    Dim Movimiento_Cereal_Pesada As Movimiento_Cereal_Pesada
+    Dim Movimiento_Cereal_Calculo As Movimiento_Cereal_Calculo
+    Dim PesadaStringList As String
+
+    If pTrapErrors Then
+        On Error GoTo ErrorHandler
+    End If
+
+    Screen.MousePointer = vbHourglass
+    
+    Set cmdSP = New ADODB.command
+    With cmdSP
+        Set .ActiveConnection = pDatabase.Connection
+        .CommandText = "usp_Movimiento_Cereal_ActualizarPesadasHumedadYZarandeo"
+        .CommandType = adCmdStoredProc
+        .Parameters.Append .CreateParameter("IDMovimiento_Cereal", adInteger, adParamInput, , mIDMovimiento_Cereal)
+        .Parameters.Append .CreateParameter("IDUsuario", adTinyInt, adParamInput, , pIDUsuario)
+        PesadaStringList = ""
+        For Each Movimiento_Cereal_Pesada In mCMovimiento_Cereal_Pesada_Updated
+            PesadaStringList = PesadaStringList & Movimiento_Cereal_Pesada.IDPesada & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.PesoNeto_FormattedForSQL & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.Humedad_FormattedForSQL & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.Zaranda_FormattedForSQL & STRING_LIST_SEPARATOR
+        Next Movimiento_Cereal_Pesada
+        .Parameters.Append .CreateParameter("StringListOfIDPesadaCompleta", adVarChar, adParamInput, 1000, PesadaStringList)
+        
+        .Execute
+    End With
+    
+    Set Movimiento_Cereal_Calculo = New Movimiento_Cereal_Calculo
+    Movimiento_Cereal_Calculo.IDMovimiento_Cereal = mIDMovimiento_Cereal
+    Movimiento_Cereal_Calculo.NoMatchRaiseError = False
+    Movimiento_Cereal_Calculo.RefreshListSkip = True
+    If Movimiento_Cereal_Calculo.Load() Then
+        Call Movimiento_Cereal_Calculo.Calcular
+    End If
+    Set Movimiento_Cereal_Calculo = Nothing
+        
+    mIsCopy = False
+    mIsDirty = False
+    
+    If Not mRefreshListSkip Then
+        Call RefreshList
+    End If
+    
+    Screen.MousePointer = vbDefault
+    UpdatePesadasHumedadYZarandeo = True
+    Exit Function
+    
+ErrorHandler:
+    pDatabase.ShowUpdateErrorMessage "Classes.Movimiento_Cereal.UpdatePesadasHumedadYZarandeo", "Error al actualizar las pesadas, la humedad y el zarandeo." & vbCr & vbCr & "IDMovimiento_Cereal: " & IDMovimiento_Cereal & vbCr & "Comprobante Nº: " & mComprobanteNumero
 End Function
 
 Public Function Delete() As Boolean

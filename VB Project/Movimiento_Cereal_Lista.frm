@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   111935489
+            Format          =   59768833
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   111935489
+            Format          =   59703297
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -996,7 +996,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Key             =   "TASKS"
                Style           =   5
                BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-                  NumButtonMenus  =   4
+                  NumButtonMenus  =   5
                   BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                      Key             =   "CONVERTIR_SUBPRODUCTO"
                      Text            =   "Convertir a SubProductos"
@@ -1005,12 +1005,16 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                      Text            =   "-"
                   EndProperty
                   BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                     Key             =   "RECALCULAR_KILOGRAMOS"
-                     Text            =   "Recalcular Kilogramos"
+                     Key             =   "OBTENER_HUMEDDAYZARANDEO"
+                     Text            =   "Obtener humedad y zarandeo desde pesadas"
                   EndProperty
                   BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                     Key             =   "RECALCULAR_KILOGRAMOS"
+                     Text            =   "Recalcular kilogramos"
+                  EndProperty
+                  BeginProperty ButtonMenu5 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                      Key             =   "RECALCULAR_ACONDICIONAMIENTO"
-                     Text            =   "Recalcular Acondicionamiento"
+                     Text            =   "Recalcular gastos de acondicionamiento"
                   EndProperty
                EndProperty
             EndProperty
@@ -1450,7 +1454,7 @@ End Function
 Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     Dim strSQLSelect As String
     Dim strSQLFrom As String
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
         
     Dim SaveIDMovimiento_Cereal As Long
     
@@ -1468,13 +1472,13 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     
     If IDMovimiento_Cereal = 0 Then
         If Not tdbgrdData.EOF Then
-            SaveIDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").Value
+            SaveIDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
         End If
     Else
         SaveIDMovimiento_Cereal = IDMovimiento_Cereal
     End If
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     
     'VERSION 14/03/2012 - MOSTRAR LA ENTIDAD REMITENTE DE LA MERCADERIA SEGUN CORRESPONDA
     strSQLSelect = "SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.Tipo, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.ComprobanteNumeroConFormato, Movimiento_Cereal.FechaCarga, Movimiento_Cereal.CTGNumero, dbo.udf_GetRemitenteCereal(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) AS Entidad_Remitente_ID, dbo.udf_GetRemitenteCerealNombre(Movimiento_Cereal.IDEntidad_Titular, Movimiento_Cereal.IDEntidad_Intermediario, Movimiento_Cereal.IDEntidad_RemitenteComercial) AS Entidad_Remitente_Nombre, Entidad_Destinatario.Nombre AS Entidad_Destinatario_Nombre, Entidad_Transportista.Nombre AS Entidad_Transportista_Nombre, Cosecha.Nombre AS Cosecha_Nombre, Cereal.Nombre AS Cereal_Nombre, Movimiento_Cereal.PesoBruto, Movimiento_Cereal.PesoTara, Movimiento_Cereal.PesoNeto, Movimiento_Cereal.PesoFinal, Movimiento_Cereal.Humedad, Movimiento_Cereal.Zaranda" & vbCr
@@ -1485,36 +1489,36 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     mRecordSelectionFormula = ""
     
     'MOVIMIENTO TIPO
-    If chkTipo_Entrada.Value = vbUnchecked And chkTipo_Salida.Value = vbUnchecked And chkTipo_SalidaProduccion.Value = vbUnchecked And chkTipo_TransferenciaInterna.Value = vbUnchecked Then
+    If chkTipo_Entrada.value = vbUnchecked And chkTipo_Salida.value = vbUnchecked And chkTipo_SalidaProduccion.value = vbUnchecked And chkTipo_TransferenciaInterna.value = vbUnchecked Then
         mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.Tipo = ''"
         mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "Movimiento_Cereal.Tipo = ''"
     Else
-        If chkTipo_Entrada.Value = vbUnchecked Or chkTipo_Salida.Value = vbUnchecked Or chkTipo_TransferenciaInterna.Value = vbUnchecked Or chkTipo_SalidaProduccion.Value = vbUnchecked Or chkTipo_AjusteBaja.Value = vbUnchecked Or chkTipo_AjusteSube.Value = vbUnchecked Then
+        If chkTipo_Entrada.value = vbUnchecked Or chkTipo_Salida.value = vbUnchecked Or chkTipo_TransferenciaInterna.value = vbUnchecked Or chkTipo_SalidaProduccion.value = vbUnchecked Or chkTipo_AjusteBaja.value = vbUnchecked Or chkTipo_AjusteSube.value = vbUnchecked Then
             'COMIENZO EL PARENTESIS PARA LOS OR
             mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "("
             mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "("
             
-            If chkTipo_Entrada.Value = vbChecked Then
+            If chkTipo_Entrada.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "'"
             End If
-            If chkTipo_Salida.Value = vbChecked Then
+            If chkTipo_Salida.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_SALIDA & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_SALIDA & "'"
             End If
-            If chkTipo_TransferenciaInterna.Value = vbChecked Then
+            If chkTipo_TransferenciaInterna.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA & "'"
             End If
-            If chkTipo_SalidaProduccion.Value = vbChecked Then
+            If chkTipo_SalidaProduccion.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION & "'"
             End If
-            If chkTipo_AjusteBaja.Value = vbChecked Then
+            If chkTipo_AjusteBaja.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA & "'"
             End If
-            If chkTipo_AjusteSube.Value = vbChecked Then
+            If chkTipo_AjusteSube.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE & "'"
             End If
@@ -1561,52 +1565,52 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
         Select Case cboFechaCargaDescargaOperacion.ListIndex
             Case 0  'ALL
             Case 1  'EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
             Case 2  'GREATER
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga > '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
             Case 3  'GREATER OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
             Case 4  'MINOR
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga < '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
             Case 5  'MINOR OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
             Case 6  'NOT EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga NOT BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(NOT ({Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga NOT BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(NOT ({Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 7  'BETWEEN
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Hasta.Value, "yyyy/mm/dd") & " 23:59:00'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy/mm/dd") & " 23:59:00'"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         End Select
     Else
         'FECHA DE CARGA O DESCARGA, SEGÚN CORRESPONDA POR EL TIPO DE MOVIMIENTO
         Select Case cboFechaCargaDescargaOperacion.ListIndex
             Case 0  'ALL
             Case 1  'EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 2  'GREATER
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga > '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga > '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 3  'GREATER OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga >= '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)))"
             Case 4  'MINOR
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga < '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga < '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)))"
             Case 5  'MINOR OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga <= '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 6  'NOT EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga NOT BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga NOT BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 23:59:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND (NOT ({Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND (NOT ({Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga NOT BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga NOT BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND (NOT ({Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND (NOT ({Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))))"
             Case 7  'BETWEEN
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Hasta.Value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Hasta.Value, "yyyy/mm/dd") & " 23:59:00'))"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.Value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.Value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy/mm/dd") & " 23:59:00') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga BETWEEN '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaCarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy, mm, dd") & ", 23, 59, 59)) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
         End Select
     End If
     
@@ -1840,9 +1844,9 @@ Private Sub Form_Load()
     cboFechaCargaDescargaOperacion.AddItem "Entre"
     cboFechaCargaDescargaOperacion.ListIndex = 7
     
-    dtpFechaCargaDescarga_Desde.Value = DateAdd("d", -7, Date)
-    txtFechaCargaDescarga_DiaSemana.Text = WeekdayName(Weekday(dtpFechaCargaDescarga_Desde.Value))
-    dtpFechaCargaDescarga_Hasta.Value = Date
+    dtpFechaCargaDescarga_Desde.value = DateAdd("d", -7, Date)
+    txtFechaCargaDescarga_DiaSemana.Text = WeekdayName(Weekday(dtpFechaCargaDescarga_Desde.value))
+    dtpFechaCargaDescarga_Hasta.value = Date
     
     Call FillComboBox_Planta
     Call FillComboBox_Entidad_Remitente
@@ -1899,32 +1903,32 @@ Private Sub Form_Load()
     
     'AGREGO LOS VALUE ITEMS DE LA COLUMNA TIPO
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_CEREAL_TIPO_ENTRADA
+    ValueItem.value = MOVIMIENTO_CEREAL_TIPO_ENTRADA
     ValueItem.DisplayValue = MOVIMIENTO_CEREAL_TIPO_ENTRADA_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_CEREAL_TIPO_SALIDA
+    ValueItem.value = MOVIMIENTO_CEREAL_TIPO_SALIDA
     ValueItem.DisplayValue = MOVIMIENTO_CEREAL_TIPO_SALIDA_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA
+    ValueItem.value = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA
     ValueItem.DisplayValue = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION
+    ValueItem.value = MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION
     ValueItem.DisplayValue = MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA
+    ValueItem.value = MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA
     ValueItem.DisplayValue = MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE
+    ValueItem.value = MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE
     ValueItem.DisplayValue = MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
@@ -1994,7 +1998,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
                 Exit Sub
             End If
             Set Movimiento_Cereal = New Movimiento_Cereal
-            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").Value
+            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
             If Movimiento_Cereal.Load() Then
                 If frmMovimiento_Cereal_Detalle.Startup(Movimiento_Cereal) Then
                     If frmMovimiento_Cereal_Detalle.LoadData() Then
@@ -2019,7 +2023,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
             
             Set Movimiento_Cereal = New Movimiento_Cereal
-            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").Value
+            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
             If Movimiento_Cereal.Load() Then
                 'VERIFICO QUE NO ESTÉ CERTIFICADO
                 If Movimiento_Cereal.Certificado Then
@@ -2043,7 +2047,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
 
             Set Movimiento_Cereal = New Movimiento_Cereal
-            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").Value
+            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
             If Movimiento_Cereal.Copy() Then
                 If frmMovimiento_Cereal_Detalle.Startup(Movimiento_Cereal) Then
                     If frmMovimiento_Cereal_Detalle.LoadData() Then
@@ -2070,7 +2074,7 @@ End Sub
 Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
     Dim Movimiento_Cereal As Movimiento_Cereal
     Dim Movimiento_Cereal_Calculo As Movimiento_Cereal_Calculo
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     Dim Report As CSC_Report
     
     Select Case ButtonMenu.Parent.Key
@@ -2113,7 +2117,7 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                         .FILENAME = pDatabase.ReportsPath & ButtonMenu.Key
                         .WindowTitle = ButtonMenu.Text
                         If .OpenReport(True) Then
-                            .Report.RecordSelectionFormula = .Report.RecordSelectionFormula & mRecordSelectionFormula
+                            .Report.RecordSelectionFormula = .Report.RecordSelectionFormula & IIf(.Report.RecordSelectionFormula <> "", " AND ", "") & mRecordSelectionFormula
                             Call .PreviewReport(False)
                         End If
                     End With
@@ -2134,7 +2138,7 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                     End If
                     
                     Set Movimiento_Cereal = New Movimiento_Cereal
-                    Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").Value
+                    Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
                     If Movimiento_Cereal.Load() Then
                         If Movimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION Then
                             MsgBox "Debe seleccionar un movimiento de salida a producción.", vbInformation, App.Title
@@ -2150,21 +2154,24 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                     
                     Set Movimiento_Cereal = Nothing
             
+                Case "OBTENER_HUMEDDAYZARANDEO"
+                    Call ObtenerPesadasHumedadYZarandeo
+                    
                 Case "RECALCULAR_KILOGRAMOS"
                     If tdbgrdData.FirstRow = "" Then
-                        MsgBox "No hay ningún Movimiento para recalcular kilogramos.", vbExclamation, App.Title
+                        MsgBox "No hay ningún movimiento para recalcular los kilogramos.", vbExclamation, App.Title
                         tdbgrdData.SetFocus
                         Exit Sub
                     End If
                     
-                    If MsgBox("Se recalcularán las Mermas (Entradas) y los Kilogramos sin Aplicar (Salidas) de todos los Movimientos que cumplan los criterios de los filtros seleccionados.", vbQuestion + vbYesNo, App.Title) = vbYes Then
+                    If MsgBox("Se recalcularán las mermas de las entradas y los kilogramos sin aplicar de las salidas mostradas.", vbQuestion + vbYesNo, App.Title) = vbYes Then
                         Set recData = tdbgrdData.DataSource
                         recData.MoveFirst
                         Set Movimiento_Cereal = New Movimiento_Cereal
                         Do While Not recData.EOF
-                            stbMain.SimpleText = "Recalculando Kilogramos: " & recData.AbsolutePosition & " de " & recData.RecordCount & " (" & Format(recData.AbsolutePosition / recData.RecordCount, "Percent") & ")..."
+                            stbMain.SimpleText = "Recalculando kilogramos: " & recData.AbsolutePosition & " de " & recData.RecordCount & " (" & Format(recData.AbsolutePosition / recData.RecordCount, "Percent") & ")..."
                             DoEvents
-                            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").Value
+                            Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
                             Movimiento_Cereal.RefreshListSkip = True
                             If Movimiento_Cereal.Load() Then
                                 Movimiento_Cereal.UpdateMermas
@@ -2180,19 +2187,19 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                     
                 Case "RECALCULAR_ACONDICIONAMIENTO"
                     If tdbgrdData.FirstRow = "" Then
-                        MsgBox "No hay ningún Movimiento para recalcular los Gastos de Acondicionamiento.", vbExclamation, App.Title
+                        MsgBox "No hay ningún movimiento para recalcular los gastos de acondicionamiento.", vbExclamation, App.Title
                         tdbgrdData.SetFocus
                         Exit Sub
                     End If
                     
-                    If MsgBox("Se recalcularán los Gastos de Acondicionamiento de todos los Movimientos de entrada que cumplan los criterios de los filtros seleccionados.", vbQuestion + vbYesNo, App.Title) = vbYes Then
+                    If MsgBox("Se recalcularán los gastos de acondicionamiento de todos los Movimientos de entrada mostrados.", vbQuestion + vbYesNo, App.Title) = vbYes Then
                         Set recData = tdbgrdData.DataSource
                         recData.MoveFirst
                         Set Movimiento_Cereal_Calculo = New Movimiento_Cereal_Calculo
                         Do While Not recData.EOF
-                            stbMain.SimpleText = "Recalculando Gastos de Acondicionamiento: " & recData.AbsolutePosition & " de " & recData.RecordCount & " (" & Format(recData.AbsolutePosition / recData.RecordCount, "Percent") & ")..."
+                            stbMain.SimpleText = "Recalculando gastos de acondicionamiento: " & recData.AbsolutePosition & " de " & recData.RecordCount & " (" & Format(recData.AbsolutePosition / recData.RecordCount, "Percent") & ")..."
                             DoEvents
-                            Movimiento_Cereal_Calculo.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").Value
+                            Movimiento_Cereal_Calculo.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").value
                             Movimiento_Cereal_Calculo.NoMatchRaiseError = False
                             Movimiento_Cereal_Calculo.RefreshListSkip = True
                             If Movimiento_Cereal_Calculo.Load() Then
@@ -2207,16 +2214,6 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                     
                     tdbgrdData.SetFocus
                     
-                Case "EXPORTAR_BOLSATECH"
-                    If tdbgrdData.FirstRow = "" Then
-                        MsgBox "No hay ningún Movimiento para recalcular kilogramos.", vbExclamation, App.Title
-                        tdbgrdData.SetFocus
-                        Exit Sub
-                    End If
-                    
-                    frmMovimiento_Cereal_Exportar.Show False, frmMDI
-                    
-                    tdbgrdData.SetFocus
             End Select
     End Select
     Exit Sub
@@ -2253,12 +2250,12 @@ End Sub
 
 Private Sub cmdTipo_Todos_Click()
     mLoading = True
-    chkTipo_Entrada.Value = vbChecked
-    chkTipo_Salida.Value = vbChecked
-    chkTipo_TransferenciaInterna.Value = vbChecked
-    chkTipo_SalidaProduccion.Value = vbChecked
-    chkTipo_AjusteBaja.Value = vbChecked
-    chkTipo_AjusteSube.Value = vbChecked
+    chkTipo_Entrada.value = vbChecked
+    chkTipo_Salida.value = vbChecked
+    chkTipo_TransferenciaInterna.value = vbChecked
+    chkTipo_SalidaProduccion.value = vbChecked
+    chkTipo_AjusteBaja.value = vbChecked
+    chkTipo_AjusteSube.value = vbChecked
     mLoading = False
     Call LoadData(0)
     tdbgrdData.SetFocus
@@ -2266,12 +2263,12 @@ End Sub
 
 Private Sub cmdTipo_Ninguno_Click()
     mLoading = True
-    chkTipo_Entrada.Value = vbUnchecked
-    chkTipo_Salida.Value = vbUnchecked
-    chkTipo_TransferenciaInterna.Value = vbUnchecked
-    chkTipo_SalidaProduccion.Value = vbUnchecked
-    chkTipo_AjusteBaja.Value = vbUnchecked
-    chkTipo_AjusteSube.Value = vbUnchecked
+    chkTipo_Entrada.value = vbUnchecked
+    chkTipo_Salida.value = vbUnchecked
+    chkTipo_TransferenciaInterna.value = vbUnchecked
+    chkTipo_SalidaProduccion.value = vbUnchecked
+    chkTipo_AjusteBaja.value = vbUnchecked
+    chkTipo_AjusteSube.value = vbUnchecked
     mLoading = False
     Call LoadData(0)
     tdbgrdData.SetFocus
@@ -2388,18 +2385,18 @@ Private Sub cboFechaCargaDescargaOperacion_Click()
 End Sub
 
 Private Sub cmdFechaCargaDescarga_DesdeAnterior_Click()
-    dtpFechaCargaDescarga_Desde.Value = DateAdd("d", -1, dtpFechaCargaDescarga_Desde.Value)
+    dtpFechaCargaDescarga_Desde.value = DateAdd("d", -1, dtpFechaCargaDescarga_Desde.value)
     dtpFechaCargaDescarga_Desde.SetFocus
     dtpFechaCargaDescarga_Desde_Change
 End Sub
 
 Private Sub dtpFechaCargaDescarga_Desde_Change()
-    txtFechaCargaDescarga_DiaSemana.Text = WeekdayName(Weekday(dtpFechaCargaDescarga_Desde.Value))
+    txtFechaCargaDescarga_DiaSemana.Text = WeekdayName(Weekday(dtpFechaCargaDescarga_Desde.value))
     Call LoadData(0)
 End Sub
 
 Private Sub cmdFechaCargaDescarga_DesdeSiguiente_Click()
-    dtpFechaCargaDescarga_Desde.Value = DateAdd("d", 1, dtpFechaCargaDescarga_Desde.Value)
+    dtpFechaCargaDescarga_Desde.value = DateAdd("d", 1, dtpFechaCargaDescarga_Desde.value)
     dtpFechaCargaDescarga_Desde.SetFocus
     dtpFechaCargaDescarga_Desde_Change
 End Sub
@@ -2407,16 +2404,16 @@ End Sub
 Private Sub cmdFechaCargaDescarga_DesdeHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaCargaDescarga_Desde.Value
-    dtpFechaCargaDescarga_Desde.Value = Date
+    OldValue = dtpFechaCargaDescarga_Desde.value
+    dtpFechaCargaDescarga_Desde.value = Date
     dtpFechaCargaDescarga_Desde.SetFocus
-    If OldValue <> dtpFechaCargaDescarga_Desde.Value Then
+    If OldValue <> dtpFechaCargaDescarga_Desde.value Then
         dtpFechaCargaDescarga_Desde_Change
     End If
 End Sub
 
 Private Sub cmdFechaCargaDescarga_HastaAnterior_Click()
-    dtpFechaCargaDescarga_Hasta.Value = DateAdd("d", -1, dtpFechaCargaDescarga_Hasta.Value)
+    dtpFechaCargaDescarga_Hasta.value = DateAdd("d", -1, dtpFechaCargaDescarga_Hasta.value)
     dtpFechaCargaDescarga_Hasta.SetFocus
     dtpFechaCargaDescarga_Hasta_Change
 End Sub
@@ -2426,7 +2423,7 @@ Private Sub dtpFechaCargaDescarga_Hasta_Change()
 End Sub
 
 Private Sub cmdFechaCargaDescarga_HastaSiguiente_Click()
-    dtpFechaCargaDescarga_Hasta.Value = DateAdd("d", 1, dtpFechaCargaDescarga_Hasta.Value)
+    dtpFechaCargaDescarga_Hasta.value = DateAdd("d", 1, dtpFechaCargaDescarga_Hasta.value)
     dtpFechaCargaDescarga_Hasta.SetFocus
     dtpFechaCargaDescarga_Hasta_Change
 End Sub
@@ -2434,10 +2431,10 @@ End Sub
 Private Sub cmdFechaCargaDescarga_HastaHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaCargaDescarga_Hasta.Value
-    dtpFechaCargaDescarga_Hasta.Value = Date
+    OldValue = dtpFechaCargaDescarga_Hasta.value
+    dtpFechaCargaDescarga_Hasta.value = Date
     dtpFechaCargaDescarga_Hasta.SetFocus
-    If OldValue <> dtpFechaCargaDescarga_Hasta.Value Then
+    If OldValue <> dtpFechaCargaDescarga_Hasta.value Then
         dtpFechaCargaDescarga_Hasta_Change
     End If
 End Sub
@@ -2596,7 +2593,7 @@ Private Sub tdbgrdData_DblClick()
 End Sub
 
 Private Sub SortColumn(ByVal OldOrderColumn As Long)
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     Set recData = tdbgrdData.DataSource
     If Not recData Is Nothing Then
@@ -2710,7 +2707,7 @@ Public Function FillComboBox_MotivoAnulacion() As Boolean
 End Function
 
 Private Function ExportCartasPorteRecibidas30(ByVal ExportPath As String) As Boolean
-    Dim recData_CartaPorte As ADODB.Recordset
+    Dim recData_CartaPorte As ADODB.recordset
 
     Dim FileNumber As Integer
 
@@ -2748,7 +2745,7 @@ Private Function ExportCartasPorteRecibidas30(ByVal ExportPath As String) As Boo
     '////////////////////////////////////////////////////////////
 
     'ABRO UN NUEVO RECORDSET CON LOS FILTROS SELECCIONADOS, Y LO ORDENO POR NUMERO DE CARTA DE PORTE
-    Set recData_CartaPorte = New ADODB.Recordset
+    Set recData_CartaPorte = New ADODB.recordset
 
     recData_CartaPorte.Open "SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.PesoNeto FROM Movimiento_Cereal LEFT JOIN Formulario1116A_Detalle ON Movimiento_Cereal.IDMovimiento_Cereal = Formulario1116A_Detalle.IDMovimiento_Cereal " & mstrSQLWhere & " ORDER BY ComprobanteNumero", pDatabase.Connection, adOpenStatic, adLockReadOnly, adCmdText
 
@@ -2756,7 +2753,7 @@ Private Function ExportCartasPorteRecibidas30(ByVal ExportPath As String) As Boo
     Do While Not recData_CartaPorte.EOF
         'CARGO LOS DATOS DEl Movimiento_Cereal ACTUAL
         Set Movimiento_Cereal = New Movimiento_Cereal
-        Movimiento_Cereal.IDMovimiento_Cereal = recData_CartaPorte("IDMovimiento_Cereal").Value
+        Movimiento_Cereal.IDMovimiento_Cereal = recData_CartaPorte("IDMovimiento_Cereal").value
         If Not Movimiento_Cereal.Load() Then
             Unload CSF_Status
             Set CSF_Status = Nothing
@@ -2919,7 +2916,7 @@ ErrorHandler:
 End Function
 
 Private Function ExportCartasPorteEmitidas30(ByVal ExportPath As String) As Boolean
-    Dim recData_CartaPorte As ADODB.Recordset
+    Dim recData_CartaPorte As ADODB.recordset
 
     Dim FileNumber As Integer
 
@@ -2957,7 +2954,7 @@ Private Function ExportCartasPorteEmitidas30(ByVal ExportPath As String) As Bool
     '////////////////////////////////////////////////////////////
 
     'ABRO UN NUEVO RECORDSET CON LOS FILTROS SELECCIONADOS, Y LO ORDENO POR NUMERO DE CARTA DE PORTE
-    Set recData_CartaPorte = New ADODB.Recordset
+    Set recData_CartaPorte = New ADODB.recordset
 
     recData_CartaPorte.Open "SELECT First(Movimiento_Cereal.IDMovimiento_Cereal) AS IDMovimiento_Cereal, First(Movimiento_Cereal.IDEquipo) AS IDEquipo, CartaPorte_Numero, Sum(IIF(IsNull(CartaPorte_KilogramoNeto), KilogramoNeto, CartaPorte_KilogramoNeto)) AS KilogramoNeto FROM Movimiento_Cereal LEFT JOIN F1116A_Detalle_Movimiento_Cereal ON Movimiento_Cereal.IDMovimiento_Cereal = F1116A_Detalle_Movimiento_Cereal.IDMovimiento_Cereal " & mstrSQLWhere & " GROUP BY CartaPorte_Numero ORDER BY CartaPorte_Numero", pDatabase.Connection, adOpenStatic, adLockReadOnly, adCmdText
 
@@ -2965,7 +2962,7 @@ Private Function ExportCartasPorteEmitidas30(ByVal ExportPath As String) As Bool
     Do While Not recData_CartaPorte.EOF
         'CARGO LOS DATOS DE LA Movimiento_Cereal ACTUAL
         Set Movimiento_Cereal = New Movimiento_Cereal
-        Movimiento_Cereal.IDMovimiento_Cereal = recData_CartaPorte("IDMovimiento_Cereal").Value
+        Movimiento_Cereal.IDMovimiento_Cereal = recData_CartaPorte("IDMovimiento_Cereal").value
         If Not Movimiento_Cereal.Load() Then
             Unload CSF_Status
             Set CSF_Status = Nothing
@@ -3117,7 +3114,7 @@ ErrorHandler:
 End Function
 
 Private Function VerifyData() As Boolean
-    Dim recData_CartaPorte As ADODB.Recordset
+    Dim recData_CartaPorte As ADODB.recordset
     Dim Movimiento_Cereal As Movimiento_Cereal
     
     Dim ResultText As String
@@ -3130,7 +3127,7 @@ Private Function VerifyData() As Boolean
     DoEvents
 
     'ABRO UN NUEVO RECORDSET CON LOS FILTROS SELECCIONADOS
-    Set recData_CartaPorte = New ADODB.Recordset
+    Set recData_CartaPorte = New ADODB.recordset
 
     recData_CartaPorte.Open "SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.ComprobanteNumero FROM Movimiento_Cereal LEFT JOIN Formulario1116A_Detalle ON Movimiento_Cereal.IDMovimiento_Cereal = Formulario1116A_Detalle.IDMovimiento_Cereal " & mstrSQLWhere & " ORDER BY ComprobanteNumero", pDatabase.Connection, adOpenStatic, adLockReadOnly, adCmdText
     ResultText = "ID MOV. | C. PORTE Nº  |   FECHA    | MOTIVO"
@@ -3139,7 +3136,7 @@ Private Function VerifyData() As Boolean
     Do While Not recData_CartaPorte.EOF
         'CARGO LOS DATOS DEL Movimiento_Cereal ACTUAL
         Set Movimiento_Cereal = New Movimiento_Cereal
-        Movimiento_Cereal.IDMovimiento_Cereal = recData_CartaPorte("IDMovimiento_Cereal").Value
+        Movimiento_Cereal.IDMovimiento_Cereal = recData_CartaPorte("IDMovimiento_Cereal").value
         If Not Movimiento_Cereal.Load() Then
             Unload CSF_Status
             Set CSF_Status = Nothing
@@ -3219,3 +3216,88 @@ Private Function AgregarErrorCP(ByVal IDMovimiento_Cereal_Formatted As String, B
 
     AgregarErrorCP = AgregarErrorCP & ResultText
 End Function
+
+Private Sub ObtenerPesadasHumedadYZarandeo()
+    Dim DatabasePesadas As CSC_Database_ADO_SQL
+    Dim recData As ADODB.recordset
+    Dim movimiento As Movimiento_Cereal
+    Dim Pesadas As Pesadas
+    Dim Pesada As Pesada
+    Dim ResultadoObtencionPesadas As String
+    
+    If tdbgrdData.FirstRow = "" Then
+        MsgBox "No hay ningún movimiento para obtener la humedad y el zarandeo.", vbExclamation, App.Title
+        tdbgrdData.SetFocus
+        Exit Sub
+    End If
+    
+    If MsgBox("Se obtendrán las pesadas, la humedad y el zarandeo de los movimientos mostrados desde el sistema de balanza." & vbCrLf & vbCrLf & "¿Desea continuar?", vbQuestion + vbYesNo, App.Title) = vbNo Then
+        Exit Sub
+    End If
+    
+    ' Obtengo los parámetros de la base de datos de Pesadas
+    Set DatabasePesadas = New CSC_Database_ADO_SQL
+    Call DatabasePesadas.LoadParametersFromINI("DatabasePesadas")
+    If DatabasePesadas.Provider = "" Or DatabasePesadas.UserID = "" Or DatabasePesadas.DataSource = "" Then
+        MsgBox "Los datos de conexión a la base de datos de pesadas están incompletos.", vbExclamation, App.Title
+        tdbgrdData.SetFocus
+        Exit Sub
+    End If
+    
+    ' Abro la conexión a la base de datos de pesadas
+    If DatabasePesadas.Connect <> -1 Then
+        tdbgrdData.SetFocus
+        Exit Sub
+    End If
+    
+    ' Recorro los movimientos de la grilla
+    Set recData = tdbgrdData.DataSource
+    recData.MoveFirst
+    ResultadoObtencionPesadas = ""
+    Set movimiento = New Movimiento_Cereal
+    Do While Not recData.EOF
+        stbMain.SimpleText = "Obteniendo datos: " & recData.AbsolutePosition & " de " & recData.RecordCount & " (" & Format(recData.AbsolutePosition / recData.RecordCount, "Percent") & ")..."
+        DoEvents
+        movimiento.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
+        movimiento.RefreshListSkip = True
+        If movimiento.Load() Then
+            ' Obtengo las pesadas correspondientes al CTG
+            Set Pesadas = New Pesadas
+            If Not Pesadas.ObtenerPesadas(DatabasePesadas, movimiento.CTGNumero) Then
+                Set Pesadas = Nothing
+                movimiento = Nothing
+                recData.Close
+                Set recData = Nothing
+                DatabasePesadas.Disconnect
+                Set DatabasePesadas = Nothing
+                tdbgrdData.SetFocus
+                Exit Sub
+            End If
+            
+            For Each Pesada In Pesadas
+                movimiento.Movimiento_Cereal_PesadaCompleta_AddFromData Pesada.IDPesada, Pesada.KilogramoNeto, Pesada.Humedad, Pesada.Zaranda
+            Next
+
+            If Not movimiento.UpdatePesadasHumedadYZarandeo Then
+                Set Pesadas = Nothing
+                movimiento = Nothing
+                recData.Close
+                Set recData = Nothing
+                DatabasePesadas.Disconnect
+                Set DatabasePesadas = Nothing
+                tdbgrdData.SetFocus
+                Exit Sub
+            End If
+        End If
+        recData.MoveNext
+    Loop
+    recData.MoveFirst
+    RefreshList_Module.Movimiento_Cereal 0
+    Set movimiento = Nothing
+
+    If Not DatabasePesadas Is Nothing Then
+        Set DatabasePesadas = Nothing
+    End If
+    
+    tdbgrdData.SetFocus
+End Sub

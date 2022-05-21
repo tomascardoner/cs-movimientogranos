@@ -654,6 +654,7 @@ namespace CS_Importador_de_cartas_de_porte
 
                 // Reemplazo los valores posibles de Sociedad Anónima
                 valor = valor.Replace(" SOCIEDAD ANONIMA", " S.A.");
+                valor = valor.Replace(" SOCIEDAD ANONIM", " S.A.");
                 valor = valor.ReplaceEnd(" SA", " S.A.");
                 valor = valor.ReplaceEnd(" S A", " S.A.");
                 valor = valor.ReplaceEnd(" CIA S.A.", " CIA. S.A.");

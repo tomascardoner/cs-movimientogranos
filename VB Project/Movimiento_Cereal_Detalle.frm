@@ -1029,7 +1029,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   86245379
+         Format          =   59768835
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1075,7 +1075,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   86245377
+         Format          =   59768833
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1089,7 +1089,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   86245377
+         Format          =   59768833
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1104,7 +1104,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   86245379
+         Format          =   59768835
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2021,7 +2021,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   86245377
+         Format          =   59768833
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2156,7 +2156,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   86245377
+         Format          =   59768833
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2255,11 +2255,11 @@ Public Function Startup(ByRef Movimiento_Cereal As Movimiento_Cereal) As Boolean
     
     Call EnableAndShowControls
     
-    dtpFechaCarga.Value = Date
+    dtpFechaCarga.value = Date
     
     If CSM_Forms.IsLoaded("frmMovimiento_Cereal_Lista") Then
         If frmMovimiento_Cereal_Lista.cboFechaCargaDescargaOperacion.ListIndex = 1 Then
-            dtpFechaCarga.Value = frmMovimiento_Cereal_Lista.dtpFechaCargaDescarga_Desde.Value
+            dtpFechaCarga.value = frmMovimiento_Cereal_Lista.dtpFechaCargaDescarga_Desde.value
         End If
     End If
     
@@ -2291,16 +2291,16 @@ Public Function Startup(ByRef Movimiento_Cereal As Movimiento_Cereal) As Boolean
     Call CSM_Control_DataCombo.FillFromSQL(datcboCosecha, "usp_Cosecha_List 0, 1, " & mMovimiento_Cereal.IDCosecha, "IDCosecha", "Nombre", "Cosechas", cscpItemOrFirstIfUnique, pParametro.Cosecha_IDDefault)
     Call CSM_Control_DataCombo.FillFromSQL(datcboCereal, "usp_Cereal_List 0, 0, 1, " & mMovimiento_Cereal.IDCereal, "IDCereal", "Nombre", "Cereales", cscpFirstIfUnique)
     
-    dtpFechaArribo.Value = dtpFechaCarga.Value
-    dtpHoraArribo.Value = Time
+    dtpFechaArribo.value = dtpFechaCarga.value
+    dtpHoraArribo.value = Time
     
-    dtpFechaDescarga.Value = dtpFechaCarga.Value
-    dtpHoraDescarga.Value = Time
+    dtpFechaDescarga.value = dtpFechaCarga.value
+    dtpHoraDescarga.value = Time
     
     Call tabExtras_Click
     
-    dtpAnalisis_Fecha.Value = dtpFechaArribo.Value
-    dtpAnalisis_Fecha.Value = Null
+    dtpAnalisis_Fecha.value = dtpFechaArribo.value
+    dtpAnalisis_Fecha.value = Null
     
     Call CSM_Control_DataCombo.FillFromSQL(datcboAnulada, "usp_CartaPorte_MotivoAnulacion_List 0, 1, 0", "IDCartaPorte_MotivoAnulacion", "Nombre", "Motivos de anulación", cscpCurrentOrFirst)
     
@@ -2310,7 +2310,7 @@ End Function
 
 Public Function LoadData() As Boolean
     Dim Index As Integer
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     mLoading = True
     With mMovimiento_Cereal
@@ -2318,9 +2318,9 @@ Public Function LoadData() As Boolean
         
         'ENCABEZADO
         datcboEntidad_Titular.BoundText = .IDEntidad_Titular
-        dtpFechaCarga.Value = .FechaCarga_Formatted
+        dtpFechaCarga.value = .FechaCarga_Formatted
         maskedtextboxComprobanteNumero.Text = .ComprobanteNumeroConFormato
-        maskedtextboxCTGNumero.Text = .CTGNumero
+        maskedtextboxCtgNumero.Text = .CTGNumero
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
         datcboEntidad_Intermediario.BoundText = .IDEntidad_Intermediario
@@ -2361,18 +2361,18 @@ Public Function LoadData() As Boolean
         '5 - DATOS A COMPLETAR EN EL LUGAR DE DESTINO Y DESCARGA
         If .Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
             dtpFechaArribo.MinDate = DateSerial(2010, 12, 1)
-            dtpFechaArribo.Value = .FechaHoraArribo_FormattedAsDate
-            dtpHoraArribo.Value = .FechaHoraArribo_FormattedAsTime
+            dtpFechaArribo.value = .FechaHoraArribo_FormattedAsDate
+            dtpHoraArribo.value = .FechaHoraArribo_FormattedAsTime
             dtpFechaDescarga.MinDate = DateSerial(2010, 12, 1)
-            dtpFechaDescarga.Value = .FechaHoraDescarga_FormattedAsDate
-            dtpHoraDescarga.Value = .FechaHoraDescarga_FormattedAsTime
+            dtpFechaDescarga.value = .FechaHoraDescarga_FormattedAsDate
+            dtpHoraDescarga.value = .FechaHoraDescarga_FormattedAsTime
         Else
             dtpFechaArribo.MinDate = DATE_TIME_FIELD_NULL_VALUE
-            dtpFechaArribo.Value = DATE_TIME_FIELD_NULL_VALUE
-            dtpHoraArribo.Value = DATE_TIME_FIELD_NULL_VALUE
+            dtpFechaArribo.value = DATE_TIME_FIELD_NULL_VALUE
+            dtpHoraArribo.value = DATE_TIME_FIELD_NULL_VALUE
             dtpFechaDescarga.MinDate = DATE_TIME_FIELD_NULL_VALUE
-            dtpFechaDescarga.Value = DATE_TIME_FIELD_NULL_VALUE
-            dtpHoraDescarga.Value = DATE_TIME_FIELD_NULL_VALUE
+            dtpFechaDescarga.value = DATE_TIME_FIELD_NULL_VALUE
+            dtpHoraDescarga.value = DATE_TIME_FIELD_NULL_VALUE
         End If
         
         'PESADAS
@@ -2404,20 +2404,20 @@ Public Function LoadData() As Boolean
         mMovimiento_Cereal_Analisis.IDMovimiento_Cereal = .IDMovimiento_Cereal
         mMovimiento_Cereal_Analisis.NoMatchRaiseError = False
         If mMovimiento_Cereal_Analisis.Load And Not mMovimiento_Cereal_Analisis.NoMatch Then
-            dtpAnalisis_Fecha.Value = CSM_Function.IfIsZeroDate_Null(mMovimiento_Cereal_Analisis.Fecha)
+            dtpAnalisis_Fecha.value = CSM_Function.IfIsZeroDate_Null(mMovimiento_Cereal_Analisis.Fecha)
             txtAnalisis_MuestraNumero.Text = mMovimiento_Cereal_Analisis.MuestraNumero
             cboAnalisis_ResultadoIPRO.ListIndex = CSM_Function.CheckBoxValue2ComboboxListIndex(mMovimiento_Cereal_Analisis.ResultadoIPRO)
         Else
             If .Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
-                dtpAnalisis_Fecha.Value = dtpFechaArribo.Value
+                dtpAnalisis_Fecha.value = dtpFechaArribo.value
             End If
-            dtpAnalisis_Fecha.Value = Null
+            dtpAnalisis_Fecha.value = Null
             txtAnalisis_MuestraNumero.Text = ""
             cboAnalisis_ResultadoIPRO.ListIndex = 0
         End If
         
         'EXTRAS
-        chkDeclaraIPRO.Value = IIf(.DeclaraIPRO, vbChecked, vbUnchecked)
+        chkDeclaraIPRO.value = IIf(.DeclaraIPRO, vbChecked, vbUnchecked)
         datcboAnulada.BoundText = .IDCartaPorte_MotivoAnulacion
         txtNotas.Text = .Notas
         
@@ -2521,23 +2521,23 @@ End Sub
 '============================================================
 'CTG NUMERO
 Private Sub maskedtextboxCtgNumero_GotFocus()
-    maskedtextboxCTGNumero.SelStart = 0
-    maskedtextboxCTGNumero.SelLength = Len(maskedtextboxCTGNumero.Text)
+    maskedtextboxCtgNumero.SelStart = 0
+    maskedtextboxCtgNumero.SelLength = Len(maskedtextboxCtgNumero.Text)
 End Sub
 
 Private Sub cmdVerificarDuplicado_Click()
     Dim Movimiento_Cereal As Movimiento_Cereal
     
-    If maskedtextboxCTGNumero.Text = "" Then
+    If maskedtextboxCtgNumero.Text = "" Then
         MsgBox "Debe especificar el C.T.G.", vbInformation, App.Title
-        If maskedtextboxCTGNumero.Enabled Then
-            maskedtextboxCTGNumero.SetFocus
+        If maskedtextboxCtgNumero.Enabled Then
+            maskedtextboxCtgNumero.SetFocus
         End If
         Exit Sub
     End If
     
     Set Movimiento_Cereal = New Movimiento_Cereal
-    Movimiento_Cereal.CTGNumero = maskedtextboxCTGNumero.Text
+    Movimiento_Cereal.CTGNumero = maskedtextboxCtgNumero.Text
     Movimiento_Cereal.NoMatchRaiseError = False
     If Movimiento_Cereal.LoadByCtgNumero() Then
         If Not Movimiento_Cereal.NoMatch Then
@@ -2557,18 +2557,18 @@ End Sub
 '============================================================
 'FECHA CARGA
 Private Sub cmdFechaCarga_Anterior_Click()
-    dtpFechaCarga.Value = DateAdd("d", -1, dtpFechaCarga.Value)
+    dtpFechaCarga.value = DateAdd("d", -1, dtpFechaCarga.value)
     dtpFechaCarga.SetFocus
     dtpFechaCarga_Change
 End Sub
 
 Private Sub dtpFechaCarga_Change()
-    dtpFechaArribo.Value = dtpFechaCarga.Value
+    dtpFechaArribo.value = dtpFechaCarga.value
     dtpFechaArribo_Change
 End Sub
 
 Private Sub cmdFechaCarga_Siguiente_Click()
-    dtpFechaCarga.Value = DateAdd("d", 1, dtpFechaCarga.Value)
+    dtpFechaCarga.value = DateAdd("d", 1, dtpFechaCarga.value)
     dtpFechaCarga.SetFocus
     dtpFechaCarga_Change
 End Sub
@@ -2576,10 +2576,10 @@ End Sub
 Private Sub cmdFechaCarga_Hoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaCarga.Value
-    dtpFechaCarga.Value = Date
+    OldValue = dtpFechaCarga.value
+    dtpFechaCarga.value = Date
     dtpFechaCarga.SetFocus
-    If OldValue <> dtpFechaCarga.Value Then
+    If OldValue <> dtpFechaCarga.value Then
         dtpFechaCarga_Change
     End If
 End Sub
@@ -2639,7 +2639,7 @@ Private Sub datcboEntidad_Transportista_Change()
     txtTransporteCamion.Text = ""
     txtTransporteAcoplado.Text = ""
     
-    Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Chofer, "usp_Entidad_Chofer_List 0, 1, " & IIf(chkEntidad_Chofer_Todos.Value = vbChecked, "NULL", Val(datcboEntidad_Transportista.BoundText)) & ", " & mMovimiento_Cereal.IDEntidad_Chofer, "IDEntidad", "Nombre", "Choferes", cscpItemOrFirstIfUnique, KeySave)
+    Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Chofer, "usp_Entidad_Chofer_List 0, 1, " & IIf(chkEntidad_Chofer_Todos.value = vbChecked, "NULL", Val(datcboEntidad_Transportista.BoundText)) & ", " & mMovimiento_Cereal.IDEntidad_Chofer, "IDEntidad", "Nombre", "Choferes", cscpItemOrFirstIfUnique, KeySave)
 End Sub
 
 '============================================================
@@ -2973,32 +2973,32 @@ End Sub
 '============================================================
 'FECHA ARRIBO
 Private Sub dtpFechaArribo_Change()
-    dtpFechaDescarga.Value = dtpFechaArribo.Value
+    dtpFechaDescarga.value = dtpFechaArribo.value
 
-    If IsNull(dtpAnalisis_Fecha.Value) Then
-        dtpAnalisis_Fecha.Value = dtpFechaArribo.Value
-        dtpAnalisis_Fecha.Value = Null
+    If IsNull(dtpAnalisis_Fecha.value) Then
+        dtpAnalisis_Fecha.value = dtpFechaArribo.value
+        dtpAnalisis_Fecha.value = Null
     Else
-        If DateDiff("d", dtpAnalisis_Fecha.Value, dtpFechaArribo.Value) > 0 Then
-        dtpAnalisis_Fecha.Value = dtpFechaArribo.Value
+        If DateDiff("d", dtpAnalisis_Fecha.value, dtpFechaArribo.value) > 0 Then
+        dtpAnalisis_Fecha.value = dtpFechaArribo.value
         End If
     End If
 End Sub
 
 Private Sub cmdFechaArribo_Anterior_Click()
-    dtpFechaArribo.Value = DateAdd("d", -1, dtpFechaArribo.Value)
+    dtpFechaArribo.value = DateAdd("d", -1, dtpFechaArribo.value)
     dtpFechaArribo.SetFocus
     dtpFechaArribo_Change
 End Sub
 
 Private Sub cmdFechaArribo_Siguiente_Click()
-    dtpFechaArribo.Value = DateAdd("d", 1, dtpFechaArribo.Value)
+    dtpFechaArribo.value = DateAdd("d", 1, dtpFechaArribo.value)
     dtpFechaArribo.SetFocus
     dtpFechaArribo_Change
 End Sub
 
 Private Sub cmdFechaArribo_Hoy_Click()
-    dtpFechaArribo.Value = Date
+    dtpFechaArribo.value = Date
     dtpFechaArribo.SetFocus
     dtpFechaArribo_Change
 End Sub
@@ -3006,17 +3006,17 @@ End Sub
 '============================================================
 'FECHA DESCARGA
 Private Sub cmdFechaDescarga_Anterior_Click()
-    dtpFechaDescarga.Value = DateAdd("d", -1, dtpFechaDescarga.Value)
+    dtpFechaDescarga.value = DateAdd("d", -1, dtpFechaDescarga.value)
     dtpFechaDescarga.SetFocus
 End Sub
 
 Private Sub cmdFechaDescarga_Siguiente_Click()
-    dtpFechaDescarga.Value = DateAdd("d", 1, dtpFechaDescarga.Value)
+    dtpFechaDescarga.value = DateAdd("d", 1, dtpFechaDescarga.value)
     dtpFechaDescarga.SetFocus
 End Sub
 
 Private Sub cmdFechaDescarga_Hoy_Click()
-    dtpFechaDescarga.Value = Date
+    dtpFechaDescarga.value = Date
     dtpFechaDescarga.SetFocus
 End Sub
 
@@ -3121,6 +3121,8 @@ Private Sub cmdPesadasCalcular_Click()
     
     Dim PesoNeto As Long
     Dim SumaPesoNetoPesadas As Long
+    Dim SumaHumedades As Single
+    Dim CantidadHumedades As Byte
     
     Dim Humedad As Single
     Dim Cereal As Cereal
@@ -3159,37 +3161,37 @@ Private Sub cmdPesadasCalcular_Click()
         End If
         
         'OBTENGO LAS MERMAS POR HUMEDAD
-        With Cereal
-            If .NoMatch = False Then
-                If Trim(txtPesadaCompleta_Humedad(Index).Text) <> "" Then
-                    If IsNumeric(txtPesadaCompleta_Humedad(Index).Text) Then
-                        Humedad = CSng(txtPesadaCompleta_Humedad(Index).Text)
-                        If Humedad >= 0 And Humedad < 50 Then
-                            If Not IsNull(.MermaHumedadBase) Then
-                                If Humedad > .MermaHumedadBase Then
-                                    'EL MANIPULEO NO CORRESPONDE PORQUE YA SE VA A RESTAR EN LA CP
-                                    'MermaSecadoPorcentaje = .MermaSecadoManipuleo
-                                    'MermaSecado = PesoNeto * .MermaSecadoManipuleo_ForCalculate
-                                    Set Cereal_Humedad = New Cereal_Humedad
-                                    Cereal_Humedad.IDCereal = Cereal.IDCereal
-                                    Cereal_Humedad.Humedad = Humedad
-                                    Cereal_Humedad.NoMatchRaiseError = False
-                                    If Cereal_Humedad.Load() Then
-                                        If Cereal_Humedad.NoMatch Then
-                                            Screen.MousePointer = vbDefault
-                                            MsgBox "No está especificada la merma de humedad " & txtPesadaCompleta_Humedad(Index).Text & " para el Cereal: " & .Nombre & ".", vbExclamation, App.Title
-                                        Else
-                                            MermaSecadoTotal = MermaSecadoTotal + (PesoNeto * Cereal_Humedad.Merma_ForCalculate)
-                                        End If
+        If Cereal.NoMatch = False Then
+            If Trim(txtPesadaCompleta_Humedad(Index).Text) <> "" Then
+                If IsNumeric(txtPesadaCompleta_Humedad(Index).Text) Then
+                    Humedad = CSng(txtPesadaCompleta_Humedad(Index).Text)
+                    If Humedad >= 0 And Humedad < 50 Then
+                        SumaHumedades = SumaHumedades + Humedad
+                        CantidadHumedades = CantidadHumedades + 1
+                        If Not IsNull(Cereal.MermaHumedadBase) Then
+                            If Humedad > Cereal.MermaHumedadBase Then
+                                'EL MANIPULEO NO CORRESPONDE PORQUE YA SE VA A RESTAR EN LA CP
+                                'MermaSecadoPorcentaje = .MermaSecadoManipuleo
+                                'MermaSecado = PesoNeto * .MermaSecadoManipuleo_ForCalculate
+                                Set Cereal_Humedad = New Cereal_Humedad
+                                Cereal_Humedad.IDCereal = Cereal.IDCereal
+                                Cereal_Humedad.Humedad = Humedad
+                                Cereal_Humedad.NoMatchRaiseError = False
+                                If Cereal_Humedad.Load() Then
+                                    If Cereal_Humedad.NoMatch Then
+                                        Screen.MousePointer = vbDefault
+                                        MsgBox "No está especificada la merma de humedad " & txtPesadaCompleta_Humedad(Index).Text & " para el Cereal: " & Cereal.Nombre & ".", vbExclamation, App.Title
+                                    Else
+                                        MermaSecadoTotal = MermaSecadoTotal + (PesoNeto * Cereal_Humedad.Merma_ForCalculate)
                                     End If
-                                    Set Cereal_Humedad = Nothing
                                 End If
+                                Set Cereal_Humedad = Nothing
                             End If
                         End If
                     End If
                 End If
             End If
-        End With
+        End If
         
         'OBTENGO LAS MERMAS POR ZARANDEO
         If Trim(txtPesadaCompleta_Zaranda(Index).Text) <> "" Then
@@ -3203,7 +3205,9 @@ Private Sub cmdPesadasCalcular_Click()
     Next Index
     
     'CALCULO LA HUMEDAD CORRESPONDIENTE A LA SUMA DE LAS MERMAS DE LAS PESADAS
-    If SumaPesoNetoPesadas > 0 And MermaSecadoTotal > 0 Then
+    If MermaSecadoTotal = 0 Then
+        txtHumedad.Text = Round(SumaHumedades / CantidadHumedades, 1)
+    ElseIf SumaPesoNetoPesadas > 0 Then
         Set Cereal_Humedad = New Cereal_Humedad
         Cereal_Humedad.IDCereal = Cereal.IDCereal
         Cereal_Humedad.Merma = MermaSecadoTotal / SumaPesoNetoPesadas * 100
@@ -3218,7 +3222,7 @@ Private Sub cmdPesadasCalcular_Click()
     Set Cereal = Nothing
     
     'CALCULO LA ZARANDA CORRESPONDIENTE A LA SUMA DE LAS MERMAS DE LAS PESADAS
-    If SumaPesoNetoPesadas > 0 And MermaZarandaTotal > 0 Then
+    If SumaPesoNetoPesadas > 0 Then
         txtZaranda.Text = Round((MermaZarandaTotal / SumaPesoNetoPesadas * 100) + 0.04, 1)
         Call txtZaranda_LostFocus
     End If
@@ -3281,8 +3285,8 @@ Private Sub Aceptar_Todos()
     With mMovimiento_Cereal
         'ENCABEZADO
         .ComprobanteNumero = Trim(maskedtextboxComprobanteNumero.Text)
-        .CTGNumero = maskedtextboxCTGNumero.Text
-        .FechaCarga = dtpFechaCarga.Value
+        .CTGNumero = maskedtextboxCtgNumero.Text
+        .FechaCarga = dtpFechaCarga.value
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
         .IDEntidad_Titular = Val(datcboEntidad_Titular.BoundText)
@@ -3323,8 +3327,8 @@ Private Sub Aceptar_Todos()
         .TransporteTarifa_Formatted = txtTransporteTarifa.Text
         
         '5 - DATOS A COMPLETAR EN EL LUGAR DE DESTINO Y DESCARGA
-        .FechaHoraArribo = Format(dtpFechaArribo.Value, "Short Date") & " " & Format(dtpHoraArribo.Value, "Short Time")
-        .FechaHoraDescarga = Format(dtpFechaDescarga.Value, "Short Date") & " " & Format(dtpHoraDescarga.Value, "Short Time")
+        .FechaHoraArribo = Format(dtpFechaArribo.value, "Short Date") & " " & Format(dtpHoraArribo.value, "Short Time")
+        .FechaHoraDescarga = Format(dtpFechaDescarga.value, "Short Date") & " " & Format(dtpHoraDescarga.value, "Short Time")
         
         'PESADAS
         For Index = 0 To 5
@@ -3340,7 +3344,7 @@ Private Sub Aceptar_Todos()
         Next Index
         
         'EXTRAS
-        .DeclaraIPRO = (chkDeclaraIPRO.Value = vbChecked)
+        .DeclaraIPRO = (chkDeclaraIPRO.value = vbChecked)
         .IDCartaPorte_MotivoAnulacion = Val(datcboAnulada.BoundText)
         .Notas = txtNotas.Text
         
@@ -3352,7 +3356,7 @@ Private Sub Aceptar_Todos()
     'ANÁLISIS
     Dim Movimiento_Cereal_Analisis_Actual As Movimiento_Cereal_Analisis
     
-    If IsNull(dtpAnalisis_Fecha.Value) And Trim(txtAnalisis_MuestraNumero.Text) = "" And cboAnalisis_ResultadoIPRO.ListIndex = 0 Then
+    If IsNull(dtpAnalisis_Fecha.value) And Trim(txtAnalisis_MuestraNumero.Text) = "" And cboAnalisis_ResultadoIPRO.ListIndex = 0 Then
         ' No se ingresaron datos de análisis
         If Not mMovimiento_Cereal.IsNew Then
             ' Es un movimiento existente, así que si existe el registro, lo elimino
@@ -3368,7 +3372,7 @@ Private Sub Aceptar_Todos()
         ' Se ingresaron los datos del análisis
         With mMovimiento_Cereal_Analisis
             .IDMovimiento_Cereal = mMovimiento_Cereal.IDMovimiento_Cereal
-            .Fecha = dtpAnalisis_Fecha.Value
+            .Fecha = dtpAnalisis_Fecha.value
             .MuestraNumero = IIf(Trim(txtAnalisis_MuestraNumero.Text) = "", 0, Trim(txtAnalisis_MuestraNumero.Text))
             .ResultadoIPRO = CSM_Function.ComboboxListIndex2CheckBoxValue(cboAnalisis_ResultadoIPRO.ListIndex)
             If Not .Update Then
@@ -3386,7 +3390,7 @@ Private Function VerificarDatosEncabezado() As Boolean
         datcboEntidad_Titular.SetFocus
         Exit Function
     End If
-    If DateDiff("d", dtpFechaCarga.Value, Date) < 0 Then
+    If DateDiff("d", dtpFechaCarga.value, Date) < 0 Then
         MsgBox "La Fecha de Carga no debe ser posterior al día de hoy.", vbInformation, App.Title
         dtpFechaCarga.SetFocus
         Exit Function
@@ -3422,14 +3426,14 @@ Private Function VerificarDatosEncabezado() As Boolean
     
     ' Verifico el C.T.G.
     If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If maskedtextboxCTGNumero.Text = "" Then
+        If maskedtextboxCtgNumero.Text = "" Then
             MsgBox "Debe especificar el Número de C.T.G.", vbInformation, App.Title
-            maskedtextboxCTGNumero.SetFocus
+            maskedtextboxCtgNumero.SetFocus
             Exit Function
         End If
-        If Len(maskedtextboxCTGNumero.Text) < 11 Then
+        If Len(maskedtextboxCtgNumero.Text) < 11 Then
             MsgBox "El Número de C.T.G. debe contener 11 dígitos.", vbInformation, App.Title
-            maskedtextboxCTGNumero.SetFocus
+            maskedtextboxCtgNumero.SetFocus
             Exit Function
         End If
     End If
@@ -3690,7 +3694,7 @@ Private Function VerificarDatosDescarga() As Boolean
     
     If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
         ' Fecha/hora de arribo
-        Select Case DateDiff("d", dtpFechaCarga.Value, dtpFechaArribo.Value)
+        Select Case DateDiff("d", dtpFechaCarga.value, dtpFechaArribo.value)
             Case Is < 0
                 MsgBox "La Fecha de Arribo no debe ser anterior a la Fecha de Carga.", vbInformation, App.Title
                 dtpFechaArribo.SetFocus
@@ -3702,8 +3706,8 @@ Private Function VerificarDatosDescarga() As Boolean
         End Select
         
         ' Fecha/hora de descarga
-        FechaHoraArribo = CDate(Format(dtpFechaArribo.Value, "Short Date") & " " & Format(dtpHoraArribo.Value, "Short Time"))
-        FechaHoraDescarga = CDate(Format(dtpFechaDescarga.Value, "Short Date") & " " & Format(dtpHoraDescarga.Value, "Short Time"))
+        FechaHoraArribo = CDate(Format(dtpFechaArribo.value, "Short Date") & " " & Format(dtpHoraArribo.value, "Short Time"))
+        FechaHoraDescarga = CDate(Format(dtpFechaDescarga.value, "Short Date") & " " & Format(dtpHoraDescarga.value, "Short Time"))
         If FechaHoraDescarga < FechaHoraArribo Then
             MsgBox "La Fecha/Hora de Descarga debe ser igual o posterior a la Fecha/Hora de Arribo.", vbInformation, App.Title
             dtpFechaDescarga.SetFocus
@@ -3852,7 +3856,7 @@ Private Function VerificarDatosAnalisis() As Boolean
                 Exit Function
             Else
                 If ent_od.RealizaAnalisisIPRO Then
-                    If IsNull(dtpAnalisis_Fecha.Value) Then
+                    If IsNull(dtpAnalisis_Fecha.value) Then
                         tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
                         MsgBox "Debe ingresar la Fecha de Análisis.", vbInformation, App.Title
                         dtpAnalisis_Fecha.SetFocus
@@ -3864,7 +3868,7 @@ Private Function VerificarDatosAnalisis() As Boolean
                         txtAnalisis_MuestraNumero.SetFocus
                         Exit Function
                     End If
-                    If chkDeclaraIPRO.Value = vbUnchecked And cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
+                    If chkDeclaraIPRO.value = vbUnchecked And cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
                         tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
                         MsgBox "Debe especificar el Resultado IPRO del Análisis.", vbInformation, App.Title
                         cboAnalisis_ResultadoIPRO.SetFocus
@@ -3877,9 +3881,9 @@ Private Function VerificarDatosAnalisis() As Boolean
     End If
     Set cer = Nothing
     
-    If Not IsNull(dtpAnalisis_Fecha.Value) Then
+    If Not IsNull(dtpAnalisis_Fecha.value) Then
         ' Fecha de análisis
-        Select Case DateDiff("d", dtpFechaArribo.Value, dtpAnalisis_Fecha.Value)
+        Select Case DateDiff("d", dtpFechaArribo.value, dtpAnalisis_Fecha.value)
             Case Is < 0
                 MsgBox "La Fecha de Análisis no debe ser anterior a la Fecha de Arribo.", vbInformation, App.Title
                 dtpFechaArribo.SetFocus
@@ -3912,15 +3916,15 @@ Private Sub Aceptar_Analisis()
     Dim Movimiento_Cereal_Analisis_Actual As Movimiento_Cereal_Analisis
     
     ' EXTRAS
-    If mMovimiento_Cereal.DeclaraIPRO <> (chkDeclaraIPRO.Value = vbChecked) Then
-        mMovimiento_Cereal.DeclaraIPRO = (chkDeclaraIPRO.Value = vbChecked)
+    If mMovimiento_Cereal.DeclaraIPRO <> (chkDeclaraIPRO.value = vbChecked) Then
+        mMovimiento_Cereal.DeclaraIPRO = (chkDeclaraIPRO.value = vbChecked)
         If Not mMovimiento_Cereal.Update Then
             Exit Sub
         End If
     End If
     
     ' ANALISIS
-    If IsNull(dtpAnalisis_Fecha.Value) And Trim(txtAnalisis_MuestraNumero.Text) = "" And cboAnalisis_ResultadoIPRO.ListIndex = 0 Then
+    If IsNull(dtpAnalisis_Fecha.value) And Trim(txtAnalisis_MuestraNumero.Text) = "" And cboAnalisis_ResultadoIPRO.ListIndex = 0 Then
         ' No se ingresaron datos de análisis
         If Not mMovimiento_Cereal.IsNew Then
             ' Es un movimiento existente, así que si existe el registro, lo elimino
@@ -3936,7 +3940,7 @@ Private Sub Aceptar_Analisis()
         ' Se ingresaron los datos del análisis
         With mMovimiento_Cereal_Analisis
             .IDMovimiento_Cereal = mMovimiento_Cereal.IDMovimiento_Cereal
-            .Fecha = dtpAnalisis_Fecha.Value
+            .Fecha = dtpAnalisis_Fecha.value
             .MuestraNumero = IIf(Trim(txtAnalisis_MuestraNumero.Text) = "", 0, Trim(txtAnalisis_MuestraNumero.Text))
             .ResultadoIPRO = CSM_Function.ComboboxListIndex2CheckBoxValue(cboAnalisis_ResultadoIPRO.ListIndex)
             If Not .Update Then
@@ -3956,7 +3960,7 @@ Private Sub EnableAndShowControls()
     maskedtextboxComprobanteNumero.Enabled = Not (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE)
 
     lblCTGNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
-    maskedtextboxCTGNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
+    maskedtextboxCtgNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
     
     lblEntidad_Intermediario.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
     datcboEntidad_Intermediario.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
@@ -4008,7 +4012,7 @@ End Sub
 
 Public Function FillComboBox_Entidad_Titular() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Titular.BoundText)
     Set recData = datcboEntidad_Titular.RowSource
@@ -4019,7 +4023,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Intermediario() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Intermediario.BoundText)
     Set recData = datcboEntidad_Intermediario.RowSource
@@ -4030,7 +4034,7 @@ End Function
 
 Public Function FillComboBox_Entidad_RemitenteComercial() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_RemitenteComercial.BoundText)
     Set recData = datcboEntidad_RemitenteComercial.RowSource
@@ -4041,7 +4045,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Corredor() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Corredor.BoundText)
     Set recData = datcboEntidad_Corredor.RowSource
@@ -4052,7 +4056,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Entregador() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Entregador.BoundText)
     Set recData = datcboEntidad_Entregador.RowSource
@@ -4063,7 +4067,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Destinatario() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Destinatario.BoundText)
     Set recData = datcboEntidad_Destinatario.RowSource
@@ -4074,7 +4078,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Destino() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Destino.BoundText)
     Set recData = datcboEntidad_Destino.RowSource
@@ -4085,7 +4089,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Transportista() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Transportista.BoundText)
     Set recData = datcboEntidad_Transportista.RowSource
@@ -4096,7 +4100,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Chofer() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     On Error Resume Next
     KeySave = Val(datcboEntidad_Chofer.BoundText)
@@ -4108,7 +4112,7 @@ End Function
 
 Public Function FillComboBox_Cosecha() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboCosecha.BoundText)
     Set recData = datcboCosecha.RowSource
@@ -4119,7 +4123,7 @@ End Function
 
 Public Function FillComboBox_Cereal() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboCereal.BoundText)
     Set recData = datcboCereal.RowSource
@@ -4130,7 +4134,7 @@ End Function
 
 Public Function FillComboBox_Contrato() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboContrato.BoundText)
     Set recData = datcboContrato.RowSource
@@ -4141,7 +4145,7 @@ End Function
 
 Public Function FillComboBox_Procedencia() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     On Error Resume Next
     KeySave = Val(datcboProcedencia.BoundText)
@@ -4153,7 +4157,7 @@ End Function
 
 Public Function FillComboBox_Destino() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     On Error Resume Next
     KeySave = Val(datcboDestino.BoundText)
@@ -4165,7 +4169,7 @@ End Function
 
 Private Sub Navegar(ByVal Position As String)
     Dim Movimiento_Cereal As Movimiento_Cereal
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     If CSM_Forms.IsLoaded("frmMovimiento_Cereal_Lista") Then
         Set recData = frmMovimiento_Cereal_Lista.tdbgrdData.DataSource
@@ -4176,7 +4180,7 @@ Private Sub Navegar(ByVal Position As String)
                     If recData.AbsolutePosition > 1 Then
                         recData.MoveFirst
                         Set Movimiento_Cereal = New Movimiento_Cereal
-                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").Value
+                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").value
                         If Movimiento_Cereal.Load() Then
                             Call Me.Startup(Movimiento_Cereal)
                             Call Me.LoadData
@@ -4187,7 +4191,7 @@ Private Sub Navegar(ByVal Position As String)
                     If recData.AbsolutePosition > 1 Then
                         recData.MovePrevious
                         Set Movimiento_Cereal = New Movimiento_Cereal
-                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").Value
+                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").value
                         If Movimiento_Cereal.Load() Then
                             Call Me.Startup(Movimiento_Cereal)
                             Call Me.LoadData
@@ -4198,7 +4202,7 @@ Private Sub Navegar(ByVal Position As String)
                     If recData.AbsolutePosition < recData.RecordCount Then
                         recData.MoveNext
                         Set Movimiento_Cereal = New Movimiento_Cereal
-                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").Value
+                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").value
                         If Movimiento_Cereal.Load() Then
                             Call Me.Startup(Movimiento_Cereal)
                             Call Me.LoadData
@@ -4209,7 +4213,7 @@ Private Sub Navegar(ByVal Position As String)
                     If recData.AbsolutePosition < recData.RecordCount Then
                         recData.MoveLast
                         Set Movimiento_Cereal = New Movimiento_Cereal
-                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").Value
+                        Movimiento_Cereal.IDMovimiento_Cereal = recData("IDMovimiento_Cereal").value
                         If Movimiento_Cereal.Load() Then
                             Call Me.Startup(Movimiento_Cereal)
                             Call Me.LoadData

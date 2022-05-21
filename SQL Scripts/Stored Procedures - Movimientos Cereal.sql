@@ -253,6 +253,189 @@ GO
 
 -- =============================================
 -- Author:		Tomás A. Cardoner
+-- Create date: 2022-05-17
+-- Description:	Parsea las pesadas y las agrega a la tabla correspondiente
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movimiento_Cereal_ParseAndInsertPesadas') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_Movimiento_Cereal_ParseAndInsertPesadas
+GO
+
+CREATE PROCEDURE usp_Movimiento_Cereal_ParseAndInsertPesadas
+	@IDMovimiento_Cereal int,
+	@StringListOfIDPesadaCompleta varchar(1000)
+AS
+BEGIN
+	DECLARE @Separator char(1) = '|'
+	DECLARE @Delimiter char(1) = '¬'
+	DECLARE @NullValueString char(4) = 'NULL'
+
+	DECLARE @SeparatorPos int = 0
+	DECLARE @DelimiterPosStart int = 0
+	DECLARE @DelimiterPosEnd int = 0
+	DECLARE @ValuePairLen int
+	DECLARE @ValuePair varchar(25)
+
+	DECLARE @IDPesada int
+	DECLARE @PesoNeto int
+	DECLARE @Humedad decimal(3,1)
+	DECLARE @Zaranda decimal(3,1)
+
+	WHILE CHARINDEX(@Separator, @StringListOfIDPesadaCompleta, @SeparatorPos + 1) > 0
+		BEGIN
+			SET @ValuePairLen = CHARINDEX(@Separator, @StringListOfIDPesadaCompleta, @SeparatorPos + 1) - @SeparatorPos
+			SET @ValuePair = SUBSTRING(@StringListOfIDPesadaCompleta, @SeparatorPos, @ValuePairLen)
+					
+			--ID PESADA
+			SET @DelimiterPosStart = CHARINDEX(@Delimiter, @ValuePair, 1)
+			IF @DelimiterPosStart > 0
+				SET @IDPesada = CAST(SUBSTRING(@ValuePair, 1, @DelimiterPosStart - 1) AS int)
+					
+			--PESO NETO
+			SET @DelimiterPosEnd = CHARINDEX(@Delimiter, @ValuePair, @DelimiterPosStart + 1)
+			IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) = @NullValueString
+				SET @PesoNeto = NULL
+			ELSE
+				SET @PesoNeto = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) AS int)
+					
+			--HUMEDAD
+			SET @DelimiterPosStart = @DelimiterPosEnd
+			SET @DelimiterPosEnd = CHARINDEX(@Delimiter, @ValuePair, @DelimiterPosStart + 1)
+			IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) = @NullValueString
+				SET @Humedad = NULL
+			ELSE
+				SET @Humedad = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) AS decimal(3,1))
+					
+			--ZARANDA
+			SET @DelimiterPosStart = @DelimiterPosEnd
+			IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, 25) = @NullValueString
+				SET @Zaranda = NULL
+			ELSE
+				SET @Zaranda = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, 25) AS decimal(3,1))
+					
+			INSERT INTO Movimiento_Cereal_Pesada
+				(IDMovimiento_Cereal, IDPesada, PesoNeto, Humedad, Zaranda)
+				VALUES (@IDMovimiento_Cereal, @IDPesada, @PesoNeto, @Humedad, @Zaranda)
+					
+			SET @SeparatorPos = CHARINDEX(@Separator, @StringListOfIDPesadaCompleta, @SeparatorPos + @ValuePairLen) + 1
+		END
+	RETURN
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
+-- Create date: 2022-05-17
+-- Description:	Calcula la humedad y el zarandeo desde las pesadas
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples
+GO
+
+CREATE PROCEDURE usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples
+	@IDMovimiento_Cereal int,
+	@IDUsuario tinyint
+AS
+BEGIN
+	DECLARE @CantidadPesadas int
+	DECLARE @SumaHumedades decimal(3,1)
+	DECLARE @CantidadHumedades tinyint
+
+	DECLARE @IDCereal tinyint
+	DECLARE @MermaHumedadBase decimal(3,1)
+
+	DECLARE @PesoNeto int
+	DECLARE @Humedad decimal(3,1)
+	DECLARE @Zaranda decimal(3,1)
+
+	DECLARE @HumedadMerma decimal(4,2)
+	DECLARE @KilogramoNetoTotal int = 0
+	DECLARE @MermaSecadoTotal int = 0
+	DECLARE @MermaZarandeoTotal int = 0
+
+	-- OBTENGO LA CANTIDAD DE PESADAS ASOCIADAS A LA CARTA DE PORTE
+	SET @CantidadPesadas = (SELECT COUNT(*) FROM Movimiento_Cereal_Pesada WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal)
+
+	-- OBTENGO EL ID DEL CEREAL DESDE LA CARTA DE PORTE
+	SELECT @IDCereal = IDCereal FROM Movimiento_Cereal WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+
+	-- OBTENGO LA INFORMACIÓN DEL CEREAL
+	SELECT @MermaHumedadBase = MermaHumedadBase FROM Cereal WHERE IDCereal = @IDCereal
+
+	IF @CantidadPesadas = 1
+		-- OBTENGO LOS DATOS DESDE LA ÚNICA PESADA
+		SELECT @Humedad = Humedad, @Zaranda = Zaranda FROM Movimiento_Cereal_Pesada WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+
+	IF @CantidadPesadas > 1
+		BEGIN
+		-- CALCULO LAS MERMAS DE CADA UNA DE LAS PESADAS PARA BUSCAR EL PORCENTAJE DE HUMEDAD y ZARANDEO MÁS PRECISO
+		DECLARE CursorPesadas CURSOR LOCAL FORWARD_ONLY STATIC FOR
+			SELECT PesoNeto, Humedad, Zaranda
+				FROM Movimiento_Cereal_Pesada
+				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+
+		OPEN CursorPesadas
+		FETCH NEXT FROM CursorPesadas INTO @PesoNeto, @Humedad, @Zaranda
+
+		WHILE @@FETCH_STATUS = 0
+			BEGIN
+			-- SUMO LOS KILOGRAMOS DE CADA PESADA
+			SET @KilogramoNetoTotal = @KilogramoNetoTotal + @PesoNeto
+
+			-- CALCULO LA MERMA POR HUMEDAD
+			IF @MermaHumedadBase IS NOT NULL AND @Humedad IS NOT NULL
+				IF @Humedad > 0 AND @Humedad < 50
+					BEGIN
+					SET @CantidadHumedades = @CantidadHumedades + 1
+					SET @SumaHumedades = @SumaHumedades + @Humedad
+					IF @Humedad > @MermaHumedadBase
+						BEGIN
+						SELECT @HumedadMerma = Merma FROM Cereal_Humedad WHERE IDCereal = @IDCereal AND Humedad = @Humedad
+						IF @HumedadMerma IS NOT NULL
+							SET @MermaSecadoTotal = @MermaSecadoTotal + (@PesoNeto * @HumedadMerma / 100)
+						END
+					END
+
+					
+
+			-- CALCULO LA MERMA POR ZARANDEO
+			IF @Zaranda IS NOT NULL
+				IF @Zaranda > 0 AND @Zaranda < 50
+					SET @MermaZarandeoTotal = @MermaZarandeoTotal + (@PesoNeto * @Zaranda)
+			
+			FETCH NEXT FROM CursorPesadas INTO @PesoNeto, @Humedad, @Zaranda
+			END
+
+		CLOSE CursorPesadas
+		DEALLOCATE CursorPesadas
+
+		-- BUSCO LA HUMEDAD MÁS CERCANA A LA SUMA DE LAS MERMAS DE LAS PESADAS
+		IF @MermaSecadoTotal = 0
+			SET @Humedad = @SumaHumedades / @CantidadHumedades
+		ELSE IF @KilogramoNetoTotal > 0
+			SELECT @Humedad = Humedad FROM Cereal_Humedad WHERE IDCereal = @IDCereal AND Merma >= (@MermaSecadoTotal / @KilogramoNetoTotal * 100)
+
+		-- CALCULO EL ZARANDEO CORRESPONDIENTE A LA SUMA DE LAS MERMAS DE LAS PESADAS
+		IF @KilogramoNetoTotal > 0 AND @MermaZarandeoTotal > 0
+			SET @Zaranda = ROUND((@MermaZarandeoTotal / @KilogramoNetoTotal * 100) + 0.04, 1)
+		END
+
+	-- ACTUALIZO LOS DATOS DE LA CARTA DE PORTE
+	UPDATE Movimiento_Cereal
+		SET Humedad = @Humedad, Zaranda = @Zaranda, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
+		WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+			
+	-- CALCULO LAS MERMAS
+	EXEC usp_Movimiento_Cereal_UpdateMerma @IDMovimiento_Cereal
+
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
 -- Create date: 2013-08-26
 -- Description:	Agrega un Movimiento de Cereal con sus dependencias
 -- =============================================
@@ -304,19 +487,8 @@ CREATE PROCEDURE usp_Movimiento_Cereal_Add
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
-	DECLARE @SeparatorPos int = 0
-	DECLARE @DelimiterPosStart int = 0
-	DECLARE @DelimiterPosEnd int = 0
-	DECLARE @ValuePairLen int
-	DECLARE @ValuePair varchar(25)
-	
-	DECLARE @Movimiento_Cereal_Pesada__IDPesada int
-	DECLARE @Movimiento_Cereal_Pesada__PesoNeto int
-	DECLARE @Movimiento_Cereal_Pesada__Humedad decimal(3,1)
-	DECLARE @Movimiento_Cereal_Pesada__Zaranda decimal(3,1)
-	
-	DECLARE @Movimiento_Cereal_Pesada TABLE(IDPesada int PRIMARY KEY, PesoNeto int NULL, Humedad decimal(3,1) NULL, Zaranda decimal(3,1) NULL)
+		
+	DECLARE @Movimiento_Cereal_Pesada TABLE(IDPesada int PRIMARY KEY NOT NULL, PesoNeto int NULL, Humedad decimal(3,1) NULL, Zaranda decimal(3,1) NULL)
 	
 	DECLARE @Certificado bit
 	DECLARE @KilogramoAplicado int
@@ -324,50 +496,10 @@ BEGIN
 	BEGIN TRY
 	
 		BEGIN TRANSACTION
-			--PARSEO LAS PESADAS Y LAS GUARDO EN UNA TABLA LOCAL
-			WHILE CHARINDEX('|', @StringListOfIDPesadaCompleta, @SeparatorPos + 1) > 0
-				BEGIN
-					SET @ValuePairLen = CHARINDEX('|', @StringListOfIDPesadaCompleta, @SeparatorPos + 1) - @SeparatorPos
-					SET @ValuePair = SUBSTRING(@StringListOfIDPesadaCompleta, @SeparatorPos, @ValuePairLen)
-					
-					--ID PESADA
-					SET @DelimiterPosStart = CHARINDEX('¬', @ValuePair, 1)
-					IF @DelimiterPosStart > 0
-						SET @Movimiento_Cereal_Pesada__IDPesada = CAST(SUBSTRING(@ValuePair, 1, @DelimiterPosStart - 1) AS int)
-					
-					--PESO NETO
-					SET @DelimiterPosEnd = CHARINDEX('¬', @ValuePair, @DelimiterPosStart + 1)
-					IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) = 'NULL'
-						SET @Movimiento_Cereal_Pesada__PesoNeto = NULL
-					ELSE
-						SET @Movimiento_Cereal_Pesada__PesoNeto = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) AS int)
-					
-					--HUMEDAD
-					SET @DelimiterPosStart = @DelimiterPosEnd
-					SET @DelimiterPosEnd = CHARINDEX('¬', @ValuePair, @DelimiterPosStart + 1)
-					IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) = 'NULL'
-						SET @Movimiento_Cereal_Pesada__Humedad = NULL
-					ELSE
-						SET @Movimiento_Cereal_Pesada__Humedad = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) AS decimal(3,1))
-					
-					--ZARANDA
-					SET @DelimiterPosStart = @DelimiterPosEnd
-					IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, 25) = 'NULL'
-						SET @Movimiento_Cereal_Pesada__Zaranda = NULL
-					ELSE
-						SET @Movimiento_Cereal_Pesada__Zaranda = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, 25) AS decimal(3,1))
-					
-					INSERT INTO @Movimiento_Cereal_Pesada
-						(IDPesada, PesoNeto, Humedad, Zaranda)
-						VALUES (@Movimiento_Cereal_Pesada__IDPesada, @Movimiento_Cereal_Pesada__PesoNeto, @Movimiento_Cereal_Pesada__Humedad, @Movimiento_Cereal_Pesada__Zaranda)
-					
-					SET @SeparatorPos = CHARINDEX('|', @StringListOfIDPesadaCompleta, @SeparatorPos + @ValuePairLen) + 1
-				END
-			
-			--OBTENGO EL NUEVO ID DEL Movimiento_Cereal
+			-- OBTENGO EL NUEVO ID DEL Movimiento_Cereal
 			SET @IDMovimiento_Cereal = (SELECT ISNULL(MAX(IDMovimiento_Cereal), 0) + 1 FROM Movimiento_Cereal)
 			
-			--PREPARO LAS VARIABLES CORRESPONDIENTES
+			-- PREPARO LAS VARIABLES CORRESPONDIENTES
 			IF @Tipo = 'E'
 				BEGIN
 				SET @Certificado = 0
@@ -411,20 +543,17 @@ BEGIN
 				SET @KilogramoAplicado = NULL
 				END
 			
-			--AGREGO EL MOVIMIENTO DE CEREAL
+			-- AGREGO EL MOVIMIENTO DE CEREAL
 			INSERT INTO Movimiento_Cereal
 				(IDMovimiento_Cereal, Tipo, ComprobanteNumero, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, Certificado, KilogramoAplicado)
 				VALUES (@IDMovimiento_Cereal, @Tipo, @ComprobanteNumero, @IDCartaPorte_Talonario, @CTGNumero, @FechaCarga, @IDEntidad_Titular, @IDEntidad_Intermediario, @IDEntidad_RemitenteComercial, @IDEntidad_Corredor, @IDEntidad_Entregador, @IDEntidad_Destinatario, @IDEntidad_Destino, @IDEntidad_Transportista, @IDEntidad_Chofer, @IDCosecha, @IDCereal, @IDContrato, @PesoBruto, @PesoTara, @PesoNeto, @Volatil, @Humedad, @Zaranda, @IDOrigenDestino_Origen, @IDOrigenDestino_Destino, @CTGCancelacion, @TransporteDominioCamion, @TransporteDominioAcoplado, @TransporteKilometro, @TransporteTarifaReferencia, @TransporteTarifa, @FechaHoraArribo, @FechaHoraDescarga, @DeclaraIPRO, @IDCartaPorte_MotivoAnulacion, @Notas, @Calculo_TarifaIndice, @IDUsuario, GETDATE(), @IDUsuario, GETDATE(), NULL, @Certificado, @KilogramoAplicado)
 			
-			--CALCULO LAS MERMAS
+			-- CALCULO LAS MERMAS
 			EXEC usp_Movimiento_Cereal_UpdateMerma @IDMovimiento_Cereal
 			
-			--AGREGO EL DETALLE DE PESADAS
-			INSERT INTO Movimiento_Cereal_Pesada
-				(IDMovimiento_Cereal, IDPesada, PesoNeto, Humedad, Zaranda)
-				SELECT @IDMovimiento_Cereal, IDPesada, PesoNeto, Humedad, Zaranda
-					FROM @Movimiento_Cereal_Pesada
-					
+			-- AGREGO EL DETALLE DE PESADAS
+			EXEC dbo.usp_Movimiento_Cereal_ParseAndInsertPesadas @IDMovimiento_Cereal, @StringListOfIDPesadaCompleta
+
 		COMMIT TRANSACTION
 	END TRY
 	
@@ -498,19 +627,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @SeparatorPos int = 0
-	DECLARE @DelimiterPosStart int = 0
-	DECLARE @DelimiterPosEnd int = 0
-	DECLARE @ValuePairLen int
-	DECLARE @ValuePair varchar(25)
-	
 	DECLARE @Tipo char(1)
-	DECLARE @Movimiento_Cereal_Pesada__IDPesada int
-	DECLARE @Movimiento_Cereal_Pesada__PesoNeto int
-	DECLARE @Movimiento_Cereal_Pesada__Humedad decimal(3,1)
-	DECLARE @Movimiento_Cereal_Pesada__Zaranda decimal(3,1)
-	
-	DECLARE @Movimiento_Cereal_Pesada TABLE(IDPesada int PRIMARY KEY, PesoNeto int NULL, Humedad decimal(3,1) NULL, Zaranda decimal(3,1) NULL)
 	
 	DECLARE @Certificado bit
 	DECLARE @KilogramoAplicado int
@@ -518,45 +635,7 @@ BEGIN
 	BEGIN TRY
 	
 		BEGIN TRANSACTION
-			--PARSEO LAS PESADAS Y LAS GUARDO EN UNA TABLA LOCAL
-			WHILE CHARINDEX('|', @StringListOfIDPesadaCompleta, @SeparatorPos + 1) > 0
-				BEGIN
-					SET @ValuePairLen = CHARINDEX('|', @StringListOfIDPesadaCompleta, @SeparatorPos + 1) - @SeparatorPos
-					SET @ValuePair = SUBSTRING(@StringListOfIDPesadaCompleta, @SeparatorPos, @ValuePairLen)
-					
-					--ID PESADA
-					SET @DelimiterPosStart = CHARINDEX('¬', @ValuePair, 1)
-					IF @DelimiterPosStart > 0
-						SET @Movimiento_Cereal_Pesada__IDPesada = CAST(SUBSTRING(@ValuePair, 1, @DelimiterPosStart - 1) AS int)
-					
-					--PESO NETO
-					SET @DelimiterPosEnd = CHARINDEX('¬', @ValuePair, @DelimiterPosStart + 1)
-					IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) = 'NULL'
-						SET @Movimiento_Cereal_Pesada__PesoNeto = NULL
-					ELSE
-						SET @Movimiento_Cereal_Pesada__PesoNeto = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) AS int)
-					
-					--HUMEDAD
-					SET @DelimiterPosStart = @DelimiterPosEnd
-					SET @DelimiterPosEnd = CHARINDEX('¬', @ValuePair, @DelimiterPosStart + 1)
-					IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) = 'NULL'
-						SET @Movimiento_Cereal_Pesada__Humedad = NULL
-					ELSE
-						SET @Movimiento_Cereal_Pesada__Humedad = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, (@DelimiterPosEnd - @DelimiterPosStart - 1)) AS decimal(3,1))
-					
-					--ZARANDA
-					SET @DelimiterPosStart = @DelimiterPosEnd
-					IF SUBSTRING(@ValuePair, @DelimiterPosStart + 1, 25) = 'NULL'
-						SET @Movimiento_Cereal_Pesada__Zaranda = NULL
-					ELSE
-						SET @Movimiento_Cereal_Pesada__Zaranda = CAST(SUBSTRING(@ValuePair, @DelimiterPosStart + 1, 25) AS decimal(3,1))
-					
-					INSERT INTO @Movimiento_Cereal_Pesada
-						VALUES (@Movimiento_Cereal_Pesada__IDPesada, @Movimiento_Cereal_Pesada__PesoNeto, @Movimiento_Cereal_Pesada__Humedad, @Movimiento_Cereal_Pesada__Zaranda)
-					
-					SET @SeparatorPos = CHARINDEX('|', @StringListOfIDPesadaCompleta, @SeparatorPos + @ValuePairLen) + 1
-				END
-			
+
 			--ACTUALIZO EL MOVIMIENTO DE CEREAL
 			SET @Tipo = (SELECT Tipo FROM Movimiento_Cereal WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal)
 			IF @Tipo <> 'E'
@@ -576,11 +655,8 @@ BEGIN
 			DELETE
 				FROM Movimiento_Cereal_Pesada
 				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
-				
-			INSERT INTO Movimiento_Cereal_Pesada
-				(IDMovimiento_Cereal, IDPesada, PesoNeto, Humedad, Zaranda)
-				SELECT @IDMovimiento_Cereal, IDPesada, PesoNeto, Humedad, Zaranda
-					FROM @Movimiento_Cereal_Pesada
+			
+			EXEC dbo.usp_Movimiento_Cereal_ParseAndInsertPesadas @IDMovimiento_Cereal, @StringListOfIDPesadaCompleta
 
 			--ACTUALIZO LA FECHA DEL MOVIMIENTO DE SUBPRODUCTOS QUE EXISTIERA
 			UPDATE Movimiento_SubProducto
@@ -592,6 +668,57 @@ BEGIN
 				SET Movimiento_SubProducto_Detalle.Kilogramo = @PesoNeto * Movimiento_SubProducto_Detalle.Porcentaje / 100
 				FROM Movimiento_SubProducto INNER JOIN Movimiento_SubProducto_Detalle ON Movimiento_SubProducto.IDMovimiento_SubProducto = Movimiento_SubProducto_Detalle.IDMovimiento_SubProducto
 				WHERE Movimiento_SubProducto.IDMovimiento_Cereal = @IDMovimiento_Cereal
+		COMMIT TRANSACTION
+	END TRY
+	
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION
+
+		DECLARE @ErrorMessage NVARCHAR(4000);
+		DECLARE @ErrorSeverity INT;
+		DECLARE @ErrorState INT;
+
+		SELECT @ErrorMessage = ERROR_MESSAGE(), @ErrorSeverity = ERROR_SEVERITY(), @ErrorState = ERROR_STATE();
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState)
+	END CATCH
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
+-- Create date: 2022-05-17
+-- Description:	Actualiza la humedad, zarandeo y pesadas de un Movimiento de Cereal
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movimiento_Cereal_ActualizarPesadasHumedadYZarandeo') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_Movimiento_Cereal_ActualizarPesadasHumedadYZarandeo
+GO
+
+CREATE PROCEDURE usp_Movimiento_Cereal_ActualizarPesadasHumedadYZarandeo
+	@IDMovimiento_Cereal int,
+	@IDUsuario tinyint,
+	@StringListOfIDPesadaCompleta varchar(1000)
+AS
+BEGIN
+	SET NOCOUNT ON;
+		
+	BEGIN TRY
+	
+		BEGIN TRANSACTION
+			--ACTUALIZO EL DETALLE DE PESADAS
+			--(ELIMINO Y VUELVO A AGREGAR), AUNQUE NO ES LO MÁS EFICIENTE, ES LO MÁS SIMPLE
+			DELETE
+				FROM Movimiento_Cereal_Pesada
+				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+			
+			EXEC dbo.usp_Movimiento_Cereal_ParseAndInsertPesadas @IDMovimiento_Cereal, @StringListOfIDPesadaCompleta
+
+			-- OBTENGO LA HUMEDAD Y EL ZARANDEO DESDE LAS PESADAS
+			EXEC dbo.usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples @IDMovimiento_Cereal, @IDUsuario
+
 		COMMIT TRANSACTION
 	END TRY
 	
@@ -966,9 +1093,9 @@ BEGIN
 	
 		BEGIN TRANSACTION	
 
-				UPDATE Movimiento_Cereal_Analisis
-					SET Fecha = @Fecha, MuestraNumero = @MuestraNumero, ResultadoIPRO = @ResultadoIPRO
-					WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal 
+			UPDATE Movimiento_Cereal_Analisis
+				SET Fecha = @Fecha, MuestraNumero = @MuestraNumero, ResultadoIPRO = @ResultadoIPRO
+				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal 
 
 		COMMIT TRANSACTION
 	END TRY

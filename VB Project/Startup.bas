@@ -59,6 +59,7 @@ Private Sub Main()
     
     PasswordErrorCount = -1
     
+    ' Obtengo los parámetros de la base de datos
     Set pDatabase = New CSC_Database_ADO_SQL
     pDatabase.ParametersSaveToRegistry = False
     Call pDatabase.LoadParameters
@@ -67,7 +68,7 @@ DATABASECHECKPARAMETERS:
     '//////////////////////////////////////////////////////////////////
     'CHEQUEO LOS PARAMETROS DE CONEXION A LA BASE DE DATOS
     'PRIMERO CHEQUEO QUE ESTEN CARGADOS LOS PARAMETROS FUNDAMENTALES
-    If pDatabase.Provider = "" Or pDatabase.UserID = "" Or (pDatabase.DataSource = "") Then
+    If pDatabase.Provider = "" Or pDatabase.UserID = "" Or pDatabase.DataSource = "" Then
         Screen.MousePointer = vbDefault
         CSF_Database.Show vbModal, frmSplash
         If CSF_Database.Tag = "CANCEL" Then
@@ -119,24 +120,8 @@ DATABASEOPEN:
     End If
     
     '//////////////////////////////////////////////////////////////////
-    'COPIO LOS ARCHIVOS DE BACKUP
-    If pIsCompiled Then
-        If pDatabase.Backup_RemoteFolder <> "" And pDatabase.Backup_LocalFolder <> "" And pDatabase.Backup_FileName <> "" Then
-            CSF_Status.lblStatus.Caption = "Realizando copia de seguridad..."
-            CSF_Status.Show
-            DoEvents
-        
-            Call CSM_File.CopyFilesFromFolder(pDatabase.Backup_RemoteFolder, pDatabase.Backup_LocalFolder, pDatabase.Backup_FileName)
-            
-            Unload CSF_Status
-            Set CSF_Status = Nothing
-        End If
-    End If
-    
-    Set pCSC_Parameter = New CSC_Parameter
-    
-    '//////////////////////////////////////////////////////////////////
     'OBTENGO LOS PARAMETROS DE LA BASE DE DATOS
+    Set pCSC_Parameter = New CSC_Parameter
     If Not pParametro.LoadParametersDatabase() Then
         Unload frmMDI
         Exit Sub
