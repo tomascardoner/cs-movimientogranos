@@ -109,23 +109,23 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 // Datos para mermas
                 if (Tipo == Constantes.MovimientoTipoEntrada)
                 {
-                    Volatil = SqlServerValues.GetDecimalSafeAsValue(reader, "Volatil", -1);
-                    Humedad = SqlServerValues.GetDecimalSafeAsValue(reader, "Humedad", -1);
-                    Zaranda = SqlServerValues.GetDecimalSafeAsValue(reader, "Zaranda", -1);
-                    MermaVolatilKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaVolatilKilogramo", -1);
-                    MermaHumedadPorcentaje = SqlServerValues.GetDecimalSafeAsValue(reader, "MermaHumedadPorcentaje", -1);
-                    MermaHumedadKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaHumedadKilogramo", -1);
-                    MermaZarandaKilogramo = SqlServerValues.GetIntegerSafeAsValue(reader, "MermaZarandaKilogramo", -1);
+                    Volatil = SqlServerValues.GetDecimalSafeAsNull(reader, "Volatil");
+                    Humedad = SqlServerValues.GetDecimalSafeAsNull(reader, "Humedad");
+                    Zaranda = SqlServerValues.GetDecimalSafeAsNull(reader, "Zaranda");
+                    MermaVolatilKilogramo = SqlServerValues.GetInteger(reader, "MermaVolatilKilogramo");
+                    MermaHumedadPorcentaje = SqlServerValues.GetDecimalSafeAsNull(reader, "MermaHumedadPorcentaje");
+                    MermaHumedadKilogramo = SqlServerValues.GetIntegerSafeAsNull(reader, "MermaHumedadKilogramo");
+                    MermaZarandaKilogramo = SqlServerValues.GetIntegerSafeAsNull(reader, "MermaZarandaKilogramo");
                 }
                 else
                 {
-                    Volatil = -1;
-                    Humedad = -1;
-                    Zaranda = -1;
-                    MermaVolatilKilogramo = -1;
-                    MermaHumedadPorcentaje = -1;
-                    MermaHumedadKilogramo = -1;
-                    MermaZarandaKilogramo = -1;
+                    Volatil = null;
+                    Humedad = null;
+                    Zaranda = null;
+                    MermaVolatilKilogramo = null;
+                    MermaHumedadPorcentaje = null;
+                    MermaHumedadKilogramo = null;
+                    MermaZarandaKilogramo = null;
                 }
                 PesoFinal = SqlServerValues.GetIntegerSafeAsNull(reader, "PesoFinal");
 

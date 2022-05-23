@@ -883,6 +883,11 @@ namespace CS_Importador_de_cartas_de_porte
                 // Entidad remitente comercial
                 movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
             }
+            else if (!string.IsNullOrWhiteSpace(cartaDePorte.RteComercialVentaSecundaria))
+            {
+                // Entidad remitente comercial
+                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaSecundaria, TiposEntidad.RemitenteComercial);
+            }
 
             // Entidad corredor
             movimiento_Cereal.IDEntidad_Corredor = ProcesarEntidad(database, cartaDePorte.CorredorVentaPrimaria, TiposEntidad.Corredor);
@@ -1261,8 +1266,8 @@ namespace CS_Importador_de_cartas_de_porte
                 movimiento_CerealEnBD.PesoBruto = VerificarValores(movimiento_CerealEnBD.PesoBruto, movimiento_CerealEnPdf.PesoBruto, ref actualizar).Value;
                 movimiento_CerealEnBD.PesoTara = VerificarValores(movimiento_CerealEnBD.PesoTara, movimiento_CerealEnPdf.PesoTara, ref actualizar).Value;
                 movimiento_CerealEnBD.PesoNeto = VerificarValores(movimiento_CerealEnBD.PesoNeto, movimiento_CerealEnPdf.PesoNeto, ref actualizar).Value;
-                // Sólo actualizo el porcentaje de volátil en caso de que esté completo con nu valor diferente
-                if (movimiento_CerealEnBD.Volatil.Value != -1)
+                // Sólo actualizo el porcentaje de volátil en caso de que esté completo con un valor diferente
+                if (movimiento_CerealEnBD.Volatil.HasValue)
                 {
                     movimiento_CerealEnBD.Volatil = VerificarValores(movimiento_CerealEnBD.Volatil, movimiento_CerealEnPdf.Volatil, ref actualizar);
                 }
