@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   59768833
+            Format          =   61800449
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   59703297
+            Format          =   61800449
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -1545,9 +1545,9 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     End Select
     
     'CTG NUMERO
-    If maskedtextboxCtgNumero.Text <> "" Then
-        mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.CTGNumero = " & maskedtextboxCtgNumero.Text
-        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.CTGNumero} = " & maskedtextboxCtgNumero.Text
+    If maskedtextboxCTGNumero.Text <> "" Then
+        mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.CTGNumero = " & maskedtextboxCTGNumero.Text
+        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.CTGNumero} = " & maskedtextboxCTGNumero.Text
     End If
     
     'PLANTA
@@ -2331,8 +2331,8 @@ End Sub
 '============================================================
 'CTG NUMERO
 Private Sub maskedtextboxCtgNumero_GotFocus()
-    maskedtextboxCtgNumero.SelStart = 0
-    maskedtextboxCtgNumero.SelLength = Len(maskedtextboxCtgNumero.Text)
+    maskedtextboxCTGNumero.SelStart = 0
+    maskedtextboxCTGNumero.SelLength = Len(maskedtextboxCTGNumero.Text)
 End Sub
 
 Private Sub maskedtextboxCtgNumero_KeyPress(KeyAscii As Integer)
@@ -3223,6 +3223,10 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
     Dim movimiento As Movimiento_Cereal
     Dim Pesadas As Pesadas
     Dim Pesada As Pesada
+    
+    Dim SumaKilogramos As Long
+    Dim SobrescribirDatos As Boolean
+    Dim MostrarAdvertenciasIndividuales As Boolean
     Dim ResultadoObtencionPesadas As String
     
     If tdbgrdData.FirstRow = "" Then
@@ -3231,9 +3235,15 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
         Exit Sub
     End If
     
-    If MsgBox("Se obtendrán las pesadas, la humedad y el zarandeo de los movimientos mostrados desde el sistema de balanza." & vbCrLf & vbCrLf & "¿Desea continuar?", vbQuestion + vbYesNo, App.Title) = vbNo Then
+    Call frmMovimiento_Cereal_ObtenerPesadas.Show(vbModal, frmMDI)
+    If frmMovimiento_Cereal_ObtenerPesadas.Tag = "CANCEL" Then
+        Set frmMovimiento_Cereal_ObtenerPesadas = Nothing
+        tdbgrdData.SetFocus
         Exit Sub
     End If
+    SobrescribirDatos = (frmMovimiento_Cereal_ObtenerPesadas.chkSobrescribirDatos.value = vbChecked)
+    MostrarAdvertenciasIndividuales = (frmMovimiento_Cereal_ObtenerPesadas.chkMostrarAdvertenciasIndividuales.value = vbChecked)
+    Set frmMovimiento_Cereal_ObtenerPesadas = Nothing
     
     ' Obtengo los parámetros de la base de datos de Pesadas
     Set DatabasePesadas = New CSC_Database_ADO_SQL
@@ -3254,41 +3264,90 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
     Set recData = tdbgrdData.DataSource
     recData.MoveFirst
     ResultadoObtencionPesadas = ""
-    Set movimiento = New Movimiento_Cereal
     Do While Not recData.EOF
         stbMain.SimpleText = "Obteniendo datos: " & recData.AbsolutePosition & " de " & recData.RecordCount & " (" & Format(recData.AbsolutePosition / recData.RecordCount, "Percent") & ")..."
         DoEvents
+        
+        Set movimiento = New Movimiento_Cereal
         movimiento.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
         movimiento.RefreshListSkip = True
-        If movimiento.Load() Then
-            ' Obtengo las pesadas correspondientes al CTG
-            Set Pesadas = New Pesadas
-            If Not Pesadas.ObtenerPesadas(DatabasePesadas, movimiento.CTGNumero) Then
-                Set Pesadas = Nothing
-                movimiento = Nothing
-                recData.Close
-                Set recData = Nothing
-                DatabasePesadas.Disconnect
-                Set DatabasePesadas = Nothing
-                tdbgrdData.SetFocus
-                Exit Sub
-            End If
+        If Not movimiento.Load() Then
+            movimiento = Nothing
+            recData.Close
+            Set recData = Nothing
+            DatabasePesadas.Disconnect
+            Set DatabasePesadas = Nothing
+            tdbgrdData.SetFocus
+            Exit Sub
+        End If
+        
+        ' Si no es una entrada la salteo
+        If movimiento.Tipo <> Constants.MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
+            GoTo ContinueLoop
+        End If
+        
+        ' Si ya tiene los datos de humedad y zarandeo especificados y no sobreescribe, sigo con la siguiente CP
+        If (movimiento.Humedad > -1 And movimiento.Zaranda > -1) And Not SobrescribirDatos Then
+            GoTo ContinueLoop
+        End If
             
-            For Each Pesada In Pesadas
-                movimiento.Movimiento_Cereal_PesadaCompleta_AddFromData Pesada.IDPesada, Pesada.KilogramoNeto, Pesada.Humedad, Pesada.Zaranda
-            Next
-
-            If Not movimiento.UpdatePesadasHumedadYZarandeo Then
-                Set Pesadas = Nothing
-                movimiento = Nothing
-                recData.Close
-                Set recData = Nothing
-                DatabasePesadas.Disconnect
-                Set DatabasePesadas = Nothing
-                tdbgrdData.SetFocus
-                Exit Sub
+        ' Obtengo las pesadas correspondientes al CTG
+        Set Pesadas = New Pesadas
+        If Not Pesadas.ObtenerPesadas(DatabasePesadas, movimiento.CTGNumero) Then
+            Set Pesadas = Nothing
+            movimiento = Nothing
+            recData.Close
+            Set recData = Nothing
+            DatabasePesadas.Disconnect
+            Set DatabasePesadas = Nothing
+            tdbgrdData.SetFocus
+            Exit Sub
+        End If
+        
+        If Pesadas.Count = 0 Then
+            If MostrarAdvertenciasIndividuales Then
+                MsgBox "No hay pesadas asociadas a la carta de porte." & vbCrLf & vbCrLf & "C.T.G. " & movimiento.CTGNumero, vbInformation, App.Title
+            Else
+                ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G. " & movimiento.CTGNumero & " - No hay pesadas asociadas a la carta de porte." & vbCrLf
+            End If
+            GoTo ContinueLoop
+        End If
+            
+        SumaKilogramos = 0
+        For Each Pesada In Pesadas
+            SumaKilogramos = SumaKilogramos + Pesada.KilogramoNeto
+            movimiento.Movimiento_Cereal_PesadaCompleta_AddFromData Pesada.IDPesada, Pesada.KilogramoNeto, Pesada.Humedad, Pesada.Zaranda
+        Next
+        
+        ' Verifico que coincidan los kilogramos de la suma de pesadas con los de la carta de porte
+        If SumaKilogramos <> movimiento.PesoNeto Then
+            If MostrarAdvertenciasIndividuales Then
+                If Pesadas.Count = 1 Then
+                    If MsgBox("No coinciden los kilogramos de la carta de porte con los de la pesada asociada." & vbCrLf & vbCrLf & "C.T.G. " & movimiento.CTGNumero & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
+                        GoTo ContinueLoop
+                    End If
+                Else
+                    If MsgBox("No coinciden los kilogramos de la carta de porte con los de la suma de las pesadas asociadas." & vbCrLf & vbCrLf & "C.T.G. " & movimiento.CTGNumero & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
+                        GoTo ContinueLoop
+                    End If
+                End If
+            Else
+                ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G. " & movimiento.CTGNumero & " - La suma de kilogramos de las pesadas asociadas no coincide con los de la carta de porte." & vbCrLf
             End If
         End If
+        
+        If Not movimiento.UpdatePesadasHumedadYZarandeo(SobrescribirDatos) Then
+            Set Pesadas = Nothing
+            movimiento = Nothing
+            recData.Close
+            Set recData = Nothing
+            DatabasePesadas.Disconnect
+            Set DatabasePesadas = Nothing
+            tdbgrdData.SetFocus
+            Exit Sub
+        End If
+        
+ContinueLoop:
         recData.MoveNext
     Loop
     recData.MoveFirst
@@ -3297,6 +3356,10 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
 
     If Not DatabasePesadas Is Nothing Then
         Set DatabasePesadas = Nothing
+    End If
+    
+    If (Not MostrarAdvertenciasIndividuales) And ResultadoObtencionPesadas <> "" Then
+        MsgBox ResultadoObtencionPesadas, vbExclamation, App.Title
     End If
     
     tdbgrdData.SetFocus

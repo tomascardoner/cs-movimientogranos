@@ -2150,7 +2150,7 @@ ErrorHandler:
     ShowErrorMessage "Classes.Movimiento_Cereal.UpdateMermas", "Error al actualizar las mermas del Movimiento de Cereal." & vbCr & vbCr & "IDMovimiento_Cereal: " & IDMovimiento_Cereal
 End Function
 
-Public Function UpdatePesadasHumedadYZarandeo() As Boolean
+Public Function UpdatePesadasHumedadYZarandeo(SobrescribirDatos As Boolean) As Boolean
     Dim cmdSP As ADODB.command
     
     Dim Movimiento_Cereal_Pesada As Movimiento_Cereal_Pesada
@@ -2175,6 +2175,7 @@ Public Function UpdatePesadasHumedadYZarandeo() As Boolean
             PesadaStringList = PesadaStringList & Movimiento_Cereal_Pesada.IDPesada & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.PesoNeto_FormattedForSQL & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.Humedad_FormattedForSQL & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.Zaranda_FormattedForSQL & STRING_LIST_SEPARATOR
         Next Movimiento_Cereal_Pesada
         .Parameters.Append .CreateParameter("StringListOfIDPesadaCompleta", adVarChar, adParamInput, 1000, PesadaStringList)
+        .Parameters.Append .CreateParameter("SobrescribirDatos", adBoolean, adParamInput, , SobrescribirDatos)
         
         .Execute
     End With

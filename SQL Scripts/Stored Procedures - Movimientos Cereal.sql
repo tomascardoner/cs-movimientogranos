@@ -335,7 +335,8 @@ GO
 
 CREATE PROCEDURE usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples
 	@IDMovimiento_Cereal int,
-	@IDUsuario tinyint
+	@IDUsuario tinyint,
+	@@SobrescribirDatos bit
 AS
 BEGIN
 	DECLARE @CantidadPesadas int
@@ -397,8 +398,6 @@ BEGIN
 						END
 					END
 
-					
-
 			-- CALCULO LA MERMA POR ZARANDEO
 			IF @Zaranda IS NOT NULL
 				IF @Zaranda > 0 AND @Zaranda < 50
@@ -422,9 +421,19 @@ BEGIN
 		END
 
 	-- ACTUALIZO LOS DATOS DE LA CARTA DE PORTE
-	UPDATE Movimiento_Cereal
-		SET Humedad = @Humedad, Zaranda = @Zaranda, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
-		WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+	IF @@SobrescribirDatos = 1
+		UPDATE Movimiento_Cereal
+			SET Humedad = @Humedad, Zaranda = @Zaranda, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
+			WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
+	ELSE
+		BEGIN
+			UPDATE Movimiento_Cereal
+				SET Humedad = @Humedad, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
+				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal AND Humedad IS NULL
+			UPDATE Movimiento_Cereal
+				SET Zaranda = @Zaranda, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
+				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal AND Zaranda IS NULL
+		END
 			
 	-- CALCULO LAS MERMAS
 	EXEC usp_Movimiento_Cereal_UpdateMerma @IDMovimiento_Cereal
@@ -700,7 +709,8 @@ GO
 CREATE PROCEDURE usp_Movimiento_Cereal_ActualizarPesadasHumedadYZarandeo
 	@IDMovimiento_Cereal int,
 	@IDUsuario tinyint,
-	@StringListOfIDPesadaCompleta varchar(1000)
+	@StringListOfIDPesadaCompleta varchar(1000),
+	@SobrescribirDatos bit
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -717,7 +727,7 @@ BEGIN
 			EXEC dbo.usp_Movimiento_Cereal_ParseAndInsertPesadas @IDMovimiento_Cereal, @StringListOfIDPesadaCompleta
 
 			-- OBTENGO LA HUMEDAD Y EL ZARANDEO DESDE LAS PESADAS
-			EXEC dbo.usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples @IDMovimiento_Cereal, @IDUsuario
+			EXEC dbo.usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples @IDMovimiento_Cereal, @IDUsuario, @SobrescribirDatos
 
 		COMMIT TRANSACTION
 	END TRY
