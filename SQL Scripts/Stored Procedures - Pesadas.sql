@@ -22,7 +22,7 @@ CREATE PROCEDURE dbo.ObtenerPesadasDeCtg
 
 BEGIN
 
-	SELECT p.IDPesada, p.KilogramoNeto, pa.Humedad, pa.Zaranda
+	SELECT p.IDPesada, p.IDProducto, p.KilogramoNeto, pa.Humedad, pa.Zaranda
 		FROM Pesada AS p
 			LEFT JOIN Pesada_Analisis AS pa ON p.IDPesada = pa.IDPesada
 		WHERE p.Ctg = @Ctg

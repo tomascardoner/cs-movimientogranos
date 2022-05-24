@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   61800449
+            Format          =   110493697
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   61800449
+            Format          =   110493697
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -1545,9 +1545,9 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
     End Select
     
     'CTG NUMERO
-    If maskedtextboxCTGNumero.Text <> "" Then
-        mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.CTGNumero = " & maskedtextboxCTGNumero.Text
-        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.CTGNumero} = " & maskedtextboxCTGNumero.Text
+    If maskedtextboxCtgNumero.Text <> "" Then
+        mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.CTGNumero = " & maskedtextboxCtgNumero.Text
+        mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.CTGNumero} = " & maskedtextboxCtgNumero.Text
     End If
     
     'PLANTA
@@ -2331,8 +2331,8 @@ End Sub
 '============================================================
 'CTG NUMERO
 Private Sub maskedtextboxCtgNumero_GotFocus()
-    maskedtextboxCTGNumero.SelStart = 0
-    maskedtextboxCTGNumero.SelLength = Len(maskedtextboxCTGNumero.Text)
+    maskedtextboxCtgNumero.SelStart = 0
+    maskedtextboxCtgNumero.SelLength = Len(maskedtextboxCtgNumero.Text)
 End Sub
 
 Private Sub maskedtextboxCtgNumero_KeyPress(KeyAscii As Integer)
@@ -3306,9 +3306,9 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
         
         If Pesadas.Count = 0 Then
             If MostrarAdvertenciasIndividuales Then
-                MsgBox "No hay pesadas asociadas a la carta de porte." & vbCrLf & vbCrLf & "C.T.G. " & movimiento.CTGNumero, vbInformation, App.Title
+                MsgBox "No hay pesadas asociadas a la carta de porte." & vbCrLf & vbCrLf & "C.T.G.: " & movimiento.CTGNumero, vbInformation, App.Title
             Else
-                ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G. " & movimiento.CTGNumero & " - No hay pesadas asociadas a la carta de porte." & vbCrLf
+                ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G.: " & movimiento.CTGNumero & " - No hay pesadas asociadas a la carta de porte." & vbCrLf
             End If
             GoTo ContinueLoop
         End If
@@ -3316,6 +3316,15 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
         SumaKilogramos = 0
         For Each Pesada In Pesadas
             SumaKilogramos = SumaKilogramos + Pesada.KilogramoNeto
+            If movimiento.IDCereal <> Pesada.IDProducto Then
+                If MostrarAdvertenciasIndividuales Then
+                    If MsgBox("No coincide el cereal de la carta de porte con el de la pesada asociada." & vbCrLf & vbCrLf & "C.T.G.: " & movimiento.CTGNumero & vbCrLf & "Nº de pesada: " & Pesada.IDPesada_Formatted & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
+                        GoTo ContinueLoop
+                    End If
+                Else
+                    ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G.: " & movimiento.CTGNumero & " - Nº de pesada: " & Pesada.IDPesada_Formatted & " - La suma de kilogramos de las pesadas asociadas no coincide con los de la carta de porte." & vbCrLf
+                End If
+            End If
             movimiento.Movimiento_Cereal_PesadaCompleta_AddFromData Pesada.IDPesada, Pesada.KilogramoNeto, Pesada.Humedad, Pesada.Zaranda
         Next
         
@@ -3323,16 +3332,16 @@ Private Sub ObtenerPesadasHumedadYZarandeo()
         If SumaKilogramos <> movimiento.PesoNeto Then
             If MostrarAdvertenciasIndividuales Then
                 If Pesadas.Count = 1 Then
-                    If MsgBox("No coinciden los kilogramos de la carta de porte con los de la pesada asociada." & vbCrLf & vbCrLf & "C.T.G. " & movimiento.CTGNumero & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
+                    If MsgBox("No coinciden los kilogramos de la carta de porte con los de la pesada asociada." & vbCrLf & vbCrLf & "C.T.G.: " & movimiento.CTGNumero & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
                         GoTo ContinueLoop
                     End If
                 Else
-                    If MsgBox("No coinciden los kilogramos de la carta de porte con los de la suma de las pesadas asociadas." & vbCrLf & vbCrLf & "C.T.G. " & movimiento.CTGNumero & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
+                    If MsgBox("No coinciden los kilogramos de la carta de porte con los de la suma de las pesadas asociadas." & vbCrLf & vbCrLf & "C.T.G.: " & movimiento.CTGNumero & vbCrLf & vbCrLf & "¿Desea actualizar los datos de todas maneras?", vbExclamation, App.Title) = vbNo Then
                         GoTo ContinueLoop
                     End If
                 End If
             Else
-                ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G. " & movimiento.CTGNumero & " - La suma de kilogramos de las pesadas asociadas no coincide con los de la carta de porte." & vbCrLf
+                ResultadoObtencionPesadas = ResultadoObtencionPesadas & "C.T.G.: " & movimiento.CTGNumero & " - La suma de kilogramos de las pesadas asociadas no coincide con los de la carta de porte." & vbCrLf
             End If
         End If
         

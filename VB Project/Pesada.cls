@@ -14,6 +14,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private mIDPesada As Long
+Private mIDProducto As Byte
 Private mKilogramoNeto As Long
 Private mHumedad As Single
 Private mZaranda As Single
@@ -35,6 +36,20 @@ Public Property Let IDPesada(ByVal value As Long)
     If value <> mIDPesada Then
         mIsDirty = True
         mIDPesada = value
+    End If
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get IDProducto() As Byte
+    IDProducto = mIDProducto
+End Property
+
+Public Property Let IDProducto(ByVal value As Byte)
+    If value <> mIDProducto Then
+        mIsDirty = True
+        mIDProducto = value
     End If
 End Property
 

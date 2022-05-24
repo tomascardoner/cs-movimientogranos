@@ -71,6 +71,7 @@ Public Function ObtenerPesadas(ByRef database As CSC_Database_ADO_SQL, Ctg As St
         Dim Pesada As New Pesada
         
         Pesada.IDPesada = recordset("IDPesada").value
+        Pesada.IDProducto = recordset("IDProducto").value
         Pesada.KilogramoNeto = CSM_Function.IfIsNull_Zero(recordset("KilogramoNeto").value)
         Pesada.Humedad = CSM_Function.IfIsNull(recordset("Humedad").value, -1)
         Pesada.Zaranda = CSM_Function.IfIsNull(recordset("Zaranda").value, -1)
