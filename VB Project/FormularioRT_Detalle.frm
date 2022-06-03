@@ -206,14 +206,14 @@ Begin VB.Form frmFormularioRT_Detalle
          Splits(0)._ColumnProps(26)=   "Column(3).DividerColor=0"
          Splits(0)._ColumnProps(27)=   "Column(3)._WidthInPix=2725"
          Splits(0)._ColumnProps(28)=   "Column(3)._EditAlways=0"
-         Splits(0)._ColumnProps(29)=   "Column(3)._ColStyle=8704"
+         Splits(0)._ColumnProps(29)=   "Column(3)._ColStyle=8705"
          Splits(0)._ColumnProps(30)=   "Column(3).AllowFocus=0"
          Splits(0)._ColumnProps(31)=   "Column(3).Order=4"
          Splits(0)._ColumnProps(32)=   "Column(4).Width=2249"
          Splits(0)._ColumnProps(33)=   "Column(4).DividerColor=0"
          Splits(0)._ColumnProps(34)=   "Column(4)._WidthInPix=2170"
          Splits(0)._ColumnProps(35)=   "Column(4)._EditAlways=0"
-         Splits(0)._ColumnProps(36)=   "Column(4)._ColStyle=8708"
+         Splits(0)._ColumnProps(36)=   "Column(4)._ColStyle=8705"
          Splits(0)._ColumnProps(37)=   "Column(4).AllowFocus=0"
          Splits(0)._ColumnProps(38)=   "Column(4).Order=5"
          Splits(0)._ColumnProps(39)=   "Column(5).Width=1773"
@@ -301,11 +301,11 @@ Begin VB.Form frmFormularioRT_Detalle
          _StyleDefs(45)  =   "Splits(0).Columns(2).HeadingStyle:id=25,.parent=14,.alignment=2"
          _StyleDefs(46)  =   "Splits(0).Columns(2).FooterStyle:id=26,.parent=15"
          _StyleDefs(47)  =   "Splits(0).Columns(2).EditorStyle:id=27,.parent=17"
-         _StyleDefs(48)  =   "Splits(0).Columns(3).Style:id=90,.parent=13,.alignment=0,.locked=-1"
+         _StyleDefs(48)  =   "Splits(0).Columns(3).Style:id=90,.parent=13,.alignment=2,.locked=-1"
          _StyleDefs(49)  =   "Splits(0).Columns(3).HeadingStyle:id=87,.parent=14,.alignment=2"
          _StyleDefs(50)  =   "Splits(0).Columns(3).FooterStyle:id=88,.parent=15"
          _StyleDefs(51)  =   "Splits(0).Columns(3).EditorStyle:id=89,.parent=17"
-         _StyleDefs(52)  =   "Splits(0).Columns(4).Style:id=46,.parent=13,.locked=-1"
+         _StyleDefs(52)  =   "Splits(0).Columns(4).Style:id=46,.parent=13,.alignment=2,.locked=-1"
          _StyleDefs(53)  =   "Splits(0).Columns(4).HeadingStyle:id=43,.parent=14,.alignment=2"
          _StyleDefs(54)  =   "Splits(0).Columns(4).FooterStyle:id=44,.parent=15"
          _StyleDefs(55)  =   "Splits(0).Columns(4).EditorStyle:id=45,.parent=17"
@@ -501,7 +501,7 @@ Begin VB.Form frmFormularioRT_Detalle
       _ExtentX        =   2566
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   58720257
+      Format          =   111542273
       CurrentDate     =   40659
       MaxDate         =   55153
       MinDate         =   40513
@@ -922,7 +922,7 @@ Begin VB.Form frmFormularioRT_Detalle
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Format          =   58720257
+         Format          =   111542273
          CurrentDate     =   40544
          MinDate         =   40179
       End
@@ -944,7 +944,7 @@ Begin VB.Form frmFormularioRT_Detalle
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Format          =   58720257
+         Format          =   111542273
          CurrentDate     =   42480.5029861111
          MinDate         =   40179
       End
@@ -1160,10 +1160,11 @@ Private Const GRID_F1116_COLUMN_KILOGRAMOPENDIENTE As String = "KilogramoPendien
 
 Private Const GRID_CARTAPORTE_COLUMN_IDMOVIMIENTO_CEREAL As Integer = 0
 Private Const GRID_CARTAPORTE_COLUMN_COMPROBANTENUMERO As Integer = 1
-Private Const GRID_CARTAPORTE_COLUMN_FECHACARGA As Integer = 2
-Private Const GRID_CARTAPORTE_COLUMN_PESONETO As Integer = 3
-Private Const GRID_CARTAPORTE_COLUMN_KILOGRAMOPENDIENTE As Integer = 4
-Private Const GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR As Integer = 5
+Private Const GRID_CARTAPORTE_COLUMN_CTGNUMERO As Integer = 2
+Private Const GRID_CARTAPORTE_COLUMN_FECHACARGA As Integer = 3
+Private Const GRID_CARTAPORTE_COLUMN_PESONETO As Integer = 4
+Private Const GRID_CARTAPORTE_COLUMN_KILOGRAMOPENDIENTE As Integer = 5
+Private Const GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR As Integer = 6
 
 Public Function Startup(ByRef Formulario1116RT_Cabecera As F1116RT_Cabecera) As Boolean
     Set mFormulario1116RT_Cabecera = Formulario1116RT_Cabecera
@@ -1231,10 +1232,10 @@ Private Sub Form_Load()
     
     Call SetTrueDBGridAppearance
     
-    mtdbgrdFormulario1116A_OrderColumn = 4
+    mtdbgrdFormulario1116A_OrderColumn = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIOFECHA).ColIndex
     mtdbgrdFormulario1116A_OrderAscending = True
     
-    mtdbgrdCartaPorte_OrderColumn = 2
+    mtdbgrdCartaPorte_OrderColumn = GRID_CARTAPORTE_COLUMN_FECHACARGA
     mtdbgrdCartaPorte_OrderAscending = True
     
     Call CSM_Control_TextBox.PrepareAll(Me)
@@ -1446,13 +1447,13 @@ Private Sub tdbgrdFormulario1116_SelChange(Cancel As Integer)
     If tdbgrdFormulario1116.SelStartCol <> tdbgrdFormulario1116.SelEndCol Then
         tdbgrdFormulario1116.SelEndCol = tdbgrdFormulario1116.SelStartCol
     End If
-    If tdbgrdFormulario1116.SelStartCol + 1 = mtdbgrdFormulario1116A_OrderColumn Then
+    If tdbgrdFormulario1116.SelStartCol = mtdbgrdFormulario1116A_OrderColumn Then
         mtdbgrdFormulario1116A_OrderAscending = Not mtdbgrdFormulario1116A_OrderAscending
     Else
         mtdbgrdFormulario1116A_OrderAscending = True
     End If
     OldOrderColumn = mtdbgrdFormulario1116A_OrderColumn
-    mtdbgrdFormulario1116A_OrderColumn = tdbgrdFormulario1116.SelStartCol + 1
+    mtdbgrdFormulario1116A_OrderColumn = tdbgrdFormulario1116.SelStartCol
     tdbgrdFormulario1116.SelStartCol = -1
     tdbgrdFormulario1116.SelEndCol = -1
     
@@ -1477,17 +1478,17 @@ Private Sub tdbgrdFormulario1116_SortColumn(ByVal OldOrderColumn As Long)
 
     Set recData = tdbgrdFormulario1116.DataSource
     If Not recData Is Nothing Then
-        recData.Sort = tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn - 1).DataField & IIf(mtdbgrdFormulario1116A_OrderAscending, " ASC", " DESC")
+        recData.Sort = tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn).DataField & IIf(mtdbgrdFormulario1116A_OrderAscending, " ASC", " DESC")
     End If
     
     'ICONOS
-    tdbgrdFormulario1116.Columns(OldOrderColumn - 1).HeadingStyle.ForegroundPicture = 0
-    tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn - 1).HeadingStyle.ForegroundPicturePosition = dbgFPRightOfText
-    tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn - 1).HeadingStyle.TransparentForegroundPicture = True
+    tdbgrdFormulario1116.Columns(OldOrderColumn).HeadingStyle.ForegroundPicture = 0
+    tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn).HeadingStyle.ForegroundPicturePosition = dbgFPRightOfText
+    tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn).HeadingStyle.TransparentForegroundPicture = True
     If mtdbgrdFormulario1116A_OrderAscending Then
-        Set tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn - 1).HeadingStyle.ForegroundPicture = LoadResPicture("SORT_ASC", vbResBitmap)
+        Set tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn).HeadingStyle.ForegroundPicture = LoadResPicture("SORT_ASC", vbResBitmap)
     Else
-        Set tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn - 1).HeadingStyle.ForegroundPicture = LoadResPicture("SORT_DESC", vbResBitmap)
+        Set tdbgrdFormulario1116.Columns(mtdbgrdFormulario1116A_OrderColumn).HeadingStyle.ForegroundPicture = LoadResPicture("SORT_DESC", vbResBitmap)
     End If
 End Sub
 
