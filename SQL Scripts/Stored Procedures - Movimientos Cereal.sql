@@ -1251,6 +1251,7 @@ GO
 -- =============================================
 -- Author:		Tomás A. Cardoner
 -- Create date: 2013-09-04
+-- Updates: 2022-06-03 - Se agregó el campo CTGNumero
 -- Description:	Lista las Cartas de Porte de Salida pendientes de RT o B
 -- =============================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movimiento_Cereal_Salida_SinAplicar_List') AND type in (N'P', N'PC'))
@@ -1269,7 +1270,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-    SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.FechaCarga, Movimiento_Cereal.PesoNeto, (Movimiento_Cereal.PesoNeto - Movimiento_Cereal.KilogramoAplicado) AS KilogramoPendiente, 0 AS KilogramoAsignar
+    SELECT Movimiento_Cereal.IDMovimiento_Cereal, Movimiento_Cereal.ComprobanteNumero, Movimiento_Cereal.CTGNumero, Movimiento_Cereal.FechaCarga, Movimiento_Cereal.PesoNeto, (Movimiento_Cereal.PesoNeto - Movimiento_Cereal.KilogramoAplicado) AS KilogramoPendiente, 0 AS KilogramoAsignar
 		FROM Movimiento_Cereal
 		WHERE Movimiento_Cereal.Tipo = 'S' AND Movimiento_Cereal.IDCartaPorte_MotivoAnulacion IS NULL
 			AND (Movimiento_Cereal.PesoNeto - Movimiento_Cereal.KilogramoAplicado) > 0

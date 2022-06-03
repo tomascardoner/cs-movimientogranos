@@ -501,7 +501,7 @@ Begin VB.Form frmFormularioRT_Detalle
       _ExtentX        =   2566
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   86638593
+      Format          =   58720257
       CurrentDate     =   40659
       MaxDate         =   55153
       MinDate         =   40513
@@ -715,28 +715,33 @@ Begin VB.Form frmFormularioRT_Detalle
          Columns(1)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
          Columns(2)._VlistStyle=   0
          Columns(2)._MaxComboItems=   5
-         Columns(2).Caption=   "Fecha Carga"
-         Columns(2).DataField=   "FechaCarga"
-         Columns(2).NumberFormat=   "Short Date"
+         Columns(2).Caption=   "C.T.G."
+         Columns(2).DataField=   "CTGNumero"
          Columns(2)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
          Columns(3)._VlistStyle=   0
          Columns(3)._MaxComboItems=   5
-         Columns(3).Caption=   "Kgs. C.P."
-         Columns(3).DataField=   "PesoNeto"
-         Columns(3).NumberFormat=   "#,###"
+         Columns(3).Caption=   "Fecha Carga"
+         Columns(3).DataField=   "FechaCarga"
+         Columns(3).NumberFormat=   "Short Date"
          Columns(3)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
          Columns(4)._VlistStyle=   0
          Columns(4)._MaxComboItems=   5
-         Columns(4).Caption=   "Kgs. Pendientes"
-         Columns(4).DataField=   "KilogramoAsignado"
+         Columns(4).Caption=   "Kgs. C.P."
+         Columns(4).DataField=   "PesoNeto"
          Columns(4).NumberFormat=   "#,###"
          Columns(4)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
          Columns(5)._VlistStyle=   0
          Columns(5)._MaxComboItems=   5
-         Columns(5).Caption=   "Kgs. a Asignar"
-         Columns(5).DataField=   "KilogramoAsignar"
+         Columns(5).Caption=   "Kgs. Pendientes"
+         Columns(5).DataField=   "KilogramoAsignado"
+         Columns(5).NumberFormat=   "#,###"
          Columns(5)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
-         Columns.Count   =   6
+         Columns(6)._VlistStyle=   0
+         Columns(6)._MaxComboItems=   5
+         Columns(6).Caption=   "Kgs. a Asignar"
+         Columns(6).DataField=   "KilogramoAsignar"
+         Columns(6)._PropDict=   "_MaxComboItems,516,2;_VlistStyle,514,3"
+         Columns.Count   =   7
          Splits(0)._UserFlags=   0
          Splits(0).AllowRowSizing=   0   'False
          Splits(0).RecordSelectors=   0   'False
@@ -746,7 +751,7 @@ Begin VB.Form frmFormularioRT_Detalle
          Splits(0).DividerColor=   14215660
          Splits(0).SpringMode=   0   'False
          Splits(0)._PropDict=   "_ColumnProps,515,0;_UserFlags,518,3"
-         Splits(0)._ColumnProps(0)=   "Columns.Count=6"
+         Splits(0)._ColumnProps(0)=   "Columns.Count=7"
          Splits(0)._ColumnProps(1)=   "Column(0).Width=3254"
          Splits(0)._ColumnProps(2)=   "Column(0).DividerColor=0"
          Splits(0)._ColumnProps(3)=   "Column(0)._WidthInPix=3175"
@@ -755,34 +760,40 @@ Begin VB.Form frmFormularioRT_Detalle
          Splits(0)._ColumnProps(6)=   "Column(0).Visible=0"
          Splits(0)._ColumnProps(7)=   "Column(0).AllowFocus=0"
          Splits(0)._ColumnProps(8)=   "Column(0).Order=1"
-         Splits(0)._ColumnProps(9)=   "Column(1).Width=2805"
+         Splits(0)._ColumnProps(9)=   "Column(1).Width=2540"
          Splits(0)._ColumnProps(10)=   "Column(1).DividerColor=0"
-         Splits(0)._ColumnProps(11)=   "Column(1)._WidthInPix=2725"
-         Splits(0)._ColumnProps(12)=   "Column(1)._ColStyle=8704"
+         Splits(0)._ColumnProps(11)=   "Column(1)._WidthInPix=2461"
+         Splits(0)._ColumnProps(12)=   "Column(1)._ColStyle=8706"
          Splits(0)._ColumnProps(13)=   "Column(1).Order=2"
-         Splits(0)._ColumnProps(14)=   "Column(2).Width=2249"
+         Splits(0)._ColumnProps(14)=   "Column(2).Width=2011"
          Splits(0)._ColumnProps(15)=   "Column(2).DividerColor=0"
-         Splits(0)._ColumnProps(16)=   "Column(2)._WidthInPix=2170"
-         Splits(0)._ColumnProps(17)=   "Column(2)._ColStyle=8708"
+         Splits(0)._ColumnProps(16)=   "Column(2)._WidthInPix=1931"
+         Splits(0)._ColumnProps(17)=   "Column(2)._ColStyle=8705"
          Splits(0)._ColumnProps(18)=   "Column(2).AllowFocus=0"
          Splits(0)._ColumnProps(19)=   "Column(2).Order=3"
-         Splits(0)._ColumnProps(20)=   "Column(3).Width=1402"
+         Splits(0)._ColumnProps(20)=   "Column(3).Width=2249"
          Splits(0)._ColumnProps(21)=   "Column(3).DividerColor=0"
-         Splits(0)._ColumnProps(22)=   "Column(3)._WidthInPix=1323"
-         Splits(0)._ColumnProps(23)=   "Column(3)._ColStyle=8706"
+         Splits(0)._ColumnProps(22)=   "Column(3)._WidthInPix=2170"
+         Splits(0)._ColumnProps(23)=   "Column(3)._ColStyle=8705"
          Splits(0)._ColumnProps(24)=   "Column(3).AllowFocus=0"
          Splits(0)._ColumnProps(25)=   "Column(3).Order=4"
-         Splits(0)._ColumnProps(26)=   "Column(4).Width=2461"
+         Splits(0)._ColumnProps(26)=   "Column(4).Width=1614"
          Splits(0)._ColumnProps(27)=   "Column(4).DividerColor=0"
-         Splits(0)._ColumnProps(28)=   "Column(4)._WidthInPix=2381"
+         Splits(0)._ColumnProps(28)=   "Column(4)._WidthInPix=1535"
          Splits(0)._ColumnProps(29)=   "Column(4)._ColStyle=8706"
          Splits(0)._ColumnProps(30)=   "Column(4).AllowFocus=0"
          Splits(0)._ColumnProps(31)=   "Column(4).Order=5"
-         Splits(0)._ColumnProps(32)=   "Column(5).Width=2461"
+         Splits(0)._ColumnProps(32)=   "Column(5).Width=2566"
          Splits(0)._ColumnProps(33)=   "Column(5).DividerColor=0"
-         Splits(0)._ColumnProps(34)=   "Column(5)._WidthInPix=2381"
+         Splits(0)._ColumnProps(34)=   "Column(5)._WidthInPix=2487"
          Splits(0)._ColumnProps(35)=   "Column(5)._ColStyle=8706"
-         Splits(0)._ColumnProps(36)=   "Column(5).Order=6"
+         Splits(0)._ColumnProps(36)=   "Column(5).AllowFocus=0"
+         Splits(0)._ColumnProps(37)=   "Column(5).Order=6"
+         Splits(0)._ColumnProps(38)=   "Column(6).Width=2461"
+         Splits(0)._ColumnProps(39)=   "Column(6).DividerColor=0"
+         Splits(0)._ColumnProps(40)=   "Column(6)._WidthInPix=2381"
+         Splits(0)._ColumnProps(41)=   "Column(6)._ColStyle=8706"
+         Splits(0)._ColumnProps(42)=   "Column(6).Order=7"
          Splits.Count    =   1
          PrintInfos(0)._StateFlags=   3
          PrintInfos(0).Name=   "piInternal 0"
@@ -847,47 +858,51 @@ Begin VB.Form frmFormularioRT_Detalle
          _StyleDefs(37)  =   "Splits(0).Columns(0).HeadingStyle:id=103,.parent=14"
          _StyleDefs(38)  =   "Splits(0).Columns(0).FooterStyle:id=104,.parent=15"
          _StyleDefs(39)  =   "Splits(0).Columns(0).EditorStyle:id=105,.parent=17"
-         _StyleDefs(40)  =   "Splits(0).Columns(1).Style:id=90,.parent=13,.alignment=0,.locked=-1"
+         _StyleDefs(40)  =   "Splits(0).Columns(1).Style:id=90,.parent=13,.alignment=1,.locked=-1"
          _StyleDefs(41)  =   "Splits(0).Columns(1).HeadingStyle:id=87,.parent=14,.alignment=2"
          _StyleDefs(42)  =   "Splits(0).Columns(1).FooterStyle:id=88,.parent=15"
          _StyleDefs(43)  =   "Splits(0).Columns(1).EditorStyle:id=89,.parent=17"
-         _StyleDefs(44)  =   "Splits(0).Columns(2).Style:id=46,.parent=13,.locked=-1"
-         _StyleDefs(45)  =   "Splits(0).Columns(2).HeadingStyle:id=43,.parent=14,.alignment=2"
-         _StyleDefs(46)  =   "Splits(0).Columns(2).FooterStyle:id=44,.parent=15"
-         _StyleDefs(47)  =   "Splits(0).Columns(2).EditorStyle:id=45,.parent=17"
-         _StyleDefs(48)  =   "Splits(0).Columns(3).Style:id=58,.parent=13,.alignment=1,.locked=-1"
-         _StyleDefs(49)  =   "Splits(0).Columns(3).HeadingStyle:id=55,.parent=14,.alignment=2"
-         _StyleDefs(50)  =   "Splits(0).Columns(3).FooterStyle:id=56,.parent=15"
-         _StyleDefs(51)  =   "Splits(0).Columns(3).EditorStyle:id=57,.parent=17"
-         _StyleDefs(52)  =   "Splits(0).Columns(4).Style:id=32,.parent=13,.alignment=1,.locked=-1"
-         _StyleDefs(53)  =   "Splits(0).Columns(4).HeadingStyle:id=29,.parent=14,.alignment=2"
-         _StyleDefs(54)  =   "Splits(0).Columns(4).FooterStyle:id=30,.parent=15"
-         _StyleDefs(55)  =   "Splits(0).Columns(4).EditorStyle:id=31,.parent=17"
-         _StyleDefs(56)  =   "Splits(0).Columns(5).Style:id=28,.parent=13,.alignment=1,.locked=-1"
-         _StyleDefs(57)  =   "Splits(0).Columns(5).HeadingStyle:id=25,.parent=14,.alignment=2"
-         _StyleDefs(58)  =   "Splits(0).Columns(5).FooterStyle:id=26,.parent=15"
-         _StyleDefs(59)  =   "Splits(0).Columns(5).EditorStyle:id=27,.parent=17"
-         _StyleDefs(60)  =   "Named:id=33:Normal"
-         _StyleDefs(61)  =   ":id=33,.parent=0"
-         _StyleDefs(62)  =   "Named:id=34:Heading"
-         _StyleDefs(63)  =   ":id=34,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
-         _StyleDefs(64)  =   ":id=34,.wraptext=-1"
-         _StyleDefs(65)  =   "Named:id=35:Footing"
-         _StyleDefs(66)  =   ":id=35,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
-         _StyleDefs(67)  =   "Named:id=36:Selected"
-         _StyleDefs(68)  =   ":id=36,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
-         _StyleDefs(69)  =   "Named:id=37:Caption"
-         _StyleDefs(70)  =   ":id=37,.parent=34,.alignment=2"
-         _StyleDefs(71)  =   "Named:id=38:HighlightRow"
-         _StyleDefs(72)  =   ":id=38,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
-         _StyleDefs(73)  =   "Named:id=39:EvenRow"
-         _StyleDefs(74)  =   ":id=39,.parent=33,.bgcolor=&HFFFF00&"
-         _StyleDefs(75)  =   "Named:id=40:OddRow"
-         _StyleDefs(76)  =   ":id=40,.parent=33"
-         _StyleDefs(77)  =   "Named:id=41:RecordSelector"
-         _StyleDefs(78)  =   ":id=41,.parent=34"
-         _StyleDefs(79)  =   "Named:id=42:FilterBar"
-         _StyleDefs(80)  =   ":id=42,.parent=33"
+         _StyleDefs(44)  =   "Splits(0).Columns(2).Style:id=50,.parent=13,.alignment=2,.locked=-1"
+         _StyleDefs(45)  =   "Splits(0).Columns(2).HeadingStyle:id=47,.parent=14,.alignment=2"
+         _StyleDefs(46)  =   "Splits(0).Columns(2).FooterStyle:id=48,.parent=15"
+         _StyleDefs(47)  =   "Splits(0).Columns(2).EditorStyle:id=49,.parent=17"
+         _StyleDefs(48)  =   "Splits(0).Columns(3).Style:id=46,.parent=13,.alignment=2,.locked=-1"
+         _StyleDefs(49)  =   "Splits(0).Columns(3).HeadingStyle:id=43,.parent=14,.alignment=2"
+         _StyleDefs(50)  =   "Splits(0).Columns(3).FooterStyle:id=44,.parent=15"
+         _StyleDefs(51)  =   "Splits(0).Columns(3).EditorStyle:id=45,.parent=17"
+         _StyleDefs(52)  =   "Splits(0).Columns(4).Style:id=58,.parent=13,.alignment=1,.locked=-1"
+         _StyleDefs(53)  =   "Splits(0).Columns(4).HeadingStyle:id=55,.parent=14,.alignment=2"
+         _StyleDefs(54)  =   "Splits(0).Columns(4).FooterStyle:id=56,.parent=15"
+         _StyleDefs(55)  =   "Splits(0).Columns(4).EditorStyle:id=57,.parent=17"
+         _StyleDefs(56)  =   "Splits(0).Columns(5).Style:id=32,.parent=13,.alignment=1,.locked=-1"
+         _StyleDefs(57)  =   "Splits(0).Columns(5).HeadingStyle:id=29,.parent=14,.alignment=2"
+         _StyleDefs(58)  =   "Splits(0).Columns(5).FooterStyle:id=30,.parent=15"
+         _StyleDefs(59)  =   "Splits(0).Columns(5).EditorStyle:id=31,.parent=17"
+         _StyleDefs(60)  =   "Splits(0).Columns(6).Style:id=28,.parent=13,.alignment=1,.locked=-1"
+         _StyleDefs(61)  =   "Splits(0).Columns(6).HeadingStyle:id=25,.parent=14,.alignment=2"
+         _StyleDefs(62)  =   "Splits(0).Columns(6).FooterStyle:id=26,.parent=15"
+         _StyleDefs(63)  =   "Splits(0).Columns(6).EditorStyle:id=27,.parent=17"
+         _StyleDefs(64)  =   "Named:id=33:Normal"
+         _StyleDefs(65)  =   ":id=33,.parent=0"
+         _StyleDefs(66)  =   "Named:id=34:Heading"
+         _StyleDefs(67)  =   ":id=34,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
+         _StyleDefs(68)  =   ":id=34,.wraptext=-1"
+         _StyleDefs(69)  =   "Named:id=35:Footing"
+         _StyleDefs(70)  =   ":id=35,.parent=33,.valignment=2,.bgcolor=&H8000000F&,.fgcolor=&H80000012&"
+         _StyleDefs(71)  =   "Named:id=36:Selected"
+         _StyleDefs(72)  =   ":id=36,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
+         _StyleDefs(73)  =   "Named:id=37:Caption"
+         _StyleDefs(74)  =   ":id=37,.parent=34,.alignment=2"
+         _StyleDefs(75)  =   "Named:id=38:HighlightRow"
+         _StyleDefs(76)  =   ":id=38,.parent=33,.bgcolor=&H8000000D&,.fgcolor=&H8000000E&"
+         _StyleDefs(77)  =   "Named:id=39:EvenRow"
+         _StyleDefs(78)  =   ":id=39,.parent=33,.bgcolor=&HFFFF00&"
+         _StyleDefs(79)  =   "Named:id=40:OddRow"
+         _StyleDefs(80)  =   ":id=40,.parent=33"
+         _StyleDefs(81)  =   "Named:id=41:RecordSelector"
+         _StyleDefs(82)  =   ":id=41,.parent=34"
+         _StyleDefs(83)  =   "Named:id=42:FilterBar"
+         _StyleDefs(84)  =   ":id=42,.parent=33"
       End
       Begin MSComCtl2.DTPicker dtpFechaDescarga_Desde 
          Height          =   315
@@ -907,7 +922,7 @@ Begin VB.Form frmFormularioRT_Detalle
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Format          =   86638593
+         Format          =   58720257
          CurrentDate     =   40544
          MinDate         =   40179
       End
@@ -929,7 +944,7 @@ Begin VB.Form frmFormularioRT_Detalle
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Format          =   86638593
+         Format          =   58720257
          CurrentDate     =   42480.5029861111
          MinDate         =   40179
       End
@@ -1160,7 +1175,7 @@ Public Function Startup(ByRef Formulario1116RT_Cabecera As F1116RT_Cabecera) As 
     
     Me.Caption = "Detalle del Certificado de Retiro / Transferencia - Nuevo"
         
-    dtpFecha.Value = Date
+    dtpFecha.value = Date
     
 '    If CSM_Forms.IsLoaded("frmMovimiento_Cereal_Lista") Then
 '        If frmMovimiento_Cereal_Lista.cboFechaCarga.ListIndex = 1 Then
@@ -1224,8 +1239,8 @@ Private Sub Form_Load()
     
     Call CSM_Control_TextBox.PrepareAll(Me)
     
-    dtpFechaDescarga_Desde.Value = DateAdd("d", -15, Date)
-    dtpFechaDescarga_Hasta.Value = Date
+    dtpFechaDescarga_Desde.value = DateAdd("d", -15, Date)
+    dtpFechaDescarga_Hasta.value = Date
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1252,20 +1267,20 @@ End Sub
 '============================================================
 'FECHA CARGA
 Private Sub cmdFecha_Anterior_Click()
-    dtpFecha.Value = DateAdd("d", -1, dtpFecha.Value)
+    dtpFecha.value = DateAdd("d", -1, dtpFecha.value)
     dtpFecha.SetFocus
 End Sub
 
 Private Sub cmdFecha_Siguiente_Click()
-    dtpFecha.Value = DateAdd("d", 1, dtpFecha.Value)
+    dtpFecha.value = DateAdd("d", 1, dtpFecha.value)
     dtpFecha.SetFocus
 End Sub
 
 Private Sub cmdFecha_Hoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFecha.Value
-    dtpFecha.Value = Date
+    OldValue = dtpFecha.value
+    dtpFecha.value = Date
     dtpFecha.SetFocus
 End Sub
 
@@ -1325,7 +1340,7 @@ End Sub
 '============================================================
 'FECHA DESCARGA DESDE
 Private Sub cmdFechaDescarga_DesdeAnterior_Click()
-    dtpFechaDescarga_Desde.Value = DateAdd("d", -1, dtpFechaDescarga_Desde.Value)
+    dtpFechaDescarga_Desde.value = DateAdd("d", -1, dtpFechaDescarga_Desde.value)
     dtpFechaDescarga_Desde.SetFocus
     dtpFechaDescarga_Desde_Change
 End Sub
@@ -1335,7 +1350,7 @@ Private Sub dtpFechaDescarga_Desde_Change()
 End Sub
 
 Private Sub cmdFechaDescarga_DesdeSiguiente_Click()
-    dtpFechaDescarga_Desde.Value = DateAdd("d", 1, dtpFechaDescarga_Desde.Value)
+    dtpFechaDescarga_Desde.value = DateAdd("d", 1, dtpFechaDescarga_Desde.value)
     dtpFechaDescarga_Desde.SetFocus
     dtpFechaDescarga_Desde_Change
 End Sub
@@ -1343,10 +1358,10 @@ End Sub
 Private Sub cmdFechaDescarga_DesdeHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaDescarga_Desde.Value
-    dtpFechaDescarga_Desde.Value = Date
+    OldValue = dtpFechaDescarga_Desde.value
+    dtpFechaDescarga_Desde.value = Date
     dtpFechaDescarga_Desde.SetFocus
-    If OldValue <> dtpFechaDescarga_Desde.Value Then
+    If OldValue <> dtpFechaDescarga_Desde.value Then
         dtpFechaDescarga_Desde_Change
     End If
 End Sub
@@ -1354,7 +1369,7 @@ End Sub
 '============================================================
 'FECHA DESCARGA HASTA
 Private Sub cmdFechaDescarga_HastaAnterior_Click()
-    dtpFechaDescarga_Hasta.Value = DateAdd("d", -1, dtpFechaDescarga_Hasta.Value)
+    dtpFechaDescarga_Hasta.value = DateAdd("d", -1, dtpFechaDescarga_Hasta.value)
     dtpFechaDescarga_Hasta.SetFocus
     dtpFechaDescarga_Hasta_Change
 End Sub
@@ -1364,7 +1379,7 @@ Private Sub dtpFechaDescarga_Hasta_Change()
 End Sub
 
 Private Sub cmdFechaDescarga_HastaSiguiente_Click()
-    dtpFechaDescarga_Hasta.Value = DateAdd("d", 1, dtpFechaDescarga_Hasta.Value)
+    dtpFechaDescarga_Hasta.value = DateAdd("d", 1, dtpFechaDescarga_Hasta.value)
     dtpFechaDescarga_Hasta.SetFocus
     dtpFechaDescarga_Hasta_Change
 End Sub
@@ -1372,17 +1387,17 @@ End Sub
 Private Sub cmdFechaDescarga_HastaHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaDescarga_Hasta.Value
-    dtpFechaDescarga_Hasta.Value = Date
+    OldValue = dtpFechaDescarga_Hasta.value
+    dtpFechaDescarga_Hasta.value = Date
     dtpFechaDescarga_Hasta.SetFocus
-    If OldValue <> dtpFechaDescarga_Hasta.Value Then
+    If OldValue <> dtpFechaDescarga_Hasta.value Then
         dtpFechaDescarga_Hasta_Change
     End If
 End Sub
 
 Private Sub tdbgrdFormulario1116_Fill()
     Dim cmdData As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     If Val(datcboPlanta.BoundText) = 0 Or Val(datcboDepositante.BoundText) = 0 Or Val(datcboCosecha.BoundText) = 0 Or Val(datcboCereal.BoundText) = 0 Then
         Set tdbgrdFormulario1116.DataSource = recData
@@ -1407,7 +1422,7 @@ Private Sub tdbgrdFormulario1116_Fill()
         .Parameters.Append .CreateParameter("IDCosecha", adSmallInt, adParamInput, , Val(datcboCosecha.BoundText))
         .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
     End With
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdData, , adOpenStatic, adLockReadOnly, adCmdStoredProc
     
     Set tdbgrdFormulario1116.DataSource = recData
@@ -1458,7 +1473,7 @@ Private Sub tdbgrdFormulario1116_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub tdbgrdFormulario1116_SortColumn(ByVal OldOrderColumn As Long)
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     Set recData = tdbgrdFormulario1116.DataSource
     If Not recData Is Nothing Then
@@ -1492,7 +1507,7 @@ End Sub
 
 Private Sub tdbgrdCartaPorte_Fill()
     Dim cmdData As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     Dim XArrayDB As XArrayDBObject.XArrayDB
     
     Set XArrayDB = New XArrayDBObject.XArrayDB
@@ -1526,10 +1541,10 @@ Private Sub tdbgrdCartaPorte_Fill()
         .Parameters.Append .CreateParameter("IDEntidad_Depositante", adInteger, adParamInput, , Val(datcboDepositante.BoundText))
         .Parameters.Append .CreateParameter("IDCosecha", adSmallInt, adParamInput, , Val(datcboCosecha.BoundText))
         .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
-        .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDescarga_Desde.Value)
-        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaDescarga_Hasta.Value)
+        .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDescarga_Desde.value)
+        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaDescarga_Hasta.value)
     End With
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdData, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
     
     If Not recData.EOF Then
@@ -1585,15 +1600,15 @@ End Sub
 Private Sub tdbgrdCartaPorte_DblClick()
     If tdbgrdCartaPorte.Col = GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR And (CLng(txtFormularioOrigen_KilogramoPendiente.Text) - CLng(txtKilogramoNetoSeleccionado.Text)) > 0 Then
         tdbgrdCartaPorte.EditActive = True
-        If tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOPENDIENTE).Value > (CLng(txtFormularioOrigen_KilogramoPendiente.Text) - CLng(txtKilogramoNetoSeleccionado.Text)) Then
-            tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).Value = (CLng(txtFormularioOrigen_KilogramoPendiente.Text) - CLng(txtKilogramoNetoSeleccionado.Text))
+        If tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOPENDIENTE).value > (CLng(txtFormularioOrigen_KilogramoPendiente.Text) - CLng(txtKilogramoNetoSeleccionado.Text)) Then
+            tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).value = (CLng(txtFormularioOrigen_KilogramoPendiente.Text) - CLng(txtKilogramoNetoSeleccionado.Text))
         Else
-            tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).Value = tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOPENDIENTE).Value
+            tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).value = tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOPENDIENTE).value
         End If
         tdbgrdCartaPorte.EditActive = False
         
         mSelectedCount = mSelectedCount + 1
-        mSelectedKgsTotal = mSelectedKgsTotal + CLng(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).Value)
+        mSelectedKgsTotal = mSelectedKgsTotal + CLng(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).value)
         
         Call RefreshTotals
     End If
@@ -1786,8 +1801,8 @@ Private Sub cmdFinalizar_Click()
             tdbgrdCartaPorte.Visible = False
             tdbgrdCartaPorte.MoveFirst
             Do While Not tdbgrdCartaPorte.EOF
-                If Val(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).Value) > 0 Then
-                    If DateDiff("d", CDate(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_FECHACARGA).Value), dtpFecha.Value) < 0 Then
+                If Val(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).value) > 0 Then
+                    If DateDiff("d", CDate(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_FECHACARGA).value), dtpFecha.value) < 0 Then
                         mFormCycleNumber = 2
                         'Call CycleForms
                         MsgBox "Hay al menos una Carta de Porte seleccionada que tiene Fecha de Carga mayor a la Fecha del Certificado.", vbInformation, App.Title
@@ -1878,7 +1893,7 @@ Private Sub cmdFinalizar_Click()
     
     With mFormulario1116RT_Cabecera
         .FormularioNumero = txtFormularioNumero.Text
-        .Fecha = dtpFecha.Value
+        .Fecha = dtpFecha.value
         
         .DepositarioIDEntidad = Val(Left(datcboPlanta.BoundText, Len(datcboPlanta.BoundText) - 5))
         .DepositarioIDPlanta = Val(Right(datcboPlanta.BoundText, 5))
@@ -1898,15 +1913,15 @@ Private Sub cmdFinalizar_Click()
         Set Entidad_Depositante = Nothing
         
         'ORIGEN
-        .Origen_FormularioTipo = Left(tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIOTIPO).Value, 1)
-        .Origen_FormularioNumero = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIONUMERO).Value
-        .Origen_FormularioFecha = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIOFECHA).Value
+        .Origen_FormularioTipo = Left(tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIOTIPO).value, 1)
+        .Origen_FormularioNumero = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIONUMERO).value
+        .Origen_FormularioFecha = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_FORMULARIOFECHA).value
         If .Origen_FormularioTipo = "A" Then
-            .Origen_IDFormulario1116A = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_IDFORMULARIO1116).Value
+            .Origen_IDFormulario1116A = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_IDFORMULARIO1116).value
         Else
-            .Origen_IDFormulario1116RT = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_IDFORMULARIO1116).Value
+            .Origen_IDFormulario1116RT = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_IDFORMULARIO1116).value
         End If
-        .Origen_IDPartido = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_ORIGEN_IDPARTIDO).Value
+        .Origen_IDPartido = tdbgrdFormulario1116.Columns(GRID_F1116_COLUMN_ORIGEN_IDPARTIDO).value
         
         'CEREAL
         .IDCosecha = Val(datcboCosecha.BoundText)
@@ -1917,7 +1932,7 @@ Private Sub cmdFinalizar_Click()
         Else
             .TotalKilogramo = CLng(txtKilogramoTransferencia.Text)
         End If
-        .GeneraNuevoF1116A = (chkGeneraNuevoF1116A.Value = vbChecked)
+        .GeneraNuevoF1116A = (chkGeneraNuevoF1116A.value = vbChecked)
         
         If .RetiroOTransferencia = FORMULARIO_RT_TRANSFERENCIA Then
             .ReceptorIDEntidad = CLng(datcboReceptor.BoundText)
@@ -1939,10 +1954,10 @@ Private Sub cmdFinalizar_Click()
             tdbgrdCartaPorte.MoveFirst
             Set .CFormulario1116RT_Detalle = New Collection
             Do While Not tdbgrdCartaPorte.EOF
-                If Val(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).Value) > 0 Then
+                If Val(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).value) > 0 Then
                     Set Formulario1116RT_Detalle = New F1116RT_Detalle
-                    Formulario1116RT_Detalle.IDMovimiento_Cereal = CLng(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_IDMOVIMIENTO_CEREAL).Value)
-                    Formulario1116RT_Detalle.KilogramoAplicado = CLng(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).Value)
+                    Formulario1116RT_Detalle.IDMovimiento_Cereal = CLng(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_IDMOVIMIENTO_CEREAL).value)
+                    Formulario1116RT_Detalle.KilogramoAplicado = CLng(tdbgrdCartaPorte.Columns(GRID_CARTAPORTE_COLUMN_KILOGRAMOASIGNAR).value)
                     .CFormulario1116RT_Detalle.Add Formulario1116RT_Detalle
                 End If
                 tdbgrdCartaPorte.MoveNext
