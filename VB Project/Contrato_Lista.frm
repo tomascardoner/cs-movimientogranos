@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Object = "{38911DA0-E448-11D0-84A3-00DD01104159}#1.1#0"; "COMCT332.OCX"
 Object = "{562E3E04-2C31-4ECE-83F4-4017EEE51D40}#8.0#0"; "todg8.ocx"
@@ -676,7 +676,7 @@ Begin VB.Form frmContrato_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   74252289
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaHasta 
@@ -698,7 +698,7 @@ Begin VB.Form frmContrato_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   74252289
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin VB.Label lblFecha 
@@ -828,7 +828,7 @@ Public Function Startup() As Boolean
 End Function
 
 Public Function LoadData(ByVal IDContrato As Long) As Boolean
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     Dim SQLSelect As String
     Dim SQLFrom As String
     Dim SQLGroupBy As String
@@ -849,13 +849,13 @@ Public Function LoadData(ByVal IDContrato As Long) As Boolean
     
     If IDContrato = 0 Then
         If Not tdbgrdData.EOF Then
-            SaveIDContrato = tdbgrdData.Columns("IDContrato").Value
+            SaveIDContrato = tdbgrdData.Columns("IDContrato").value
         End If
     Else
         SaveIDContrato = IDContrato
     End If
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     
     SQLSelect = "SELECT Contrato.IDContrato, Contrato.Numero, Contrato.NumeroComprador, Contrato.Fecha, Cosecha.Nombre AS Cosecha, Cereal.Nombre AS Cereal, Comprador.Nombre AS Comprador, Contrato.Kilogramo, ISNULL(SUM(Movimiento_Cereal.PesoNeto), 0) AS KilogramoEntregado, Contrato.Kilogramo - ISNULL(SUM(Movimiento_Cereal.PesoNeto), 0) AS KilogramoPendienteEntregar, ISNULL(SUM(ContratoLiquidacion.Kilogramo), 0) AS KilogramoLiquidado, Contrato.Kilogramo - ISNULL(SUM(ContratoLiquidacion.Kilogramo), 0) AS KilogramoPendienteLiquidar" & vbCr
     SQLFrom = "FROM ((((Contrato INNER JOIN Cosecha ON Contrato.IDCosecha = Cosecha.IDCosecha) INNER JOIN Cereal ON Contrato.IDCereal = Cereal.IDCereal) INNER JOIN Entidad AS Comprador ON Contrato.IDEntidad_Comprador = Comprador.IDEntidad) LEFT JOIN Movimiento_Cereal ON Contrato.IDContrato = Movimiento_Cereal.IDContrato) LEFT JOIN ContratoLiquidacion ON Contrato.IDContrato = ContratoLiquidacion.IDContrato" & vbCr
@@ -898,26 +898,26 @@ Public Function LoadData(ByVal IDContrato As Long) As Boolean
     Select Case cboFecha.ListIndex
         Case 0  'ALL
         Case 1  'EQUAL
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha = '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & "'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} >= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Contrato.Fecha} <= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha = '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & "'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} >= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Contrato.Fecha} <= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 2  'GREATER
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha > '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} > CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha > '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} > CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 3  'GREATER OR EQUAL
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha >= '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} >= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha >= '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} >= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 4  'MINOR
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha < '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} < CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha < '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} < CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 5  'MINOR OR EQUAL
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha <= '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} <= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha <= '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} <= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 6  'NOT EQUAL
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha NOT BETWEEN '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 23:59:59'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} <> CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha NOT BETWEEN '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 23:59:59'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} <> CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 7  'BETWEEN
-            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha BETWEEN '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaHasta.Value, "yyyy/mm/dd") & " 23:59:59'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} >= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Contrato.Fecha} <= CDateTime(" & Format(dtpFechaHasta.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mSQLWhere = mSQLWhere & IIf(mSQLWhere = "", "WHERE ", " AND ") & "Contrato.Fecha BETWEEN '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaHasta.value, "yyyy/mm/dd") & " 23:59:59'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Contrato.Fecha} >= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Contrato.Fecha} <= CDateTime(" & Format(dtpFechaHasta.value, "yyyy, mm, dd") & ", 23, 59, 59)"
     End Select
         
     'COMPRADOR
@@ -990,9 +990,6 @@ Public Sub SetTrueDBGridAppearance()
 End Sub
 
 Private Sub Form_Load()
-    Dim CReports As Collection
-    Dim ReportName As Variant
-    
     mLoading = True
     
     cbrMain.Bands("Toolbar").MinWidth = CSM_Control_Toolbar.GetTotalWidth(tlbMain)
@@ -1014,14 +1011,7 @@ Private Sub Form_Load()
     
     '//////////////////////////////////////////////////////////
     'ASIGNO LOS REPORTES AL SUBMENU DE IMPRIMIR
-    Set CReports = CSM_File.GetCollectionOfFiles(pDatabase.ReportsPath, REPORT_FILENAME_PREFIX & "*.rpt", False, True, False)
-    For Each ReportName In CReports
-        If Left(Right(CStr(ReportName), 4), 1) = "@" Then
-            tlbMain.buttons("PRINT").ButtonMenus.Add , CStr(ReportName), Mid(CStr(ReportName), Len(REPORT_FILENAME_PREFIX) + 1, Len(CStr(ReportName)) - Len(REPORT_FILENAME_PREFIX) - 5)
-        Else
-            tlbMain.buttons("PRINT").ButtonMenus.Add , CStr(ReportName), Mid(CStr(ReportName), Len(REPORT_FILENAME_PREFIX) + 1)
-        End If
-    Next ReportName
+    Call FillSubmenuWithReports(REPORT_FILENAME_PREFIX, tlbMain.buttons("PRINT").ButtonMenus)
     
     Call CSM_Parameter_CoolBar.GetSettings(Mid(Me.Name, 4), cbrMain)
     
@@ -1049,9 +1039,9 @@ Private Sub Form_Load()
     cboFecha.AddItem "Entre"
     cboFecha.ListIndex = 7
     
-    dtpFechaDesde.Value = DateAdd("d", -7, Date)
+    dtpFechaDesde.value = DateAdd("d", -7, Date)
     dtpFechaDesde_Change
-    dtpFechaHasta.Value = Date
+    dtpFechaHasta.value = Date
     
     cboCerrado.AddItem CSM_Constant.ITEM_ALL_MALE
     cboCerrado.AddItem CSM_Constant.BOOLEAN_STRING_YES
@@ -1125,7 +1115,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
                 Exit Sub
             End If
             Set Contrato = New Contrato
-            Contrato.IDContrato = tdbgrdData.Columns("IDContrato").Value
+            Contrato.IDContrato = tdbgrdData.Columns("IDContrato").value
             If Contrato.Load() Then
                 If frmContrato_Detalle.Startup(Contrato) Then
                     If frmContrato_Detalle.LoadData() Then
@@ -1149,7 +1139,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
                 Exit Sub
             End If
             Set Contrato = New Contrato
-            Contrato.IDContrato = tdbgrdData.Columns("IDContrato").Value
+            Contrato.IDContrato = tdbgrdData.Columns("IDContrato").value
             If Contrato.Copy() Then
                 If frmContrato_Detalle.Startup(Contrato) Then
                     If frmContrato_Detalle.LoadData() Then
@@ -1175,7 +1165,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             If MsgBox("¿Desea eliminar el Contrato?", vbExclamation + vbYesNo + vbDefaultButton2) = vbYes Then
                 Set Contrato = New Contrato
-                Contrato.IDContrato = tdbgrdData.Columns("IDContrato").Value
+                Contrato.IDContrato = tdbgrdData.Columns("IDContrato").value
                 Call Contrato.Delete
                 Set Contrato = Nothing
             End If
@@ -1188,7 +1178,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
 
             Set Contrato = New Contrato
-            Contrato.IDContrato = tdbgrdData.Columns("IDContrato").Value
+            Contrato.IDContrato = tdbgrdData.Columns("IDContrato").value
             If Contrato.Load() Then
                 If frmContrato_Liquidacion.Startup(Contrato) Then
                     If frmContrato_Liquidacion.LoadData(Contrato.IDContrato, 0) Then
@@ -1214,8 +1204,6 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
 End Sub
 
 Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
-    Dim Report As CSC_Report
-    
     Select Case ButtonMenu.Parent.Key
         Case "TASKS"
             Select Case ButtonMenu.Key
@@ -1232,25 +1220,7 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                         Exit Sub
                     End If
                 
-                    Screen.MousePointer = vbHourglass
-                    
-                    Set Report = New CSC_Report
-                    With Report
-                        .ParentForm_hWnd = frmMDI.hwnd
-                        .FileName = pDatabase.ReportsPath & ButtonMenu.Key & "." & REPORT_FILE_EXTENSION
-                        .WindowTitle = ButtonMenu.Text & " - Contrato Nº " & tdbgrdData.Columns("Numero").Value
-                        If Right(ButtonMenu.Key, 4) = REPORT_PARAMETER_KEY Then
-                            .ParameterAdd("@IDContrato", "", csrpdtNumberInteger, False, False, True).ParameterValue = tdbgrdData.Columns(0).Value
-                        End If
-                        If .OpenReport(True) Then
-                            If Right(ButtonMenu.Key, 4) = REPORT_PARAMETER_SELECTION Then
-                                .Report.RecordSelectionFormula = .Report.RecordSelectionFormula & mRecordSelectionFormula
-                            End If
-                            Call .PreviewReport(False)
-                        End If
-                    End With
-                    
-                    Screen.MousePointer = vbDefault
+                    Call MiscAppFunctions.ShowReport(ButtonMenu.Key, ButtonMenu.Text, "@IDContrato", tdbgrdData.Columns(0).value, mRecordSelectionFormula)
             End Select
     End Select
 End Sub
@@ -1339,18 +1309,18 @@ Private Sub cboFecha_Click()
 End Sub
 
 Private Sub cmdFechaDesdeAnterior_Click()
-    dtpFechaDesde.Value = DateAdd("d", -1, dtpFechaDesde.Value)
+    dtpFechaDesde.value = DateAdd("d", -1, dtpFechaDesde.value)
     dtpFechaDesde.SetFocus
     dtpFechaDesde_Change
 End Sub
 
 Private Sub dtpFechaDesde_Change()
-    txtDiaSemana.Text = WeekdayName(Weekday(dtpFechaDesde.Value))
+    txtDiaSemana.Text = WeekdayName(Weekday(dtpFechaDesde.value))
     Call LoadData(0)
 End Sub
 
 Private Sub cmdFechaDesdeSiguiente_Click()
-    dtpFechaDesde.Value = DateAdd("d", 1, dtpFechaDesde.Value)
+    dtpFechaDesde.value = DateAdd("d", 1, dtpFechaDesde.value)
     dtpFechaDesde.SetFocus
     dtpFechaDesde_Change
 End Sub
@@ -1358,16 +1328,16 @@ End Sub
 Private Sub cmdFechaDesdeHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaDesde.Value
-    dtpFechaDesde.Value = Date
+    OldValue = dtpFechaDesde.value
+    dtpFechaDesde.value = Date
     dtpFechaDesde.SetFocus
-    If OldValue <> dtpFechaDesde.Value Then
+    If OldValue <> dtpFechaDesde.value Then
         dtpFechaDesde_Change
     End If
 End Sub
 
 Private Sub cmdFechaHastaAnterior_Click()
-    dtpFechaHasta.Value = DateAdd("d", -1, dtpFechaHasta.Value)
+    dtpFechaHasta.value = DateAdd("d", -1, dtpFechaHasta.value)
     dtpFechaHasta.SetFocus
     dtpFechaHasta_Change
 End Sub
@@ -1377,7 +1347,7 @@ Private Sub dtpFechaHasta_Change()
 End Sub
 
 Private Sub cmdFechaHastaSiguiente_Click()
-    dtpFechaHasta.Value = DateAdd("d", 1, dtpFechaHasta.Value)
+    dtpFechaHasta.value = DateAdd("d", 1, dtpFechaHasta.value)
     dtpFechaHasta.SetFocus
     dtpFechaHasta_Change
 End Sub
@@ -1385,10 +1355,10 @@ End Sub
 Private Sub cmdFechaHastaHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaHasta.Value
-    dtpFechaHasta.Value = Date
+    OldValue = dtpFechaHasta.value
+    dtpFechaHasta.value = Date
     dtpFechaHasta.SetFocus
-    If OldValue <> dtpFechaHasta.Value Then
+    If OldValue <> dtpFechaHasta.value Then
         dtpFechaHasta_Change
     End If
 End Sub
@@ -1434,7 +1404,7 @@ Private Sub tdbgrdData_DblClick()
 End Sub
 
 Private Sub SortColumn(ByVal OldOrderColumn As Long)
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     Set recData = tdbgrdData.DataSource
     If Not recData Is Nothing Then

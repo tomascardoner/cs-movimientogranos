@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   110493697
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   110493697
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -1771,9 +1771,6 @@ ErrorHandler:
 End Function
 
 Private Sub Form_Load()
-    Dim CReports As Collection
-    Dim ReportName As Variant
-    
     Dim ValueItem As TrueOleDBGrid80.ValueItem
     
     mLoading = True
@@ -1806,10 +1803,7 @@ Private Sub Form_Load()
     
     '//////////////////////////////////////////////////////////
     'ASIGNO LOS REPORTES AL SUBMENU DE IMPRIMIR
-    Set CReports = CSM_File.GetCollectionOfFiles(pDatabase.ReportsPath, REPORT_FILENAME_PREFIX & "*.rpt", False, True, False)
-    For Each ReportName In CReports
-        tlbMain.buttons("PRINT").ButtonMenus.Add , CStr(ReportName) & ".rpt", Mid(CStr(ReportName), Len(REPORT_FILENAME_PREFIX) + 1)
-    Next ReportName
+    Call MiscAppFunctions.FillSubmenuWithReports(REPORT_FILENAME_PREFIX, tlbMain.buttons("PRINT").ButtonMenus)
     
     Call CSM_Parameter_CoolBar.GetSettings(Mid(Me.Name, 4), cbrMain)
     
@@ -2075,7 +2069,6 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
     Dim Movimiento_Cereal As Movimiento_Cereal
     Dim Movimiento_Cereal_Calculo As Movimiento_Cereal_Calculo
     Dim recData As ADODB.recordset
-    Dim Report As CSC_Report
     
     Select Case ButtonMenu.Parent.Key
     
@@ -2107,22 +2100,7 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                         Exit Sub
                     End If
                     
-                    Screen.MousePointer = vbHourglass
-                    
-                    On Error GoTo ErrorHandlerPrint
-                    
-                    Set Report = New CSC_Report
-                    With Report
-                        .ParentForm_hWnd = frmMDI.hwnd
-                        .FILENAME = pDatabase.ReportsPath & ButtonMenu.Key
-                        .WindowTitle = ButtonMenu.Text
-                        If .OpenReport(True) Then
-                            .Report.RecordSelectionFormula = .Report.RecordSelectionFormula & IIf(.Report.RecordSelectionFormula <> "", " AND ", "") & mRecordSelectionFormula
-                            Call .PreviewReport(False)
-                        End If
-                    End With
-                    
-                    Screen.MousePointer = vbDefault
+                    Call MiscAppFunctions.ShowReport(ButtonMenu.Key, ButtonMenu.Text, "", 0, mRecordSelectionFormula)
             End Select
     
         '//////////////////////////////////////////////////////////////////////
@@ -2216,10 +2194,6 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                     
             End Select
     End Select
-    Exit Sub
-    
-ErrorHandlerPrint:
-    CSM_Error.ShowErrorMessage "Forms.Movimiento_Cereal_Lista.Print", "Error al mostrar el Reporte." & vbCrLf & vbCrLf & Err.Description
 End Sub
 
 '============================================================

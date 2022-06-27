@@ -512,7 +512,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   90439681
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFecha_Hasta 
@@ -534,7 +534,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   90439681
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin VB.Label lblFecha 
@@ -939,7 +939,7 @@ End Function
 Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
     Dim strSQLSelect As String
     Dim strSQLFrom As String
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
         
     Dim SaveIDMovimiento_SubProducto As Long
     
@@ -957,13 +957,13 @@ Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
     
     If IDMovimiento_SubProducto = 0 Then
         If Not tdbgrdData.EOF Then
-            SaveIDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").Value
+            SaveIDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").value
         End If
     Else
         SaveIDMovimiento_SubProducto = IDMovimiento_SubProducto
     End If
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
         
     strSQLSelect = "SELECT Movimiento_SubProducto.IDMovimiento_SubProducto, Movimiento_SubProducto.Tipo, Movimiento_SubProducto.ComprobanteNumero, Movimiento_SubProducto.Fecha, Entidad_OrigenDestino_Origen.Nombre AS Planta_Nombre, Entidad_Destinatario.Nombre AS Entidad_Destinatario_Nombre, Entidad_Transportista.Nombre AS Entidad_Transportista_Nombre, Movimiento_SubProducto.EsCanje, Movimiento_SubProducto.FacturaNumero" & vbCr
     strSQLFrom = "FROM ((Movimiento_SubProducto INNER JOIN Entidad_OrigenDestino AS Entidad_OrigenDestino_Origen ON Movimiento_SubProducto.IDEntidad_Titular = Entidad_OrigenDestino_Origen.IDEntidad AND Movimiento_SubProducto.IDOrigenDestino_Origen = Entidad_OrigenDestino_Origen.IDOrigenDestino) LEFT JOIN Entidad AS Entidad_Destinatario ON Movimiento_SubProducto.IDEntidad_Destinatario = Entidad_Destinatario.IDEntidad) LEFT JOIN Entidad AS Entidad_Transportista ON Movimiento_SubProducto.IDEntidad_Transportista = Entidad_Transportista.IDEntidad" & vbCr
@@ -973,28 +973,28 @@ Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
     mRecordSelectionFormula = ""
     
     'MOVIMIENTO TIPO
-    If chkTipo_EntradaProduccion.Value = vbUnchecked And chkTipo_SalidaVenta.Value = vbUnchecked And chkTipo_AjusteBaja.Value = vbUnchecked And chkTipo_AjusteSube.Value = vbUnchecked Then
+    If chkTipo_EntradaProduccion.value = vbUnchecked And chkTipo_SalidaVenta.value = vbUnchecked And chkTipo_AjusteBaja.value = vbUnchecked And chkTipo_AjusteSube.value = vbUnchecked Then
         mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Tipo = ''"
         mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "Movimiento_SubProducto.Tipo = ''"
     Else
-        If chkTipo_EntradaProduccion.Value = vbUnchecked Or chkTipo_SalidaVenta.Value = vbUnchecked Or chkTipo_AjusteBaja.Value = vbUnchecked Or chkTipo_AjusteSube.Value = vbUnchecked Then
+        If chkTipo_EntradaProduccion.value = vbUnchecked Or chkTipo_SalidaVenta.value = vbUnchecked Or chkTipo_AjusteBaja.value = vbUnchecked Or chkTipo_AjusteSube.value = vbUnchecked Then
             'COMIENZO EL PARENTESIS PARA LOS OR
             mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "("
             mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "("
             
-            If chkTipo_EntradaProduccion.Value = vbChecked Then
+            If chkTipo_EntradaProduccion.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_SubProducto.Tipo = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_ENTRADAPRODUCCION & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_SubProducto.Tipo} = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_ENTRADAPRODUCCION & "'"
             End If
-            If chkTipo_SalidaVenta.Value = vbChecked Then
+            If chkTipo_SalidaVenta.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_SubProducto.Tipo = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_SALIDAVENTA & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_SubProducto.Tipo} = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_SALIDAVENTA & "'"
             End If
-            If chkTipo_AjusteBaja.Value = vbChecked Then
+            If chkTipo_AjusteBaja.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_SubProducto.Tipo = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTEBAJA & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_SubProducto.Tipo} = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTEBAJA & "'"
             End If
-            If chkTipo_AjusteSube.Value = vbChecked Then
+            If chkTipo_AjusteSube.value = vbChecked Then
                 mstrSQLWhere = mstrSQLWhere & IIf(Right(mstrSQLWhere, 1) = "(", "", " OR ") & "Movimiento_SubProducto.Tipo = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTESUBE & "'"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(Right(mRecordSelectionFormula, 1) = "(", "", " OR ") & "{Movimiento_SubProducto.Tipo} = '" & MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTESUBE & "'"
             End If
@@ -1024,26 +1024,26 @@ Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
     Select Case cboFecha.ListIndex
         Case 0  'ALL
         Case 1  'EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 2  'GREATER
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha > '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} > CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha > '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} > CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 3  'GREATER OR EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha >= '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha >= '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 4  'MINOR
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha < '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} < CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha < '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} < CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 5  'MINOR OR EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha <= '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha <= '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 6  'NOT EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha NOT BETWEEN '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(NOT ({Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha NOT BETWEEN '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(NOT ({Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
         Case 7  'BETWEEN
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN '" & Format(dtpFecha_Desde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Hasta.Value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Hasta.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Hasta.value, "yyyy/mm/dd") & " 23:59:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Hasta.value, "yyyy, mm, dd") & ", 23, 59, 59)"
     End Select
     
     'ENTIDAD DESTINATARIO
@@ -1129,8 +1129,6 @@ End Function
 
 Private Sub Form_Load()
     Dim ValueItem As TrueOleDBGrid80.ValueItem
-    Dim CReports As Collection
-    Dim ReportName As Variant
     
     mLoading = True
 
@@ -1159,14 +1157,7 @@ Private Sub Form_Load()
     
     '//////////////////////////////////////////////////////////
     'ASIGNO LOS REPORTES AL SUBMENU DE IMPRIMIR
-    Set CReports = CSM_File.GetCollectionOfFiles(pDatabase.ReportsPath, REPORT_FILENAME_PREFIX & "*.rpt", False, True, False)
-    For Each ReportName In CReports
-        If Left(Right(CStr(ReportName), 4), 1) = "@" Then
-            tlbMain.buttons("PRINT").ButtonMenus.Add , CStr(ReportName), Mid(CStr(ReportName), Len(REPORT_FILENAME_PREFIX) + 1, Len(CStr(ReportName)) - Len(REPORT_FILENAME_PREFIX) - 5)
-        Else
-            tlbMain.buttons("PRINT").ButtonMenus.Add , CStr(ReportName), Mid(CStr(ReportName), Len(REPORT_FILENAME_PREFIX) + 1)
-        End If
-    Next ReportName
+    Call MiscAppFunctions.FillSubmenuWithReports(REPORT_FILENAME_PREFIX, tlbMain.buttons("PRINT").ButtonMenus)
     
     Call CSM_Parameter_CoolBar.GetSettings(Mid(Me.Name, 4), cbrMain)
     
@@ -1195,9 +1186,9 @@ Private Sub Form_Load()
     cboFecha.AddItem "Entre"
     cboFecha.ListIndex = 7
     
-    dtpFecha_Desde.Value = DateAdd("d", -7, Date)
-    txtFecha_DiaSemana.Text = WeekdayName(Weekday(dtpFecha_Desde.Value))
-    dtpFecha_Hasta.Value = Date
+    dtpFecha_Desde.value = DateAdd("d", -7, Date)
+    txtFecha_DiaSemana.Text = WeekdayName(Weekday(dtpFecha_Desde.value))
+    dtpFecha_Hasta.value = Date
     
     Call FillComboBox_Planta
     Call FillComboBox_Entidad_Destinatario
@@ -1215,22 +1206,22 @@ Private Sub Form_Load()
     
     'AGREGO LOS VALUE ITEMS DE LA COLUMNA TIPO
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_SUBPRODUCTO_TIPO_ENTRADAPRODUCCION
+    ValueItem.value = MOVIMIENTO_SUBPRODUCTO_TIPO_ENTRADAPRODUCCION
     ValueItem.DisplayValue = MOVIMIENTO_SUBPRODUCTO_TIPO_ENTRADAPRODUCCION_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_SUBPRODUCTO_TIPO_SALIDAVENTA
+    ValueItem.value = MOVIMIENTO_SUBPRODUCTO_TIPO_SALIDAVENTA
     ValueItem.DisplayValue = MOVIMIENTO_SUBPRODUCTO_TIPO_SALIDAVENTA_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTEBAJA
+    ValueItem.value = MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTEBAJA
     ValueItem.DisplayValue = MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTEBAJA_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
     Set ValueItem = New TrueOleDBGrid80.ValueItem
-    ValueItem.Value = MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTESUBE
+    ValueItem.value = MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTESUBE
     ValueItem.DisplayValue = MOVIMIENTO_SUBPRODUCTO_TIPO_AJUSTESUBE_NOMBRECORTO
     tdbgrdData.Columns("Tipo").ValueItems.Add ValueItem
     
@@ -1300,7 +1291,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
                 Exit Sub
             End If
             Set Movimiento_SubProducto = New Movimiento_SubProducto
-            Movimiento_SubProducto.IDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").Value
+            Movimiento_SubProducto.IDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").value
             If Movimiento_SubProducto.Load() Then
                 If frmMovimiento_SubProducto_Detalle.Startup(Movimiento_SubProducto) Then
                     If frmMovimiento_SubProducto_Detalle.LoadData() Then
@@ -1325,7 +1316,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
             
             Set Movimiento_SubProducto = New Movimiento_SubProducto
-            Movimiento_SubProducto.IDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").Value
+            Movimiento_SubProducto.IDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").value
             If Movimiento_SubProducto.Load() Then
                 If MsgBox("¿Desea eliminar este Movimiento de SubProducto?", vbExclamation + vbYesNo + vbDefaultButton2, App.Title) = vbYes Then
                     Movimiento_SubProducto.Delete
@@ -1343,7 +1334,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
 
             Set Movimiento_SubProducto = New Movimiento_SubProducto
             
-            Movimiento_SubProducto.IDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").Value
+            Movimiento_SubProducto.IDMovimiento_SubProducto = tdbgrdData.Columns("IDMovimiento_SubProducto").value
             If Movimiento_SubProducto.Copy() Then
                 If frmMovimiento_SubProducto_Detalle.Startup(Movimiento_SubProducto) Then
                     If frmMovimiento_SubProducto_Detalle.LoadData Then
@@ -1376,8 +1367,7 @@ End Sub
 
 Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
     Dim Movimiento_SubProducto As Movimiento_SubProducto
-    Dim recData As ADODB.Recordset
-    Dim Report As CSC_Report
+    Dim recData As ADODB.recordset
     
     Dim ExportPath As String
 
@@ -1403,26 +1393,8 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                         tdbgrdData.SetFocus
                         Exit Sub
                     End If
-                
-                    Screen.MousePointer = vbHourglass
                     
-                    Set Report = New CSC_Report
-                    With Report
-                        .ParentForm_hWnd = frmMDI.hwnd
-                        .FILENAME = pDatabase.ReportsPath & ButtonMenu.Key & "." & REPORT_FILE_EXTENSION
-                        .WindowTitle = ButtonMenu.Text & " - Remito Nº " & tdbgrdData.Columns("ComprobanteNumero").Value
-                        If Right(ButtonMenu.Key, 4) = REPORT_PARAMETER_KEY Then
-                            .ParameterAdd("@IDMovimiento_SubProducto", "", csrpdtNumberInteger, False, False, True).ParameterValue = tdbgrdData.Columns(0).Value
-                        End If
-                        If .OpenReport(True) Then
-                            If Right(ButtonMenu.Key, 4) = REPORT_PARAMETER_SELECTION Then
-                                .Report.RecordSelectionFormula = .Report.RecordSelectionFormula & mRecordSelectionFormula
-                            End If
-                            Call .PreviewReport(False)
-                        End If
-                    End With
-                    
-                    Screen.MousePointer = vbDefault
+                    Call MiscAppFunctions.ShowReport(ButtonMenu.Key, ButtonMenu.Text, "@IDMovimiento_SubProducto", tdbgrdData.Columns(0).value, mRecordSelectionFormula)
             End Select
     
         '//////////////////////////////////////////////////////////////////////
@@ -1430,11 +1402,6 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
         '//////////////////////////////////////////////////////////////////////
         Case "TASKS"
     End Select
-    
-    Exit Sub
-    
-ErrorHandler:
-    CSM_Error.ShowErrorMessage "Forms.Movimiento_SubProducto_Lista.Print", "Error al mostrar un Reporte."
 End Sub
 
 '============================================================
@@ -1457,10 +1424,10 @@ End Sub
 
 Private Sub cmdTipo_Todos_Click()
     mLoading = True
-    chkTipo_EntradaProduccion.Value = vbChecked
-    chkTipo_SalidaVenta.Value = vbChecked
-    chkTipo_AjusteBaja.Value = vbChecked
-    chkTipo_AjusteSube.Value = vbChecked
+    chkTipo_EntradaProduccion.value = vbChecked
+    chkTipo_SalidaVenta.value = vbChecked
+    chkTipo_AjusteBaja.value = vbChecked
+    chkTipo_AjusteSube.value = vbChecked
     mLoading = False
     Call LoadData(0)
     tdbgrdData.SetFocus
@@ -1468,10 +1435,10 @@ End Sub
 
 Private Sub cmdTipo_Ninguno_Click()
     mLoading = True
-    chkTipo_EntradaProduccion.Value = vbUnchecked
-    chkTipo_SalidaVenta.Value = vbUnchecked
-    chkTipo_AjusteBaja.Value = vbUnchecked
-    chkTipo_AjusteSube.Value = vbUnchecked
+    chkTipo_EntradaProduccion.value = vbUnchecked
+    chkTipo_SalidaVenta.value = vbUnchecked
+    chkTipo_AjusteBaja.value = vbUnchecked
+    chkTipo_AjusteSube.value = vbUnchecked
     mLoading = False
     Call LoadData(0)
     tdbgrdData.SetFocus
@@ -1557,18 +1524,18 @@ Private Sub cboFecha_Click()
 End Sub
 
 Private Sub cmdFecha_DesdeAnterior_Click()
-    dtpFecha_Desde.Value = DateAdd("d", -1, dtpFecha_Desde.Value)
+    dtpFecha_Desde.value = DateAdd("d", -1, dtpFecha_Desde.value)
     dtpFecha_Desde.SetFocus
     dtpFecha_Desde_Change
 End Sub
 
 Private Sub dtpFecha_Desde_Change()
-    txtFecha_DiaSemana.Text = WeekdayName(Weekday(dtpFecha_Desde.Value))
+    txtFecha_DiaSemana.Text = WeekdayName(Weekday(dtpFecha_Desde.value))
     Call LoadData(0)
 End Sub
 
 Private Sub cmdFecha_DesdeSiguiente_Click()
-    dtpFecha_Desde.Value = DateAdd("d", 1, dtpFecha_Desde.Value)
+    dtpFecha_Desde.value = DateAdd("d", 1, dtpFecha_Desde.value)
     dtpFecha_Desde.SetFocus
     dtpFecha_Desde_Change
 End Sub
@@ -1576,16 +1543,16 @@ End Sub
 Private Sub cmdFecha_DesdeHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFecha_Desde.Value
-    dtpFecha_Desde.Value = Date
+    OldValue = dtpFecha_Desde.value
+    dtpFecha_Desde.value = Date
     dtpFecha_Desde.SetFocus
-    If OldValue <> dtpFecha_Desde.Value Then
+    If OldValue <> dtpFecha_Desde.value Then
         dtpFecha_Desde_Change
     End If
 End Sub
 
 Private Sub cmdFecha_HastaAnterior_Click()
-    dtpFecha_Hasta.Value = DateAdd("d", -1, dtpFecha_Hasta.Value)
+    dtpFecha_Hasta.value = DateAdd("d", -1, dtpFecha_Hasta.value)
     dtpFecha_Hasta.SetFocus
     dtpFecha_Hasta_Change
 End Sub
@@ -1595,7 +1562,7 @@ Private Sub dtpFecha_Hasta_Change()
 End Sub
 
 Private Sub cmdFecha_HastaSiguiente_Click()
-    dtpFecha_Hasta.Value = DateAdd("d", 1, dtpFecha_Hasta.Value)
+    dtpFecha_Hasta.value = DateAdd("d", 1, dtpFecha_Hasta.value)
     dtpFecha_Hasta.SetFocus
     dtpFecha_Hasta_Change
 End Sub
@@ -1603,10 +1570,10 @@ End Sub
 Private Sub cmdFecha_HastaHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFecha_Hasta.Value
-    dtpFecha_Hasta.Value = Date
+    OldValue = dtpFecha_Hasta.value
+    dtpFecha_Hasta.value = Date
     dtpFecha_Hasta.SetFocus
-    If OldValue <> dtpFecha_Hasta.Value Then
+    If OldValue <> dtpFecha_Hasta.value Then
         dtpFecha_Hasta_Change
     End If
 End Sub
@@ -1670,7 +1637,7 @@ Private Sub tdbgrdData_DblClick()
 End Sub
 
 Private Sub SortColumn(ByVal OldOrderColumn As Long)
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     Set recData = tdbgrdData.DataSource
     If Not recData Is Nothing Then

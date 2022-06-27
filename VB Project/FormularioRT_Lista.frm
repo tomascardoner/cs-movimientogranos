@@ -577,7 +577,7 @@ Begin VB.Form frmFormularioRT_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   98304001
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaHasta 
@@ -599,7 +599,7 @@ Begin VB.Form frmFormularioRT_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   98304001
+            Format          =   106102785
             CurrentDate     =   36950
          End
          Begin VB.Label lblFecha 
@@ -727,7 +727,7 @@ Public Function Startup() As Boolean
 End Function
 
 Public Function LoadData(ByVal IDFormulario1116RT As Long) As Boolean
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     Dim strSQLSelect As String
     Dim strSQLFrom As String
     Dim strSQLWhere As String
@@ -748,13 +748,13 @@ Public Function LoadData(ByVal IDFormulario1116RT As Long) As Boolean
     
     If IDFormulario1116RT = 0 Then
         If Not tdbgrdData.EOF Then
-            SaveIDFormulario1116RT = tdbgrdData.Columns("IDFormulario1116RT").Value
+            SaveIDFormulario1116RT = tdbgrdData.Columns("IDFormulario1116RT").value
         End If
     Else
         SaveIDFormulario1116RT = IDFormulario1116RT
     End If
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     
     strSQLSelect = "SELECT Formulario1116RT_Cabecera.IDFormulario1116RT, Formulario1116RT_Cabecera.FormularioNumero, dbo.udf_GetFormulario1116TipoNumero(Formulario1116RT_Cabecera.Origen_FormularioTipo, Formulario1116RT_Cabecera.Origen_FormularioNumero) AS Origen_FormularioTipoNumero, Formulario1116RT_Cabecera.Fecha, Formulario1116RT_Cabecera.RetiroOTransferencia, Cereal.Nombre AS Cereal, Formulario1116RT_Cabecera.DepositanteRazonSocial, Formulario1116RT_Cabecera.ReceptorRazonSocial, Formulario1116RT_Cabecera.TotalKilogramo" & vbCr
     
@@ -794,26 +794,26 @@ Public Function LoadData(ByVal IDFormulario1116RT As Long) As Boolean
     Select Case cboFecha.ListIndex
         Case 0  'ALL
         Case 1  'EQUAL
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha = '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & "'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} >= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Formulario1116A_Cabecera.Fecha} <= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha = '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & "'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} >= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Formulario1116A_Cabecera.Fecha} <= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 2  'GREATER
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha > '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 23:59:59'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} > CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha > '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 23:59:59'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} > CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
         Case 3  'GREATER OR EQUAL
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha >= '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} >= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha >= '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} >= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 4  'MINOR
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha < '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} < CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha < '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} < CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 5  'MINOR OR EQUAL
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha <= '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 23:59:59'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} <= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha <= '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 23:59:59'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} <= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 6  'NOT EQUAL
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha NOT BETWEEN '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 23:59:59'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} <> CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha NOT BETWEEN '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 23:59:59'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} <> CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
         Case 7  'BETWEEN
-            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha BETWEEN '" & Format(dtpFechaDesde.Value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaHasta.Value, "yyyy/mm/dd") & " 23:59:59'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} >= CDateTime(" & Format(dtpFechaDesde.Value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Formulario1116RT_Cabecera.Fecha} <= CDateTime(" & Format(dtpFechaHasta.Value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            strSQLWhere = strSQLWhere & IIf(strSQLWhere = "", "WHERE ", " AND ") & "Formulario1116RT_Cabecera.Fecha BETWEEN '" & Format(dtpFechaDesde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFechaHasta.value, "yyyy/mm/dd") & " 23:59:59'"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Formulario1116RT_Cabecera.Fecha} >= CDateTime(" & Format(dtpFechaDesde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Formulario1116RT_Cabecera.Fecha} <= CDateTime(" & Format(dtpFechaHasta.value, "yyyy, mm, dd") & ", 23, 59, 59)"
     End Select
     
     If strSQLWhere <> "" Then
@@ -875,9 +875,6 @@ Public Sub SetTrueDBGridAppearance()
 End Sub
 
 Private Sub Form_Load()
-    Dim CReports As Collection
-    Dim ReportName As Variant
-    
     mLoading = True
     
     cbrMain.Bands("Toolbar").MinWidth = CSM_Control_Toolbar.GetTotalWidth(tlbMain)
@@ -897,10 +894,7 @@ Private Sub Form_Load()
     
     '//////////////////////////////////////////////////////////
     'ASIGNO LOS REPORTES AL SUBMENU DE IMPRIMIR
-    Set CReports = CSM_File.GetCollectionOfFiles(pDatabase.ReportsPath, REPORT_FILENAME_PREFIX & "*.rpt", False, True, False)
-    For Each ReportName In CReports
-        tlbMain.buttons("PRINT").ButtonMenus.Add , CStr(ReportName) & ".rpt", Mid(CStr(ReportName), Len(REPORT_FILENAME_PREFIX) + 1)
-    Next ReportName
+    Call FillSubmenuWithReports(REPORT_FILENAME_PREFIX, tlbMain.buttons("PRINT").ButtonMenus)
     
     Call CSM_Parameter_CoolBar.GetSettings(Mid(Me.Name, 4), cbrMain)
     
@@ -919,9 +913,9 @@ Private Sub Form_Load()
     cboFecha.AddItem "Entre"
     cboFecha.ListIndex = 7
     
-    dtpFechaDesde.Value = DateAdd("d", -7, Date)
+    dtpFechaDesde.value = DateAdd("d", -7, Date)
     dtpFechaDesde_Change
-    dtpFechaHasta.Value = Date
+    dtpFechaHasta.value = Date
     
     Call SetTrueDBGridAppearance
     Call CSM_Parameter_TrueDBGrid.GetSettings(Mid(Me.Name, 4), tdbgrdData)
@@ -1008,7 +1002,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
         
             If MsgBox("¿Desea eliminar el Certificado de Retiro / Transferencia?", vbExclamation + vbYesNo + vbDefaultButton2) = vbYes Then
                 Set Formulario1116RT_Cabecera = New F1116RT_Cabecera
-                Formulario1116RT_Cabecera.IDFormulario1116RT = tdbgrdData.Columns("IDFormulario1116RT").Value
+                Formulario1116RT_Cabecera.IDFormulario1116RT = tdbgrdData.Columns("IDFormulario1116RT").value
                 Call Formulario1116RT_Cabecera.Delete
                 Set Formulario1116RT_Cabecera = Nothing
             End If
@@ -1024,7 +1018,6 @@ End Sub
 
 Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
     Dim Formulario1116RT_Cabecera As F1116RT_Cabecera
-    Dim Report As CSC_Report
     
     Select Case ButtonMenu.Parent.Key
         Case "NEW"
@@ -1050,21 +1043,8 @@ Private Sub tlbMain_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
                         tdbgrdData.SetFocus
                         Exit Sub
                     End If
-                
-                    Screen.MousePointer = vbHourglass
                     
-                    Set Report = New CSC_Report
-                    With Report
-                        .ParentForm_hWnd = frmMDI.hwnd
-                        .FILENAME = pDatabase.ReportsPath & ButtonMenu.Key
-                        .WindowTitle = ButtonMenu.Text & " - Certificado de Retiro / Transferencia Nº " & tdbgrdData.Columns("FormularioNumero").Value
-                        .ParameterAdd("@IDFormulario1116RT", "", csrpdtNumberInteger, False, False, True).ParameterValue = tdbgrdData.Columns("IDFormulario1116RT").Value
-                        If .OpenReport(True) Then
-                            Call .PreviewReport(False)
-                        End If
-                    End With
-                    
-                    Screen.MousePointer = vbDefault
+                    Call MiscAppFunctions.ShowReport(ButtonMenu.Key, ButtonMenu.Text, "@IDFormulario1116RT", tdbgrdData.Columns(0).value, mRecordSelectionFormula)
             End Select
     End Select
 End Sub
@@ -1115,18 +1095,18 @@ Private Sub cboFecha_Click()
 End Sub
 
 Private Sub cmdFechaDesdeAnterior_Click()
-    dtpFechaDesde.Value = DateAdd("d", -1, dtpFechaDesde.Value)
+    dtpFechaDesde.value = DateAdd("d", -1, dtpFechaDesde.value)
     dtpFechaDesde.SetFocus
     dtpFechaDesde_Change
 End Sub
 
 Private Sub dtpFechaDesde_Change()
-    txtDiaSemana.Text = WeekdayName(Weekday(dtpFechaDesde.Value))
+    txtDiaSemana.Text = WeekdayName(Weekday(dtpFechaDesde.value))
     Call LoadData(0)
 End Sub
 
 Private Sub cmdFechaDesdeSiguiente_Click()
-    dtpFechaDesde.Value = DateAdd("d", 1, dtpFechaDesde.Value)
+    dtpFechaDesde.value = DateAdd("d", 1, dtpFechaDesde.value)
     dtpFechaDesde.SetFocus
     dtpFechaDesde_Change
 End Sub
@@ -1134,16 +1114,16 @@ End Sub
 Private Sub cmdFechaDesdeHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaDesde.Value
-    dtpFechaDesde.Value = Date
+    OldValue = dtpFechaDesde.value
+    dtpFechaDesde.value = Date
     dtpFechaDesde.SetFocus
-    If OldValue <> dtpFechaDesde.Value Then
+    If OldValue <> dtpFechaDesde.value Then
         dtpFechaDesde_Change
     End If
 End Sub
 
 Private Sub cmdFechaHastaAnterior_Click()
-    dtpFechaHasta.Value = DateAdd("d", -1, dtpFechaHasta.Value)
+    dtpFechaHasta.value = DateAdd("d", -1, dtpFechaHasta.value)
     dtpFechaHasta.SetFocus
     dtpFechaHasta_Change
 End Sub
@@ -1153,7 +1133,7 @@ Private Sub dtpFechaHasta_Change()
 End Sub
 
 Private Sub cmdFechaHastaSiguiente_Click()
-    dtpFechaHasta.Value = DateAdd("d", 1, dtpFechaHasta.Value)
+    dtpFechaHasta.value = DateAdd("d", 1, dtpFechaHasta.value)
     dtpFechaHasta.SetFocus
     dtpFechaHasta_Change
 End Sub
@@ -1161,10 +1141,10 @@ End Sub
 Private Sub cmdFechaHastaHoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFechaHasta.Value
-    dtpFechaHasta.Value = Date
+    OldValue = dtpFechaHasta.value
+    dtpFechaHasta.value = Date
     dtpFechaHasta.SetFocus
-    If OldValue <> dtpFechaHasta.Value Then
+    If OldValue <> dtpFechaHasta.value Then
         dtpFechaHasta_Change
     End If
 End Sub
@@ -1206,7 +1186,7 @@ Private Sub tdbgrdData_DblClick()
 End Sub
 
 Private Sub SortColumn(ByVal OldOrderColumn As Long)
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     Set recData = tdbgrdData.DataSource
     If Not recData Is Nothing Then
