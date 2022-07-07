@@ -32,7 +32,11 @@ Public Function ShowReport(ByVal reportFilename As String, ByVal reportName, ByV
         End If
         If .OpenReport(True) Then
             If Right(reportFilename, 4) <> REPORT_PARAMETER_KEY Then
-                .Report.recordSelectionFormula = .Report.recordSelectionFormula & recordSelectionFormula
+                If .Report.recordSelectionFormula = "" Then
+                    .Report.recordSelectionFormula = recordSelectionFormula
+                Else
+                    .Report.recordSelectionFormula = .Report.recordSelectionFormula & " AND " & recordSelectionFormula
+                End If
             End If
             Call .PreviewReport(False)
         End If

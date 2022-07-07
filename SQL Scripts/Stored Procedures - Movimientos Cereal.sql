@@ -336,12 +336,12 @@ GO
 CREATE PROCEDURE usp_Movimiento_Cereal_CalcularYActualizarHumedadYZarandeoMultiples
 	@IDMovimiento_Cereal int,
 	@IDUsuario tinyint,
-	@@SobrescribirDatos bit
+	@SobrescribirDatos bit
 AS
 BEGIN
-	DECLARE @CantidadPesadas int
-	DECLARE @SumaHumedades decimal(3,1)
-	DECLARE @CantidadHumedades tinyint
+	DECLARE @CantidadPesadas int = 0
+	DECLARE @SumaHumedades decimal(3,1) = 0
+	DECLARE @CantidadHumedades tinyint = 0
 
 	DECLARE @IDCereal tinyint
 	DECLARE @MermaHumedadBase decimal(3,1)
@@ -411,7 +411,10 @@ BEGIN
 
 		-- BUSCO LA HUMEDAD MÁS CERCANA A LA SUMA DE LAS MERMAS DE LAS PESADAS
 		IF @MermaSecadoTotal = 0
+			BEGIN
 			SET @Humedad = @SumaHumedades / @CantidadHumedades
+			SELECT @SumaHumedades, @CantidadHumedades, @SumaHumedades / @CantidadHumedades
+			END
 		ELSE IF @KilogramoNetoTotal > 0
 			SELECT @Humedad = Humedad FROM Cereal_Humedad WHERE IDCereal = @IDCereal AND Merma >= (@MermaSecadoTotal / @KilogramoNetoTotal * 100)
 
@@ -421,7 +424,7 @@ BEGIN
 		END
 
 	-- ACTUALIZO LOS DATOS DE LA CARTA DE PORTE
-	IF @@SobrescribirDatos = 1
+	IF @SobrescribirDatos = 1
 		UPDATE Movimiento_Cereal
 			SET Humedad = @Humedad, Zaranda = @Zaranda, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
 			WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
