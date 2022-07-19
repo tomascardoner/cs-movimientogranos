@@ -495,6 +495,7 @@ CREATE PROCEDURE usp_Movimiento_Cereal_Add
 	@Notas varchar(1000),
 	@Calculo_TarifaIndice smallint,
 	@IDUsuario tinyint,
+	@Certificado bit,
 	@StringListOfIDPesadaCompleta varchar(1000)
 AS
 BEGIN
@@ -502,7 +503,6 @@ BEGIN
 		
 	DECLARE @Movimiento_Cereal_Pesada TABLE(IDPesada int PRIMARY KEY NOT NULL, PesoNeto int NULL, Humedad decimal(3,1) NULL, Zaranda decimal(3,1) NULL)
 	
-	DECLARE @Certificado bit
 	DECLARE @KilogramoAplicado int
 	
 	BEGIN TRY
@@ -514,7 +514,6 @@ BEGIN
 			-- PREPARO LAS VARIABLES CORRESPONDIENTES
 			IF @Tipo = 'E'
 				BEGIN
-				SET @Certificado = 0
 				SET @KilogramoAplicado = NULL
 				END
 			IF @Tipo = 'S'
@@ -634,14 +633,13 @@ CREATE PROCEDURE usp_Movimiento_Cereal_Update
 	@Notas varchar(1000),
 	@Calculo_TarifaIndice smallint,
 	@IDUsuario tinyint,
+	@Certificado bit,
 	@StringListOfIDPesadaCompleta varchar(1000)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	DECLARE @Tipo char(1)
-	
-	DECLARE @Certificado bit
 	DECLARE @KilogramoAplicado int
 	
 	BEGIN TRY
@@ -654,9 +652,10 @@ BEGIN
 				BEGIN
 				SET @FechaHoraArribo = @FechaCarga
 				SET @FechaHoraDescarga = @FechaCarga
+				SET @Certificado = NULL
 				END
 			UPDATE Movimiento_Cereal
-				SET ComprobanteNumero = @ComprobanteNumero, IDCartaPorte_Talonario = @IDCartaPorte_Talonario, CTGNumero = @CTGNumero, FechaCarga = @FechaCarga, IDEntidad_Titular = @IDEntidad_Titular, IDEntidad_Intermediario = @IDEntidad_Intermediario, IDEntidad_RemitenteComercial = @IDEntidad_RemitenteComercial, IDEntidad_Corredor = @IDEntidad_Corredor, IDEntidad_Entregador = @IDEntidad_Entregador, IDEntidad_Destinatario = @IDEntidad_Destinatario, IDEntidad_Destino = @IDEntidad_Destino, IDEntidad_Transportista = @IDEntidad_Transportista, IDEntidad_Chofer = @IDEntidad_Chofer, IDCosecha = @IDCosecha, IDCereal = @IDCereal, IDContrato = @IDContrato, PesoBruto = @PesoBruto, PesoTara = @PesoTara, PesoNeto = @PesoNeto, Volatil = @Volatil, Humedad = @Humedad, Zaranda = @Zaranda, IDOrigenDestino_Origen = @IDOrigenDestino_Origen, IDOrigenDestino_Destino = @IDOrigenDestino_Destino, CTGCancelacion = @CTGCancelacion, TransporteDominioCamion = @TransporteDominioCamion, TransporteDominioAcoplado = @TransporteDominioAcoplado, TransporteKilometro = @TransporteKilometro, TransporteTarifaReferencia = @TransporteTarifaReferencia, TransporteTarifa = @TransporteTarifa, FechaHoraArribo = @FechaHoraArribo, FechaHoraDescarga = @FechaHoraDescarga, DeclaraIPRO = @DeclaraIPRO, IDCartaPorte_MotivoAnulacion = @IDCartaPorte_MotivoAnulacion, Notas = @Notas, Calculo_TarifaIndice = @Calculo_TarifaIndice, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE()
+				SET ComprobanteNumero = @ComprobanteNumero, IDCartaPorte_Talonario = @IDCartaPorte_Talonario, CTGNumero = @CTGNumero, FechaCarga = @FechaCarga, IDEntidad_Titular = @IDEntidad_Titular, IDEntidad_Intermediario = @IDEntidad_Intermediario, IDEntidad_RemitenteComercial = @IDEntidad_RemitenteComercial, IDEntidad_Corredor = @IDEntidad_Corredor, IDEntidad_Entregador = @IDEntidad_Entregador, IDEntidad_Destinatario = @IDEntidad_Destinatario, IDEntidad_Destino = @IDEntidad_Destino, IDEntidad_Transportista = @IDEntidad_Transportista, IDEntidad_Chofer = @IDEntidad_Chofer, IDCosecha = @IDCosecha, IDCereal = @IDCereal, IDContrato = @IDContrato, PesoBruto = @PesoBruto, PesoTara = @PesoTara, PesoNeto = @PesoNeto, Volatil = @Volatil, Humedad = @Humedad, Zaranda = @Zaranda, IDOrigenDestino_Origen = @IDOrigenDestino_Origen, IDOrigenDestino_Destino = @IDOrigenDestino_Destino, CTGCancelacion = @CTGCancelacion, TransporteDominioCamion = @TransporteDominioCamion, TransporteDominioAcoplado = @TransporteDominioAcoplado, TransporteKilometro = @TransporteKilometro, TransporteTarifaReferencia = @TransporteTarifaReferencia, TransporteTarifa = @TransporteTarifa, FechaHoraArribo = @FechaHoraArribo, FechaHoraDescarga = @FechaHoraDescarga, DeclaraIPRO = @DeclaraIPRO, IDCartaPorte_MotivoAnulacion = @IDCartaPorte_MotivoAnulacion, Notas = @Notas, Calculo_TarifaIndice = @Calculo_TarifaIndice, IDUsuarioModificacion = @IDUsuario, FechaHoraModificacion = GETDATE(), Certificado = @Certificado
 				WHERE IDMovimiento_Cereal = @IDMovimiento_Cereal
 			
 			--CALCULO LAS MERMAS

@@ -74,6 +74,7 @@ Private mFechaHoraDescarga As Date
 'DATOS EXTRAS
 Private mDeclaraIPRO As Boolean
 Private mIDCartaPorte_MotivoAnulacion As Byte
+Private mCertificado As Integer
 Private mNotas As String
 Private mCalculo_TarifaIndice As Integer
 
@@ -84,7 +85,6 @@ Private mIDUsuarioModificacion As Byte
 Private mFechaHoraModificacion As Date
 Private mFechaHoraLiquidacionServicio As Date
 Private mFechaHoraEnvioBolsaTech As Date
-Private mCertificado As Boolean
 Private mKilogramoAplicado As Long
 
 'DATOS ADICIONALES
@@ -1342,6 +1342,20 @@ End Property
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Public Property Get Certificado() As Integer
+    Certificado = mCertificado
+End Property
+
+Public Property Let Certificado(ByVal value As Integer)
+    If value <> mCertificado Then
+        mIsDirty = True
+    End If
+    mCertificado = value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 Public Property Get Calculo_TarifaIndice() As Integer
     Calculo_TarifaIndice = mCalculo_TarifaIndice
 End Property
@@ -1509,20 +1523,6 @@ Public Property Let FechaHoraEnvioBolsaTech(ByVal value As Date)
         mIsDirty = True
     End If
     mFechaHoraEnvioBolsaTech = value
-End Property
-
-''////////////////////////////////////////////////////////////////////////
-''\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-Public Property Get Certificado() As Boolean
-    Certificado = mCertificado
-End Property
-
-Public Property Let Certificado(ByVal value As Boolean)
-    If value <> mCertificado Then
-        mIsDirty = True
-    End If
-    mCertificado = value
 End Property
 
 ''////////////////////////////////////////////////////////////////////////
@@ -1896,7 +1896,7 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.recordset) As Boole
         mFechaHoraLiquidacionServicio = IIf(IsNull(recData("FechaHoraLiquidacionServicio").value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraLiquidacionServicio").value)
         mFechaHoraEnvioBolsaTech = IIf(IsNull(recData("FechaHoraEnvioBolsaTech").value), DATE_TIME_FIELD_NULL_VALUE, recData("FechaHoraEnvioBolsaTech").value)
         
-        mCertificado = IIf(mTipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA, recData("Certificado").value, False)
+        mCertificado = CSM_Function.SQLBit2CheckBoxValue(recData("Certificado").value)
         mKilogramoAplicado = Val(recData("KilogramoAplicado").value & "")
     End If
     
@@ -2082,6 +2082,7 @@ Public Function Update() As Boolean
         .Parameters.Append .CreateParameter("Notas", adVarChar, adParamInput, 1000, CSM_Function.IfIsZeroLenghtString_Null(mNotas))
         .Parameters.Append .CreateParameter("Calculo_TarifaIndice", adSmallInt, adParamInput, , CSM_Function.IfIsZero_Null(mCalculo_TarifaIndice))
         .Parameters.Append .CreateParameter("IDUsuario", adTinyInt, adParamInput, , pIDUsuario)
+        .Parameters.Append .CreateParameter("Certificado", adBoolean, adParamInput, , CSM_Function.CheckBoxValue2SQLBit(mCertificado))
         For Each Movimiento_Cereal_Pesada In mCMovimiento_Cereal_Pesada_Updated
             PesadaStringList = PesadaStringList & Movimiento_Cereal_Pesada.IDPesada & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.PesoNeto_FormattedForSQL & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.Humedad_FormattedForSQL & STRING_LIST_DELIMITER & Movimiento_Cereal_Pesada.Zaranda_FormattedForSQL & STRING_LIST_SEPARATOR
         Next Movimiento_Cereal_Pesada

@@ -169,7 +169,14 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 FechaHoraLiquidacionServicio = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraLiquidacionServicio");
                 FechaHoraEnvioBolsaTech = SqlServerValues.GetDateTimeSafeAsNull(reader, "FechaHoraEnvioBolsaTech");
 
-                Certificado = (Tipo == Constantes.MovimientoTipoEntrada) && SqlServerValues.GetBoolean(reader, "Certificado");
+                if (Tipo == Constantes.MovimientoTipoEntrada)
+                {
+                    Certificado = SqlServerValues.GetBooleanSafeAsNull(reader, "Certificado");
+                }
+                else
+                {
+                    Certificado = null;
+                }
                 KilogramoAplicado = SqlServerValues.GetIntegerSafeAsNull(reader, "KilogramoAplicado");
 
                 return true;
@@ -328,6 +335,14 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 command.Parameters.Add("Notas", SqlDbType.VarChar).Value = SqlServerValues.SetValue(Notas);
                 command.Parameters.Add("Calculo_TarifaIndice", SqlDbType.SmallInt).Value = DBNull.Value;
                 command.Parameters.Add("IDUsuario", SqlDbType.TinyInt).Value = Properties.Settings.Default.IdUsuarioImportador;
+                if (Tipo == Constantes.MovimientoTipoEntrada)
+                {
+                    command.Parameters.Add("Certificado", SqlDbType.Bit).Value = SqlServerValues.SetValue(Certificado);
+                }
+                else
+                {
+                    command.Parameters.Add("Certificado", SqlDbType.Bit).Value = DBNull.Value;
+                }
                 command.Parameters.Add("StringListOfIDPesadaCompleta", SqlDbType.VarChar).Value = DBNull.Value;
 
                 command.ExecuteNonQuery();
