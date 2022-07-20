@@ -17,7 +17,7 @@ namespace CS_Importador_de_cartas_de_porte
             textboxCarpetaOrigen.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFolder", string.Empty, true);
         }
 
-        private void buttonCarpetaOrigenExaminar_Click(object sender, EventArgs e)
+        private void CarpetaOrigenExaminar(object sender, EventArgs e)
         {
             folderbrowserdialogMain.SelectedPath = textboxCarpetaOrigen.Text;
             if (folderbrowserdialogMain.ShowDialog(this) == DialogResult.OK)
@@ -26,7 +26,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
         }
 
-        private void buttonBuscarCartasPorte_Click(object sender, EventArgs e)
+        private void BuscarCartasPorte(object sender, EventArgs e)
         {
             carpetaOrigen = textboxCarpetaOrigen.Text.Trim();
 
@@ -79,22 +79,22 @@ namespace CS_Importador_de_cartas_de_porte
             comboboxCosecha.DataSource = database.ObtenerCosechas();
         }
 
-        private void buttonArchivosSeleccionarTodos_Click(object sender, EventArgs e)
+        private void ArchivosSeleccionarTodos(object sender, EventArgs e)
         {
             CambiarSeleccion(1);
         }
 
-        private void buttonArchivosSeleccionarHaciaAbajo_Click(object sender, EventArgs e)
+        private void ArchivosSeleccionarHaciaAbajo(object sender, EventArgs e)
         {
             CambiarSeleccion(2);
         }
 
-        private void buttonArchivosInvertirSeleccion_Click(object sender, EventArgs e)
+        private void ArchivosInvertirSeleccion(object sender, EventArgs e)
         {
             CambiarSeleccion(-1);
         }
 
-        private void buttonArchivosDeseleccionarTodos_Click(object sender, EventArgs e)
+        private void ArchivosDeseleccionarTodos(object sender, EventArgs e)
         {
             CambiarSeleccion(0);
         }
@@ -140,7 +140,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
         }
 
-        private void buttonImportar_Click(object sender, EventArgs e)
+        private void Importar(object sender, EventArgs e)
         {
             int cartasDePorteAgregadas = 0;
             int cartasDePorteActualizadas = 0;

@@ -74,7 +74,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonCarpetaOrigenExaminar.TabStop = false;
             this.buttonCarpetaOrigenExaminar.Text = "...";
             this.buttonCarpetaOrigenExaminar.UseVisualStyleBackColor = true;
-            this.buttonCarpetaOrigenExaminar.Click += new System.EventHandler(this.buttonCarpetaOrigenExaminar_Click);
+            this.buttonCarpetaOrigenExaminar.Click += new System.EventHandler(this.CarpetaOrigenExaminar);
             // 
             // folderbrowserdialogMain
             // 
@@ -90,7 +90,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonBuscarCartasPorte.TabIndex = 3;
             this.buttonBuscarCartasPorte.Text = "Buscar archivos";
             this.buttonBuscarCartasPorte.UseVisualStyleBackColor = true;
-            this.buttonBuscarCartasPorte.Click += new System.EventHandler(this.buttonBuscarCartasPorte_Click);
+            this.buttonBuscarCartasPorte.Click += new System.EventHandler(this.BuscarCartasPorte);
             // 
             // checkedlistboxArchivos
             // 
@@ -113,7 +113,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonArchivosSeleccionarTodos.TabIndex = 5;
             this.buttonArchivosSeleccionarTodos.Text = "Marcar todos";
             this.buttonArchivosSeleccionarTodos.UseVisualStyleBackColor = true;
-            this.buttonArchivosSeleccionarTodos.Click += new System.EventHandler(this.buttonArchivosSeleccionarTodos_Click);
+            this.buttonArchivosSeleccionarTodos.Click += new System.EventHandler(this.ArchivosSeleccionarTodos);
             // 
             // buttonArchivosInvertirSeleccion
             // 
@@ -124,7 +124,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonArchivosInvertirSeleccion.TabIndex = 7;
             this.buttonArchivosInvertirSeleccion.Text = "Invertir selección";
             this.buttonArchivosInvertirSeleccion.UseVisualStyleBackColor = true;
-            this.buttonArchivosInvertirSeleccion.Click += new System.EventHandler(this.buttonArchivosInvertirSeleccion_Click);
+            this.buttonArchivosInvertirSeleccion.Click += new System.EventHandler(this.ArchivosInvertirSeleccion);
             // 
             // buttonArchivosDeseleccionarTodos
             // 
@@ -135,7 +135,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonArchivosDeseleccionarTodos.TabIndex = 8;
             this.buttonArchivosDeseleccionarTodos.Text = "Desmarcar todos";
             this.buttonArchivosDeseleccionarTodos.UseVisualStyleBackColor = true;
-            this.buttonArchivosDeseleccionarTodos.Click += new System.EventHandler(this.buttonArchivosDeseleccionarTodos_Click);
+            this.buttonArchivosDeseleccionarTodos.Click += new System.EventHandler(this.ArchivosDeseleccionarTodos);
             // 
             // buttonImportar
             // 
@@ -147,7 +147,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonImportar.TabIndex = 11;
             this.buttonImportar.Text = "Importar datos...";
             this.buttonImportar.UseVisualStyleBackColor = true;
-            this.buttonImportar.Click += new System.EventHandler(this.buttonImportar_Click);
+            this.buttonImportar.Click += new System.EventHandler(this.Importar);
             // 
             // labelCosecha
             // 
@@ -190,7 +190,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.buttonArchivosSeleccionarHaciaAbajo.TabIndex = 6;
             this.buttonArchivosSeleccionarHaciaAbajo.Text = "Marcar hacia abajo";
             this.buttonArchivosSeleccionarHaciaAbajo.UseVisualStyleBackColor = true;
-            this.buttonArchivosSeleccionarHaciaAbajo.Click += new System.EventHandler(this.buttonArchivosSeleccionarHaciaAbajo_Click);
+            this.buttonArchivosSeleccionarHaciaAbajo.Click += new System.EventHandler(this.ArchivosSeleccionarHaciaAbajo);
             // 
             // FormImportarCartasDePorte
             // 
