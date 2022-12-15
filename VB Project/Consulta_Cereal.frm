@@ -123,7 +123,6 @@ Begin VB.Form frmConsulta_Cereal
       Height          =   315
       Left            =   4500
       TabIndex        =   25
-      TabStop         =   0   'False
       Top             =   4680
       Width           =   1035
    End
@@ -144,7 +143,6 @@ Begin VB.Form frmConsulta_Cereal
       Index           =   0
       Left            =   4500
       TabIndex        =   23
-      TabStop         =   0   'False
       Top             =   3720
       Width           =   1035
    End
@@ -165,7 +163,6 @@ Begin VB.Form frmConsulta_Cereal
       Index           =   0
       Left            =   4500
       TabIndex        =   19
-      TabStop         =   0   'False
       Top             =   2880
       Width           =   1035
    End
@@ -225,7 +222,6 @@ Begin VB.Form frmConsulta_Cereal
       Height          =   315
       Left            =   4500
       TabIndex        =   21
-      TabStop         =   0   'False
       Top             =   3300
       Width           =   1035
    End
@@ -245,7 +241,6 @@ Begin VB.Form frmConsulta_Cereal
       Height          =   315
       Left            =   4500
       TabIndex        =   17
-      TabStop         =   0   'False
       Top             =   2460
       Width           =   1035
    End
@@ -265,7 +260,6 @@ Begin VB.Form frmConsulta_Cereal
       Height          =   315
       Left            =   1500
       TabIndex        =   15
-      TabStop         =   0   'False
       Top             =   2460
       Width           =   1035
    End
@@ -362,7 +356,7 @@ Begin VB.Form frmConsulta_Cereal
       _ExtentY        =   556
       _Version        =   393216
       CheckBox        =   -1  'True
-      Format          =   104660993
+      Format          =   112001025
       CurrentDate     =   40513
       MaxDate         =   55153
       MinDate         =   40513
@@ -377,7 +371,7 @@ Begin VB.Form frmConsulta_Cereal
       _ExtentY        =   556
       _Version        =   393216
       CheckBox        =   -1  'True
-      Format          =   104595457
+      Format          =   112001025
       CurrentDate     =   40513
       MaxDate         =   55153
       MinDate         =   40513
@@ -672,10 +666,10 @@ Private Sub dtpFecha_Hasta_Change()
 End Sub
 
 Private Sub Form_Load()
-    dtpFecha_Desde.Value = Date
-    dtpFecha_Desde.Value = Null
-    dtpFecha_Hasta.Value = Date
-    dtpFecha_Hasta.Value = Null
+    dtpFecha_Desde.value = Date
+    dtpFecha_Desde.value = Null
+    dtpFecha_Hasta.value = Date
+    dtpFecha_Hasta.value = Null
     
     Call CSM_Control_DataCombo.FillFromSQL(datcboPlanta, "usp_Entidad_OrigenDestino_List 0, " & IIf(pParametro.Planta_MostrarNombreEmpresa, "1", "0") & ", 1, 1, NULL, NULL, NULL ", "ID", "Nombre", "Plantas", cscpItemOrFirstIfUnique, pParametro.Planta_IDDefault)
     Call CSM_Control_DataCombo.FillFromSQL(datcboDepositante, "usp_Entidad_Titular_List 1, 1, NULL", "IDEntidad", "Nombre", "Depositantes", cscpFirst)
@@ -685,7 +679,7 @@ End Sub
 
 Private Sub cmdConsultar_Click()
     Dim cmdSP As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     If datcboPlanta.BoundText = "" Then
         MsgBox "Debe seleccionar la Planta.", vbInformation, App.Title
@@ -731,49 +725,89 @@ Private Sub cmdConsultar_Click()
         End If
         .Parameters.Append .CreateParameter("IDCosecha", adTinyInt, adParamInput, , Val(datcboCosecha.BoundText))
         .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
-        .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFecha_Desde.Value)
-        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFecha_Hasta.Value)
+        .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFecha_Desde.value)
+        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFecha_Hasta.value)
     End With
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdSP, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
     
-    txtEntradaBruto.Text = Format(recData("EntradaBruto").Value, "#,##0")
+    txtEntradaBruto.Text = Format(recData("EntradaBruto").value, "#,##0")
     
-    txtEntradaNeto.Text = Format(recData("EntradaNeto").Value, "#,##0")
+    txtEntradaNeto.Text = Format(recData("EntradaNeto").value, "#,##0")
     If Val(datcboDepositante.BoundText) = 0 Then
         txtTransferidoDeTercero(0).Text = ""
     Else
-        txtTransferidoDeTercero(0).Text = Format(recData("TransferidoDeTercero").Value, "#,##0")
+        txtTransferidoDeTercero(0).Text = Format(recData("TransferidoDeTercero").value, "#,##0")
     End If
-    txtSalida.Text = Format(recData("Salida").Value, "#,##0")
+    txtSalida.Text = Format(recData("Salida").value, "#,##0")
     If Val(datcboDepositante.BoundText) = 0 Then
         txtTransferidoATercero(0).Text = ""
     Else
-        txtTransferidoATercero(0).Text = Format(recData("TransferidoATercero").Value, "#,##0")
+        txtTransferidoATercero(0).Text = Format(recData("TransferidoATercero").value, "#,##0")
     End If
-    txtStockActual.Text = Format(recData("StockActual").Value, "#,##0")
+    txtStockActual.Text = Format(recData("StockActual").value, "#,##0")
     
-    txtCertificado.Text = Format(recData("Certificado").Value, "#,##0")
+    txtCertificado.Text = Format(recData("Certificado").value, "#,##0")
     If Val(datcboDepositante.BoundText) = 0 Then
         txtTransferidoDeTercero(1).Text = ""
     Else
-        txtTransferidoDeTercero(1).Text = Format(recData("TransferidoDeTercero").Value, "#,##0")
+        txtTransferidoDeTercero(1).Text = Format(recData("TransferidoDeTercero").value, "#,##0")
     End If
-    txtRetirado.Text = Format(recData("Retirado").Value, "#,##0")
+    txtRetirado.Text = Format(recData("Retirado").value, "#,##0")
     If Val(datcboDepositante.BoundText) = 0 Then
         txtTransferidoATercero(1).Text = ""
     Else
-        txtTransferidoATercero(1).Text = Format(recData("TransferidoATercero").Value, "#,##0")
+        txtTransferidoATercero(1).Text = Format(recData("TransferidoATercero").value, "#,##0")
     End If
-    txtLiquidado.Text = Format(recData("Liquidado").Value, "#,##0")
-    txtExistencia.Text = Format(recData("Existencia").Value, "#,##0")
+    txtLiquidado.Text = Format(recData("Liquidado").value, "#,##0")
+    txtExistencia.Text = Format(recData("Existencia").value, "#,##0")
     
     Screen.MousePointer = vbDefault
     Exit Sub
     
 ErrorHandler:
     ShowErrorMessage "Forms.Consulta_Cereal.Consultar", "Error al obtener los datos del Resumen de Cuenta de Cereal."
+End Sub
+
+Private Sub txtEntradaBruto_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtEntradaBruto)
+End Sub
+
+Private Sub txtEntradaNeto_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtEntradaNeto)
+End Sub
+
+Private Sub txtTransferidoDeTercero_GotFocus(Index As Integer)
+    Call CSM_Control_TextBox.SelAllText(txtTransferidoDeTercero(Index))
+End Sub
+
+Private Sub txtSalida_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtSalida)
+End Sub
+
+Private Sub txtTransferidoATercero_GotFocus(Index As Integer)
+    Call CSM_Control_TextBox.SelAllText(txtTransferidoATercero(Index))
+End Sub
+
+Private Sub txtStockActual_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtStockActual)
+End Sub
+
+Private Sub txtCertificado_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtCertificado)
+End Sub
+
+Private Sub txtRetirado_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtRetirado)
+End Sub
+
+Private Sub txtLiquidado_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtLiquidado)
+End Sub
+
+Private Sub txtExistencia_GotFocus()
+    Call CSM_Control_TextBox.SelAllText(txtExistencia)
 End Sub
 
 Private Sub CleanValues()
@@ -796,3 +830,4 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
     Set frmConsulta_Cereal = Nothing
 End Sub
+
