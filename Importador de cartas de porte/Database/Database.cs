@@ -25,7 +25,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al crear la conexión a la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al crear la conexión a la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -47,7 +47,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al cerrar la conexión a la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al cerrar la conexión a la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -58,10 +58,12 @@ namespace CS_Importador_de_cartas_de_porte.Database
 
             try
             {
-                SqlCommand command = new SqlCommand();
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection = Connection;
-                command.CommandText = "usp_Cosecha_List";
+                SqlCommand command = new SqlCommand
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = Connection,
+                    CommandText = "usp_Cosecha_List"
+                };
                 command.Parameters.Add("ListaNinguno", SqlDbType.Bit).Value = 0;
                 command.Parameters.Add("Activo", SqlDbType.Bit).Value = 1;
                 command.Parameters.Add("IDCosecha", SqlDbType.TinyInt).Value = 0;
@@ -91,7 +93,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener la lista de cosechas desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener la lista de cosechas desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
             return cosechas;

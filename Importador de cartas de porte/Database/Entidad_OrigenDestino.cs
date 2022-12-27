@@ -51,7 +51,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al leer los datos del origen-destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al leer los datos del origen-destino desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -95,7 +95,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     reader.Close();
                 }
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener el origen-destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener el origen-destino desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -137,7 +137,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     reader.Close();
                 }
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener el origen-destino desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener el origen-destino desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

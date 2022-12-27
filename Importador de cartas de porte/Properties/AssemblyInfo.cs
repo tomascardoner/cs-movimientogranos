@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Cardoner Sistemas")]
 [assembly: AssemblyProduct("CS-Importador de cartas de porte")]
 [assembly: AssemblyCopyright("Copyright © 2022 Cardoner Sistemas")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("® CS-Importador de cartas de porte")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

@@ -184,7 +184,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al leer los datos de la carta de porte desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al leer los datos de la carta de porte desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -225,7 +225,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     reader.Close();
                 }
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener la carta de porte desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener la carta de porte desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -267,7 +267,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     reader.Close();
                 }
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener la carta de porte desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener la carta de porte desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -359,11 +359,11 @@ namespace CS_Importador_de_cartas_de_porte.Database
                 Cursor.Current = Cursors.Default;
                 if (ex.Message.Contains("FK__Entidad_OrigenDestino__Movimiento__Origen"))
                 {
-                    MessageBox.Show($"La entidad titular de la carta de porte no tiene especificado un origen. Carta de porte nº {ComprobanteNumero}.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"La entidad titular de la carta de porte no tiene especificado un origen. Carta de porte nº {ComprobanteNumero}.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    MessageBox.Show($"Error al actualizar los datos de la carta de porte nº {ComprobanteNumero} en la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error al actualizar los datos de la carta de porte nº {ComprobanteNumero} en la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 return false;
             }

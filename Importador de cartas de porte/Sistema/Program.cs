@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CS_Importador_de_cartas_de_porte
@@ -16,7 +13,7 @@ namespace CS_Importador_de_cartas_de_porte
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormImportarCartasDePorte());
+            Application.Run(new FormMainMenu());
         }
     }
 }

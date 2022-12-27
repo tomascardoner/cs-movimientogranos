@@ -61,13 +61,13 @@ namespace CS_Importador_de_cartas_de_porte
             this.textboxCarpetaOrigen.Location = new System.Drawing.Point(12, 25);
             this.textboxCarpetaOrigen.MaxLength = 512;
             this.textboxCarpetaOrigen.Name = "textboxCarpetaOrigen";
-            this.textboxCarpetaOrigen.Size = new System.Drawing.Size(432, 20);
+            this.textboxCarpetaOrigen.Size = new System.Drawing.Size(435, 20);
             this.textboxCarpetaOrigen.TabIndex = 1;
             // 
             // buttonCarpetaOrigenExaminar
             // 
             this.buttonCarpetaOrigenExaminar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCarpetaOrigenExaminar.Location = new System.Drawing.Point(444, 25);
+            this.buttonCarpetaOrigenExaminar.Location = new System.Drawing.Point(447, 25);
             this.buttonCarpetaOrigenExaminar.Name = "buttonCarpetaOrigenExaminar";
             this.buttonCarpetaOrigenExaminar.Size = new System.Drawing.Size(26, 20);
             this.buttonCarpetaOrigenExaminar.TabIndex = 2;
@@ -86,7 +86,7 @@ namespace CS_Importador_de_cartas_de_porte
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonBuscarCartasPorte.Location = new System.Drawing.Point(12, 51);
             this.buttonBuscarCartasPorte.Name = "buttonBuscarCartasPorte";
-            this.buttonBuscarCartasPorte.Size = new System.Drawing.Size(459, 28);
+            this.buttonBuscarCartasPorte.Size = new System.Drawing.Size(462, 28);
             this.buttonBuscarCartasPorte.TabIndex = 3;
             this.buttonBuscarCartasPorte.Text = "Buscar archivos";
             this.buttonBuscarCartasPorte.UseVisualStyleBackColor = true;
@@ -101,7 +101,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.checkedlistboxArchivos.FormattingEnabled = true;
             this.checkedlistboxArchivos.Location = new System.Drawing.Point(12, 85);
             this.checkedlistboxArchivos.Name = "checkedlistboxArchivos";
-            this.checkedlistboxArchivos.Size = new System.Drawing.Size(459, 274);
+            this.checkedlistboxArchivos.Size = new System.Drawing.Size(462, 274);
             this.checkedlistboxArchivos.TabIndex = 4;
             // 
             // buttonArchivosSeleccionarTodos
@@ -118,7 +118,7 @@ namespace CS_Importador_de_cartas_de_porte
             // buttonArchivosInvertirSeleccion
             // 
             this.buttonArchivosInvertirSeleccion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonArchivosInvertirSeleccion.Location = new System.Drawing.Point(244, 365);
+            this.buttonArchivosInvertirSeleccion.Location = new System.Drawing.Point(247, 365);
             this.buttonArchivosInvertirSeleccion.Name = "buttonArchivosInvertirSeleccion";
             this.buttonArchivosInvertirSeleccion.Size = new System.Drawing.Size(110, 28);
             this.buttonArchivosInvertirSeleccion.TabIndex = 7;
@@ -129,7 +129,7 @@ namespace CS_Importador_de_cartas_de_porte
             // buttonArchivosDeseleccionarTodos
             // 
             this.buttonArchivosDeseleccionarTodos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonArchivosDeseleccionarTodos.Location = new System.Drawing.Point(360, 365);
+            this.buttonArchivosDeseleccionarTodos.Location = new System.Drawing.Point(363, 365);
             this.buttonArchivosDeseleccionarTodos.Name = "buttonArchivosDeseleccionarTodos";
             this.buttonArchivosDeseleccionarTodos.Size = new System.Drawing.Size(110, 28);
             this.buttonArchivosDeseleccionarTodos.TabIndex = 8;
@@ -143,7 +143,7 @@ namespace CS_Importador_de_cartas_de_porte
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonImportar.Location = new System.Drawing.Point(12, 426);
             this.buttonImportar.Name = "buttonImportar";
-            this.buttonImportar.Size = new System.Drawing.Size(459, 27);
+            this.buttonImportar.Size = new System.Drawing.Size(462, 27);
             this.buttonImportar.TabIndex = 11;
             this.buttonImportar.Text = "Importar datos...";
             this.buttonImportar.UseVisualStyleBackColor = true;
@@ -168,7 +168,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.comboboxCosecha.FormattingEnabled = true;
             this.comboboxCosecha.Location = new System.Drawing.Point(70, 399);
             this.comboboxCosecha.Name = "comboboxCosecha";
-            this.comboboxCosecha.Size = new System.Drawing.Size(400, 21);
+            this.comboboxCosecha.Size = new System.Drawing.Size(403, 21);
             this.comboboxCosecha.TabIndex = 10;
             // 
             // progressbarMain
@@ -177,7 +177,7 @@ namespace CS_Importador_de_cartas_de_porte
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressbarMain.Location = new System.Drawing.Point(12, 365);
             this.progressbarMain.Name = "progressbarMain";
-            this.progressbarMain.Size = new System.Drawing.Size(458, 28);
+            this.progressbarMain.Size = new System.Drawing.Size(461, 28);
             this.progressbarMain.TabIndex = 12;
             this.progressbarMain.Visible = false;
             // 
@@ -196,7 +196,7 @@ namespace CS_Importador_de_cartas_de_porte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 462);
+            this.ClientSize = new System.Drawing.Size(485, 462);
             this.Controls.Add(this.buttonArchivosSeleccionarHaciaAbajo);
             this.Controls.Add(this.comboboxCosecha);
             this.Controls.Add(this.labelCosecha);
@@ -213,6 +213,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FormImportarCartasDePorte";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Importar C.P.s a CS-Movimientos de granos";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormImportarCartasDePorte_FormClosing);

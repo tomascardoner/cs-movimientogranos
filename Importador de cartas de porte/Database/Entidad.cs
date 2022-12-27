@@ -91,7 +91,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     reader.Close();
                 }
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al obtener la entidad desde la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener la entidad desde la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -154,7 +154,7 @@ namespace CS_Importador_de_cartas_de_porte.Database
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al actualizar los datos de la entidad '{Nombre}' en la base de datos.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al actualizar los datos de la entidad '{Nombre}' en la base de datos.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

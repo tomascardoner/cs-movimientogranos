@@ -32,20 +32,20 @@ namespace CS_Importador_de_cartas_de_porte
 
             if (carpetaOrigen == string.Empty)
             {
-                MessageBox.Show("Debe especificar la ubicación de los archivos.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Debe especificar la ubicación de los archivos.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textboxCarpetaOrigen.Focus();
                 return;
             }
             if (!Directory.Exists(carpetaOrigen))
             {
-                MessageBox.Show("La ubicación de los archivos especificada, no existe.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("La ubicación de los archivos especificada, no existe.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textboxCarpetaOrigen.Focus();
                 return;
             }
 
             checkedlistboxArchivos.Items.Clear();
 
-            // Guardo la carpeta en el registro de windows para abrirla la seiguiente vez
+            // Guardo la carpeta en el registro de windows para abrirla la siguiente vez
             CardonerSistemas.Registry.SaveUserValueToApplicationFolder(string.Empty, "SourceFolder", textboxCarpetaOrigen.Text.Trim(), true);
 
             try
@@ -63,7 +63,7 @@ namespace CS_Importador_de_cartas_de_porte
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al leer los archivos desde la ubicación especificada.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al leer los archivos desde la ubicación especificada.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -148,12 +148,12 @@ namespace CS_Importador_de_cartas_de_porte
 
             if (checkedlistboxArchivos.CheckedItems.Count == 0)
             {
-                MessageBox.Show("No hay ninguna carta de porte seleccionada.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No hay ninguna carta de porte seleccionada.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             if (comboboxCosecha.SelectedIndex == -1)
             {
-                MessageBox.Show("No hay ninguna cosecha seleccionada.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No hay ninguna cosecha seleccionada.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -207,7 +207,7 @@ namespace CS_Importador_de_cartas_de_porte
         {
             if (agregadas == 0 & actualizadas == 0 & sinCambios == 0)
             {
-                MessageBox.Show("No se procesó ninguna carta de porte.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se procesó ninguna carta de porte.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -223,7 +223,7 @@ namespace CS_Importador_de_cartas_de_porte
                 mensaje += $"Agregadas:______{agregadas}\n";
                 mensaje += $"Actualizadas:___{actualizadas}\n";
                 mensaje += $"Sin cambios:____{sinCambios}";
-                MessageBox.Show(mensaje, "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
