@@ -78,7 +78,7 @@ namespace CS_Importador_de_cartas_de_porte
             this.MinimizeBox = false;
             this.Name = "FormMainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CS-Importador de cartas de porte";
+            this.Text = CardonerSistemas.My.Application.Info.Title;
             this.ResumeLayout(false);
 
         }

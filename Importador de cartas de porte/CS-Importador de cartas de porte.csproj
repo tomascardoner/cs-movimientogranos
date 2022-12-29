@@ -74,6 +74,8 @@
       <Link>Framework\String.cs</Link>
     </Compile>
     <Compile Include="Cartas de porte\CartaDePorte.cs" />
+    <Compile Include="Parsers\CommonFunctions.cs" />
+    <Compile Include="Parsers\ParserV1.cs" />
     <Compile Include="Cartas de porte\CartaDePorteProcesador.cs" />
     <Compile Include="Cartas de porte\FormVerificarCartasDePorte.cs">
       <SubType>Form</SubType>
@@ -81,8 +83,9 @@
     <Compile Include="Cartas de porte\FormVerificarCartasDePorte.Designer.cs">
       <DependentUpon>FormVerificarCartasDePorte.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parsers\IParser.cs" />
+    <Compile Include="Parsers\ParserV2.cs" />
     <Compile Include="Sistema\Constantes.cs" />
-    <Compile Include="Sistema\ConstantesParsing.cs" />
     <Compile Include="Database\Cereal.cs" />
     <Compile Include="Database\Cosecha.cs" />
     <Compile Include="Database\Database.cs" />

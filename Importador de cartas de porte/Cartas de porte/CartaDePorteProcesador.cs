@@ -88,545 +88,51 @@ namespace CS_Importador_de_cartas_de_porte
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show($"Error al leer el archivo de la carta de porte '{archivo}'.\n\nError: {ex.Message}", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al leer el archivo de la carta de porte '{archivo}'.\n\nError: {ex.Message}", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
         #endregion
 
-        #region Procesamiento del texto por secciones
+        #region Procesamiento del texto
 
         private static bool ProcesarTexto(string texto, CartaDePorte cartaDePorte)
         {
+            IParser parser;
+
             if (string.IsNullOrWhiteSpace(texto))
             {
-                MessageBox.Show("No se detectó texto en la carta de porte.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            if (!texto.StartsWith(Constantes.CartaPorteInicioTexto))
-            {
-                MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("No se detectó texto en la carta de porte.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
-            int index = Constantes.CartaPorteInicioTexto.Length;
-
-            if (!ProcesarTextoEncabezado(texto, cartaDePorte, ref index))
+            // Detecto la versión del formato y ejecuto el parser correspondiente
+            if (texto.StartsWith(Constantes.CartaPorteV1InicioTexto))
             {
-                return false;
-            }
-            if (!ProcesarTextoSeccionA(texto, cartaDePorte, ref index))
-            {
-                return false;
-            }
-            if (!ProcesarTextoSeccionB(texto, cartaDePorte, ref index))
-            {
-                return false;
-            }
-            if (!ProcesarTextoSeccionC(texto, cartaDePorte, ref index))
-            {
-                return false;
-            }
-            if (!ProcesarTextoSeccionD(texto, cartaDePorte, ref index))
-            {
-                return false;
-            }
-            if (!ProcesarTextoSeccionE(texto, cartaDePorte, ref index))
-            {
-                return false;
-            }
-
-            // Si es una carta de salida, no proceso la sección de descarga
-            if (cartaDePorte.TitularCartaDePorte.Substring(0, 11) != Properties.Settings.Default.CuitEntidadDestinatarioLocal)
-            {
-                if (!ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
+                parser = new ParserV1();
+                if (!parser.ProcesarTexto(texto, cartaDePorte, Constantes.CartaPorteV1InicioTexto.Length))
                 {
-                    MessageBox.Show($"CPE nº {cartaDePorte.Numero}: Es una carta de porte de entrada pero no tiene los datos de descarga.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
-
-            return true;
-        }
-
-        // Encabezado
-        private static bool ProcesarTextoEncabezado(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Fecha
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.FechaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
+            else if (texto.StartsWith(Constantes.CartaPorteV2InicioTexto))
             {
-                return false;
-            }
-            cartaDePorte.Fecha = valorEncontrado;
-
-            // Número
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.NumeroCartaPortePrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Numero = valorEncontrado;
-
-            // CTG
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.CtgPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Ctg = valorEncontrado;
-
-            return true;
-        }
-
-        // Sección A - Intervinientes
-        private static bool ProcesarTextoSeccionA(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Titular
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.TitularPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.TitularCartaDePorte = valorEncontrado;
-
-            // Remitente comercial productor
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.RemitenteComercialProductorPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.RemitenteComercialProductor = valorEncontrado;
-
-            // Remitente comercial venta primaria
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.RemitenteComercialVentaPrimariaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.RteComercialVentaPrimaria = valorEncontrado;
-
-            // Remitente comercial venta secundaria
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.RemitenteComercialVentaSecundariaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.RteComercialVentaSecundaria = valorEncontrado;
-
-            // Remitente comercial venta secundaria 2
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.RemitenteComercialVentaSecundaria2Prefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.RteComercialVentaSecundaria2 = valorEncontrado;
-
-            // Mercado a término
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.MercadoATerminoPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.MercadoATermino = valorEncontrado;
-
-            // Corredor venta primaria
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.CorredorVentaPrimariaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.CorredorVentaPrimaria = valorEncontrado;
-
-            // Corredor venta secundaria
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.CorredorVentaSecundariaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.CorredorVentaSecundaria = valorEncontrado;
-
-            // Representante entregador
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.RepresentanteEntregadorPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.RepresentanteEntregador = valorEncontrado;
-
-            // Representante recibidor
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.RepresentanteRecibidorPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.RepresentanteRecibidor = valorEncontrado;
-
-            // Destinatario
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinatarioPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Destinatario = valorEncontrado;
-
-            // Destino
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinoPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Destino = valorEncontrado;
-
-            // Empresa transportista
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.EmpresaTransportistaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.EmpresaTransportista = valorEncontrado;
-
-            // Flete pagador
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.FletePagadorPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.FletePagador = valorEncontrado;
-
-            // Chofer
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.ChoferPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Chofer = valorEncontrado;
-
-            // Intermediario de flete
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.IntermediarioDeFletePrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.IntermediarioDeFlete = valorEncontrado;
-
-            return true;
-        }
-
-        // Sección B - Grano / Especie
-        private static bool ProcesarTextoSeccionB(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Tipo de grano / especie
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.GranoTipoPrefijo, ref index, ConstantesParsing.PesoBrutoPrefijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.GranoEspecieTipo = valorEncontrado;
-
-            // Peso bruto
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.PesoBrutoPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.PesoBruto = valorEncontrado;
-
-            // Grano / especie
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.Finalizacion, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.GranoEspecie = valorEncontrado;
-
-            // Peso tara
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.Finalizacion, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.PesoTara = valorEncontrado;
-
-            // Peso neto
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.PesoNetoPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.PesoNeto = valorEncontrado;
-
-            // TODO: Declaración de calidad (Conforme / Condicional)
-        
-            return true;
-        }
-
-        // Sección C - Procedencia
-        private static bool ProcesarTextoSeccionC(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Número de planta
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.ProcedenciaNumeroPlantaPrefijo, ref index, ConstantesParsing.ProcedenciaNumeroPlantaSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.ProcedenciaNumeroPlanta = valorEncontrado;
-
-            // Dirección
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.ProcedenciaDireccionPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.ProcedenciaDireccion = valorEncontrado;
-
-            // Es un campo
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.Finalizacion, ref index, ConstantesParsing.ProcedenciaEsUnCampoSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.ProcedenciaEsUnCampo = valorEncontrado;
-
-            // Localidad
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.ProcedenciaLocalidadPrefijo, ref index, ConstantesParsing.ProcedenciaLocalidadSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.ProcedenciaLocalidad = valorEncontrado;
-
-            // Provincia
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.ProcedenciaProvinciaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.ProcedenciaProvincia = valorEncontrado;
-
-            return true;
-        }
-
-        // Sección D - Destino de la mercadería
-        private static bool ProcesarTextoSeccionD(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Es un campo
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinoEsUnCampoPrefijo, ref index, ConstantesParsing.DestinoEsUnCampoSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoEsUnCampo = valorEncontrado;
-
-            // Número de planta
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinoNumeroPlantaPrefijo, ref index, ConstantesParsing.DestinoNumeroPlantaSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoNumeroPlanta = valorEncontrado;
-
-            // Dirección
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinoDireccionPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoDireccion = valorEncontrado;
-
-            // Localidad
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinoLocalidadPrefijo, ref index, ConstantesParsing.DestinoLocalidadSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoLocalidad = valorEncontrado;
-
-            // Provincia
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DestinoProvinciaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoProvincia = valorEncontrado;
-
-            return true;
-        }
-
-        // Sección E - Datos del transporte
-        private static bool ProcesarTextoSeccionE(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Dominios
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DominiosPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Dominios = valorEncontrado;
-
-            // Partida
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.Finalizacion, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Partida = valorEncontrado;
-
-            // Kms a recorrer
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.KmsARecorrerPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.KmsARecorrer = valorEncontrado;
-
-            // Tarifa de referencia
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.TarifaDeReferenciaPrefijo, ref index, ConstantesParsing.TarifaDeReferenciaSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.TarifaDeReferencia = valorEncontrado;
-
-            // Tarifa
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.TarifaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Tarifa = valorEncontrado;
-
-            return true;
-        }
-
-        // Sección G - Descarga
-        private static bool ProcesarTextoSeccionG(string texto, CartaDePorte cartaDePorte, ref int index)
-        {
-            string valorEncontrado;
-
-            // Peso bruto
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DescargaPesoBrutoPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DescargaPesoBruto = valorEncontrado;
-
-            // Fecha de arribo
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.FechaArriboPrefijo, ref index, ConstantesParsing.FechaArriboSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.FechaArribo = valorEncontrado;
-
-            // Fecha de descarga
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.FechaDescargaPrefijo, ref index, ConstantesParsing.FechaDescargaSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.FechaDescarga = valorEncontrado;
-
-            // Peso tara
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DescargaPesoTaraPrefijo, ref index, ConstantesParsing.DescargaPesoTaraSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DescargaPesoTara = valorEncontrado;
-
-            // Localidad
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DescargaLocalidadPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DescargaLocalidad = valorEncontrado;
-
-            // Provincia
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DescargaProvinciaPrefijo, ref index, ConstantesParsing.Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DescargaProvincia = valorEncontrado;
-
-            // Nº de turno
-            //valorEncontrado = ObtenerValor(texto, ConstantesParsing.NumeroTurnoPrefijo, ref index, ConstantesParsing.NumeroTurnoSufijo);
-            //if (index == -1)
-            //{
-            //    return false;
-            //}
-            cartaDePorte.NumeroTurno = string.Empty;
-
-            // Peso neto
-            valorEncontrado = ObtenerValor(texto, ConstantesParsing.DescargaPesoNetoPrefijo, ref index, ConstantesParsing.DescargaPesoNetoSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DescargaPesoNeto = valorEncontrado;
-
-            return true;
-        }
-
-        #endregion
-
-        #region Funciones de parsing
-
-        private static string ObtenerValor(string textoOriginal, string textoABuscar, ref int indice, string textoFin)
-        {
-            indice = textoOriginal.IndexOf(textoABuscar, indice);
-            if (indice == -1)
-            {
-                return string.Empty;
+                parser = new ParserV2();
+                if (!parser.ProcesarTexto(texto, cartaDePorte, 1))
+                {
+                    MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
             }
             else
             {
-                int indiceFin = textoOriginal.IndexOf(textoFin, indice + textoABuscar.Length);
-                if (indiceFin == -1)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    string resultado = textoOriginal.Substring(indice + textoABuscar.Length, indiceFin - indice - textoABuscar.Length).Trim();
-                    indice = indiceFin;
-                    return resultado;
-                }
-            }
-        }
-
-        private static void Separar2Valores(string textoOriginal, string separador, ref string valor1, ref string valor2)
-        {
-            if (string.IsNullOrWhiteSpace(textoOriginal) | string.IsNullOrEmpty(separador))
-            {
-                valor1 = string.Empty;
-                valor2 = string.Empty;
-                return;
+                MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
             }
 
-            int index;
-            index = textoOriginal.IndexOf(separador);
-            if (index > -1)
-            {
-                valor1 = textoOriginal.Substring(0, index);
-                valor2 = textoOriginal.Substring(index + separador.Length, textoOriginal.Length - index - separador.Length);
-            }
+            return true;
         }
 
         #endregion
@@ -682,7 +188,7 @@ namespace CS_Importador_de_cartas_de_porte
                 string cuitString = string.Empty;
                 string nombre = string.Empty;
 
-                Separar2Valores(valor, ConstantesParsing.CuitYNombreSeparador, ref cuitString, ref nombre);
+                CommonFunctions.Separar2Valores(valor, CommonFunctions.CuitYNombreSeparador, ref cuitString, ref nombre);
                 if (!string.IsNullOrWhiteSpace(cuitString))
                 {
                     if (long.TryParse(cuitString, out long cuitLong))
@@ -877,19 +383,19 @@ namespace CS_Importador_de_cartas_de_porte
                     movimiento_Cereal.CTGNumero = longTemp;
                     if (longTemp == 0)
                     {
-                        MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return false;
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
@@ -988,7 +494,7 @@ namespace CS_Importador_de_cartas_de_porte
                 }
                 else
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el cereal.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el cereal.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -1019,7 +525,7 @@ namespace CS_Importador_de_cartas_de_porte
                 }
                 if (movimiento_Cereal.PesoBruto == 0 && movimiento_Cereal.PesoTara == 0 && movimiento_Cereal.PesoNeto == 0)
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se detectaron los kilogramos, es posible que esta carta esté anulada o sin confirmar.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se detectaron los kilogramos, es posible que esta carta esté anulada o sin confirmar.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -1049,7 +555,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
             if (movimiento_Cereal.PesoBruto - movimiento_Cereal.PesoTara != movimiento_Cereal.PesoNeto)
             {
-                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: El peso neto no coincide con el peso bruto - peso tara.", "CS-Importador de cartas de porte", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: El peso neto no coincide con el peso bruto - peso tara.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
@@ -1082,7 +588,7 @@ namespace CS_Importador_de_cartas_de_porte
                                 }
                                 else
                                 {
-                                    if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el origen con nº de planta {intTemp} perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", "CS-Importador de cartas de porte", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                                    if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el origen con nº de planta {intTemp} perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                                     {
                                         break;
                                     }
@@ -1112,7 +618,7 @@ namespace CS_Importador_de_cartas_de_porte
                         }
                         else
                         {
-                            if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró ningún origen perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", "CS-Importador de cartas de porte", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                            if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró ningún origen perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                             {
                                 break;
                             }
@@ -1150,7 +656,7 @@ namespace CS_Importador_de_cartas_de_porte
                                 }
                                 else
                                 {
-                                    if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el destino con nº de planta {intTemp} perteneciente a {cartaDePorte.Destino}.\n\n¿Desea reintentar?", "CS-Importador de cartas de porte", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                                    if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el destino con nº de planta {intTemp} perteneciente a {cartaDePorte.Destino}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                                     {
                                         break;
                                     }
@@ -1177,7 +683,7 @@ namespace CS_Importador_de_cartas_de_porte
             // Dominios
             if (!string.IsNullOrWhiteSpace(cartaDePorte.Dominios))
             {
-                Separar2Valores(cartaDePorte.Dominios, ConstantesParsing.DominiosSeparador, ref stringTemp1, ref stringTemp2);
+                CommonFunctions.Separar2Valores(cartaDePorte.Dominios, CommonFunctions.DominiosSeparador, ref stringTemp1, ref stringTemp2);
                 if (string.IsNullOrWhiteSpace(stringTemp1))
                 {
                     movimiento_Cereal.TransporteDominioCamion = string.Empty;
