@@ -193,7 +193,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   120389633
+         Format          =   111280129
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1066,7 +1066,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   120389633
+         Format          =   111280129
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1146,12 +1146,12 @@ Public Function Startup(ByRef Movimiento_SubProducto As Movimiento_SubProducto) 
         txtComprobanteNumero.Text = mMovimiento_SubProducto.ComprobanteNumero
     End If
     
-    dtpFecha.Value = Date
-    dtpCotizacionDolarFecha.Value = Date
+    dtpFecha.value = Date
+    dtpCotizacionDolarFecha.value = Date
     
     If CSM_Forms.IsLoaded("frmMovimiento_SubProducto_Lista") Then
         If frmMovimiento_SubProducto_Lista.cboFecha.ListIndex = 1 Then
-            dtpFecha.Value = frmMovimiento_SubProducto_Lista.dtpFecha_Desde.Value
+            dtpFecha.value = frmMovimiento_SubProducto_Lista.dtpFecha_Desde.value
         End If
     End If
     
@@ -1178,7 +1178,7 @@ Public Function LoadData() As Boolean
         
         'ENCABEZADO
         txtComprobanteNumero.Text = .ComprobanteNumero
-        dtpFecha.Value = .Fecha_Formatted
+        dtpFecha.value = .Fecha_Formatted
         txtCOTNumero.Text = .COTNumero
         
         'ENTIDADES
@@ -1192,7 +1192,7 @@ Public Function LoadData() As Boolean
         datcboDestino.BoundText = .IDOrigenDestino_Destino
         
         'COTIZACIÓN DEL DOLAR
-        dtpCotizacionDolarFecha.Value = IIf(.CotizacionDolarFecha = DATE_TIME_FIELD_NULL_VALUE, Date, .CotizacionDolarFecha)
+        dtpCotizacionDolarFecha.value = IIf(.CotizacionDolarFecha = DATE_TIME_FIELD_NULL_VALUE, Date, .CotizacionDolarFecha)
         txtCotizacionDolarImporte.Text = .CotizacionDolarImporte_Formatted
         
         'TRANSPORTE
@@ -1203,7 +1203,7 @@ Public Function LoadData() As Boolean
         txtTransporteTarifa.Text = .TransporteTarifa_Formatted
         
         'FACTURACIÓN
-        checkboxEsCanje.Value = IIf(.EsCanje, vbChecked, vbUnchecked)
+        checkboxEsCanje.value = IIf(.EsCanje, vbChecked, vbUnchecked)
         textboxFacturaNumero.Text = .FacturaNumero
         
         'SI ES UN SÓLO ITEM, LO MUESTRO PLANO, SI NO, EN GRILLA
@@ -1280,7 +1280,7 @@ Private Sub cmdCOTNumero_Click()
         
         ' DOCUMENTACIÓN
         .txtDocumentacionNumero.Text = Left(txtComprobanteNumero.Text, 4) & "-" & Mid(txtComprobanteNumero.Text, 5)
-        .txtDocumentacionFecha.Text = dtpFecha.Value
+        .txtDocumentacionFecha.Text = dtpFecha.value
         
         Call txtPrecioToneladaPeso_LostFocus
         If Trim(txtKilogramo.Text) <> "" And Trim(txtPrecioToneladaPeso.Text) <> "" Then
@@ -1351,20 +1351,20 @@ End Sub
 '============================================================
 'FECHA
 Private Sub cmdFecha_Anterior_Click()
-    dtpFecha.Value = DateAdd("d", -1, dtpFecha.Value)
+    dtpFecha.value = DateAdd("d", -1, dtpFecha.value)
     dtpFecha.SetFocus
 End Sub
 
 Private Sub cmdFecha_Siguiente_Click()
-    dtpFecha.Value = DateAdd("d", 1, dtpFecha.Value)
+    dtpFecha.value = DateAdd("d", 1, dtpFecha.value)
     dtpFecha.SetFocus
 End Sub
 
 Private Sub cmdFecha_Hoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpFecha.Value
-    dtpFecha.Value = Date
+    OldValue = dtpFecha.value
+    dtpFecha.value = Date
     dtpFecha.SetFocus
 End Sub
 
@@ -1445,22 +1445,24 @@ Private Sub datcboEntidad_Transportista_Change()
     Dim Entidad_Transportista As Entidad
     
     'MUESTRO EL NÚMERO DE CUIT
-    Set Entidad_Transportista = New Entidad
-    Entidad_Transportista.IDEntidad = CLng(datcboEntidad_Transportista.BoundText)
-    If Not Entidad_Transportista.Load() Then
-        txtTransportistaCUIT.Text = ""
+    txtTransportistaCUIT.Text = ""
+    If datcboEntidad_Transportista.BoundText <> "" Then
+        Set Entidad_Transportista = New Entidad
+        Entidad_Transportista.IDEntidad = CLng(datcboEntidad_Transportista.BoundText)
+        If Not Entidad_Transportista.Load() Then
+            Set Entidad_Transportista = Nothing
+            Exit Sub
+        End If
+        txtTransportistaCUIT.Text = Entidad_Transportista.CUIT_Formatted
         Set Entidad_Transportista = Nothing
-        Exit Sub
     End If
-    txtTransportistaCUIT.Text = Entidad_Transportista.CUIT_Formatted
-    Set Entidad_Transportista = Nothing
     
     'LLENO EL COMBO DE CHOFERES
     KeySave = Val(datcboEntidad_Chofer)
     datcboEntidad_Chofer.BoundText = ""
     txtTransporteCamion.Text = ""
     txtTransporteAcoplado.Text = ""
-    Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Chofer, "usp_Entidad_Chofer_List 0, 1, " & IIf(chkEntidad_Chofer_Todos.Value = vbChecked, "NULL", Val(datcboEntidad_Transportista.BoundText)) & ", " & mMovimiento_SubProducto.IDEntidad_Chofer, "IDEntidad", "Nombre", "Choferes", cscpItemOrFirstIfUnique, KeySave)
+    Call CSM_Control_DataCombo.FillFromSQL(datcboEntidad_Chofer, "usp_Entidad_Chofer_List 0, 1, " & IIf(chkEntidad_Chofer_Todos.value = vbChecked, "NULL", Val(datcboEntidad_Transportista.BoundText)) & ", " & mMovimiento_SubProducto.IDEntidad_Chofer, "IDEntidad", "Nombre", "Choferes", cscpItemOrFirstIfUnique, KeySave)
 End Sub
 
 '============================================================
@@ -1698,20 +1700,20 @@ End Sub
 '============================================================
 'COTIZACION DOLAR FECHA
 Private Sub cmdCotizacionDolarFecha_Anterior_Click()
-    dtpCotizacionDolarFecha.Value = DateAdd("d", -1, dtpCotizacionDolarFecha.Value)
+    dtpCotizacionDolarFecha.value = DateAdd("d", -1, dtpCotizacionDolarFecha.value)
     dtpCotizacionDolarFecha.SetFocus
 End Sub
 
 Private Sub cmdCotizacionDolarFecha_Siguiente_Click()
-    dtpCotizacionDolarFecha.Value = DateAdd("d", 1, dtpCotizacionDolarFecha.Value)
+    dtpCotizacionDolarFecha.value = DateAdd("d", 1, dtpCotizacionDolarFecha.value)
     dtpCotizacionDolarFecha.SetFocus
 End Sub
 
 Private Sub cmdCotizacionDolarFecha_Hoy_Click()
     Dim OldValue As Date
     
-    OldValue = dtpCotizacionDolarFecha.Value
-    dtpCotizacionDolarFecha.Value = Date
+    OldValue = dtpCotizacionDolarFecha.value
+    dtpCotizacionDolarFecha.value = Date
     dtpCotizacionDolarFecha.SetFocus
 End Sub
 
@@ -1751,7 +1753,7 @@ Private Sub cmdAceptar_Click()
         txtComprobanteNumero.SetFocus
         Exit Sub
     End If
-    If DateDiff("d", dtpFecha.Value, Date) < 0 Then
+    If DateDiff("d", dtpFecha.value, Date) < 0 Then
         If MsgBox("La Fecha es posterior al día de hoy." & vbCr & vbCr & "¿Desea continuar de todos modos?", vbExclamation + vbYesNo, App.Title) = vbNo Then
             dtpFecha.SetFocus
             Exit Sub
@@ -1863,7 +1865,7 @@ Private Sub cmdAceptar_Click()
     With mMovimiento_SubProducto
         'ENCABEZADO
         .ComprobanteNumero = Trim(txtComprobanteNumero.Text)
-        .Fecha = dtpFecha.Value
+        .Fecha = dtpFecha.value
         .COTNumero = txtCOTNumero.Text
         
         'ENTIDADES
@@ -1880,7 +1882,7 @@ Private Sub cmdAceptar_Click()
         Select Case tabDetalle.SelectedItem.Key
             Case TABS_KEY_SIMPLE
                 If txtPrecioToneladaDolar.Visible Then
-                    .CotizacionDolarFecha = dtpCotizacionDolarFecha.Value
+                    .CotizacionDolarFecha = dtpCotizacionDolarFecha.value
                     If IsNumeric(txtCotizacionDolarImporte.Text) Then
                         .CotizacionDolarImporte = CCur(txtCotizacionDolarImporte.Text)
                     Else
@@ -1897,7 +1899,7 @@ Private Sub cmdAceptar_Click()
         .TransporteTarifa_Formatted = txtTransporteTarifa.Text
         
         'FACTURACIÓN
-        .EsCanje = checkboxEsCanje.Value
+        .EsCanje = checkboxEsCanje.value
         .FacturaNumero = Trim(textboxFacturaNumero.Text)
 
         'EXTRAS
@@ -1926,12 +1928,12 @@ Private Sub cmdAceptar_Click()
                 
             Case TABS_KEY_GRILLA
                 Set Movimiento_SubProducto_Detalle = New Movimiento_SubProducto_Det
-                Movimiento_SubProducto_Detalle.IDSubProducto = tdbgrdData.Columns("IDSubProducto").Value
-                Movimiento_SubProducto_Detalle.Kilogramo = CLng(tdbgrdData.Columns("Kilogramo").Value)
+                Movimiento_SubProducto_Detalle.IDSubProducto = tdbgrdData.Columns("IDSubProducto").value
+                Movimiento_SubProducto_Detalle.Kilogramo = CLng(tdbgrdData.Columns("Kilogramo").value)
                 If txtPrecioToneladaDolar.Visible Then
-                    Movimiento_SubProducto_Detalle.PrecioToneladaDolar = CCur(tdbgrdData.Columns("PrecioToneladaDolar").Value)
+                    Movimiento_SubProducto_Detalle.PrecioToneladaDolar = CCur(tdbgrdData.Columns("PrecioToneladaDolar").value)
                 End If
-                Movimiento_SubProducto_Detalle.Kilogramo = CLng(tdbgrdData.Columns("Kilogramo").Value)
+                Movimiento_SubProducto_Detalle.Kilogramo = CLng(tdbgrdData.Columns("Kilogramo").value)
                 Set Movimiento_SubProducto_Detalle = Nothing
         End Select
 
@@ -1949,7 +1951,7 @@ End Sub
 
 Public Function FillComboBox_Entidad_Titular() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Titular.BoundText)
     Set recData = datcboEntidad_Titular.RowSource
@@ -1960,7 +1962,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Destino() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Destinatario.BoundText)
     Set recData = datcboEntidad_Destinatario.RowSource
@@ -1971,7 +1973,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Transportista() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboEntidad_Transportista.BoundText)
     Set recData = datcboEntidad_Transportista.RowSource
@@ -1982,7 +1984,7 @@ End Function
 
 Public Function FillComboBox_Entidad_Chofer() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     On Error Resume Next
     KeySave = Val(datcboEntidad_Chofer.BoundText)
@@ -1994,7 +1996,7 @@ End Function
 
 Public Function FillComboBox_SubProducto() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     KeySave = Val(datcboSubProducto.BoundText)
     Set recData = datcboSubProducto.RowSource
@@ -2005,7 +2007,7 @@ End Function
 
 Public Function FillComboBox_Destino() As Boolean
     Dim KeySave As Long
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     On Error Resume Next
     KeySave = Val(datcboDestino.BoundText)
