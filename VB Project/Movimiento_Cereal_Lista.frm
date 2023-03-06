@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   106102785
+            Format          =   110690305
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   106102785
+            Format          =   110690305
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -2020,7 +2020,7 @@ Private Sub tlbMain_ButtonClick(ByVal Button As MSComctlLib.Button)
             Movimiento_Cereal.IDMovimiento_Cereal = tdbgrdData.Columns("IDMovimiento_Cereal").value
             If Movimiento_Cereal.Load() Then
                 'VERIFICO QUE NO ESTÉ CERTIFICADO
-                If Movimiento_Cereal.Certificado Then
+                If Movimiento_Cereal.Certificado = vbChecked Then
                     MsgBox "No se puede eliminar este Movimiento de Cereal porque ya está Certificado.", vbExclamation, App.Title
                     Set Movimiento_Cereal = Nothing
                     Exit Sub
