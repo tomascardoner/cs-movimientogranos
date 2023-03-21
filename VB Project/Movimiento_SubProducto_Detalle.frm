@@ -56,9 +56,9 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          EndProperty
          Height          =   330
          Left            =   1200
-         MaxLength       =   12
+         MaxLength       =   13
          TabIndex        =   57
-         Tag             =   "STRING|NOTEMPTY|NUMBERS|12"
+         Tag             =   "STRING|NOTEMPTY|NUMBERS|13"
          Top             =   600
          Width           =   1755
       End
@@ -193,7 +193,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111280129
+         Format          =   86441985
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1066,7 +1066,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111280129
+         Format          =   86441985
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
