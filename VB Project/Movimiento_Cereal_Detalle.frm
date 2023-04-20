@@ -9,7 +9,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
    ClientHeight    =   6525
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   13920
+   ClientWidth     =   13890
    BeginProperty Font 
       Name            =   "Arial"
       Size            =   8.25
@@ -26,27 +26,27 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    ScaleHeight     =   6525
-   ScaleWidth      =   13920
+   ScaleWidth      =   13890
    Begin VB.PictureBox picExtras 
       BorderStyle     =   0  'None
       Height          =   1515
       Left            =   9360
       ScaleHeight     =   1515
       ScaleWidth      =   4395
-      TabIndex        =   124
+      TabIndex        =   125
       Top             =   4380
       Width           =   4395
       Begin VB.CheckBox chkIgnorarCertificado 
          Height          =   210
          Left            =   3540
-         TabIndex        =   129
+         TabIndex        =   130
          Top             =   120
          Width           =   195
       End
       Begin VB.CheckBox chkDeclaraIPRO 
          Height          =   210
          Left            =   1260
-         TabIndex        =   127
+         TabIndex        =   128
          Top             =   120
          Width           =   195
       End
@@ -54,14 +54,14 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   615
          Left            =   1260
          MultiLine       =   -1  'True
-         TabIndex        =   133
+         TabIndex        =   134
          Top             =   840
          Width           =   3015
       End
       Begin MSDataListLib.DataCombo datcboAnulada 
          Height          =   330
          Left            =   1260
-         TabIndex        =   131
+         TabIndex        =   132
          Top             =   420
          Width           =   3015
          _ExtentX        =   5318
@@ -76,7 +76,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Ignorar certificado:"
          Height          =   210
          Left            =   1980
-         TabIndex        =   128
+         TabIndex        =   129
          Top             =   120
          Width           =   1365
       End
@@ -85,7 +85,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Declara IPRO:"
          Height          =   210
          Left            =   120
-         TabIndex        =   126
+         TabIndex        =   127
          Top             =   120
          Width           =   990
       End
@@ -94,7 +94,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Anulada:"
          Height          =   210
          Left            =   120
-         TabIndex        =   130
+         TabIndex        =   131
          Top             =   480
          Width           =   645
       End
@@ -103,7 +103,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Notas:"
          Height          =   210
          Left            =   120
-         TabIndex        =   132
+         TabIndex        =   133
          Top             =   840
          Width           =   465
       End
@@ -121,7 +121,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       EndProperty
       Height          =   3975
       Left            =   9300
-      TabIndex        =   153
+      TabIndex        =   154
       Top             =   1980
       Visible         =   0   'False
       Width           =   4515
@@ -129,7 +129,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Calcular Humedad, Zarandeo y Kgs. Netos"
          Height          =   375
          Left            =   420
-         TabIndex        =   189
+         TabIndex        =   190
          Top             =   3540
          Visible         =   0   'False
          Width           =   3855
@@ -147,7 +147,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          EndProperty
          Height          =   315
          Left            =   120
-         TabIndex        =   154
+         TabIndex        =   155
          TabStop         =   0   'False
          ToolTipText     =   "Pesadas reducidas"
          Top             =   300
@@ -160,7 +160,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   5
          Left            =   1680
          MaxLength       =   7
-         TabIndex        =   186
+         TabIndex        =   187
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   3120
          Width           =   855
@@ -170,23 +170,23 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   330
          Index           =   5
          Left            =   2700
-         MaxLength       =   4
-         TabIndex        =   187
-         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
-         Top             =   3120
-         Width           =   675
-      End
-      Begin VB.TextBox txtPesadaCompleta_Zaranda 
-         Alignment       =   1  'Right Justify
-         Height          =   330
-         Index           =   5
-         Left            =   3600
          MaxLength       =   4
          TabIndex        =   188
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   3120
          Width           =   675
       End
+      Begin VB.TextBox txtPesadaCompleta_Zaranda 
+         Alignment       =   1  'Right Justify
+         Height          =   330
+         Index           =   5
+         Left            =   3600
+         MaxLength       =   4
+         TabIndex        =   189
+         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
+         Top             =   3120
+         Width           =   675
+      End
       Begin VB.TextBox txtPesadaCompleta_PesoNeto 
          Alignment       =   1  'Right Justify
          ForeColor       =   &H8000000D&
@@ -194,7 +194,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   4
          Left            =   1680
          MaxLength       =   7
-         TabIndex        =   181
+         TabIndex        =   182
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   2640
          Width           =   855
@@ -204,23 +204,23 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   330
          Index           =   4
          Left            =   2700
-         MaxLength       =   4
-         TabIndex        =   182
-         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
-         Top             =   2640
-         Width           =   675
-      End
-      Begin VB.TextBox txtPesadaCompleta_Zaranda 
-         Alignment       =   1  'Right Justify
-         Height          =   330
-         Index           =   4
-         Left            =   3600
          MaxLength       =   4
          TabIndex        =   183
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   2640
          Width           =   675
       End
+      Begin VB.TextBox txtPesadaCompleta_Zaranda 
+         Alignment       =   1  'Right Justify
+         Height          =   330
+         Index           =   4
+         Left            =   3600
+         MaxLength       =   4
+         TabIndex        =   184
+         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
+         Top             =   2640
+         Width           =   675
+      End
       Begin VB.TextBox txtPesadaCompleta_PesoNeto 
          Alignment       =   1  'Right Justify
          ForeColor       =   &H8000000D&
@@ -228,7 +228,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   3
          Left            =   1680
          MaxLength       =   7
-         TabIndex        =   176
+         TabIndex        =   177
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   2160
          Width           =   855
@@ -238,23 +238,23 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   330
          Index           =   3
          Left            =   2700
-         MaxLength       =   4
-         TabIndex        =   177
-         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
-         Top             =   2160
-         Width           =   675
-      End
-      Begin VB.TextBox txtPesadaCompleta_Zaranda 
-         Alignment       =   1  'Right Justify
-         Height          =   330
-         Index           =   3
-         Left            =   3600
          MaxLength       =   4
          TabIndex        =   178
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   2160
          Width           =   675
       End
+      Begin VB.TextBox txtPesadaCompleta_Zaranda 
+         Alignment       =   1  'Right Justify
+         Height          =   330
+         Index           =   3
+         Left            =   3600
+         MaxLength       =   4
+         TabIndex        =   179
+         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
+         Top             =   2160
+         Width           =   675
+      End
       Begin VB.TextBox txtPesadaCompleta_PesoNeto 
          Alignment       =   1  'Right Justify
          ForeColor       =   &H8000000D&
@@ -262,7 +262,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   2
          Left            =   1680
          MaxLength       =   7
-         TabIndex        =   171
+         TabIndex        =   172
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   1680
          Width           =   855
@@ -272,17 +272,6 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   330
          Index           =   2
          Left            =   2700
-         MaxLength       =   4
-         TabIndex        =   172
-         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
-         Top             =   1680
-         Width           =   675
-      End
-      Begin VB.TextBox txtPesadaCompleta_Zaranda 
-         Alignment       =   1  'Right Justify
-         Height          =   330
-         Index           =   2
-         Left            =   3600
          MaxLength       =   4
          TabIndex        =   173
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
@@ -292,10 +281,21 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       Begin VB.TextBox txtPesadaCompleta_Zaranda 
          Alignment       =   1  'Right Justify
          Height          =   330
+         Index           =   2
+         Left            =   3600
+         MaxLength       =   4
+         TabIndex        =   174
+         Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
+         Top             =   1680
+         Width           =   675
+      End
+      Begin VB.TextBox txtPesadaCompleta_Zaranda 
+         Alignment       =   1  'Right Justify
+         Height          =   330
          Index           =   1
          Left            =   3600
          MaxLength       =   4
-         TabIndex        =   168
+         TabIndex        =   169
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   1200
          Width           =   675
@@ -306,7 +306,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   0
          Left            =   3600
          MaxLength       =   4
-         TabIndex        =   163
+         TabIndex        =   164
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   720
          Width           =   675
@@ -317,7 +317,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   1
          Left            =   2700
          MaxLength       =   4
-         TabIndex        =   167
+         TabIndex        =   168
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   1200
          Width           =   675
@@ -328,7 +328,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   0
          Left            =   2700
          MaxLength       =   4
-         TabIndex        =   162
+         TabIndex        =   163
          Tag             =   "DECIMAL|EMPTY|ZERO|POSITIVE|99.9"
          Top             =   720
          Width           =   675
@@ -340,7 +340,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   1
          Left            =   1680
          MaxLength       =   7
-         TabIndex        =   166
+         TabIndex        =   167
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   1200
          Width           =   855
@@ -352,7 +352,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   0
          Left            =   1680
          MaxLength       =   7
-         TabIndex        =   161
+         TabIndex        =   162
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   720
          Width           =   855
@@ -363,7 +363,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   0
          Left            =   420
          MaxLength       =   11
-         TabIndex        =   160
+         TabIndex        =   161
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   720
          Width           =   1095
@@ -374,7 +374,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   1
          Left            =   420
          MaxLength       =   11
-         TabIndex        =   165
+         TabIndex        =   166
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   1200
          Width           =   1095
@@ -385,7 +385,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   2
          Left            =   420
          MaxLength       =   11
-         TabIndex        =   170
+         TabIndex        =   171
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   1680
          Width           =   1095
@@ -396,7 +396,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   3
          Left            =   420
          MaxLength       =   11
-         TabIndex        =   175
+         TabIndex        =   176
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   2160
          Width           =   1095
@@ -407,7 +407,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   4
          Left            =   420
          MaxLength       =   11
-         TabIndex        =   180
+         TabIndex        =   181
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   2640
          Width           =   1095
@@ -418,7 +418,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Index           =   5
          Left            =   420
          MaxLength       =   11
-         TabIndex        =   185
+         TabIndex        =   186
          Tag             =   "INTEGER|EMPTY|NOTZERO|POSITIVE"
          Top             =   3120
          Width           =   1095
@@ -493,7 +493,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Zarandeo"
          Height          =   210
          Left            =   3540
-         TabIndex        =   158
+         TabIndex        =   159
          Top             =   300
          Width           =   705
       End
@@ -502,7 +502,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Humedad"
          Height          =   210
          Left            =   2700
-         TabIndex        =   157
+         TabIndex        =   158
          Top             =   300
          Width           =   675
       End
@@ -512,7 +512,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Peso Neto"
          Height          =   210
          Left            =   1680
-         TabIndex        =   156
+         TabIndex        =   157
          Top             =   300
          Width           =   855
       End
@@ -522,7 +522,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Nº Ticket"
          Height          =   210
          Left            =   480
-         TabIndex        =   155
+         TabIndex        =   156
          Top             =   300
          Width           =   1005
       End
@@ -532,7 +532,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   210
          Index           =   0
          Left            =   180
-         TabIndex        =   159
+         TabIndex        =   160
          Top             =   780
          Width           =   135
       End
@@ -542,7 +542,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   210
          Index           =   1
          Left            =   180
-         TabIndex        =   164
+         TabIndex        =   165
          Top             =   1260
          Width           =   135
       End
@@ -552,7 +552,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   210
          Index           =   2
          Left            =   180
-         TabIndex        =   169
+         TabIndex        =   170
          Top             =   1740
          Width           =   135
       End
@@ -562,7 +562,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   210
          Index           =   3
          Left            =   180
-         TabIndex        =   174
+         TabIndex        =   175
          Top             =   2220
          Width           =   135
       End
@@ -572,7 +572,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   210
          Index           =   4
          Left            =   180
-         TabIndex        =   179
+         TabIndex        =   180
          Top             =   2700
          Width           =   135
       End
@@ -582,7 +582,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Height          =   210
          Index           =   5
          Left            =   180
-         TabIndex        =   184
+         TabIndex        =   185
          Top             =   3180
          Width           =   135
       End
@@ -610,7 +610,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          EndProperty
          Height          =   315
          Left            =   1320
-         TabIndex        =   134
+         TabIndex        =   135
          TabStop         =   0   'False
          ToolTipText     =   "Pesadas completas"
          Top             =   120
@@ -749,14 +749,14 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       Left            =   9360
       ScaleHeight     =   1395
       ScaleWidth      =   4395
-      TabIndex        =   137
+      TabIndex        =   138
       Top             =   4440
       Width           =   4395
       Begin VB.ComboBox cboFormulariosAplicados 
          Height          =   330
          Left            =   1560
          Style           =   2  'Dropdown List
-         TabIndex        =   143
+         TabIndex        =   144
          Top             =   720
          Width           =   2670
       End
@@ -766,7 +766,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          ForeColor       =   &H8000000D&
          Height          =   315
          Left            =   1560
-         TabIndex        =   139
+         TabIndex        =   140
          TabStop         =   0   'False
          Top             =   0
          Width           =   1395
@@ -777,7 +777,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          ForeColor       =   &H8000000D&
          Height          =   315
          Left            =   1560
-         TabIndex        =   141
+         TabIndex        =   142
          TabStop         =   0   'False
          Top             =   360
          Width           =   1395
@@ -787,7 +787,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Formularios:"
          Height          =   210
          Left            =   120
-         TabIndex        =   142
+         TabIndex        =   143
          Top             =   780
          Width           =   885
       End
@@ -796,7 +796,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Kgs.:"
          Height          =   210
          Left            =   120
-         TabIndex        =   140
+         TabIndex        =   141
          Top             =   420
          Width           =   375
       End
@@ -805,7 +805,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "ID Movim.:"
          Height          =   210
          Left            =   120
-         TabIndex        =   138
+         TabIndex        =   139
          Top             =   60
          Width           =   720
       End
@@ -816,7 +816,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       Left            =   9360
       ScaleHeight     =   1395
       ScaleWidth      =   4395
-      TabIndex        =   144
+      TabIndex        =   145
       Top             =   4440
       Width           =   4395
       Begin VB.TextBox txtUsuario_Modificacion 
@@ -825,7 +825,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          ForeColor       =   &H8000000D&
          Height          =   315
          Left            =   1620
-         TabIndex        =   150
+         TabIndex        =   151
          TabStop         =   0   'False
          Top             =   720
          Width           =   2715
@@ -836,7 +836,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          ForeColor       =   &H8000000D&
          Height          =   315
          Left            =   1620
-         TabIndex        =   148
+         TabIndex        =   149
          TabStop         =   0   'False
          Top             =   360
          Width           =   2715
@@ -847,7 +847,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          ForeColor       =   &H8000000D&
          Height          =   315
          Left            =   1620
-         TabIndex        =   146
+         TabIndex        =   147
          TabStop         =   0   'False
          Top             =   0
          Width           =   2715
@@ -858,7 +858,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          ForeColor       =   &H8000000D&
          Height          =   315
          Left            =   1620
-         TabIndex        =   152
+         TabIndex        =   153
          TabStop         =   0   'False
          Top             =   1080
          Width           =   2715
@@ -868,7 +868,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Usuario Creación:"
          Height          =   210
          Left            =   120
-         TabIndex        =   145
+         TabIndex        =   146
          Top             =   60
          Width           =   1290
       End
@@ -877,7 +877,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Fecha/Hora Creac.:"
          Height          =   210
          Left            =   120
-         TabIndex        =   147
+         TabIndex        =   148
          Top             =   420
          Width           =   1410
       End
@@ -886,7 +886,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Fecha/Hora Modif.:"
          Height          =   210
          Left            =   120
-         TabIndex        =   151
+         TabIndex        =   152
          Top             =   1140
          Width           =   1365
       End
@@ -895,7 +895,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Usuario Modificac.:"
          Height          =   210
          Left            =   120
-         TabIndex        =   149
+         TabIndex        =   150
          Top             =   780
          Width           =   1380
       End
@@ -906,14 +906,14 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       Left            =   9300
       ScaleHeight     =   375
       ScaleWidth      =   2475
-      TabIndex        =   190
+      TabIndex        =   191
       Top             =   6060
       Width           =   2475
       Begin VB.CommandButton cmdNavegador_Ultimo 
          Caption         =   ">>"
          Height          =   375
          Left            =   2100
-         TabIndex        =   194
+         TabIndex        =   195
          ToolTipText     =   "Ir al último Movimiento"
          Top             =   0
          Width           =   375
@@ -922,7 +922,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   ">"
          Height          =   375
          Left            =   1680
-         TabIndex        =   193
+         TabIndex        =   194
          ToolTipText     =   "Ir al Movimiento siguiente"
          Top             =   0
          Width           =   375
@@ -931,7 +931,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "<"
          Height          =   375
          Left            =   420
-         TabIndex        =   192
+         TabIndex        =   193
          ToolTipText     =   "Ir al Movimiento anterior"
          Top             =   0
          Width           =   375
@@ -940,7 +940,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "<<"
          Height          =   375
          Left            =   0
-         TabIndex        =   191
+         TabIndex        =   192
          ToolTipText     =   "Ir al primer Movimiento"
          Top             =   0
          Width           =   375
@@ -964,7 +964,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          EndProperty
          Height          =   150
          Left            =   840
-         TabIndex        =   196
+         TabIndex        =   197
          Top             =   210
          Width           =   795
       End
@@ -981,7 +981,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          EndProperty
          Height          =   150
          Left            =   840
-         TabIndex        =   195
+         TabIndex        =   196
          Top             =   0
          Width           =   795
       End
@@ -1045,7 +1045,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   111738883
+         Format          =   110297091
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1091,7 +1091,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111738881
+         Format          =   110297089
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1105,7 +1105,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111738881
+         Format          =   110297089
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1120,7 +1120,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   111738883
+         Format          =   110297091
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2037,7 +2037,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111738881
+         Format          =   110297089
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2122,7 +2122,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       Caption         =   "Cancelar"
       Height          =   375
       Left            =   12900
-      TabIndex        =   136
+      TabIndex        =   137
       Top             =   6060
       Width           =   915
    End
@@ -2131,7 +2131,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       Default         =   -1  'True
       Height          =   375
       Left            =   11880
-      TabIndex        =   135
+      TabIndex        =   136
       Top             =   6060
       Width           =   915
    End
@@ -2144,11 +2144,19 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
       TabIndex        =   117
       Top             =   4380
       Width           =   4395
+      Begin VB.CommandButton cmdAnalisis_MuestraNumero_ObtenerSiguiente 
+         Caption         =   "Obtener siguiente"
+         Height          =   330
+         Left            =   2580
+         TabIndex        =   122
+         Top             =   480
+         Width           =   1575
+      End
       Begin VB.ComboBox cboAnalisis_ResultadoIPRO 
          Height          =   330
          Left            =   1440
          Style           =   2  'Dropdown List
-         TabIndex        =   123
+         TabIndex        =   124
          Top             =   900
          Width           =   1770
       End
@@ -2172,7 +2180,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   111738881
+         Format          =   110297089
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2182,18 +2190,18 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          Caption         =   "Resultado IPRO:"
          Height          =   210
          Left            =   120
-         TabIndex        =   122
+         TabIndex        =   123
          Top             =   960
          Width           =   1155
       End
       Begin VB.Label lblAnalisis_MuestraNumero 
          AutoSize        =   -1  'True
-         Caption         =   "Muestra Nro.:"
+         Caption         =   "Muestra Nº:"
          Height          =   210
          Left            =   120
          TabIndex        =   120
          Top             =   540
-         Width           =   975
+         Width           =   855
       End
       Begin VB.Label lblAnalisis_Fecha 
          AutoSize        =   -1  'True
@@ -2208,7 +2216,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
    Begin MSComctlLib.TabStrip tabExtras 
       Height          =   1935
       Left            =   9300
-      TabIndex        =   125
+      TabIndex        =   126
       Top             =   4020
       Width           =   4515
       _ExtentX        =   7964
@@ -2256,6 +2264,11 @@ Private mLoading As Boolean
 
 Private mMovimiento_Cereal As Movimiento_Cereal
 Private mMovimiento_Cereal_Analisis As Movimiento_Cereal_Analisis
+
+Private mCerealRealizaAnalisis As Boolean
+Private mCerealRealizaAnalisisIPRO As Boolean
+Private mEntidadOrigenDestinoRealizaAnalisis As Boolean
+Private mEntidadOrigenDestinoRealizaAnalisisIPRO As Boolean
 
 Public Function Startup(ByRef Movimiento_Cereal As Movimiento_Cereal) As Boolean
     Set mMovimiento_Cereal = Movimiento_Cereal
@@ -2336,7 +2349,7 @@ Public Function LoadData() As Boolean
         datcboEntidad_Titular.BoundText = .IDEntidad_Titular
         dtpFechaCarga.value = .FechaCarga_Formatted
         maskedtextboxComprobanteNumero.Text = .ComprobanteNumeroConFormato
-        maskedtextboxCtgNumero.Text = .CTGNumero
+        maskedtextboxCTGNumero.Text = .CTGNumero
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
         datcboEntidad_Intermediario.BoundText = .IDEntidad_Intermediario
@@ -2538,23 +2551,23 @@ End Sub
 '============================================================
 'CTG NUMERO
 Private Sub maskedtextboxCtgNumero_GotFocus()
-    maskedtextboxCtgNumero.SelStart = 0
-    maskedtextboxCtgNumero.SelLength = Len(maskedtextboxCtgNumero.Text)
+    maskedtextboxCTGNumero.SelStart = 0
+    maskedtextboxCTGNumero.SelLength = Len(maskedtextboxCTGNumero.Text)
 End Sub
 
 Private Sub cmdVerificarDuplicado_Click()
     Dim Movimiento_Cereal As Movimiento_Cereal
     
-    If maskedtextboxCtgNumero.Text = "" Then
+    If maskedtextboxCTGNumero.Text = "" Then
         MsgBox "Debe especificar el C.T.G.", vbInformation, App.Title
-        If maskedtextboxCtgNumero.Enabled Then
-            maskedtextboxCtgNumero.SetFocus
+        If maskedtextboxCTGNumero.Enabled Then
+            maskedtextboxCTGNumero.SetFocus
         End If
         Exit Sub
     End If
     
     Set Movimiento_Cereal = New Movimiento_Cereal
-    Movimiento_Cereal.CTGNumero = maskedtextboxCtgNumero.Text
+    Movimiento_Cereal.CTGNumero = maskedtextboxCTGNumero.Text
     Movimiento_Cereal.NoMatchRaiseError = False
     If Movimiento_Cereal.LoadByCtgNumero() Then
         If Not Movimiento_Cereal.NoMatch Then
@@ -2690,24 +2703,29 @@ End Sub
 Private Sub datcboCereal_Change()
     Dim Cereal As Cereal
     
+    If Val(datcboCereal.BoundText) = 0 Then
+        Exit Sub
+    End If
+        
+    Set Cereal = New Cereal
+    Cereal.IDCereal = Val(datcboCereal.BoundText)
+    If Cereal.Load() Then
+        mCerealRealizaAnalisis = Cereal.RealizaAnalisis
+        mCerealRealizaAnalisisIPRO = Cereal.RealizaAnalisisIPRO
+        picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
+    End If
+    Call LoadComboBoxContratos
+    
     If Not mLoading Then
-        If Val(datcboCereal.BoundText) <> 0 Then
-            Set Cereal = New Cereal
-            Cereal.IDCereal = Val(datcboCereal.BoundText)
-            If Cereal.Load() Then
-                If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA And (Not mMovimiento_Cereal.IsNew) And (Not mMovimiento_Cereal.Certificado) And mMovimiento_Cereal.Volatil <> Cereal.MermaVolatilidad Then
-                    If MsgBox("¿Desea modificar el porcentaje de merma volátil con la del nuevo Cereal seleccionado?", vbQuestion + vbYesNo, App.Title) = vbYes Then
-                        txtVolatil.Text = Cereal.MermaVolatilidad_Formatted
-                    End If
-                Else
-                    txtVolatil.Text = Cereal.MermaVolatilidad_Formatted
-                End If
+        If mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA And (Not mMovimiento_Cereal.IsNew) And (Not mMovimiento_Cereal.Certificado) And mMovimiento_Cereal.Volatil <> Cereal.MermaVolatilidad Then
+            If MsgBox("¿Desea modificar el porcentaje de merma volátil con la del nuevo Cereal seleccionado?", vbQuestion + vbYesNo, App.Title) = vbYes Then
+                txtVolatil.Text = Cereal.MermaVolatilidad_Formatted
             End If
-            Set Cereal = Nothing
+        Else
+            txtVolatil.Text = Cereal.MermaVolatilidad_Formatted
         End If
     End If
-    
-    Call LoadComboBoxContratos
+    Set Cereal = Nothing
 End Sub
 
 '============================================================
@@ -2856,6 +2874,9 @@ Private Sub datcboDestino_Change()
             txtDestinoDireccion.Text = Entidad_OrigDest.Direccion
             txtDestinoLocalidad.Text = Entidad_OrigDest.Localidad.Nombre
             txtDestinoProvincia.Text = Entidad_OrigDest.Localidad.Provincia.Nombre
+            mEntidadOrigenDestinoRealizaAnalisis = Entidad_OrigDest.RealizaAnalisis
+            mEntidadOrigenDestinoRealizaAnalisisIPRO = Entidad_OrigDest.RealizaAnalisisIPRO
+            picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
         End If
         Set Entidad_OrigDest = Nothing
     End If
@@ -3043,7 +3064,7 @@ Private Sub tabExtras_Click()
     Dim Formulario As Variant
     
     picPesadas.Visible = (tabExtras.SelectedItem.Key = "PESADAS")
-    picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS")
+    picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
     picExtras.Visible = (tabExtras.SelectedItem.Key = "EXTRAS")
     picInformacion.Visible = (tabExtras.SelectedItem.Key = "INFORMACION")
     picAuditoria.Visible = (tabExtras.SelectedItem.Key = "AUDITORIA")
@@ -3257,6 +3278,23 @@ Private Sub txtAnalisis_MuestraNumero_LostFocus()
     Call FormatValue_ByTag(txtAnalisis_MuestraNumero)
 End Sub
 
+Private Sub cmdAnalisis_MuestraNumero_ObtenerSiguiente_Click()
+    Dim recData As ADODB.recordset
+    
+    On Error GoTo ErrorHandler
+    
+    Screen.MousePointer = vbHourglass
+    Set recData = New ADODB.recordset
+    recData.Open "SELECT ISNULL(MAX(MuestraNumero), 0) FROM Movimiento_Cereal_Analisis", pDatabase.Connection, adOpenForwardOnly, adLockReadOnly
+    txtAnalisis_MuestraNumero.Text = recData(0).value + 1
+    Screen.MousePointer = vbDefault
+    Exit Sub
+    
+ErrorHandler:
+    Screen.MousePointer = vbDefault
+    CSM_Error.ShowErrorMessage "Forms.Movimiento_Cereal_Detalle.Analisis_MuestraNumero_ObtenerSiguiente", "Error al obtener el siguiente número de muestra."
+End Sub
+
 '============================================================
 'NOTAS
 Private Sub txtNotas_GotFocus()
@@ -3302,7 +3340,7 @@ Private Sub Aceptar_Todos()
     With mMovimiento_Cereal
         'ENCABEZADO
         .ComprobanteNumero = Trim(maskedtextboxComprobanteNumero.Text)
-        .CTGNumero = maskedtextboxCtgNumero.Text
+        .CTGNumero = maskedtextboxCTGNumero.Text
         .FechaCarga = dtpFechaCarga.value
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
@@ -3444,14 +3482,14 @@ Private Function VerificarDatosEncabezado() As Boolean
     
     ' Verifico el C.T.G.
     If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If maskedtextboxCtgNumero.Text = "" Then
+        If maskedtextboxCTGNumero.Text = "" Then
             MsgBox "Debe especificar el Número de C.T.G.", vbInformation, App.Title
-            maskedtextboxCtgNumero.SetFocus
+            maskedtextboxCTGNumero.SetFocus
             Exit Function
         End If
-        If Len(maskedtextboxCtgNumero.Text) < 11 Then
+        If Len(maskedtextboxCTGNumero.Text) < 11 Then
             MsgBox "El Número de C.T.G. debe contener 11 dígitos.", vbInformation, App.Title
-            maskedtextboxCtgNumero.SetFocus
+            maskedtextboxCTGNumero.SetFocus
             Exit Function
         End If
     End If
@@ -3850,54 +3888,39 @@ Private Function VerificarDatosPesadas() As Boolean
 End Function
 
 Private Function VerificarDatosAnalisis() As Boolean
-    Dim cer As Cereal
-    Dim ent_od As Entidad_OrigDest
-    
     If mMovimiento_Cereal.Tipo <> MOVIMIENTO_CEREAL_TIPO_ENTRADA Then
         VerificarDatosAnalisis = True
         Exit Function
     End If
-    
-    Set cer = New Cereal
-    cer.IDCereal = Val(datcboCereal.BoundText)
-    If Not cer.Load() Then
-        Set cer = Nothing
+    If Not mCerealRealizaAnalisis Then
+        VerificarDatosAnalisis = True
         Exit Function
-    Else
-        If cer.RealizaAnalisisIPRO Then
-            Set ent_od = New Entidad_OrigDest
-            ent_od.IDEntidad = Val(datcboEntidad_Destino.BoundText)
-            ent_od.IDOrigenDestino = Val(datcboDestino.BoundText)
-            If Not ent_od.Load() Then
-                Set ent_od = Nothing
-                Set cer = Nothing
-                Exit Function
-            Else
-                If ent_od.RealizaAnalisisIPRO Then
-                    If IsNull(dtpAnalisis_Fecha.value) Then
-                        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
-                        MsgBox "Debe ingresar la Fecha de Análisis.", vbInformation, App.Title
-                        dtpAnalisis_Fecha.SetFocus
-                        Exit Function
-                    End If
-                    If Trim(txtAnalisis_MuestraNumero.Text) = "" Then
-                        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
-                        MsgBox "Debe ingresar el Número de Muestra del Análisis.", vbInformation, App.Title
-                        txtAnalisis_MuestraNumero.SetFocus
-                        Exit Function
-                    End If
-                    If chkDeclaraIPRO.value = vbUnchecked And cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
-                        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
-                        MsgBox "Debe especificar el Resultado IPRO del Análisis.", vbInformation, App.Title
-                        cboAnalisis_ResultadoIPRO.SetFocus
-                        Exit Function
-                    End If
-                End If
-            End If
-            Set ent_od = Nothing
+    End If
+    If Not mEntidadOrigenDestinoRealizaAnalisis Then
+        VerificarDatosAnalisis = True
+        Exit Function
+    End If
+    
+    If IsNull(dtpAnalisis_Fecha.value) Then
+        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+        MsgBox "Debe ingresar la Fecha de Análisis.", vbInformation, App.Title
+        dtpAnalisis_Fecha.SetFocus
+        Exit Function
+    End If
+    If Trim(txtAnalisis_MuestraNumero.Text) = "" Then
+        tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+        MsgBox "Debe ingresar el Número de Muestra del Análisis.", vbInformation, App.Title
+        txtAnalisis_MuestraNumero.SetFocus
+        Exit Function
+    End If
+    If mCerealRealizaAnalisisIPRO And mEntidadOrigenDestinoRealizaAnalisisIPRO Then
+        If chkDeclaraIPRO.value = vbUnchecked And cboAnalisis_ResultadoIPRO.ListIndex < 1 Then
+            tabExtras.SelectedItem = tabExtras.Tabs("ANALISIS")
+            MsgBox "Debe especificar el Resultado IPRO del Análisis.", vbInformation, App.Title
+            cboAnalisis_ResultadoIPRO.SetFocus
+            Exit Function
         End If
     End If
-    Set cer = Nothing
     
     If Not IsNull(dtpAnalisis_Fecha.value) Then
         ' Fecha de análisis
@@ -3978,7 +4001,7 @@ Private Sub EnableAndShowControls()
     maskedtextboxComprobanteNumero.Enabled = Not (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE)
 
     lblCTGNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
-    maskedtextboxCtgNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
+    maskedtextboxCTGNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
     
     lblEntidad_Intermediario.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
     datcboEntidad_Intermediario.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)

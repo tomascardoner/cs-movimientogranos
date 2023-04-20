@@ -23,6 +23,7 @@ Private mKilometro As Integer
 Private mONCCA_Codigo As Long
 Private mControlaStock As Boolean
 Private mConvierteEnSubProducto As Boolean
+Private mRealizaAnalisis As Boolean
 Private mRealizaAnalisisIPRO As Boolean
 Private mActivo As Boolean
 
@@ -45,11 +46,11 @@ Public Property Get IDEntidad() As Long
     IDEntidad = mIDEntidad
 End Property
 
-Public Property Let IDEntidad(ByVal Value As Long)
-    If Value <> mIDEntidad Then
+Public Property Let IDEntidad(ByVal value As Long)
+    If value <> mIDEntidad Then
         mIsDirty = True
     End If
-    mIDEntidad = Value
+    mIDEntidad = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -79,11 +80,11 @@ Public Property Get IDOrigenDestino() As Long
     IDOrigenDestino = mIDOrigenDestino
 End Property
 
-Public Property Let IDOrigenDestino(ByVal Value As Long)
-    If Value <> mIDOrigenDestino Then
+Public Property Let IDOrigenDestino(ByVal value As Long)
+    If value <> mIDOrigenDestino Then
         mIsDirty = True
     End If
-    mIDOrigenDestino = Value
+    mIDOrigenDestino = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -93,11 +94,11 @@ Public Property Get Nombre() As String
     Nombre = mNombre
 End Property
 
-Public Property Let Nombre(ByVal Value As String)
-    If Value <> mNombre Then
+Public Property Let Nombre(ByVal value As String)
+    If value <> mNombre Then
         mIsDirty = True
     End If
-    mNombre = Value
+    mNombre = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -107,11 +108,11 @@ Public Property Get Direccion() As String
     Direccion = mDireccion
 End Property
 
-Public Property Let Direccion(ByVal Value As String)
-    If Value <> mDireccion Then
+Public Property Let Direccion(ByVal value As String)
+    If value <> mDireccion Then
         mIsDirty = True
     End If
-    mDireccion = Value
+    mDireccion = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -121,11 +122,11 @@ Public Property Get IDLocalidad() As Long
     IDLocalidad = mIDLocalidad
 End Property
 
-Public Property Let IDLocalidad(ByVal Value As Long)
-    If Value <> mIDLocalidad Then
+Public Property Let IDLocalidad(ByVal value As Long)
+    If value <> mIDLocalidad Then
         mIsDirty = True
     End If
-    mIDLocalidad = Value
+    mIDLocalidad = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -163,20 +164,20 @@ Public Property Get Kilometro_Formatted() As String
     End If
 End Property
 
-Public Property Let Kilometro(ByVal Value As Integer)
-    If Value <> mKilometro Then
+Public Property Let Kilometro(ByVal value As Integer)
+    If value <> mKilometro Then
         mIsDirty = True
     End If
-    mKilometro = Value
+    mKilometro = value
 End Property
 
-Public Property Let Kilometro_Formatted(ByVal Value As String)
+Public Property Let Kilometro_Formatted(ByVal value As String)
     Dim ConvertedValue As Integer
     
-    If Not IsNumeric(Value) Then
+    If Not IsNumeric(value) Then
         ConvertedValue = 0
     Else
-        ConvertedValue = CInt(Value)
+        ConvertedValue = CInt(value)
     End If
     If ConvertedValue <> mKilometro Then
         mIsDirty = True
@@ -199,20 +200,20 @@ Public Property Get ONCCA_Codigo_Formatted() As String
     End If
 End Property
 
-Public Property Let ONCCA_Codigo(ByVal Value As Long)
-    If Value <> mONCCA_Codigo Then
+Public Property Let ONCCA_Codigo(ByVal value As Long)
+    If value <> mONCCA_Codigo Then
         mIsDirty = True
     End If
-    mONCCA_Codigo = Value
+    mONCCA_Codigo = value
 End Property
 
-Public Property Let ONCCA_Codigo_Formatted(ByVal Value As String)
+Public Property Let ONCCA_Codigo_Formatted(ByVal value As String)
     Dim ConvertedValue As Long
     
-    If Not IsNumeric(Value) Then
+    If Not IsNumeric(value) Then
         ConvertedValue = 0
     Else
-        ConvertedValue = CLng(Value)
+        ConvertedValue = CLng(value)
     End If
     If ConvertedValue <> mONCCA_Codigo Then
         mIsDirty = True
@@ -227,11 +228,11 @@ Public Property Get ControlaStock() As Boolean
     ControlaStock = mControlaStock
 End Property
 
-Public Property Let ControlaStock(ByVal Value As Boolean)
-    If Value <> mControlaStock Then
+Public Property Let ControlaStock(ByVal value As Boolean)
+    If value <> mControlaStock Then
         mIsDirty = True
     End If
-    mControlaStock = Value
+    mControlaStock = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -241,11 +242,25 @@ Public Property Get ConvierteEnSubProducto() As Boolean
     ConvierteEnSubProducto = mConvierteEnSubProducto
 End Property
 
-Public Property Let ConvierteEnSubProducto(ByVal Value As Boolean)
-    If Value <> mConvierteEnSubProducto Then
+Public Property Let ConvierteEnSubProducto(ByVal value As Boolean)
+    If value <> mConvierteEnSubProducto Then
         mIsDirty = True
     End If
-    mConvierteEnSubProducto = Value
+    mConvierteEnSubProducto = value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get RealizaAnalisis() As Boolean
+    RealizaAnalisis = mRealizaAnalisis
+End Property
+
+Public Property Let RealizaAnalisis(ByVal value As Boolean)
+    If value <> mRealizaAnalisis Then
+        mIsDirty = True
+    End If
+    mRealizaAnalisis = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -255,11 +270,11 @@ Public Property Get RealizaAnalisisIPRO() As Boolean
     RealizaAnalisisIPRO = mRealizaAnalisisIPRO
 End Property
 
-Public Property Let RealizaAnalisisIPRO(ByVal Value As Boolean)
-    If Value <> mRealizaAnalisisIPRO Then
+Public Property Let RealizaAnalisisIPRO(ByVal value As Boolean)
+    If value <> mRealizaAnalisisIPRO Then
         mIsDirty = True
     End If
-    mRealizaAnalisisIPRO = Value
+    mRealizaAnalisisIPRO = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -269,11 +284,11 @@ Public Property Get Activo() As Boolean
     Activo = mActivo
 End Property
 
-Public Property Let Activo(ByVal Value As Boolean)
-    If Value <> mActivo Then
+Public Property Let Activo(ByVal value As Boolean)
+    If value <> mActivo Then
         mIsDirty = True
     End If
-    mActivo = Value
+    mActivo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -302,8 +317,8 @@ Public Property Get NoMatchRaiseError() As Boolean
     NoMatchRaiseError = mNoMatchRaiseError
 End Property
 
-Public Property Let NoMatchRaiseError(ByVal Value As Boolean)
-    mNoMatchRaiseError = Value
+Public Property Let NoMatchRaiseError(ByVal value As Boolean)
+    mNoMatchRaiseError = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -313,8 +328,8 @@ Public Property Get RefreshListSkip() As Boolean
     RefreshListSkip = mRefreshListSkip
 End Property
 
-Public Property Let RefreshListSkip(ByVal Value As Boolean)
-    mRefreshListSkip = Value
+Public Property Let RefreshListSkip(ByVal value As Boolean)
+    mRefreshListSkip = value
 End Property
 
 Public Sub RefreshList()
@@ -326,7 +341,7 @@ End Sub
 
 Public Function Load() As Boolean
     Dim cmdSP As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
 
     If pTrapErrors Then
         On Error GoTo ErrorHandler
@@ -346,7 +361,7 @@ Public Function Load() As Boolean
         .Parameters.Append .CreateParameter("IDOrigenDestino", adSmallInt, adParamInput, , mIDOrigenDestino)
     End With
 
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdSP, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
 
     Load = GetDataFromRecordset(recData)
@@ -360,7 +375,7 @@ ErrorHandler:
     ShowErrorMessage "Classes.Entidad_Destino.Load", "Error al obtener los datos del Origen / Destino de la Entidad." & vbCr & vbCr & "IDEntidad: " & IDEntidad & vbCr & "IDOrigenDestino: " & IDOrigenDestino
 End Function
 
-Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boolean
+Private Function GetDataFromRecordset(ByRef recData As ADODB.recordset) As Boolean
 
     If (Not mNoMatchRaiseError) And recData.EOF Then
         mNoMatch = True
@@ -368,17 +383,18 @@ Private Function GetDataFromRecordset(ByRef recData As ADODB.Recordset) As Boole
         mNoMatch = False
         mIsNew = False
 
-        mIDEntidad = recData("IDEntidad").Value
-        mIDOrigenDestino = recData("IDOrigenDestino").Value
-        mNombre = recData("Nombre").Value
-        mDireccion = recData("Direccion").Value
-        mIDLocalidad = recData("IDLocalidad").Value
-        mKilometro = CSM_Function.IfIsNull_Zero(recData("Kilometro").Value)
-        mONCCA_Codigo = CSM_Function.IfIsNull_Zero(recData("ONCCA_Codigo").Value)
-        mControlaStock = recData("ControlaStock").Value
-        mConvierteEnSubProducto = recData("ConvierteEnSubProducto").Value
-        mRealizaAnalisisIPRO = recData("RealizaAnalisisIPRO").Value
-        mActivo = recData("Activo").Value
+        mIDEntidad = recData("IDEntidad").value
+        mIDOrigenDestino = recData("IDOrigenDestino").value
+        mNombre = recData("Nombre").value
+        mDireccion = recData("Direccion").value
+        mIDLocalidad = recData("IDLocalidad").value
+        mKilometro = CSM_Function.IfIsNull_Zero(recData("Kilometro").value)
+        mONCCA_Codigo = CSM_Function.IfIsNull_Zero(recData("ONCCA_Codigo").value)
+        mControlaStock = recData("ControlaStock").value
+        mConvierteEnSubProducto = recData("ConvierteEnSubProducto").value
+        mRealizaAnalisis = recData("RealizaAnalisis").value
+        mRealizaAnalisisIPRO = recData("RealizaAnalisisIPRO").value
+        mActivo = recData("Activo").value
     End If
 
     Screen.MousePointer = vbDefault
@@ -433,14 +449,15 @@ Public Function Update() As Boolean
         .Parameters.Append .CreateParameter("ONCCA_Codigo", adInteger, adParamInput, , CSM_Function.IfIsZero_Null(mONCCA_Codigo))
         .Parameters.Append .CreateParameter("ControlaStock", adBoolean, adParamInput, , mControlaStock)
         .Parameters.Append .CreateParameter("ConvierteEnSubProducto", adBoolean, adParamInput, , mConvierteEnSubProducto)
+        .Parameters.Append .CreateParameter("RealizaAnalisis", adBoolean, adParamInput, , mRealizaAnalisis)
         .Parameters.Append .CreateParameter("RealizaAnalisisIPRO", adBoolean, adParamInput, , mRealizaAnalisisIPRO)
         .Parameters.Append .CreateParameter("Activo", adBoolean, adParamInput, , mActivo)
 
         .Execute
 
         If mIsNew Then
-            mIDEntidad = .Parameters("IDEntidad").Value
-            mIDOrigenDestino = .Parameters("IDOrigenDestino").Value
+            mIDEntidad = .Parameters("IDEntidad").value
+            mIDOrigenDestino = .Parameters("IDOrigenDestino").value
         End If
     End With
 
@@ -509,6 +526,7 @@ Private Sub InitializeValues()
     mONCCA_Codigo = 0
     mControlaStock = False
     mConvierteEnSubProducto = False
+    mRealizaAnalisis = False
     mRealizaAnalisisIPRO = False
     mActivo = True
 

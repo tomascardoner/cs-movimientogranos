@@ -26,7 +26,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
+	SELECT IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisis, RealizaAnalisisIPRO, Activo
 		FROM Entidad_OrigenDestino
 		WHERE Entidad_OrigenDestino.IDEntidad = @IDEntidad AND Entidad_OrigenDestino.IDOrigenDestino = @IDOrigenDestino 
 
@@ -52,7 +52,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
+	SELECT IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisis, RealizaAnalisisIPRO, Activo
 		FROM Entidad_OrigenDestino
 		WHERE Entidad_OrigenDestino.IDEntidad = @IDEntidad AND Entidad_OrigenDestino.ONCCA_Codigo = @ONCCA_Codigo 
 
@@ -77,7 +77,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT TOP 1 IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo
+	SELECT TOP 1 IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisis, RealizaAnalisisIPRO, Activo
 		FROM Entidad_OrigenDestino
 		WHERE IDEntidad = @IDEntidad
 		ORDER BY IDOrigenDestino
@@ -107,6 +107,7 @@ CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_Add
 	@ONCCA_Codigo int,
 	@ControlaStock bit,
 	@ConvierteEnSubProducto bit,
+	@RealizaAnalisis bit,
 	@RealizaAnalisisIPRO bit,
 	@Activo bit
 AS
@@ -121,8 +122,8 @@ BEGIN
 			SET @IDOrigenDestino = (SELECT ISNULL(MAX(Entidad_OrigenDestino.IDOrigenDestino), 0) + 1 FROM Entidad_OrigenDestino WHERE IDEntidad = @IDEntidad)
 		
 			INSERT INTO Entidad_OrigenDestino
-				(IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisisIPRO, Activo)
-				VALUES (@IDEntidad, @IDOrigenDestino, @Nombre, @Direccion, @IDLocalidad, @Kilometro, @ONCCA_Codigo, @ControlaStock, @ConvierteEnSubProducto, @RealizaAnalisisIPRO, @Activo)
+				(IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisis, RealizaAnalisisIPRO, Activo)
+				VALUES (@IDEntidad, @IDOrigenDestino, @Nombre, @Direccion, @IDLocalidad, @Kilometro, @ONCCA_Codigo, @ControlaStock, @ConvierteEnSubProducto, @RealizaAnalisis, @RealizaAnalisisIPRO, @Activo)
 	
 		COMMIT TRANSACTION
 	END TRY
@@ -165,6 +166,7 @@ CREATE PROCEDURE dbo.usp_Entidad_OrigenDestino_Update
 	@ONCCA_Codigo int,
 	@ControlaStock bit,
 	@ConvierteEnSubProducto bit,
+	@RealizaAnalisis bit,
 	@RealizaAnalisisIPRO bit,
 	@Activo bit
 AS
@@ -177,7 +179,7 @@ BEGIN
 		BEGIN TRANSACTION	
 
 				UPDATE Entidad_OrigenDestino
-					SET Nombre = @Nombre, Direccion = @Direccion, IDLocalidad = @IDLocalidad, Kilometro = @Kilometro, ONCCA_Codigo = @ONCCA_Codigo, ControlaStock = @ControlaStock, ConvierteEnSubProducto = @ConvierteEnSubProducto, RealizaAnalisisIPRO = @RealizaAnalisisIPRO, Activo = @Activo
+					SET Nombre = @Nombre, Direccion = @Direccion, IDLocalidad = @IDLocalidad, Kilometro = @Kilometro, ONCCA_Codigo = @ONCCA_Codigo, ControlaStock = @ControlaStock, ConvierteEnSubProducto = @ConvierteEnSubProducto, RealizaAnalisis = @RealizaAnalisis, RealizaAnalisisIPRO = @RealizaAnalisisIPRO, Activo = @Activo
 					WHERE IDEntidad = @IDEntidad AND IDOrigenDestino = @IDOrigenDestino 
 
 		COMMIT TRANSACTION

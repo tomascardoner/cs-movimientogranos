@@ -24,6 +24,7 @@ Private mONCCA_EspecieCodigo As String
 Private mONCCA_EspecieNombre As String
 Private mONCCA_GranoTipoCodigo As String
 Private mONCCA_GranoTipoNombre As String
+Private mRealizaAnalisis As Boolean
 Private mRealizaAnalisisIPRO As Boolean
 Private mActivo As Boolean
 
@@ -41,7 +42,7 @@ Private mRefreshListSkip As Boolean
 Private mDatabase As CSC_Database_ADO_SQL
 
 'INTERNAL VARIABLES
-Private mrecData As ADODB.Recordset
+Private mrecData As ADODB.recordset
 
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -50,11 +51,11 @@ Public Property Get IDCereal() As Long
     IDCereal = mIDCereal
 End Property
 
-Public Property Let IDCereal(ByVal Value As Long)
-    If Value <> mIDCereal Then
+Public Property Let IDCereal(ByVal value As Long)
+    If value <> mIDCereal Then
         mIsDirty = True
     End If
-    mIDCereal = Value
+    mIDCereal = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -64,11 +65,11 @@ Public Property Get Nombre() As String
     Nombre = mNombre
 End Property
 
-Public Property Let Nombre(ByVal Value As String)
-    If Value <> mNombre Then
+Public Property Let Nombre(ByVal value As String)
+    If value <> mNombre Then
         mIsDirty = True
     End If
-    mNombre = Value
+    mNombre = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -78,11 +79,11 @@ Public Property Get Tipo() As String
     Tipo = mTipo
 End Property
 
-Public Property Let Tipo(ByVal Value As String)
-    If Value <> mTipo Then
+Public Property Let Tipo(ByVal value As String)
+    If value <> mTipo Then
         mIsDirty = True
     End If
-    mTipo = Value
+    mTipo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -108,11 +109,11 @@ Public Property Get MermaVolatilidad_Formatted() As String
     End If
 End Property
 
-Public Property Let MermaVolatilidad(ByVal Value As Single)
-    If Value <> mMermaVolatilidad Then
+Public Property Let MermaVolatilidad(ByVal value As Single)
+    If value <> mMermaVolatilidad Then
         mIsDirty = True
     End If
-    mMermaVolatilidad = Value
+    mMermaVolatilidad = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -138,11 +139,11 @@ Public Property Get MermaHumedadBase_Formatted() As String
     End If
 End Property
 
-Public Property Let MermaHumedadBase(ByVal Value As Single)
-    If Value <> mMermaHumedadBase Then
+Public Property Let MermaHumedadBase(ByVal value As Single)
+    If value <> mMermaHumedadBase Then
         mIsDirty = True
     End If
-    mMermaHumedadBase = Value
+    mMermaHumedadBase = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -168,11 +169,11 @@ Public Property Get MermaHumedadManipuleo_Formatted() As String
     End If
 End Property
 
-Public Property Let MermaHumedadManipuleo(ByVal Value As Single)
-    If Value <> mMermaHumedadManipuleo Then
+Public Property Let MermaHumedadManipuleo(ByVal value As Single)
+    If value <> mMermaHumedadManipuleo Then
         mIsDirty = True
     End If
-    mMermaHumedadManipuleo = Value
+    mMermaHumedadManipuleo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -182,11 +183,11 @@ Public Property Get ONCCA_EspecieCodigo() As String
     ONCCA_EspecieCodigo = mONCCA_EspecieCodigo
 End Property
 
-Public Property Let ONCCA_EspecieCodigo(ByVal Value As String)
-    If Value <> mONCCA_EspecieCodigo Then
+Public Property Let ONCCA_EspecieCodigo(ByVal value As String)
+    If value <> mONCCA_EspecieCodigo Then
         mIsDirty = True
     End If
-    mONCCA_EspecieCodigo = Value
+    mONCCA_EspecieCodigo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -196,11 +197,11 @@ Public Property Get ONCCA_EspecieNombre() As String
     ONCCA_EspecieNombre = mONCCA_EspecieNombre
 End Property
 
-Public Property Let ONCCA_EspecieNombre(ByVal Value As String)
-    If Value <> mONCCA_EspecieNombre Then
+Public Property Let ONCCA_EspecieNombre(ByVal value As String)
+    If value <> mONCCA_EspecieNombre Then
         mIsDirty = True
     End If
-    mONCCA_EspecieNombre = Value
+    mONCCA_EspecieNombre = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -210,11 +211,11 @@ Public Property Get ONCCA_GranoTipoCodigo() As String
     ONCCA_GranoTipoCodigo = mONCCA_GranoTipoCodigo
 End Property
 
-Public Property Let ONCCA_GranoTipoCodigo(ByVal Value As String)
-    If Value <> mONCCA_GranoTipoCodigo Then
+Public Property Let ONCCA_GranoTipoCodigo(ByVal value As String)
+    If value <> mONCCA_GranoTipoCodigo Then
         mIsDirty = True
     End If
-    mONCCA_GranoTipoCodigo = Value
+    mONCCA_GranoTipoCodigo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -224,11 +225,25 @@ Public Property Get ONCCA_GranoTipoNombre() As String
     ONCCA_GranoTipoNombre = mONCCA_GranoTipoNombre
 End Property
 
-Public Property Let ONCCA_GranoTipoNombre(ByVal Value As String)
-    If Value <> mONCCA_GranoTipoNombre Then
+Public Property Let ONCCA_GranoTipoNombre(ByVal value As String)
+    If value <> mONCCA_GranoTipoNombre Then
         mIsDirty = True
     End If
-    mONCCA_GranoTipoNombre = Value
+    mONCCA_GranoTipoNombre = value
+End Property
+
+'////////////////////////////////////////////////////////////////////////
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Public Property Get RealizaAnalisis() As Boolean
+    RealizaAnalisis = mRealizaAnalisis
+End Property
+
+Public Property Let RealizaAnalisis(ByVal value As Boolean)
+    If value <> mRealizaAnalisis Then
+        mIsDirty = True
+    End If
+    mRealizaAnalisis = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -238,11 +253,11 @@ Public Property Get RealizaAnalisisIPRO() As Boolean
     RealizaAnalisisIPRO = mRealizaAnalisisIPRO
 End Property
 
-Public Property Let RealizaAnalisisIPRO(ByVal Value As Boolean)
-    If Value <> mRealizaAnalisisIPRO Then
+Public Property Let RealizaAnalisisIPRO(ByVal value As Boolean)
+    If value <> mRealizaAnalisisIPRO Then
         mIsDirty = True
     End If
-    mRealizaAnalisisIPRO = Value
+    mRealizaAnalisisIPRO = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -252,11 +267,11 @@ Public Property Get Activo() As Boolean
     Activo = mActivo
 End Property
 
-Public Property Let Activo(ByVal Value As Boolean)
-    If Value <> mActivo Then
+Public Property Let Activo(ByVal value As Boolean)
+    If value <> mActivo Then
         mIsDirty = True
     End If
-    mActivo = Value
+    mActivo = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -285,8 +300,8 @@ Public Property Get NoMatchRaiseError() As Boolean
     NoMatchRaiseError = mNoMatchRaiseError
 End Property
 
-Public Property Let NoMatchRaiseError(ByVal Value As Boolean)
-    mNoMatchRaiseError = Value
+Public Property Let NoMatchRaiseError(ByVal value As Boolean)
+    mNoMatchRaiseError = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -296,8 +311,8 @@ Public Property Get RefreshListSkip() As Boolean
     RefreshListSkip = mRefreshListSkip
 End Property
 
-Public Property Let RefreshListSkip(ByVal Value As Boolean)
-    mRefreshListSkip = Value
+Public Property Let RefreshListSkip(ByVal value As Boolean)
+    mRefreshListSkip = value
 End Property
 
 Public Sub RefreshList()
@@ -307,12 +322,12 @@ End Sub
 '////////////////////////////////////////////////////////////////////////
 '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-Public Property Get Database() As CSC_Database_ADO_SQL
-    Set Database = mDatabase
+Public Property Get database() As CSC_Database_ADO_SQL
+    Set database = mDatabase
 End Property
 
-Public Property Set Database(ByRef Value As CSC_Database_ADO_SQL)
-    Set mDatabase = Value
+Public Property Set database(ByRef value As CSC_Database_ADO_SQL)
+    Set mDatabase = value
 End Property
 
 '////////////////////////////////////////////////////////////////////////
@@ -325,13 +340,13 @@ Public Function OpenRecordset() As Boolean
         
     Screen.MousePointer = vbHourglass
       
-    Set mrecData = New ADODB.Recordset
+    Set mrecData = New ADODB.recordset
     Set mrecData.ActiveConnection = pDatabase.Connection
     mrecData.CursorType = adOpenKeyset
     mrecData.LockType = adLockOptimistic
     mrecData.Source = "SELECT * FROM Cereal"
     mrecData.Open , , , , adCmdText
-    mrecData.Properties("Update Criteria").Value = adCriteriaKey
+    mrecData.Properties("Update Criteria").value = adCriteriaKey
 
     Screen.MousePointer = vbDefault
     OpenRecordset = True
@@ -373,17 +388,18 @@ Public Function Load() As Boolean
         mNoMatch = False
         mIsNew = False
     
-        mNombre = mrecData("Nombre").Value
-        mTipo = mrecData("Tipo").Value & ""
-        mMermaVolatilidad = IIf(IsNull(mrecData("MermaVolatil").Value), -1, mrecData("MermaVolatil").Value)
-        mMermaHumedadBase = IIf(IsNull(mrecData("MermaHumedadBase").Value), -1, mrecData("MermaHumedadBase").Value)
-        mMermaHumedadManipuleo = IIf(IsNull(mrecData("MermaHumedadManipuleo").Value), -1, mrecData("MermaHumedadManipuleo").Value)
-        mONCCA_EspecieCodigo = mrecData("ONCCA_EspecieCodigo").Value & ""
-        mONCCA_EspecieNombre = mrecData("ONCCA_EspecieNombre").Value & ""
-        mONCCA_GranoTipoCodigo = mrecData("ONCCA_GranoTipoCodigo").Value & ""
-        mONCCA_GranoTipoNombre = mrecData("ONCCA_GranoTipoNombre").Value & ""
-        mRealizaAnalisisIPRO = mrecData("RealizaAnalisisIPRO").Value
-        mActivo = mrecData("Activo").Value
+        mNombre = mrecData("Nombre").value
+        mTipo = mrecData("Tipo").value & ""
+        mMermaVolatilidad = IIf(IsNull(mrecData("MermaVolatil").value), -1, mrecData("MermaVolatil").value)
+        mMermaHumedadBase = IIf(IsNull(mrecData("MermaHumedadBase").value), -1, mrecData("MermaHumedadBase").value)
+        mMermaHumedadManipuleo = IIf(IsNull(mrecData("MermaHumedadManipuleo").value), -1, mrecData("MermaHumedadManipuleo").value)
+        mONCCA_EspecieCodigo = mrecData("ONCCA_EspecieCodigo").value & ""
+        mONCCA_EspecieNombre = mrecData("ONCCA_EspecieNombre").value & ""
+        mONCCA_GranoTipoCodigo = mrecData("ONCCA_GranoTipoCodigo").value & ""
+        mONCCA_GranoTipoNombre = mrecData("ONCCA_GranoTipoNombre").value & ""
+        mRealizaAnalisis = mrecData("RealizaAnalisis").value
+        mRealizaAnalisisIPRO = mrecData("RealizaAnalisisIPRO").value
+        mActivo = mrecData("Activo").value
     End If
     
     Screen.MousePointer = vbDefault
@@ -407,7 +423,7 @@ Public Function Copy() As Boolean
 End Function
 
 Public Function Update() As Boolean
-    Dim recMaxID As ADODB.Recordset
+    Dim recMaxID As ADODB.recordset
 
     If Not mIsDirty Then
         Update = True
@@ -434,31 +450,32 @@ Public Function Update() As Boolean
     
     If mIsNew Then
         'GET NEW ID
-        Set recMaxID = New ADODB.Recordset
+        Set recMaxID = New ADODB.recordset
         Set recMaxID.ActiveConnection = pDatabase.Connection
         recMaxID.CursorType = adOpenForwardOnly
         recMaxID.LockType = adLockReadOnly
         recMaxID.Source = "SELECT MAX(IDCereal) AS MaxID FROM Cereal"
         recMaxID.Open , , , , adCmdText
-        mIDCereal = Val(recMaxID("MaxID").Value & "") + 1
+        mIDCereal = Val(recMaxID("MaxID").value & "") + 1
         recMaxID.Close
         Set recMaxID = Nothing
         'NEW RECORD
         mrecData.AddNew
-        mrecData("IDCereal").Value = mIDCereal
+        mrecData("IDCereal").value = mIDCereal
     End If
 
-    mrecData("Nombre").Value = mNombre
-    mrecData("Tipo").Value = IIf(Trim(mTipo) = "", Null, mTipo)
-    mrecData("MermaVolatilidad").Value = IIf(mMermaVolatilidad = -1, Null, mMermaVolatilidad)
-    mrecData("MermaHumedadBase").Value = IIf(mMermaHumedadBase = -1, Null, mMermaHumedadBase)
-    mrecData("MermaHumedadManipuleo").Value = IIf(mMermaHumedadManipuleo = -1, Null, mMermaHumedadManipuleo)
-    mrecData("ONCCA_EspecieCodigo").Value = IIf(Trim(mONCCA_EspecieCodigo) = "", Null, mONCCA_EspecieCodigo)
-    mrecData("ONCCA_EspecieNombre").Value = IIf(Trim(mONCCA_EspecieNombre) = "", Null, mONCCA_EspecieNombre)
-    mrecData("ONCCA_GranoTipoCodigo").Value = IIf(Trim(mONCCA_GranoTipoCodigo) = "", Null, mONCCA_GranoTipoCodigo)
-    mrecData("ONCCA_GranoTipoNombre").Value = IIf(Trim(mONCCA_GranoTipoNombre) = "", Null, mONCCA_GranoTipoNombre)
-    mrecData("RealizaAnalisisIPRO").Value = mRealizaAnalisisIPRO
-    mrecData("Activo").Value = mActivo
+    mrecData("Nombre").value = mNombre
+    mrecData("Tipo").value = IIf(Trim(mTipo) = "", Null, mTipo)
+    mrecData("MermaVolatilidad").value = IIf(mMermaVolatilidad = -1, Null, mMermaVolatilidad)
+    mrecData("MermaHumedadBase").value = IIf(mMermaHumedadBase = -1, Null, mMermaHumedadBase)
+    mrecData("MermaHumedadManipuleo").value = IIf(mMermaHumedadManipuleo = -1, Null, mMermaHumedadManipuleo)
+    mrecData("ONCCA_EspecieCodigo").value = IIf(Trim(mONCCA_EspecieCodigo) = "", Null, mONCCA_EspecieCodigo)
+    mrecData("ONCCA_EspecieNombre").value = IIf(Trim(mONCCA_EspecieNombre) = "", Null, mONCCA_EspecieNombre)
+    mrecData("ONCCA_GranoTipoCodigo").value = IIf(Trim(mONCCA_GranoTipoCodigo) = "", Null, mONCCA_GranoTipoCodigo)
+    mrecData("ONCCA_GranoTipoNombre").value = IIf(Trim(mONCCA_GranoTipoNombre) = "", Null, mONCCA_GranoTipoNombre)
+    mrecData("RealizaAnalisis").value = mRealizaAnalisis
+    mrecData("RealizaAnalisisIPRO").value = mRealizaAnalisisIPRO
+    mrecData("Activo").value = mActivo
     mrecData.Update
 
     mIsCopy = False
@@ -540,6 +557,7 @@ Private Sub InitializeValues()
     mONCCA_EspecieNombre = ""
     mONCCA_GranoTipoCodigo = ""
     mONCCA_GranoTipoNombre = ""
+    mRealizaAnalisis = False
     mRealizaAnalisisIPRO = False
     mActivo = True
 
