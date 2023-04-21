@@ -1045,7 +1045,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   110297091
+         Format          =   103022595
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1091,7 +1091,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   110297089
+         Format          =   103022593
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1105,7 +1105,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   110297089
+         Format          =   103022593
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1120,7 +1120,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   110297091
+         Format          =   103022595
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2037,7 +2037,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   110297089
+         Format          =   103022593
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2180,7 +2180,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   110297089
+         Format          =   103022593
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2282,7 +2282,7 @@ Public Function Startup(ByRef Movimiento_Cereal As Movimiento_Cereal) As Boolean
     
     txtMovimientoTipo.Text = mMovimiento_Cereal.TipoNombre
     
-    Call EnableAndShowControls
+    Call MostrarYHabilitarControles
     
     dtpFechaCarga.value = Date
     
@@ -2349,7 +2349,7 @@ Public Function LoadData() As Boolean
         datcboEntidad_Titular.BoundText = .IDEntidad_Titular
         dtpFechaCarga.value = .FechaCarga_Formatted
         maskedtextboxComprobanteNumero.Text = .ComprobanteNumeroConFormato
-        maskedtextboxCTGNumero.Text = .CTGNumero
+        maskedtextboxCtgNumero.Text = .CTGNumero
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
         datcboEntidad_Intermediario.BoundText = .IDEntidad_Intermediario
@@ -2551,23 +2551,23 @@ End Sub
 '============================================================
 'CTG NUMERO
 Private Sub maskedtextboxCtgNumero_GotFocus()
-    maskedtextboxCTGNumero.SelStart = 0
-    maskedtextboxCTGNumero.SelLength = Len(maskedtextboxCTGNumero.Text)
+    maskedtextboxCtgNumero.SelStart = 0
+    maskedtextboxCtgNumero.SelLength = Len(maskedtextboxCtgNumero.Text)
 End Sub
 
 Private Sub cmdVerificarDuplicado_Click()
     Dim Movimiento_Cereal As Movimiento_Cereal
     
-    If maskedtextboxCTGNumero.Text = "" Then
+    If maskedtextboxCtgNumero.Text = "" Then
         MsgBox "Debe especificar el C.T.G.", vbInformation, App.Title
-        If maskedtextboxCTGNumero.Enabled Then
-            maskedtextboxCTGNumero.SetFocus
+        If maskedtextboxCtgNumero.Enabled Then
+            maskedtextboxCtgNumero.SetFocus
         End If
         Exit Sub
     End If
     
     Set Movimiento_Cereal = New Movimiento_Cereal
-    Movimiento_Cereal.CTGNumero = maskedtextboxCTGNumero.Text
+    Movimiento_Cereal.CTGNumero = maskedtextboxCtgNumero.Text
     Movimiento_Cereal.NoMatchRaiseError = False
     If Movimiento_Cereal.LoadByCtgNumero() Then
         If Not Movimiento_Cereal.NoMatch Then
@@ -2712,7 +2712,7 @@ Private Sub datcboCereal_Change()
     If Cereal.Load() Then
         mCerealRealizaAnalisis = Cereal.RealizaAnalisis
         mCerealRealizaAnalisisIPRO = Cereal.RealizaAnalisisIPRO
-        picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
+        Call MostrarControlesDeAnalisis
     End If
     Call LoadComboBoxContratos
     
@@ -2876,7 +2876,7 @@ Private Sub datcboDestino_Change()
             txtDestinoProvincia.Text = Entidad_OrigDest.Localidad.Provincia.Nombre
             mEntidadOrigenDestinoRealizaAnalisis = Entidad_OrigDest.RealizaAnalisis
             mEntidadOrigenDestinoRealizaAnalisisIPRO = Entidad_OrigDest.RealizaAnalisisIPRO
-            picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
+            Call MostrarControlesDeAnalisis
         End If
         Set Entidad_OrigDest = Nothing
     End If
@@ -3064,7 +3064,7 @@ Private Sub tabExtras_Click()
     Dim Formulario As Variant
     
     picPesadas.Visible = (tabExtras.SelectedItem.Key = "PESADAS")
-    picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
+    Call MostrarControlesDeAnalisis
     picExtras.Visible = (tabExtras.SelectedItem.Key = "EXTRAS")
     picInformacion.Visible = (tabExtras.SelectedItem.Key = "INFORMACION")
     picAuditoria.Visible = (tabExtras.SelectedItem.Key = "AUDITORIA")
@@ -3340,7 +3340,7 @@ Private Sub Aceptar_Todos()
     With mMovimiento_Cereal
         'ENCABEZADO
         .ComprobanteNumero = Trim(maskedtextboxComprobanteNumero.Text)
-        .CTGNumero = maskedtextboxCTGNumero.Text
+        .CTGNumero = maskedtextboxCtgNumero.Text
         .FechaCarga = dtpFechaCarga.value
         
         '1 - DATOS DE INTERVINIENTES EN EL TRASLADO DE GRANOS
@@ -3482,14 +3482,14 @@ Private Function VerificarDatosEncabezado() As Boolean
     
     ' Verifico el C.T.G.
     If (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA) Then
-        If maskedtextboxCTGNumero.Text = "" Then
+        If maskedtextboxCtgNumero.Text = "" Then
             MsgBox "Debe especificar el Número de C.T.G.", vbInformation, App.Title
-            maskedtextboxCTGNumero.SetFocus
+            maskedtextboxCtgNumero.SetFocus
             Exit Function
         End If
-        If Len(maskedtextboxCTGNumero.Text) < 11 Then
+        If Len(maskedtextboxCtgNumero.Text) < 11 Then
             MsgBox "El Número de C.T.G. debe contener 11 dígitos.", vbInformation, App.Title
-            maskedtextboxCTGNumero.SetFocus
+            maskedtextboxCtgNumero.SetFocus
             Exit Function
         End If
     End If
@@ -3997,11 +3997,11 @@ Private Sub cmdCancelar_Click()
     Unload Me
 End Sub
 
-Private Sub EnableAndShowControls()
+Private Sub MostrarYHabilitarControles()
     maskedtextboxComprobanteNumero.Enabled = Not (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE)
 
     lblCTGNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
-    maskedtextboxCTGNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
+    maskedtextboxCtgNumero.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
     
     lblEntidad_Intermediario.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
     datcboEntidad_Intermediario.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA Or mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_SALIDA)
@@ -4046,6 +4046,15 @@ Private Sub EnableAndShowControls()
     chkIgnorarCertificado.Visible = (mMovimiento_Cereal.Tipo = MOVIMIENTO_CEREAL_TIPO_ENTRADA)
     
     picNavegador.Visible = Not mMovimiento_Cereal.IsNew
+End Sub
+
+Private Sub MostrarControlesDeAnalisis()
+    picAnalisis.Visible = (tabExtras.SelectedItem.Key = "ANALISIS" And mCerealRealizaAnalisis And mEntidadOrigenDestinoRealizaAnalisis)
+    
+    lblDeclaraIPRO.Visible = (mCerealRealizaAnalisisIPRO And mEntidadOrigenDestinoRealizaAnalisisIPRO)
+    chkDeclaraIPRO.Visible = lblDeclaraIPRO.Visible
+    lblAnalisis_ResultadoIPRO.Visible = lblDeclaraIPRO.Visible
+    cboAnalisis_ResultadoIPRO.Visible = lblDeclaraIPRO.Visible
 End Sub
 
 Private Sub LoadComboBoxContratos()

@@ -33,7 +33,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   91553793
+      Format          =   103022593
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -75,7 +75,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       Left            =   180
       TabIndex        =   7
       Top             =   1980
-      Value           =   1  'Checked
+      Visible         =   0   'False
       Width           =   1635
    End
    Begin VB.CheckBox chkExportarCartasDePorte 
@@ -96,7 +96,7 @@ Begin VB.Form frmMovimiento_Cereal_Exportar
       _ExtentX        =   2778
       _ExtentY        =   556
       _Version        =   393216
-      Format          =   91553793
+      Format          =   103022593
       CurrentDate     =   43271
       MaxDate         =   73415
       MinDate         =   42736
@@ -159,8 +159,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub Form_Load()
-    dtpFechaDesde.Value = DateSerial(Year(Date), Month(Date), 1)
-    dtpFechaHasta.Value = Date
+    dtpFechaDesde.value = DateSerial(Year(Date), Month(Date), 1)
+    dtpFechaHasta.value = Date
     
     Call CSM_Control_DataCombo.FillFromSQL(datcboCereal, "usp_Cereal_List 0, 0, 1, 0", "IDCereal", "Nombre", "Cereales", cscpFirstIfUnique)
 End Sub
@@ -181,7 +181,7 @@ Private Sub cmdExport_Click()
     Dim RecordCount As Long
     
     Dim cmdData As ADODB.command
-    Dim recData As ADODB.Recordset
+    Dim recData As ADODB.recordset
     
     Dim FileNumber_CartasPorte As Integer
     Dim FileNumber_Analisis As Integer
@@ -207,7 +207,7 @@ Private Sub cmdExport_Click()
         Exit Sub
     End If
     
-    If (chkExportarCartasDePorte.Value + chkExportarAnalisis.Value) = vbUnchecked Then
+    If (chkExportarCartasDePorte.value + chkExportarAnalisis.value) = vbUnchecked Then
         MsgBox "Debe seleecionar algún tipo de exportación.", vbInformation, App.Title
         chkExportarCartasDePorte.SetFocus
         Exit Sub
@@ -219,9 +219,9 @@ Private Sub cmdExport_Click()
     
     CarpetaDestino = Trim(txtCarpeta.Text)
     CarpetaDestino = CarpetaDestino & IIf(Right(CarpetaDestino, 1) = "\", "", "\")
-    If chkExportarCartasDePorte.Value = vbChecked Then
+    If chkExportarCartasDePorte.value = vbChecked Then
         If FileSystem.Dir(CarpetaDestino & CARTASPORTE_FILENAME) <> "" Then
-            If chkEliminarArchivos.Value = vbChecked Then
+            If chkEliminarArchivos.value = vbChecked Then
                 FileSystem.Kill CarpetaDestino & CARTASPORTE_FILENAME
             Else
                 DeletePreviousFile = MsgBox("Ya existe el archivo (" & CARTASPORTE_FILENAME & ") en la carpeta de destino (" & CarpetaDestino & ")." & vbCr & vbCr & "<Sí> para sobreescribirlo, <No> para agregar al final del archivo", vbExclamation + vbYesNoCancel, App.Title)
@@ -231,9 +231,9 @@ Private Sub cmdExport_Click()
             End If
         End If
     End If
-    If chkExportarAnalisis.Value = vbChecked Then
+    If chkExportarAnalisis.value = vbChecked Then
         If FileSystem.Dir(CarpetaDestino & ANALISIS_FILENAME) <> "" Then
-            If chkEliminarArchivos.Value = vbChecked Then
+            If chkEliminarArchivos.value = vbChecked Then
                 FileSystem.Kill CarpetaDestino & ANALISIS_FILENAME
             Else
                 DeletePreviousFile = MsgBox("Ya existe el archivo (" & ANALISIS_FILENAME & ") en la carpeta de destino (" & CarpetaDestino & ")." & vbCr & vbCr & "<Sí> para sobreescribirlo, <No> para agregar al final del archivo", vbExclamation + vbYesNoCancel, App.Title)
@@ -246,9 +246,9 @@ Private Sub cmdExport_Click()
     
     Screen.MousePointer = vbHourglass
 
-    If chkExportarCartasDePorte.Value = vbChecked And chkExportarAnalisis.Value = vbChecked Then
+    If chkExportarCartasDePorte.value = vbChecked And chkExportarAnalisis.value = vbChecked Then
         CSF_Status.lblStatus.Caption = "Exportando Cartas de Porte y Análisis..."
-    ElseIf chkExportarCartasDePorte.Value = vbChecked Then
+    ElseIf chkExportarCartasDePorte.value = vbChecked Then
         CSF_Status.lblStatus.Caption = "Exportando Cartas de Porte..."
     Else
         CSF_Status.lblStatus.Caption = "Exportando Análisis..."
@@ -266,69 +266,69 @@ Private Sub cmdExport_Click()
         .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
         .Parameters.Append .CreateParameter("IDDepositario", adInteger, adParamInput, , CLng(pParametro.Planta_IDDefault \ 100000))
         .Parameters.Append .CreateParameter("IDPlanta", adSmallInt, adParamInput, , Val(Right(pParametro.Planta_IDDefault, 5)))
-        .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDesde.Value)
-        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaHasta.Value)
+        .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDesde.value)
+        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaHasta.value)
     End With
     
-    Set recData = New ADODB.Recordset
+    Set recData = New ADODB.recordset
     recData.Open cmdData, , adOpenForwardOnly, adLockReadOnly, adCmdStoredProc
     
     TextStream_CartasPorte = ""
     TextStream_Analisis = ""
     Do While Not recData.EOF
-        DeclaraIPRO = CBool(recData("DeclaraIPRO").Value)
-        If chkExportarCartasDePorte.Value = vbChecked Then
-            TextStream_CartasPorte = TextStream_CartasPorte & recData("ComprobanteNumero").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("CTGNumero").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("CerealCodigo").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Destino_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Destinatario_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Titular_Nombre").Value & "", 255), ",", "")
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Titular_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("RemitenteComercial_Nombre").Value & "", 255), ",", "")
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("RemitenteComercial_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("CodigoEstablecimiento").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LocalidadOrigen").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LocalidadDestino").Value
+        DeclaraIPRO = CBool(recData("DeclaraIPRO").value)
+        If chkExportarCartasDePorte.value = vbChecked Then
+            TextStream_CartasPorte = TextStream_CartasPorte & recData("ComprobanteNumero").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("CTGNumero").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("CerealCodigo").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Destinatario_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Destino_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Titular_Nombre").value & "", 255), ",", "")
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Titular_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("RemitenteComercial_Nombre").value & "", 255), ",", "")
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("RemitenteComercial_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("CodigoEstablecimiento").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LocalidadOrigen").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LocalidadDestino").value
             TextStream_CartasPorte = TextStream_CartasPorte & ",TRANSPORTE AUTOMOTOR"
             TextStream_CartasPorte = TextStream_CartasPorte & ","   ' Cantidad de vagones
             TextStream_CartasPorte = TextStream_CartasPorte & ","   ' Identificador de vagones
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Peso").Value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Peso").value
             TextStream_CartasPorte = TextStream_CartasPorte & "," & IIf(DeclaraIPRO, "INTACTA", "")     ' Tecnología
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & CSM_Function.IfIsNull_ZeroLenghtString(recData("MuestraNumero").Value)
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LaboratorioCuantitativo").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LaboratorioCualitativo").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & Format(recData("FechaDescarga").Value, "dd/mm/yyyy")
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("NumeroPlantaDestino").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Corredor_Nombre").Value & "", 255), ",", "")
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Corredor_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Intermediario_Nombre").Value & "", 255), ",", "")
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Intermediario_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Entregador_Nombre").Value & "", 255), ",", "")
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Entregador_CUIT").Value
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & CSM_String.CleanNotNumericChars(recData("Cosecha").Value)
-            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("ContratoNumero").Value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & CSM_Function.IfIsNull_ZeroLenghtString(recData("MuestraNumero").value)
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LaboratorioCuantitativo").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("LaboratorioCualitativo").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & Format(recData("FechaDescarga").value, "dd/mm/yyyy")
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("NumeroPlantaDestino").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Corredor_Nombre").value & "", 255), ",", "")
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Corredor_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Intermediario_Nombre").value & "", 255), ",", "")
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Intermediario_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & Replace(Left(recData("Entregador_Nombre").value & "", 255), ",", "")
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("Entregador_CUIT").value
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & CSM_String.CleanNotNumericChars(recData("Cosecha").value)
+            TextStream_CartasPorte = TextStream_CartasPorte & "," & recData("ContratoNumero").value
         End If
-        ExportarAnalisis = chkExportarAnalisis.Value = vbChecked
+        ExportarAnalisis = chkExportarAnalisis.value = vbChecked
         If ExportarAnalisis Then
-            TextStream_Analisis = TextStream_Analisis & recData("MuestraNumero").Value
-            TextStream_Analisis = TextStream_Analisis & "," & recData("Destino_CUIT").Value
+            TextStream_Analisis = TextStream_Analisis & recData("MuestraNumero").value
+            TextStream_Analisis = TextStream_Analisis & "," & recData("Destino_CUIT").value
             TextStream_Analisis = TextStream_Analisis & ",CUALITATIVO"
             TextStream_Analisis = TextStream_Analisis & ",INTACTA"
-            TextStream_Analisis = TextStream_Analisis & "," & IIf(recData("ResultadoIPRO").Value Or DeclaraIPRO, "POSITIVO", "NEGATIVO")
+            TextStream_Analisis = TextStream_Analisis & "," & IIf(recData("ResultadoIPRO").value Or DeclaraIPRO, "POSITIVO", "NEGATIVO")
             TextStream_Analisis = TextStream_Analisis & ","         ' Porcentaje Cuantitativo
-            TextStream_Analisis = TextStream_Analisis & "," & Format(recData("FechaAnalisis").Value, "dd/mm/yyyy")
+            TextStream_Analisis = TextStream_Analisis & "," & Format(recData("FechaAnalisis").value, "dd/mm/yyyy")
             If DeclaraIPRO Then
-                TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("RemitenteComercial_Nombre").Value & "", 255), ",", "")
-                TextStream_Analisis = TextStream_Analisis & "," & recData("RemitenteComercial_CUIT").Value
-                TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("Titular_Nombre").Value & "", 255), ",", "")
-                TextStream_Analisis = TextStream_Analisis & "," & recData("Titular_CUIT").Value
-            ElseIf Not IsNull(recData("ResultadoIPRO").Value) Then
-                If CBool(recData("ResultadoIPRO").Value Or DeclaraIPRO) Then
-                    TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("RemitenteComercial_Nombre").Value & "", 255), ",", "")
-                    TextStream_Analisis = TextStream_Analisis & "," & recData("RemitenteComercial_CUIT").Value
-                    TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("Titular_Nombre").Value & "", 255), ",", "")
-                    TextStream_Analisis = TextStream_Analisis & "," & recData("Titular_CUIT").Value
+                TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("RemitenteComercial_Nombre").value & "", 255), ",", "")
+                TextStream_Analisis = TextStream_Analisis & "," & recData("RemitenteComercial_CUIT").value
+                TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("Titular_Nombre").value & "", 255), ",", "")
+                TextStream_Analisis = TextStream_Analisis & "," & recData("Titular_CUIT").value
+            ElseIf Not IsNull(recData("ResultadoIPRO").value) Then
+                If CBool(recData("ResultadoIPRO").value Or DeclaraIPRO) Then
+                    TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("RemitenteComercial_Nombre").value & "", 255), ",", "")
+                    TextStream_Analisis = TextStream_Analisis & "," & recData("RemitenteComercial_CUIT").value
+                    TextStream_Analisis = TextStream_Analisis & "," & Replace(Left(recData("Titular_Nombre").value & "", 255), ",", "")
+                    TextStream_Analisis = TextStream_Analisis & "," & recData("Titular_CUIT").value
                 Else
                     TextStream_Analisis = TextStream_Analisis & ","         ' Remitente Comercial Nombre
                     TextStream_Analisis = TextStream_Analisis & ","         ' Remitente Comercial CUIT
@@ -346,7 +346,7 @@ Private Sub cmdExport_Click()
         recData.MoveNext
         
         If Not recData.EOF Then
-            If chkExportarCartasDePorte.Value = vbChecked Then
+            If chkExportarCartasDePorte.value = vbChecked Then
                 TextStream_CartasPorte = TextStream_CartasPorte & vbCrLf
             End If
             If ExportarAnalisis Then
@@ -361,7 +361,7 @@ Private Sub cmdExport_Click()
     Set recData = Nothing
     
     ' SI CORRESPONDE, ABRO EL ARCHIVO Y GRABO LOS DATOS
-    If chkExportarCartasDePorte.Value = vbChecked And TextStream_CartasPorte <> "" Then
+    If chkExportarCartasDePorte.value = vbChecked And TextStream_CartasPorte <> "" Then
         FileNumber_CartasPorte = FreeFile()
         If DeletePreviousFile = VbMsgBoxResult.vbYes Then
             Open CarpetaDestino & CARTASPORTE_FILENAME For Output As #FileNumber_CartasPorte
@@ -371,7 +371,7 @@ Private Sub cmdExport_Click()
         Print #FileNumber_CartasPorte, TextStream_CartasPorte
         Close #FileNumber_CartasPorte
     End If
-    If chkExportarAnalisis.Value = vbChecked And TextStream_Analisis <> "" Then
+    If chkExportarAnalisis.value = vbChecked And TextStream_Analisis <> "" Then
         FileNumber_Analisis = FreeFile()
         If DeletePreviousFile = VbMsgBoxResult.vbYes Then
             Open CarpetaDestino & ANALISIS_FILENAME For Output As #FileNumber_Analisis
@@ -385,9 +385,9 @@ Private Sub cmdExport_Click()
     Unload CSF_Status
     Set CSF_Status = Nothing
     
-    If chkExportarCartasDePorte.Value = vbChecked And chkExportarAnalisis.Value = vbChecked Then
+    If chkExportarCartasDePorte.value = vbChecked And chkExportarAnalisis.value = vbChecked Then
         MsgBox "Se han exportado " & RecordCount & " Cartas de Porte y Análisis.", vbInformation, App.Title
-    ElseIf chkExportarCartasDePorte.Value = vbChecked Then
+    ElseIf chkExportarCartasDePorte.value = vbChecked Then
         MsgBox "Se han exportado " & RecordCount & " Cartas de Porte.", vbInformation, App.Title
     Else
         MsgBox "Se han exportado " & RecordCount & " Análisis.", vbInformation, App.Title
@@ -403,8 +403,8 @@ Private Sub cmdExport_Click()
             .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
             .Parameters.Append .CreateParameter("IDDepositario", adInteger, adParamInput, , CLng(pParametro.Planta_IDDefault \ 100000))
             .Parameters.Append .CreateParameter("IDPlanta", adSmallInt, adParamInput, , Val(Right(pParametro.Planta_IDDefault, 5)))
-            .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDesde.Value)
-            .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaHasta.Value)
+            .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFechaDesde.value)
+            .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFechaHasta.value)
             
             .Execute
         End With

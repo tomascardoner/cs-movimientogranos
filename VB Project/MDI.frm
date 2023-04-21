@@ -80,7 +80,7 @@ Begin VB.MDIForm frmMDI
             AutoSize        =   2
             Object.Width           =   1693
             MinWidth        =   2
-            TextSave        =   "22/05/2022"
+            TextSave        =   "21/04/2023"
             Key             =   "DATE"
          EndProperty
          BeginProperty Panel8 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
@@ -89,7 +89,7 @@ Begin VB.MDIForm frmMDI
             AutoSize        =   2
             Object.Width           =   873
             MinWidth        =   2
-            TextSave        =   "21:19"
+            TextSave        =   "17:20"
             Key             =   "TIME"
          EndProperty
       EndProperty
@@ -337,11 +337,9 @@ Begin VB.MDIForm frmMDI
                   Text            =   "Subproductos"
                EndProperty
                BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Object.Visible         =   0   'False
                   Text            =   "-"
                EndProperty
                BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Object.Visible         =   0   'False
                   Key             =   "EXPORT"
                   Text            =   "Exportar cartas de porte y análisis (BolsaTech)"
                EndProperty
