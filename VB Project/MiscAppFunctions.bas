@@ -22,6 +22,10 @@ Public Function ShowReport(ByVal reportFilename As String, ByVal reportName, ByV
     
     Screen.MousePointer = vbHourglass
     
+    If pIsCompiled Then
+        On Error GoTo ErrorHandler
+    End If
+    
     Set Report = New CSC_Report
     With Report
         .ParentForm_hWnd = frmMDI.hwnd
