@@ -193,7 +193,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   86441985
+         Format          =   90963969
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1066,7 +1066,7 @@ Begin VB.Form frmMovimiento_SubProducto_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   86441985
+         Format          =   90963969
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1482,6 +1482,7 @@ Private Sub datcboEntidad_Chofer_Change()
     
     If Val(datcboEntidad_Chofer.BoundText) > 0 Then
         Set Entidad_Chofer = New Entidad_Chofer
+        Entidad_Chofer.NoMatchRaiseError = False
         Entidad_Chofer.IDEntidad = Val(datcboEntidad_Chofer.BoundText)
         If Entidad_Chofer.Load() Then
             txtTransporteCamion.Text = Entidad_Chofer.PatenteChasis
