@@ -356,7 +356,7 @@ Begin VB.Form frmConsulta_Cereal
       _ExtentY        =   556
       _Version        =   393216
       CheckBox        =   -1  'True
-      Format          =   112001025
+      Format          =   112590849
       CurrentDate     =   40513
       MaxDate         =   55153
       MinDate         =   40513
@@ -371,7 +371,7 @@ Begin VB.Form frmConsulta_Cereal
       _ExtentY        =   556
       _Version        =   393216
       CheckBox        =   -1  'True
-      Format          =   112001025
+      Format          =   112590849
       CurrentDate     =   40513
       MaxDate         =   55153
       MinDate         =   40513
@@ -726,7 +726,7 @@ Private Sub cmdConsultar_Click()
         .Parameters.Append .CreateParameter("IDCosecha", adTinyInt, adParamInput, , Val(datcboCosecha.BoundText))
         .Parameters.Append .CreateParameter("IDCereal", adTinyInt, adParamInput, , Val(datcboCereal.BoundText))
         .Parameters.Append .CreateParameter("FechaDesde", adDate, adParamInput, , dtpFecha_Desde.value)
-        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFecha_Hasta.value)
+        .Parameters.Append .CreateParameter("FechaHasta", adDate, adParamInput, , dtpFecha_Hasta.value & " 23:59:59")
     End With
     
     Set recData = New ADODB.recordset
