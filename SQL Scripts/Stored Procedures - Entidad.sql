@@ -751,8 +751,8 @@ CREATE PROCEDURE usp_Entidad_SaldoCereal
 	@IDEntidad_Depositante int,
 	@IDCosecha tinyint,
 	@IDCereal tinyint,
-	@FechaDesde date,
-	@FechaHasta date
+	@FechaDesde smalldatetime,
+	@FechaHasta smalldatetime
 AS
 BEGIN
 	SET NOCOUNT ON;
