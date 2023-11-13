@@ -436,16 +436,18 @@ BEGIN
 		UNION
 		(SELECT IDEntidad, Nombre, 2 AS Orden
 			FROM Entidad
-			WHERE EsTitular = 1 OR EsIntermediario = 1 OR EsRemitenteComercial = 1
-				AND (@Activo IS NULL OR Activo = @Activo OR IDEntidad = @IDEntidad))
+			WHERE (EsTitular = 1 OR EsIntermediario = 1 OR EsRemitenteComercial = 1)
+				AND (@Activo IS NULL OR Activo = @Activo)
+				AND (@IDEntidad IS NULL OR IDEntidad = @IDEntidad))
 		ORDER BY Orden, Nombre
 		END
 	ELSE
 		BEGIN
 		SELECT IDEntidad, Nombre
 			FROM Entidad
-			WHERE EsTitular = 1 OR EsIntermediario = 1 OR EsRemitenteComercial = 1
-				AND (@Activo IS NULL OR Activo = @Activo OR IDEntidad = @IDEntidad)
+			WHERE (EsTitular = 1 OR EsIntermediario = 1 OR EsRemitenteComercial = 1)
+				AND (@Activo IS NULL OR Activo = @Activo)
+				AND (@IDEntidad IS NULL OR IDEntidad = @IDEntidad)
 			ORDER BY Nombre
 		END
 END

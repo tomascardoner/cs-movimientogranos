@@ -12,6 +12,7 @@ GO
 -- Author:	Tomás A. Cardoner
 -- Created:	20/06/2018 10:14
 -- Updated:	04/05/2021 11:39
+--          13/11/2023 11:54 - Se modificó el formato del número de muestra para adaptarlo al sistema nuevo
 -- Description: Obtiene los datos para exportar las Cartas de Porte y Análisis para el sistema BolsaTech
 -- =============================================
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Movimiento_Cereal_ListForExport') AND type in (N'P', N'PC'))
@@ -31,7 +32,7 @@ BEGIN
 		Entidad_Destino.CUIT AS Destino_CUIT, Entidad_Destinatario.CUIT AS Destinatario_CUIT, Entidad_Titular.Nombre AS Titular_Nombre, Entidad_Titular.CUIT AS Titular_CUIT,
 		Entidad_RemitenteComercial.Nombre AS RemitenteComercial_Nombre, Entidad_RemitenteComercial.CUIT AS RemitenteComercial_CUIT, Destino.ONCCA_Codigo AS CodigoEstablecimiento,
 		Origen.IDLocalidad AS LocalidadOrigen, Destino.IDLocalidad AS LocalidadDestino, Movimiento_Cereal.PesoNeto AS Peso,
-		Movimiento_Cereal.DeclaraIPRO, Movimiento_Cereal_Analisis.MuestraNumero, Destino.ONCCA_Codigo AS LaboratorioCuantitativo, Destino.ONCCA_Codigo AS LaboratorioCualitativo,
+		Movimiento_Cereal.DeclaraIPRO, '169' + RIGHT('000000000000' + CAST(Movimiento_Cereal_Analisis.MuestraNumero AS varchar(6)), 12) AS MuestraNumero, Destino.ONCCA_Codigo AS LaboratorioCuantitativo, Destino.ONCCA_Codigo AS LaboratorioCualitativo,
 		Movimiento_Cereal.FechaHoraDescarga AS FechaDescarga, Destino.ONCCA_Codigo AS NumeroPlantaDestino, Entidad_Corredor.Nombre AS Corredor_Nombre,
 		Entidad_Corredor.CUIT AS Corredor_CUIT, Entidad_Intermediario.Nombre AS Intermediario_Nombre, Entidad_Intermediario.CUIT AS Intermediario_CUIT,
 		Entidad_Entregador.Nombre AS Entregador_Nombre, Entidad_Entregador.CUIT AS Entregador_CUIT, Cosecha.ONCCA_Codigo AS Cosecha, Movimiento_Cereal.ContratoNumero,
