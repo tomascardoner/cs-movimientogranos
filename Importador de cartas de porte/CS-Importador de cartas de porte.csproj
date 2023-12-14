@@ -84,6 +84,7 @@
       <DependentUpon>FormVerificarCartasDePorte.cs</DependentUpon>
     </Compile>
     <Compile Include="Parsers\IParser.cs" />
+    <Compile Include="Parsers\ParserV3.cs" />
     <Compile Include="Parsers\ParserV2.cs" />
     <Compile Include="Sistema\Constantes.cs" />
     <Compile Include="Database\Cereal.cs" />

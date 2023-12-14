@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cardoner Sistemas")]
 [assembly: AssemblyProduct("CS-Importador de cartas de porte")]
-[assembly: AssemblyCopyright("Copyright © 2022 Cardoner Sistemas")]
+[assembly: AssemblyCopyright("Copyright © 2022-2023 Cardoner Sistemas")]
 [assembly: AssemblyTrademark("® CS-Importador de cartas de porte")]
 [assembly: AssemblyCulture("")]
 

@@ -10,6 +10,7 @@
         internal const string ArchivosPatronBusqueda = "cpe-?????-???????*.pdf";
         internal const string ArchivosSufijoAnulada = "anulada.pdf";
         internal const string CartaPorteV1InicioTexto = "\nCarta de Porte Electrónica\n";
-        internal const string CartaPorteV2InicioTexto = "\nFecha: ";
+        internal const string CartaPorteV2y3InicioTexto = "\nFecha: ";
+        internal const string CartaPorteV3Texto = "\nN° CPE:\nAutomotor";
     }
 }

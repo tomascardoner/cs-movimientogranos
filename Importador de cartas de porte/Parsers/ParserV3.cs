@@ -2,7 +2,7 @@
 
 namespace CS_Importador_de_cartas_de_porte
 {
-    internal class ParserV2 : IParser
+    internal class ParserV3 : IParser
     {
 
         #region Declarations
@@ -12,7 +12,7 @@ namespace CS_Importador_de_cartas_de_porte
 
         // Encabezado
         internal const string FechaPrefijo = "Fecha:";
-        internal const string NumeroCartaPortePrefijo = "N° CPE:";
+        internal const string NumeroCartaPortePrefijo = "Automotor\n";
         internal const string CtgPrefijo = "CTG:";
 
         // Sección A - Intervinientes

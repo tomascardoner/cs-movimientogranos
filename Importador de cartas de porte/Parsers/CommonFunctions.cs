@@ -31,7 +31,7 @@
 
         internal static void Separar2Valores(string textoOriginal, string separador, ref string valor1, ref string valor2)
         {
-            if (string.IsNullOrWhiteSpace(textoOriginal) | string.IsNullOrEmpty(separador))
+            if (string.IsNullOrWhiteSpace(textoOriginal) || string.IsNullOrEmpty(separador))
             {
                 valor1 = string.Empty;
                 valor2 = string.Empty;

@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace CS_Importador_de_cartas_de_porte
@@ -76,13 +77,11 @@ namespace CS_Importador_de_cartas_de_porte
                     if (!ProcesarTexto(currentText, cartaDePorte))
                     {
                         pdfReader.Close();
-                        pdfReader = null;
                         Cursor.Current = Cursors.Default;
                         return false;
                     }
                 }
                 pdfReader.Close();
-                pdfReader = null;
                 return true;
             }
             catch (Exception ex)
@@ -117,9 +116,16 @@ namespace CS_Importador_de_cartas_de_porte
                     return false;
                 }
             }
-            else if (texto.StartsWith(Constantes.CartaPorteV2InicioTexto))
+            else if (texto.StartsWith(Constantes.CartaPorteV2y3InicioTexto))
             {
-                parser = new ParserV2();
+                if (texto.Contains(Constantes.CartaPorteV3Texto))
+                {
+                    parser = new ParserV3();
+                }
+                else
+                {
+                    parser = new ParserV2();
+                }
                 if (!parser.ProcesarTexto(texto, cartaDePorte, 1))
                 {
                     MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -189,120 +195,117 @@ namespace CS_Importador_de_cartas_de_porte
                 string nombre = string.Empty;
 
                 CommonFunctions.Separar2Valores(valor, CommonFunctions.CuitYNombreSeparador, ref cuitString, ref nombre);
-                if (!string.IsNullOrWhiteSpace(cuitString))
+                if (!string.IsNullOrWhiteSpace(cuitString) && long.TryParse(cuitString, out long cuitLong))
                 {
-                    if (long.TryParse(cuitString, out long cuitLong))
+                    // Proceso nombre por si tiene siglas sin puntos o palabras completas reemplazables
+                    nombre = ProcesarNombreEntidad(nombre);
+
+                    // Busco la entidad en la base de datos
+                    Database.Entidad entidad = new Database.Entidad();
+                    if (!entidad.ObtenerPorCuit(database, cuitLong))
                     {
-                        // Proceso nombre por si tiene siglas sin puntos o palabras completas reemplazables
-                        nombre = ProcesarNombreEntidad(nombre);
+                        return null;
+                    }
+                    if (entidad.IsFound)
+                    {
+                        // La entidad existe
+                        bool actualizar = false;
 
-                        // Busco la entidad en la base de datos
-                        Database.Entidad entidad = new Database.Entidad();
-                        if (!entidad.ObtenerPorCuit(database, cuitLong))
+                        // Verifico el nombre
+                        if (string.Compare(entidad.Nombre, nombre, false) != 0)
                         {
-                            return null;
-                        }
-                        if (entidad.IsFound)
-                        {
-                            // La entidad existe
-                            bool actualizar = false;
-
-                            // Verifico el nombre
-                            if (string.Compare(entidad.Nombre, nombre, false) != 0)
-                            {
-                                entidad.Nombre = nombre;
-                                actualizar = true;
-                            }
-
-                            // Verifico que sea del tipo especificado
-                            switch (tipoEntidad)
-                            {
-                                case TiposEntidad.Titular:
-                                    entidad.EsTitular = VerificarTipoEntidad(entidad.EsTitular, ref actualizar);
-                                    break;
-                                case TiposEntidad.Intermediario:
-                                    entidad.EsIntermediario = VerificarTipoEntidad(entidad.EsIntermediario, ref actualizar);
-                                    break;
-                                case TiposEntidad.RemitenteComercial:
-                                    entidad.EsRemitenteComercial = VerificarTipoEntidad(entidad.EsRemitenteComercial, ref actualizar);
-                                    break;
-                                case TiposEntidad.Corredor:
-                                    entidad.EsCorredor = VerificarTipoEntidad(entidad.EsCorredor, ref actualizar);
-                                    break;
-                                case TiposEntidad.Entregador:
-                                    entidad.EsEntregador = VerificarTipoEntidad(entidad.EsEntregador, ref actualizar);
-                                    break;
-                                case TiposEntidad.Destinatario:
-                                    entidad.EsDestinatario = VerificarTipoEntidad(entidad.EsDestinatario, ref actualizar);
-                                    break;
-                                case TiposEntidad.Destino:
-                                    entidad.EsDestino = VerificarTipoEntidad(entidad.EsDestino, ref actualizar);
-                                    break;
-                                case TiposEntidad.Transportista:
-                                    entidad.EsTransportista = VerificarTipoEntidad(entidad.EsTransportista, ref actualizar);
-                                    break;
-                                case TiposEntidad.Chofer:
-                                    entidad.EsChofer = VerificarTipoEntidad(entidad.EsChofer, ref actualizar);
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            // Verifico que esté activa
-                            if (!entidad.Activo)
-                            {
-                                entidad.Activo = true;
-                                actualizar = true;
-                            }
-
-                            // Si corresponde, actualizo
-                            if (actualizar)
-                            {
-                                entidad.Actualizar(database);
-                            }
-                        }
-                        else
-                        {
-                            // No se encontró la entidad, crearla
-                            entidad.Cuit = cuitLong;
                             entidad.Nombre = nombre;
-                            switch (tipoEntidad)
-                            {
-                                case TiposEntidad.Titular:
-                                    entidad.EsTitular = true;
-                                    break;
-                                case TiposEntidad.Intermediario:
-                                    entidad.EsIntermediario = true;
-                                    break;
-                                case TiposEntidad.RemitenteComercial:
-                                    entidad.EsRemitenteComercial = true;
-                                    break;
-                                case TiposEntidad.Corredor:
-                                    entidad.EsCorredor = true;
-                                    break;
-                                case TiposEntidad.Entregador:
-                                    entidad.EsEntregador = true;
-                                    break;
-                                case TiposEntidad.Destinatario:
-                                    entidad.EsDestinatario = true;
-                                    break;
-                                case TiposEntidad.Destino:
-                                    entidad.EsDestino = true;
-                                    break;
-                                case TiposEntidad.Transportista:
-                                    entidad.EsTransportista = true;
-                                    break;
-                                case TiposEntidad.Chofer:
-                                    entidad.EsChofer = true;
-                                    break;
-                                default:
-                                    break;
-                            }
+                            actualizar = true;
+                        }
+
+                        // Verifico que sea del tipo especificado
+                        switch (tipoEntidad)
+                        {
+                            case TiposEntidad.Titular:
+                                entidad.EsTitular = VerificarTipoEntidad(entidad.EsTitular, ref actualizar);
+                                break;
+                            case TiposEntidad.Intermediario:
+                                entidad.EsIntermediario = VerificarTipoEntidad(entidad.EsIntermediario, ref actualizar);
+                                break;
+                            case TiposEntidad.RemitenteComercial:
+                                entidad.EsRemitenteComercial = VerificarTipoEntidad(entidad.EsRemitenteComercial, ref actualizar);
+                                break;
+                            case TiposEntidad.Corredor:
+                                entidad.EsCorredor = VerificarTipoEntidad(entidad.EsCorredor, ref actualizar);
+                                break;
+                            case TiposEntidad.Entregador:
+                                entidad.EsEntregador = VerificarTipoEntidad(entidad.EsEntregador, ref actualizar);
+                                break;
+                            case TiposEntidad.Destinatario:
+                                entidad.EsDestinatario = VerificarTipoEntidad(entidad.EsDestinatario, ref actualizar);
+                                break;
+                            case TiposEntidad.Destino:
+                                entidad.EsDestino = VerificarTipoEntidad(entidad.EsDestino, ref actualizar);
+                                break;
+                            case TiposEntidad.Transportista:
+                                entidad.EsTransportista = VerificarTipoEntidad(entidad.EsTransportista, ref actualizar);
+                                break;
+                            case TiposEntidad.Chofer:
+                                entidad.EsChofer = VerificarTipoEntidad(entidad.EsChofer, ref actualizar);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // Verifico que esté activa
+                        if (!entidad.Activo)
+                        {
                             entidad.Activo = true;
+                            actualizar = true;
+                        }
+
+                        // Si corresponde, actualizo
+                        if (actualizar)
+                        {
                             entidad.Actualizar(database);
                         }
-                        return entidad.IDEntidad;
                     }
+                    else
+                    {
+                        // No se encontró la entidad, crearla
+                        entidad.Cuit = cuitLong;
+                        entidad.Nombre = nombre;
+                        switch (tipoEntidad)
+                        {
+                            case TiposEntidad.Titular:
+                                entidad.EsTitular = true;
+                                break;
+                            case TiposEntidad.Intermediario:
+                                entidad.EsIntermediario = true;
+                                break;
+                            case TiposEntidad.RemitenteComercial:
+                                entidad.EsRemitenteComercial = true;
+                                break;
+                            case TiposEntidad.Corredor:
+                                entidad.EsCorredor = true;
+                                break;
+                            case TiposEntidad.Entregador:
+                                entidad.EsEntregador = true;
+                                break;
+                            case TiposEntidad.Destinatario:
+                                entidad.EsDestinatario = true;
+                                break;
+                            case TiposEntidad.Destino:
+                                entidad.EsDestino = true;
+                                break;
+                            case TiposEntidad.Transportista:
+                                entidad.EsTransportista = true;
+                                break;
+                            case TiposEntidad.Chofer:
+                                entidad.EsChofer = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        entidad.Activo = true;
+                        entidad.Actualizar(database);
+                    }
+                    return entidad.IDEntidad;
                 }
             }
             return null;
@@ -367,18 +370,15 @@ namespace CS_Importador_de_cartas_de_porte
         private static bool ConvertiDatosAObjetoDestinoEncabezado(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal)
         {
             // Comprobante número
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.Numero))
+            if (!string.IsNullOrWhiteSpace(cartaDePorte.Numero) && long.TryParse(cartaDePorte.Numero.Trim().Replace("-", ""), out long longTemp))
             {
-                if (long.TryParse(cartaDePorte.Numero.Trim().Replace("-", ""), out long longTemp))
-                {
-                    movimiento_Cereal.ComprobanteNumero = longTemp;
-                }
+                movimiento_Cereal.ComprobanteNumero = longTemp;
             }
 
             // CTG
             if (!string.IsNullOrWhiteSpace(cartaDePorte.Ctg))
             {
-                if (long.TryParse(cartaDePorte.Ctg, out long longTemp))
+                if (long.TryParse(cartaDePorte.Ctg, out longTemp))
                 {
                     movimiento_Cereal.CTGNumero = longTemp;
                     if (longTemp == 0)
@@ -400,12 +400,9 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             // Fecha de carga
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.Fecha))
+            if (!(string.IsNullOrWhiteSpace(cartaDePorte.Fecha) || !DateTime.TryParse(cartaDePorte.Fecha, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out DateTime datetimeTemp)))
             {
-                if (DateTime.TryParse(cartaDePorte.Fecha, out DateTime datetimeTemp))
-                {
-                    movimiento_Cereal.FechaCarga = datetimeTemp;
-                }
+                movimiento_Cereal.FechaCarga = datetimeTemp;
             }
 
             return true;
@@ -502,26 +499,17 @@ namespace CS_Importador_de_cartas_de_porte
             // Pesos
             if (movimiento_Cereal.Tipo == Constantes.MovimientoTipoEntrada)
             {
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoBruto))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoBruto) && int.TryParse(cartaDePorte.DescargaPesoBruto, out intTemp))
                 {
-                    if (int.TryParse(cartaDePorte.DescargaPesoBruto, out intTemp))
-                    {
-                        movimiento_Cereal.PesoBruto = intTemp;
-                    }
+                    movimiento_Cereal.PesoBruto = intTemp;
                 }
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoTara))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoTara) && int.TryParse(cartaDePorte.DescargaPesoTara, out intTemp))
                 {
-                    if (int.TryParse(cartaDePorte.DescargaPesoTara, out intTemp))
-                    {
-                        movimiento_Cereal.PesoTara = intTemp;
-                    }
+                    movimiento_Cereal.PesoTara = intTemp;
                 }
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoNeto))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoNeto) && int.TryParse(cartaDePorte.DescargaPesoNeto, out intTemp))
                 {
-                    if (int.TryParse(cartaDePorte.DescargaPesoNeto, out intTemp))
-                    {
-                        movimiento_Cereal.PesoNeto = intTemp;
-                    }
+                    movimiento_Cereal.PesoNeto = intTemp;
                 }
                 if (movimiento_Cereal.PesoBruto == 0 && movimiento_Cereal.PesoTara == 0 && movimiento_Cereal.PesoNeto == 0)
                 {
@@ -531,26 +519,17 @@ namespace CS_Importador_de_cartas_de_porte
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoBruto))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoBruto) && int.TryParse(cartaDePorte.PesoBruto, out intTemp))
                 {
-                    if (int.TryParse(cartaDePorte.PesoBruto, out intTemp))
-                    {
-                        movimiento_Cereal.PesoBruto = intTemp;
-                    }
+                    movimiento_Cereal.PesoBruto = intTemp;
                 }
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoTara))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoTara) && int.TryParse(cartaDePorte.PesoTara, out intTemp))
                 {
-                    if (int.TryParse(cartaDePorte.PesoTara, out intTemp))
-                    {
-                        movimiento_Cereal.PesoTara = intTemp;
-                    }
+                    movimiento_Cereal.PesoTara = intTemp;
                 }
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoNeto))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoNeto) && int.TryParse(cartaDePorte.PesoNeto, out intTemp))
                 {
-                    if (int.TryParse(cartaDePorte.PesoNeto, out intTemp))
-                    {
-                        movimiento_Cereal.PesoNeto = intTemp;
-                    }
+                    movimiento_Cereal.PesoNeto = intTemp;
                 }
             }
             if (movimiento_Cereal.PesoBruto - movimiento_Cereal.PesoTara != movimiento_Cereal.PesoNeto)
@@ -633,41 +612,38 @@ namespace CS_Importador_de_cartas_de_porte
         private static bool ConvertiDatosAObjetoDestinoSeccionD(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal, Database.Database database)
         {
             // Destino
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoEsUnCampo))
+            if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoEsUnCampo) && cartaDePorte.DestinoEsUnCampo.Trim() == Properties.Settings.Default.DireccionEsUnCampoNo)
             {
-                if (cartaDePorte.DestinoEsUnCampo.Trim() == Properties.Settings.Default.DireccionEsUnCampoNo)
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoNumeroPlanta) && movimiento_Cereal.IDEntidad_Destino.HasValue)
                 {
-                    if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoNumeroPlanta) && movimiento_Cereal.IDEntidad_Destino.HasValue)
+                    // Buscar por número de planta
+                    if (int.TryParse(cartaDePorte.DestinoNumeroPlanta, out int intTemp))
                     {
-                        // Buscar por número de planta
-                        if (int.TryParse(cartaDePorte.DestinoNumeroPlanta, out int intTemp))
+                        Database.Entidad_OrigenDestino destino = new Database.Entidad_OrigenDestino();
+                        while (true)
                         {
-                            Database.Entidad_OrigenDestino destino = new Database.Entidad_OrigenDestino();
-                            while (true)
+                            if (!destino.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Destino.Value, intTemp))
                             {
-                                if (!destino.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Destino.Value, intTemp))
+                                return false;
+                            }
+                            if (destino.IsFound)
+                            {
+                                movimiento_Cereal.IDOrigenDestino_Destino = destino.IDOrigenDestino;
+                                break;
+                            }
+                            else
+                            {
+                                if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el destino con nº de planta {intTemp} perteneciente a {cartaDePorte.Destino}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                                 {
-                                    return false;
-                                }
-                                if (destino.IsFound)
-                                {
-                                    movimiento_Cereal.IDOrigenDestino_Destino = destino.IDOrigenDestino;
                                     break;
-                                }
-                                else
-                                {
-                                    if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el destino con nº de planta {intTemp} perteneciente a {cartaDePorte.Destino}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
-                                    {
-                                        break;
-                                    }
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        //Buscar por dirección
-                    }
+                }
+                else
+                {
+                    //Buscar por dirección
                 }
             }
 
@@ -703,30 +679,21 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             // Kilometros
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.KmsARecorrer))
+            if (!string.IsNullOrWhiteSpace(cartaDePorte.KmsARecorrer) && short.TryParse(cartaDePorte.KmsARecorrer, out short shortTemp))
             {
-                if (short.TryParse(cartaDePorte.KmsARecorrer, out short shortTemp))
-                {
-                    movimiento_Cereal.TransporteKilometro = shortTemp;
-                }
+                movimiento_Cereal.TransporteKilometro = shortTemp;
             }
 
             // Tarifa de referencia
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.TarifaDeReferencia))
+            if (!string.IsNullOrWhiteSpace(cartaDePorte.TarifaDeReferencia) && decimal.TryParse(cartaDePorte.TarifaDeReferencia.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimalTemp))
             {
-                if (decimal.TryParse(cartaDePorte.TarifaDeReferencia.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimalTemp))
-                {
-                    movimiento_Cereal.TransporteTarifaReferencia = decimalTemp;
-                }
+                movimiento_Cereal.TransporteTarifaReferencia = decimalTemp;
             }
 
             // Tarifa
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.Tarifa))
+            if (!string.IsNullOrWhiteSpace(cartaDePorte.Tarifa) && decimal.TryParse(cartaDePorte.Tarifa.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimalTemp))
             {
-                if (decimal.TryParse(cartaDePorte.Tarifa.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimalTemp))
-                {
-                    movimiento_Cereal.TransporteTarifa = decimalTemp;
-                }
+                movimiento_Cereal.TransporteTarifa = decimalTemp;
             }
             return true;
         }
@@ -738,21 +705,14 @@ namespace CS_Importador_de_cartas_de_porte
             // Fechas de arribo y de descarga
             if (movimiento_Cereal.Tipo == Constantes.MovimientoTipoEntrada)
             {
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaArribo))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaArribo) && DateTime.TryParse(cartaDePorte.FechaArribo, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out datetimeTemp))
                 {
-                    if (DateTime.TryParse(cartaDePorte.FechaArribo, out datetimeTemp))
-                    {
-                        // Le paso la fecha/hora sin los segundos porque si no, redondea los minutos porque el campo de destino es smalldatetime
-                        movimiento_Cereal.FechaHoraArribo = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0);
-                    }
+                    // Le paso la fecha/hora sin los segundos porque si no, redondea los minutos porque el campo de destino es smalldatetime
+                    movimiento_Cereal.FechaHoraArribo = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0, DateTimeKind.Unspecified);
                 }
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaDescarga))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaDescarga) && DateTime.TryParse(cartaDePorte.FechaDescarga, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out datetimeTemp))
                 {
-                    if (DateTime.TryParse(cartaDePorte.FechaDescarga, out datetimeTemp))
-                    {
-                        // Le paso la fecha/hora sin los segundos porque si no, redondea los minutos porque el campo de destino es smalldatetime
-                        movimiento_Cereal.FechaHoraDescarga = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0);
-                    }
+                    movimiento_Cereal.FechaHoraDescarga = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0, DateTimeKind.Unspecified);
                 }
             }
             return true;
