@@ -52,7 +52,7 @@ namespace CS_Importador_de_cartas_de_porte.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.20.1")]
         public string DatabaseDatasource {
             get {
                 return ((string)(this["DatabaseDatasource"]));
