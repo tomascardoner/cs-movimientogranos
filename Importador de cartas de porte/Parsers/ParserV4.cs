@@ -2,7 +2,7 @@
 
 namespace CS_Importador_de_cartas_de_porte
 {
-    internal class ParserV1 : IParser
+    internal class ParserV4 : IParser
     {
 
         #region Declarations
@@ -41,18 +41,18 @@ namespace CS_Importador_de_cartas_de_porte
 
         // Sección C - Procedencia
         internal const string ProcedenciaEsUnCampoPrefijo = "Dirección:";
-        internal const string ProcedenciaEsUnCampoSufijo = "N° Planta (RUCA):";
+        internal const string ProcedenciaEsUnCampoSufijo = "N° Planta";
         internal const string ProcedenciaNumeroPlantaPrefijo = "Es un campo:";
         internal const string ProcedenciaNumeroPlantaSufijo = "Dirección:";
         internal const string ProcedenciaDireccionPrefijo = "Dirección:";
-        internal const string ProcedenciaLocalidadPrefijo = "Localidad:\n";
+        internal const string ProcedenciaLocalidadPrefijo = "Localidad:";
         internal const string ProcedenciaLocalidadSufijo = "Provincia:";
         internal const string ProcedenciaProvinciaPrefijo = "Provincia:";
 
         // Sección D - Destino de la mercadería
         internal const string DestinoEsUnCampoPrefijo = "Es un campo:";
-        internal const string DestinoEsUnCampoSufijo = "N° Planta (RUCA):";
-        internal const string DestinoNumeroPlantaPrefijo = "N° Planta (RUCA):";
+        internal const string DestinoEsUnCampoSufijo = "N° Planta";
+        internal const string DestinoNumeroPlantaPrefijo = "N° Planta";
         internal const string DestinoNumeroPlantaSufijo = "Dirección:";
         internal const string DestinoDireccionPrefijo = "Dirección:";
         internal const string DestinoLocalidadPrefijo = "Localidad:";
@@ -137,6 +137,11 @@ namespace CS_Importador_de_cartas_de_porte
             valorEncontrado = CommonFunctions.ObtenerValor(texto, NumeroCartaPortePrefijo, ref index, Finalizacion);
             if (index == -1)
             {
+                return false;
+            }
+            else if (string.IsNullOrEmpty(valorEncontrado))
+            {
+                MessageBox.Show($"No se pudo leer el número de carta de porte.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
             cartaDePorte.Numero = valorEncontrado;
@@ -445,14 +450,6 @@ namespace CS_Importador_de_cartas_de_porte
             }
             cartaDePorte.Dominios = valorEncontrado;
 
-            // Partida
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, Finalizacion, ref index, Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.Partida = valorEncontrado;
-
             // Kms a recorrer
             valorEncontrado = CommonFunctions.ObtenerValor(texto, KmsARecorrerPrefijo, ref index, Finalizacion);
             if (index == -1)
@@ -460,6 +457,14 @@ namespace CS_Importador_de_cartas_de_porte
                 return false;
             }
             cartaDePorte.KmsARecorrer = valorEncontrado;
+
+            // Partida
+            valorEncontrado = CommonFunctions.ObtenerValor(texto, Finalizacion, ref index, Finalizacion);
+            if (index == -1)
+            {
+                return false;
+            }
+            cartaDePorte.Partida = valorEncontrado;
 
             // Tarifa de referencia
             valorEncontrado = CommonFunctions.ObtenerValor(texto, TarifaDeReferenciaPrefijo, ref index, TarifaDeReferenciaSufijo);
@@ -533,6 +538,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
             cartaDePorte.DescargaProvincia = valorEncontrado;
 
+            // Nº de turno
             cartaDePorte.NumeroTurno = string.Empty;
 
             // Peso neto

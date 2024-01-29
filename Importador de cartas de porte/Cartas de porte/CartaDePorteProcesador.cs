@@ -116,11 +116,18 @@ namespace CS_Importador_de_cartas_de_porte
                     return false;
                 }
             }
-            else if (texto.StartsWith(Constantes.CartaPorteV2y3InicioTexto))
+            else if (texto.StartsWith(Constantes.CartaPorteV2_3_4_InicioTexto))
             {
-                if (texto.Contains(Constantes.CartaPorteV3Texto))
+                if (texto.Contains(Constantes.CartaPorteV3_4Texto))
                 {
-                    parser = new ParserV3();
+                    if (texto.Contains(Constantes.CartaPorteV3Texto))
+                    {
+                        parser = new ParserV3();
+                    }
+                    else
+                    {
+                        parser = new ParserV4();
+                    }
                 }
                 else
                 {
