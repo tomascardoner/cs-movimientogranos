@@ -459,7 +459,7 @@ GO
 -- =============================================
 -- Author:	Tomás A. Cardoner
 -- Created:	25/02/2014 00:34
--- Updated:	
+-- Updated:	20/02/2024 13:27 - se convierte el tipo de datos a datetime porque el Crystal Reports no soporta el tipo date
 -- Description: Obtiene los datos para el Reporte de Remito de Venta
 -- =============================================
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Movimiento_SubProducto_Report_Remito') AND type in (N'P', N'PC'))
@@ -472,8 +472,20 @@ CREATE PROCEDURE dbo.usp_Movimiento_SubProducto_Report_Remito
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT Movimiento_SubProducto.ComprobanteNumero, Movimiento_SubProducto.Fecha, Movimiento_SubProducto.COTNumero, UPPER(Destinatario.Nombre) AS Destinatario_Nombre, Destinatario.CUIT AS Destinatario_CUIT, UPPER(dbo.udf_GetDomicilioCompleto(Destinatario_Domicilio.Calle, Destinatario_Domicilio.Numero, Destinatario_Domicilio.Piso, Destinatario_Domicilio.Oficina)) AS Destinatario_DomicilioCompleto, UPPER(dbo.udf_GetCodigoPostalLocalidad(Destinatario_Domicilio.CodigoPostal, Destinatario_Localidad.Nombre)) AS Destinatario_DomicilioLocalidad, UPPER(Destinatario_CategoriaIVA.Nombre) AS CategoriaIVANombre, UPPER(Destino.Direccion + ' - ' + Destino_Localidad.Nombre) AS Destino_Domicilio, ABS(Movimiento_SubProducto_Detalle.Kilogramo) AS SubProducto_Kilogramo, UPPER(SubProducto.Nombre) AS SubProductoNombre, UPPER(Transportista.Nombre) AS Transportista_Nombre, Transportista.CUIT AS Transportista_CUIT, Movimiento_SubProducto.TransporteDominioCamion, Movimiento_SubProducto.TransporteDominioAcoplado, UPPER(Chofer.Nombre) AS Chofer_Nombre, Chofer.CUIT AS Chofer_CUIL
-		FROM ((((((((((Movimiento_SubProducto INNER JOIN Entidad AS Destinatario ON Movimiento_SubProducto.IDEntidad_Destinatario = Destinatario.IDEntidad) INNER JOIN Entidad_Impuesto AS Destinatario_Impuesto ON Destinatario.IDEntidad = Destinatario_Impuesto.IDEntidad) INNER JOIN CategoriaIVA AS Destinatario_CategoriaIVA ON Destinatario_Impuesto.IDCategoriaIVA = Destinatario_CategoriaIVA.IDCategoriaIVA) INNER JOIN Entidad_Domicilio AS Destinatario_Domicilio ON Destinatario.IDEntidad = Destinatario_Domicilio.IDEntidad) INNER JOIN Localidad AS Destinatario_Localidad ON Destinatario_Domicilio.IDLocalidad = Destinatario_Localidad.IDLocalidad) INNER JOIN Entidad_OrigenDestino AS Destino ON Movimiento_SubProducto.IDEntidad_Destinatario = Destino.IDEntidad AND Movimiento_SubProducto.IDOrigenDestino_Destino = Destino.IDOrigenDestino) INNER JOIN Localidad AS Destino_Localidad ON Destino.IDLocalidad = Destino_Localidad.IDLocalidad) INNER JOIN Entidad AS Transportista ON Movimiento_SubProducto.IDEntidad_Transportista = Transportista.IDEntidad) INNER JOIN Entidad AS Chofer ON Movimiento_SubProducto.IDEntidad_Chofer = Chofer.IDEntidad) INNER JOIN Movimiento_SubProducto_Detalle ON Movimiento_SubProducto.IDMovimiento_SubProducto = Movimiento_SubProducto_Detalle.IDMovimiento_SubProducto) INNER JOIN SubProducto ON Movimiento_SubProducto_Detalle.IDSubProducto = SubProducto.IDSubProducto
+	SELECT Movimiento_SubProducto.ComprobanteNumero, CAST(Movimiento_SubProducto.Fecha AS datetime) AS Fecha, Movimiento_SubProducto.COTNumero,
+			UPPER(Destinatario.Nombre) AS Destinatario_Nombre, Destinatario.CUIT AS Destinatario_CUIT, UPPER(dbo.udf_GetDomicilioCompleto(Destinatario_Domicilio.Calle, Destinatario_Domicilio.Numero, Destinatario_Domicilio.Piso, Destinatario_Domicilio.Oficina)) AS Destinatario_DomicilioCompleto, UPPER(dbo.udf_GetCodigoPostalLocalidad(Destinatario_Domicilio.CodigoPostal, Destinatario_Localidad.Nombre)) AS Destinatario_DomicilioLocalidad, UPPER(Destinatario_CategoriaIVA.Nombre) AS CategoriaIVANombre, UPPER(Destino.Direccion + ' - ' + Destino_Localidad.Nombre) AS Destino_Domicilio,
+			ABS(Movimiento_SubProducto_Detalle.Kilogramo) AS SubProducto_Kilogramo, UPPER(SubProducto.Nombre) AS SubProductoNombre, UPPER(Transportista.Nombre) AS Transportista_Nombre, Transportista.CUIT AS Transportista_CUIT, Movimiento_SubProducto.TransporteDominioCamion, Movimiento_SubProducto.TransporteDominioAcoplado, UPPER(Chofer.Nombre) AS Chofer_Nombre, Chofer.CUIT AS Chofer_CUIL
+		FROM Movimiento_SubProducto INNER JOIN Entidad AS Destinatario ON Movimiento_SubProducto.IDEntidad_Destinatario = Destinatario.IDEntidad
+			INNER JOIN Entidad_Impuesto AS Destinatario_Impuesto ON Destinatario.IDEntidad = Destinatario_Impuesto.IDEntidad
+			INNER JOIN CategoriaIVA AS Destinatario_CategoriaIVA ON Destinatario_Impuesto.IDCategoriaIVA = Destinatario_CategoriaIVA.IDCategoriaIVA
+			INNER JOIN Entidad_Domicilio AS Destinatario_Domicilio ON Destinatario.IDEntidad = Destinatario_Domicilio.IDEntidad
+			INNER JOIN Localidad AS Destinatario_Localidad ON Destinatario_Domicilio.IDLocalidad = Destinatario_Localidad.IDLocalidad
+			INNER JOIN Entidad_OrigenDestino AS Destino ON Movimiento_SubProducto.IDEntidad_Destinatario = Destino.IDEntidad AND Movimiento_SubProducto.IDOrigenDestino_Destino = Destino.IDOrigenDestino
+			INNER JOIN Localidad AS Destino_Localidad ON Destino.IDLocalidad = Destino_Localidad.IDLocalidad
+			INNER JOIN Entidad AS Transportista ON Movimiento_SubProducto.IDEntidad_Transportista = Transportista.IDEntidad
+			INNER JOIN Entidad AS Chofer ON Movimiento_SubProducto.IDEntidad_Chofer = Chofer.IDEntidad
+			INNER JOIN Movimiento_SubProducto_Detalle ON Movimiento_SubProducto.IDMovimiento_SubProducto = Movimiento_SubProducto_Detalle.IDMovimiento_SubProducto
+			INNER JOIN SubProducto ON Movimiento_SubProducto_Detalle.IDSubProducto = SubProducto.IDSubProducto
 		WHERE Movimiento_SubProducto.IDMovimiento_SubProducto = @IDMovimiento_SubProducto
 
 END
