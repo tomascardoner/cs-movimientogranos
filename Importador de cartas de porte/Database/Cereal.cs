@@ -64,8 +64,6 @@ namespace CS_Importador_de_cartas_de_porte.Database
                     IsNew = false;
                 }
                 reader.Close();
-                reader = null;
-                command = null;
                 return true;
             }
             catch (Exception ex)

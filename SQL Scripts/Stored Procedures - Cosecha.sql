@@ -9,6 +9,31 @@ GO
 
 
 -- =============================================
+-- Author:	Tomás A. Cardoner
+-- Created: 24/03/2024 20:14
+-- Updated: 
+-- Description: Obtiene una Cosecha por el código Oncca
+-- =============================================
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Cosecha_GetPorCodigoOncca') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_Cosecha_GetPorCodigoOncca
+GO
+
+CREATE PROCEDURE dbo.usp_Cosecha_GetPorCodigoOncca
+	@CodigoOncca char(5)
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT IDCosecha, Nombre, FechaInicio, FechaFin, ONCCA_Codigo, Activo
+		FROM Cosecha
+		WHERE ONCCA_Codigo = @CodigoOncca
+END
+GO
+
+
+
+-- =============================================
 -- Author:		Tomás A. Cardoner
 -- Create date: 2013-09-10
 -- Description:	Lista las Cosechas

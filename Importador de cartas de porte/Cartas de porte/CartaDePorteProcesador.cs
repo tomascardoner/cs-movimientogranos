@@ -116,17 +116,26 @@ namespace CS_Importador_de_cartas_de_porte
                     return false;
                 }
             }
-            else if (texto.StartsWith(Constantes.CartaPorteV2_3_4_InicioTexto))
+            else if (texto.StartsWith(Constantes.CartaPorteV2_3_4_5_InicioTexto))
             {
-                if (texto.Contains(Constantes.CartaPorteV3_4Texto))
+                if (texto.Contains(Constantes.CartaPorteV3_4_5_Texto))
                 {
                     if (texto.Contains(Constantes.CartaPorteV3Texto))
                     {
                         parser = new ParserV3();
                     }
-                    else
+                    else if(texto.Contains(Constantes.CartaPorteV4Texto))
                     {
                         parser = new ParserV4();
+                    }
+                    else if (texto.Contains(Constantes.CartaPorteV5Texto))
+                    {
+                        parser = new ParserV5();
+                    }
+                    else
+                    {
+                        MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return false;
                     }
                 }
                 else
@@ -480,9 +489,6 @@ namespace CS_Importador_de_cartas_de_porte
         {
             int intTemp;
 
-            // Cosecha
-            movimiento_Cereal.IDCosecha = idCosecha;
-
             // Cereal
             if (!string.IsNullOrWhiteSpace(cartaDePorte.GranoEspecie))
             {
@@ -503,7 +509,30 @@ namespace CS_Importador_de_cartas_de_porte
                 }
             }
 
-            // Pesos
+            // Cosecha
+            if (string.IsNullOrWhiteSpace(cartaDePorte.Campania))
+            { 
+                movimiento_Cereal.IDCosecha = idCosecha;
+            }
+            else
+            {
+                Database.Cosecha cosecha = new Database.Cosecha();
+                if (!cosecha.ObtenerPorCodigoOncca(database, cartaDePorte.Campania))
+                {
+                    return false;
+                }
+                if (cosecha.IsFound)
+                {
+                    movimiento_Cereal.IDCosecha = cosecha.IDCosecha;
+                }
+                else
+                {
+                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró la cosecha.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+            }
+
+            // Pesaje
             if (movimiento_Cereal.Tipo == Constantes.MovimientoTipoEntrada)
             {
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoBruto) && int.TryParse(cartaDePorte.DescargaPesoBruto, out intTemp))

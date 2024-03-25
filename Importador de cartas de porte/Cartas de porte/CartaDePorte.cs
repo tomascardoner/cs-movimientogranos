@@ -33,6 +33,7 @@
         // Sección B - Grano / Especie
         internal string GranoEspecie { get; set; }
         internal string GranoEspecieTipo { get; set; }
+        internal string Campania { get; set; }
         internal string CalidadConforme { get; set; }
         internal string CalidadCondicional { get; set; }
         internal string PesoBruto { get; set; }
