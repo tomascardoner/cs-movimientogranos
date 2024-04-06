@@ -9,7 +9,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
    ClientHeight    =   6825
    ClientLeft      =   60
    ClientTop       =   450
-   ClientWidth     =   13245
+   ClientWidth     =   11280
    BeginProperty Font 
       Name            =   "Arial"
       Size            =   8.25
@@ -25,21 +25,21 @@ Begin VB.Form frmMovimiento_Cereal_Lista
    LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   6825
-   ScaleWidth      =   13245
+   ScaleWidth      =   11280
    Begin ComCtl3.CoolBar cbrMain 
       Align           =   1  'Align Top
       Height          =   3450
       Left            =   0
       TabIndex        =   1
       Top             =   0
-      Width           =   13245
-      _ExtentX        =   23363
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   6085
       BandCount       =   18
       FixedOrder      =   -1  'True
-      _CBWidth        =   13245
+      _CBWidth        =   11280
       _CBHeight       =   3450
-      _Version        =   "6.7.9782"
+      _Version        =   "6.7.9816"
       Child1          =   "tlbMain"
       MinWidth1       =   9165
       MinHeight1      =   570
@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   95879169
+            Format          =   100335617
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   95879169
+            Format          =   100335617
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -420,15 +420,6 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       End
       Begin VB.PictureBox picTipo 
          BorderStyle     =   0  'None
-         BeginProperty Font 
-            Name            =   "Arial Narrow"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
          Height          =   450
          Left            =   165
          ScaleHeight     =   450
@@ -1027,8 +1018,8 @@ Begin VB.Form frmMovimiento_Cereal_Lista
       Left            =   0
       TabIndex        =   47
       Top             =   6465
-      Width           =   13245
-      _ExtentX        =   23363
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   635
       Style           =   1
       _Version        =   393216
@@ -1036,7 +1027,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
          NumPanels       =   1
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   22834
+            Object.Width           =   19368
             Key             =   "TEXT"
          EndProperty
       EndProperty
@@ -1565,51 +1556,51 @@ Public Function LoadData(ByVal IDMovimiento_Cereal As Long) As Boolean
         Select Case cboFechaCargaDescargaOperacion.ListIndex
             Case 0  'ALL
             Case 1  'EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga = '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} = CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga = DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) = DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
             Case 2  'GREATER
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} > CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga > DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) > DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
             Case 3  'GREATER OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} >= CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga >= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) >= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
             Case 4  'MINOR
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} < CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga < DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) < DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
             Case 5  'MINOR OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} <= CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga <= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) <= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
             Case 6  'NOT EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga <> '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "'"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_Cereal.FechaCarga} <> CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga <> DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) <> DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")"
             Case 7  'BETWEEN
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "(Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "' AND Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy/mm/dd") & "')"
-                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "({Movimiento_Cereal.FechaCarga} >= CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ") AND {Movimiento_Cereal.FechaCarga} <= CDate(" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy, mm, dd") & "))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_Cereal.FechaCarga BETWEEN DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ") AND DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Hasta.value) & ")"
+                mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_Cereal.FechaCarga}) >= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ") AND DateTimeValue({Movimiento_Cereal.FechaCarga}) <= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Hasta.value) & ")"
         End Select
     Else
         'FECHA DE CARGA O DESCARGA, SEGÚN CORRESPONDA POR EL TIPO DE MOVIMIENTO
         Select Case cboFechaCargaDescargaOperacion.ListIndex
             Case 0  'ALL
             Case 1  'EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga = '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & ") OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND Movimiento_Cereal.FechaHoraDescarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga = DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) = DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} = CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 2  'GREATER
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga > DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) > DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} > CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 3  'GREATER OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00'))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga >= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) >= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)))"
             Case 4  'MINOR
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00'))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga < DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) < DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} < CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)))"
             Case 5  'MINOR OR EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga <= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga <= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) <= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} <= CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
             Case 6  'NOT EQUAL
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga <> '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND (Movimiento_Cereal.FechaHoraDescarga < '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' OR Movimiento_Cereal.FechaHoraDescarga > '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 23:59:00')))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga <> DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) <> DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} <> CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND ({Movimiento_Cereal.FechaHoraDescarga} < CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) OR {Movimiento_Cereal.FechaHoraDescarga} > CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59))))"
             Case 7  'BETWEEN
-                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & "' AND Movimiento_Cereal.FechaCarga <= '" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy/mm/dd") & "') OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaHoraDescarga >= '" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND Movimiento_Cereal.FechaHoraDescarga <= '" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy/mm/dd") & " 23:59:00'))"
+                mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "((Movimiento_Cereal.Tipo <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND Movimiento_Cereal.FechaCarga >= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ") AND Movimiento_Cereal.FechaCarga <= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Hasta.value) & ")) OR (Movimiento_Cereal.Tipo = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) >= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Desde.value) & ") AND CONVERT(date, Movimiento_Cereal.FechaHoraDescarga) <= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFechaCargaDescarga_Hasta.value) & ")))"
                 mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(({Movimiento_Cereal.Tipo} <> '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaCarga} >= CDate(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ") AND {Movimiento_Cereal.FechaCarga} <= CDate(" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy, mm, dd") & ")) OR ({Movimiento_Cereal.Tipo} = '" & MOVIMIENTO_CEREAL_TIPO_ENTRADA & "' AND {Movimiento_Cereal.FechaHoraDescarga} >= CDateTime(" & Format(dtpFechaCargaDescarga_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_Cereal.FechaHoraDescarga} <= CDateTime(" & Format(dtpFechaCargaDescarga_Hasta.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
         End Select
     End If

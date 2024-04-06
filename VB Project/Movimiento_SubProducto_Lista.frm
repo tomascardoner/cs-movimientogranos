@@ -8,7 +8,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
    ClientHeight    =   6735
    ClientLeft      =   2610
    ClientTop       =   2940
-   ClientWidth     =   14085
+   ClientWidth     =   11280
    BeginProperty Font 
       Name            =   "Arial"
       Size            =   8.25
@@ -24,21 +24,21 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
    LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   6735
-   ScaleWidth      =   14085
+   ScaleWidth      =   11280
    Begin ComCtl3.CoolBar cbrMain 
       Align           =   1  'Align Top
       Height          =   1800
       Left            =   0
       TabIndex        =   1
       Top             =   0
-      Width           =   14085
-      _ExtentX        =   24844
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   3175
       BandCount       =   9
       FixedOrder      =   -1  'True
-      _CBWidth        =   14085
+      _CBWidth        =   11280
       _CBHeight       =   1800
-      _Version        =   "6.7.9782"
+      _Version        =   "6.7.9816"
       Child1          =   "tlbMain"
       MinWidth1       =   9165
       MinHeight1      =   570
@@ -167,15 +167,6 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       End
       Begin VB.PictureBox picTipo 
          BorderStyle     =   0  'None
-         BeginProperty Font 
-            Name            =   "Arial Narrow"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
          Height          =   450
          Left            =   9840
          ScaleHeight     =   450
@@ -512,7 +503,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   106102785
+            Format          =   100335617
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFecha_Hasta 
@@ -534,7 +525,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   106102785
+            Format          =   100335617
             CurrentDate     =   36950
          End
          Begin VB.Label lblFecha 
@@ -630,8 +621,8 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
       Left            =   0
       TabIndex        =   28
       Top             =   6375
-      Width           =   14085
-      _ExtentX        =   24844
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   635
       Style           =   1
       _Version        =   393216
@@ -639,7 +630,7 @@ Begin VB.Form frmMovimiento_SubProducto_Lista
          NumPanels       =   1
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   24315
+            Object.Width           =   19368
             Key             =   "TEXT"
          EndProperty
       EndProperty
@@ -1024,26 +1015,26 @@ Public Function LoadData(ByVal IDMovimiento_SubProducto As Long) As Boolean
     Select Case cboFecha.ListIndex
         Case 0  'ALL
         Case 1  'EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha = DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) = DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
         Case 2  'GREATER
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha > '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} > CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha > DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) > DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
         Case 3  'GREATER OR EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha >= '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha >= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) >= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
         Case 4  'MINOR
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha < '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} < CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha < DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) < DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
         Case 5  'MINOR OR EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha <= '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha <= DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) <= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
         Case 6  'NOT EQUAL
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha NOT BETWEEN '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "(NOT ({Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 23, 59, 59)))"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha <> DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) <> DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ")"
         Case 7  'BETWEEN
-            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN '" & Format(dtpFecha_Desde.value, "yyyy/mm/dd") & " 00:00:00' AND '" & Format(dtpFecha_Hasta.value, "yyyy/mm/dd") & " 23:59:00'"
-            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "{Movimiento_SubProducto.Fecha} >= CDateTime(" & Format(dtpFecha_Desde.value, "yyyy, mm, dd") & ", 0, 0, 0) AND {Movimiento_SubProducto.Fecha} <= CDateTime(" & Format(dtpFecha_Hasta.value, "yyyy, mm, dd") & ", 23, 59, 59)"
+            mstrSQLWhere = mstrSQLWhere & IIf(mstrSQLWhere = "", "WHERE ", " AND ") & "Movimiento_SubProducto.Fecha BETWEEN DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ") AND DATEFROMPARTS(" & GetYearMonthDateStringByComma(dtpFecha_Hasta.value) & ")"
+            mRecordSelectionFormula = mRecordSelectionFormula & IIf(mRecordSelectionFormula = "", "", " AND ") & "DateTimeValue({Movimiento_SubProducto.Fecha}) >= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Desde.value) & ") AND DateTimeValue({Movimiento_SubProducto.Fecha}) <= DateTimeValue(" & GetYearMonthDateStringByComma(dtpFecha_Hasta.value) & ")"
     End Select
     
     'ENTIDAD DESTINATARIO

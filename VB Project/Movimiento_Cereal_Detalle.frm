@@ -1045,7 +1045,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   111083523
+         Format          =   97976323
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1091,7 +1091,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111083521
+         Format          =   97976321
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1105,7 +1105,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111083521
+         Format          =   97976321
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1120,7 +1120,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   111083523
+         Format          =   97976323
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2037,7 +2037,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   111083521
+         Format          =   97976321
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2180,7 +2180,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   111083521
+         Format          =   97976321
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2573,9 +2573,17 @@ Private Sub cmdVerificarDuplicado_Click()
         If Not Movimiento_Cereal.NoMatch Then
             Select Case Movimiento_Cereal.Tipo
                 Case MOVIMIENTO_CEREAL_TIPO_ENTRADA, MOVIMIENTO_CEREAL_TIPO_SALIDA, MOVIMIENTO_CEREAL_TIPO_TRANSFERENCIAINTERNA, MOVIMIENTO_CEREAL_TIPO_SALIDAPRODUCCION_NOMBRE
-                    MsgBox "Esta " & Movimiento_Cereal.TipoNombre & " ya está cargada en el sistema.", vbExclamation, App.Title
+                    If Movimiento_Cereal.Tipo = mMovimiento_Cereal.Tipo Then
+                        MsgBox "Esta " & Movimiento_Cereal.TipoNombre & " ya está cargada en el sistema.", vbExclamation, App.Title
+                    Else
+                        MsgBox "Esta " & Movimiento_Cereal.TipoNombre & " ya está cargada en el sistema pero con otro tipo.", vbExclamation, App.Title
+                    End If
                 Case MOVIMIENTO_CEREAL_TIPO_AJUSTEBAJA, MOVIMIENTO_CEREAL_TIPO_AJUSTESUBE
-                    MsgBox "Este " & Movimiento_Cereal.TipoNombre & " ya está cargado en el sistema.", vbExclamation, App.Title
+                    If Movimiento_Cereal.Tipo = mMovimiento_Cereal.Tipo Then
+                        MsgBox "Este " & Movimiento_Cereal.TipoNombre & " ya está cargado en el sistema.", vbExclamation, App.Title
+                    Else
+                        MsgBox "Este " & Movimiento_Cereal.TipoNombre & " ya está cargado en el sistema pero con otro tipo.", vbExclamation, App.Title
+                    End If
             End Select
             Set Movimiento_Cereal = Nothing
             Exit Sub
