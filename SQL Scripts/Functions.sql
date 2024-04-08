@@ -308,3 +308,45 @@ BEGIN
 	
 END
 GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
+-- Create date: 2024-04-08
+-- Description:	Devuelve el promedio de 3 importes
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.ObtenerPrecioPromedio') AND type = N'FN')
+	DROP FUNCTION dbo.ObtenerPrecioPromedio
+GO
+
+CREATE FUNCTION ObtenerPrecioPromedio 
+(	
+	@Precio1 money,
+	@Precio2 money,
+	@Precio3 money
+) RETURNS money AS
+BEGIN
+	DECLARE @Cantidad tinyint = 0
+	DECLARE @SumaPrecios money
+	DECLARE @Result money
+
+	SET @SumaPrecios = ISNULL(@Precio1, 0) + ISNULL(@Precio2, 0) + ISNULL(@Precio3, 0)
+
+	IF @Precio1 IS NOT NULL
+		SET @Cantidad = @Cantidad + 1
+
+	IF @Precio2 IS NOT NULL
+		SET @Cantidad = @Cantidad + 1
+
+	IF @Precio3 IS NOT NULL
+		SET @Cantidad = @Cantidad + 1
+	
+	IF @Cantidad = 0
+		SET @Result = 0
+	ELSE
+		SET @Result = @SumaPrecios / @Cantidad
+
+	RETURN @Result
+END
+GO
