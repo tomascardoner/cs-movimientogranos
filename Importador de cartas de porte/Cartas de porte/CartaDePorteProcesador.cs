@@ -107,30 +107,37 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             // Detecto la versión del formato y ejecuto el parser correspondiente
-            if (texto.StartsWith(Constantes.CartaPorteV1InicioTexto))
+            if (texto.StartsWith(Constantes.CartaPorteVersion1TextoInicio))
             {
                 parser = new ParserV1();
-                if (!parser.ProcesarTexto(texto, cartaDePorte, Constantes.CartaPorteV1InicioTexto.Length))
+                if (!parser.ProcesarTexto(texto, cartaDePorte, Constantes.CartaPorteVersion1TextoInicio.Length))
                 {
                     MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
-            else if (texto.StartsWith(Constantes.CartaPorteV2_3_4_5_InicioTexto))
+            else if (texto.StartsWith(Constantes.CartaPorteVersion2_3_4_5_6TextoInicio))
             {
-                if (texto.Contains(Constantes.CartaPorteV3_4_5_Texto))
+                if (texto.Contains(Constantes.CartaPorteVersion3_4_5_6Texto))
                 {
-                    if (texto.Contains(Constantes.CartaPorteV3Texto))
+                    if (texto.Contains(Constantes.CartaPorteVersion3Texto))
                     {
                         parser = new ParserV3();
                     }
-                    else if(texto.Contains(Constantes.CartaPorteV4Texto))
+                    else if(texto.Contains(Constantes.CartaPorteVersion4Texto))
                     {
                         parser = new ParserV4();
                     }
-                    else if (texto.Contains(Constantes.CartaPorteV5Texto))
+                    else if (texto.Contains(Constantes.CartaPorteVersion5_6Texto))
                     {
-                        parser = new ParserV5();
+                        if (texto.Contains(Constantes.CartaPorteVersion5Texto))
+                        {
+                            parser = new ParserV5();
+                        }
+                        else
+                        {
+                            parser = new ParserV6();
+                        }
                     }
                     else
                     {

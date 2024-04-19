@@ -86,6 +86,7 @@
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Parsers\ParserV3.cs" />
     <Compile Include="Parsers\ParserV2.cs" />
+    <Compile Include="Parsers\ParserV5 - Copy.cs" />
     <Compile Include="Parsers\ParserV5.cs" />
     <Compile Include="Parsers\ParserV4.cs" />
     <Compile Include="Sistema\Constantes.cs" />
