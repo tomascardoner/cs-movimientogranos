@@ -11,18 +11,6 @@
     <Setting Name="IdCartaPorteMotivoAnulacion" Type="System.Byte" Scope="Application">
       <Value Profile="(Default)">6</Value>
     </Setting>
-    <Setting Name="DatabaseDatasource" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">192.168.20.1</Value>
-    </Setting>
-    <Setting Name="DatabaseUserId" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">sa</Value>
-    </Setting>
-    <Setting Name="DatabasePassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Tai1802Pei</Value>
-    </Setting>
-    <Setting Name="DatabaseCatalog" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">CSMovimientoGranos</Value>
-    </Setting>
     <Setting Name="DireccionEsUnCampoSi" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Si</Value>
     </Setting>
@@ -31,6 +19,24 @@
     </Setting>
     <Setting Name="CuitEntidadDestinatarioLocal" Type="System.String" Scope="Application">
       <Value Profile="(Default)">30710717946</Value>
+    </Setting>
+    <Setting Name="NumeroPlantaAceitera" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">207581</Value>
+    </Setting>
+    <Setting Name="NumeroPlantaAcondicionador" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">23952</Value>
+    </Setting>
+    <Setting Name="DatabaseDatasource" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">192.168.20.1</Value>
+    </Setting>
+    <Setting Name="DatabaseDatabase" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CSMovimientoGranos</Value>
+    </Setting>
+    <Setting Name="DatabaseUserId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">sa</Value>
+    </Setting>
+    <Setting Name="DatabasePassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">AWoGVPIe8Uox9rNPH5BRrd4iGlJPpJw7/CB2TMez50Sf9CcY4hw+rwITtkC3+tVVF85965IHca1GoIvc28HAycrPre8lnjhTsF23x9Dujyq95giFs9QEtaz14o+cZdCA</Value>
     </Setting>
   </Settings>
 </SettingsFile>

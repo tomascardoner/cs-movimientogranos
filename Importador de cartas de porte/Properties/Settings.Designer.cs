@@ -12,7 +12,7 @@ namespace CS_Importador_de_cartas_de_porte.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.8.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -52,42 +52,6 @@ namespace CS_Importador_de_cartas_de_porte.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.20.1")]
-        public string DatabaseDatasource {
-            get {
-                return ((string)(this["DatabaseDatasource"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("sa")]
-        public string DatabaseUserId {
-            get {
-                return ((string)(this["DatabaseUserId"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Tai1802Pei")]
-        public string DatabasePassword {
-            get {
-                return ((string)(this["DatabasePassword"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CSMovimientoGranos")]
-        public string DatabaseCatalog {
-            get {
-                return ((string)(this["DatabaseCatalog"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Si")]
         public string DireccionEsUnCampoSi {
             get {
@@ -110,6 +74,61 @@ namespace CS_Importador_de_cartas_de_porte.Properties {
         public string CuitEntidadDestinatarioLocal {
             get {
                 return ((string)(this["CuitEntidadDestinatarioLocal"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("207581")]
+        public int NumeroPlantaAceitera {
+            get {
+                return ((int)(this["NumeroPlantaAceitera"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("23952")]
+        public int NumeroPlantaAcondicionador {
+            get {
+                return ((int)(this["NumeroPlantaAcondicionador"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.20.1")]
+        public string DatabaseDatasource {
+            get {
+                return ((string)(this["DatabaseDatasource"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("CSMovimientoGranos")]
+        public string DatabaseDatabase {
+            get {
+                return ((string)(this["DatabaseDatabase"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sa")]
+        public string DatabaseUserId {
+            get {
+                return ((string)(this["DatabaseUserId"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AWoGVPIe8Uox9rNPH5BRrd4iGlJPpJw7/CB2TMez50Sf9CcY4hw+rwITtkC3+tVVF85965IHca1GoIvc2" +
+            "8HAycrPre8lnjhTsF23x9Dujyq95giFs9QEtaz14o+cZdCA")]
+        public string DatabasePassword {
+            get {
+                return ((string)(this["DatabasePassword"]));
             }
         }
     }

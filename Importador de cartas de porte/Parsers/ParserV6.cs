@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace CS_Importador_de_cartas_de_porte
 {
@@ -16,6 +17,7 @@ namespace CS_Importador_de_cartas_de_porte
         internal const string CtgPrefijo = "CTG:";
 
         // Sección A - Intervinientes
+        internal const string SeccionA = "A - INTERVINIENTES";
         internal const string TitularPrefijo = "Titular Carta de Porte:";
         internal const string RemitenteComercialProductorPrefijo = "Remitente Comercial Productor:";
         internal const string RemitenteComercialVentaPrimariaPrefijo = "Rte. Comercial Venta Primaria:";
@@ -34,30 +36,19 @@ namespace CS_Importador_de_cartas_de_porte
         internal const string IntermediarioDeFletePrefijo = "Intermediario de flete :";
 
         // Sección B - Grano / Especie
+        internal const string SeccionB = "B - GRANO / ESPECIE";
         internal const string GranoTipoPrefijo = "Tipo: ";
         internal const string CampaniaPrefijo = "Campaña: ";
         internal const string PesoBrutoPrefijo = "Peso Bruto ";
         internal const string PesoTaraPrefijo = "Peso Tara ";
         internal const string PesoNetoPrefijo = "Peso Neto ";
 
-        // Sección C - Procedencia
-        internal const string ProcedenciaEsUnCampoPrefijo = "Es un campo:";
-        internal const string ProcedenciaDireccionPrefijo = "Dirección:";
-        internal const string ProcedenciaLocalidadPrefijo = "Localidad:";
-        internal const string ProcedenciaLocalidadSufijo = "Provincia:";
-        internal const string ProcedenciaProvinciaPrefijo = "Provincia:";
-
-        // Sección D - Destino de la mercadería
-        internal const string DestinoEsUnCampoPrefijo = "Es un campo:";
-        internal const string DestinoEsUnCampoSufijo = "N° Planta";
-        internal const string DestinoNumeroPlantaPrefijo = "N° Planta";
-        internal const string DestinoNumeroPlantaSufijo = "Dirección:";
-        internal const string DestinoDireccionPrefijo = "Dirección:";
-        internal const string DestinoLocalidadPrefijo = "Localidad:";
-        internal const string DestinoLocalidadSufijo = "Provincia:";
-        internal const string DestinoProvinciaPrefijo = "Provincia:";
+        // Secciones
+        private const string SeccionC = "C - PROCEDENCIA";
+        private const string SeccionD = "D - DESTINO DE LA MERCADERÍA";
 
         // Sección E - Datos del transporte
+        internal const string SeccionE = "E - DATOS DEL TRANSPORTE";
         internal const string DominiosPrefijo = "Dominios:";
         internal const string KmsARecorrerPrefijo = "Kms. a recorrer:";
         internal const string TarifaDeReferenciaPrefijo = "Tarifa de Referencia:";
@@ -65,6 +56,7 @@ namespace CS_Importador_de_cartas_de_porte
         internal const string TarifaPrefijo = "Tarifa:";
 
         // Sección G - Descarga
+        internal const string SeccionG = "G - DESCARGA";
         internal const string FechaArriboPrefijo = "Fecha Arribo:";
         internal const string FechaArriboSufijo = "Peso Bruto (kg):";
         internal const string FechaDescargaPrefijo = "Fecha Descarga:";
@@ -95,11 +87,11 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 return false;
             }
-            if (!ProcesarTextoSeccionC(texto, cartaDePorte, ref index))
+            if (!ProcesarTextoSeccionC(texto, cartaDePorte))
             {
                 return false;
             }
-            if (!ProcesarTextoSeccionD(texto, cartaDePorte, ref index))
+            if (!ProcesarTextoSeccionD(texto, cartaDePorte))
             {
                 return false;
             }
@@ -107,9 +99,8 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 return false;
             }
-
-            // Si es una carta de salida, no proceso la sección de descarga
-            if (cartaDePorte.TitularCartaDePorte.Substring(0, 11) != Properties.Settings.Default.CuitEntidadDestinatarioLocal && !ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
+            DetectarTipoDeCartaDePorte(cartaDePorte);
+            if (cartaDePorte.EsEntrada && !ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
             {
                 MessageBox.Show($"CPE nº {cartaDePorte.Numero}: Es una carta de porte de entrada pero no tiene los datos de descarga.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
@@ -348,83 +339,67 @@ namespace CS_Importador_de_cartas_de_porte
         }
 
         // Sección C - Procedencia
-        private static bool ProcesarTextoSeccionC(string texto, CartaDePorte cartaDePorte, ref int index)
+        private static bool ProcesarTextoSeccionC(string texto, CartaDePorte cartaDePorte)
         {
-            string valorEncontrado;
+            const string NumeroPlanta = "N° Planta";
+            const string NumeroPlantaInicio = "Es un campo: ";
+            const string NumeroPlantaFin = " ";
+            const string LocalidadInicio = "Localidad: ";
+            const string LocalidadFin = "Provincia: ";
+            const string ProvinciaInicio = "Provincia: ";
 
-            // Es un campo
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, Finalizacion, ref index, Finalizacion);
-            if (index == -1)
+            string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionC, SeccionD).Split('\n');
+            if (filas[2].Contains(NumeroPlanta))
             {
-                return false;
+                cartaDePorte.ProcedenciaNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], NumeroPlantaInicio, NumeroPlantaFin);
             }
-            cartaDePorte.ProcedenciaEsUnCampo = valorEncontrado;
-
-            // Localidad
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, ProcedenciaLocalidadPrefijo, ref index, ProcedenciaLocalidadSufijo);
-            if (index == -1)
+            else
             {
-                return false;
+                cartaDePorte.ProcedenciaNumeroPlanta = string.Empty;
             }
-            cartaDePorte.ProcedenciaLocalidad = valorEncontrado;
-
-            // Provincia
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, ProcedenciaProvinciaPrefijo, ref index, Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.ProcedenciaProvincia = valorEncontrado;
-
+            cartaDePorte.ProcedenciaEsUnCampo = filas[2].Substring(0, 2);
+            cartaDePorte.ProcedenciaLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[3], LocalidadInicio, LocalidadFin);
+            cartaDePorte.ProcedenciaProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[3], ProvinciaInicio);
             return true;
         }
 
         // Sección D - Destino de la mercadería
-        private static bool ProcesarTextoSeccionD(string texto, CartaDePorte cartaDePorte, ref int index)
+        private static bool ProcesarTextoSeccionD(string texto, CartaDePorte cartaDePorte)
         {
-            string valorEncontrado;
+            const string EsUnCampoInicio = "Es un campo: ";
+            const string NumeroPlantaInicio = "N° Planta ";
+            const string NumeroPlantaFin = " ";
+            const string LocalidadInicio = "Localidad: ";
+            const string LocalidadFin = "Provincia: ";
+            const string ProvinciaInicio = "Provincia: ";
 
-            // Es un campo
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, DestinoEsUnCampoPrefijo, ref index, DestinoEsUnCampoSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoEsUnCampo = valorEncontrado;
-
-            // Número de planta
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, DestinoNumeroPlantaPrefijo, ref index, DestinoNumeroPlantaSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoNumeroPlanta = valorEncontrado;
-
-            // Dirección
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, DestinoDireccionPrefijo, ref index, Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoDireccion = valorEncontrado;
-
-            // Localidad
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, DestinoLocalidadPrefijo, ref index, DestinoLocalidadSufijo);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoLocalidad = valorEncontrado;
-
-            // Provincia
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, DestinoProvinciaPrefijo, ref index, Finalizacion);
-            if (index == -1)
-            {
-                return false;
-            }
-            cartaDePorte.DestinoProvincia = valorEncontrado;
-
+            string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionD, SeccionE).Split('\n');
+            cartaDePorte.DestinoEsUnCampo = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[1], EsUnCampoInicio).Substring(0, 2);
+            cartaDePorte.DestinoNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], NumeroPlantaInicio, NumeroPlantaFin);
+            cartaDePorte.DestinoLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[2], LocalidadInicio, LocalidadFin);
+            cartaDePorte.DestinoProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[2], ProvinciaInicio);
             return true;
+        }
+
+        // Tipo de carta de porte
+        private static void DetectarTipoDeCartaDePorte(CartaDePorte cartaDePorte)
+        {
+            if (cartaDePorte.TitularCartaDePorte.Substring(0, 11) != Properties.Settings.Default.CuitEntidadDestinatarioLocal)
+            {
+                cartaDePorte.EsEntrada = true;
+                cartaDePorte.EsSalida = false;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(cartaDePorte.DestinoNumeroPlanta) && int.TryParse(cartaDePorte.DestinoNumeroPlanta, out int destinoNumeroPlanta))
+                {
+                    cartaDePorte.EsEntrada = destinoNumeroPlanta == Properties.Settings.Default.NumeroPlantaAcondicionador || destinoNumeroPlanta == Properties.Settings.Default.NumeroPlantaAceitera;
+                }
+                if (!string.IsNullOrEmpty(cartaDePorte.ProcedenciaNumeroPlanta) && int.TryParse(cartaDePorte.ProcedenciaNumeroPlanta, out int procedenciaNumeroPlanta))
+                {
+                    cartaDePorte.EsSalida = procedenciaNumeroPlanta == Properties.Settings.Default.NumeroPlantaAcondicionador || procedenciaNumeroPlanta == Properties.Settings.Default.NumeroPlantaAceitera;
+                }
+            }
         }
 
         // Sección E - Datos del transporte

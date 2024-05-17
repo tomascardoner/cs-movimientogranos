@@ -6,6 +6,42 @@
         internal const string CuitYNombreSeparador = " - ";
         internal const string DominiosSeparador = " - ";
 
+        internal static string ObtenerTextoDesdeDelimitador(string texto, string delimitador)
+        {
+            int inicioDelimitador = texto.IndexOf(delimitador);
+            if (inicioDelimitador > -1)
+            {
+                int finDelimitador = inicioDelimitador + delimitador.Length;
+                return texto.Substring(finDelimitador);
+            }
+            return string.Empty;
+        }
+
+        internal static string ObtenerTextoLimpioDesdeDelimitador(string texto, string delimitador)
+        { 
+            return ObtenerTextoDesdeDelimitador(texto, delimitador).Replace("\n", string.Empty).Trim();
+        }
+
+        internal static string ObtenerTextoEntreDelimitadores(string texto, string delimitadorInicial, string delimitadorFinal)
+        {
+            int inicioDelimitadorInicial = texto.IndexOf(delimitadorInicial);
+            if (inicioDelimitadorInicial > -1)
+            {
+                int finDelimitadorInicial = inicioDelimitadorInicial + delimitadorInicial.Length;
+                int inicioDelimitadorFinal = texto.IndexOf(delimitadorFinal, finDelimitadorInicial);
+                if (inicioDelimitadorFinal > 0)
+                {
+                    return texto.Substring(finDelimitadorInicial, inicioDelimitadorFinal - finDelimitadorInicial);
+                }
+            }
+            return string.Empty;
+        }
+
+        internal static string ObtenerTextoLimpioEntreDelimitadores(string texto, string delimitadorInicial, string delimitadorFinal)
+        {
+            return ObtenerTextoEntreDelimitadores(texto, delimitadorInicial, delimitadorFinal).Replace("\n", string.Empty).Trim();
+        }
+
         internal static string ObtenerValor(string textoOriginal, string textoABuscar, ref int indice, string textoFin)
         {
             indice = textoOriginal.IndexOf(textoABuscar, indice);

@@ -10,7 +10,10 @@ namespace CS_Importador_de_cartas_de_porte
     public partial class FormVerificarCartasDePorte : Form
     {
         string archivoOrigen;
-        Database.Database database = new Database.Database();
+        private CardonerSistemas.Database.Ado.SqlServer database = new CardonerSistemas.Database.Ado.SqlServer()
+        {
+            ConnectionString = Program.DatabaseConnectionString
+        };
 
         public FormVerificarCartasDePorte()
         {
@@ -90,8 +93,8 @@ namespace CS_Importador_de_cartas_de_porte
 
             foreach (CartaDePorteEnAfip cartaDePorteEnAfip  in cartasDePorteEnAfip)
             {
-                Database.Movimiento_Cereal movimiento_Cereal = new Database.Movimiento_Cereal();
-                if (!movimiento_Cereal.ObtenerPorCtg(database, cartaDePorteEnAfip.cpe))
+                Database.MovimientoCereal movimientoCereal = new Database.MovimientoCereal();
+                if (!Database.MovimientoCerealMetodos.ObtenerPorCtg(database, cartaDePorteEnAfip.cpe, movimientoCereal))
                 {
                     // Se produjo un error al leer la base de datos
                     EnableControls(true);
@@ -104,16 +107,16 @@ namespace CS_Importador_de_cartas_de_porte
                 switch (cartaDePorteEnAfip.estado)
                 {
                     case CartaDePorteEstadoAnulada:
-                        if (movimiento_Cereal.IsFound && movimiento_Cereal.IDCartaPorte_MotivoAnulacion == null)
+                        if (movimientoCereal.IsFound && movimientoCereal.IDCartaPorte_MotivoAnulacion == null)
                         {
                             listboxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: está anulada en Afip pero no en CS-Movimiento de Granos.");
-                        };
+                        }
                         break;
 
                     case CartaDePorteEstadoConfirmada:
-                        if (movimiento_Cereal.IsFound)
+                        if (movimientoCereal.IsFound)
                         {
-                            if (movimiento_Cereal.IDCartaPorte_MotivoAnulacion != null)
+                            if (movimientoCereal.IDCartaPorte_MotivoAnulacion != null)
                             {
                                 listboxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: está confirmada en Afip y anulada en CS-Movimiento de Granos.");
                             }
@@ -121,14 +124,12 @@ namespace CS_Importador_de_cartas_de_porte
                         else
                         {
                             listboxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: no existe en CS-Movimiento de Granos.");
-                        };
+                        }
                         break;
 
                     default:
                         break;
                 }
-
-                movimiento_Cereal = null;
 
                 if (progressbarMain.Value > 0)
                 {
@@ -146,12 +147,10 @@ namespace CS_Importador_de_cartas_de_porte
             if (listboxCartasDePorte.Items.Count == 0)
             {
                 MessageBox.Show($"Se han verificado {cartasDePorteEnAfip.Count} cartas de porte y todas están correctas.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
             }
             else
             {
                 MessageBox.Show($"Se han verificado {cartasDePorteEnAfip.Count} cartas de porte.\nVerifique la lista con las observaciones.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
             }
         }
 

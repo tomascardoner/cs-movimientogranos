@@ -79,7 +79,7 @@ BEGIN
 
 	SELECT TOP 1 IDEntidad, IDOrigenDestino, Nombre, Direccion, IDLocalidad, Kilometro, ONCCA_Codigo, ControlaStock, ConvierteEnSubProducto, RealizaAnalisis, RealizaAnalisisIPRO, Activo
 		FROM Entidad_OrigenDestino
-		WHERE IDEntidad = @IDEntidad
+		WHERE IDEntidad = @IDEntidad AND ONCCA_Codigo IS NULL
 		ORDER BY IDOrigenDestino
 
 END

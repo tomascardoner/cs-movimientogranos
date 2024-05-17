@@ -3,8 +3,8 @@
     internal static class Constantes
     {
         // Tipos de movimientos
-        internal const string MovimientoTipoEntrada = "E";
-        internal const string MovimientoTipoSalida = "S";
+        internal const char MovimientoTipoEntrada = 'E';
+        internal const char MovimientoTipoSalida = 'S';
 
         // Identificación de cartas de porte
         internal const string ArchivosPatronBusqueda = "cpe-?????-???????*.pdf";

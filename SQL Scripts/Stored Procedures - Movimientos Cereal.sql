@@ -156,6 +156,30 @@ GO
 
 -- =============================================
 -- Author:		Tomás A. Cardoner
+-- Create date: 2024-05-16
+-- Description:	Obtiene los datos de un Movimiento de Cereal a partir del CTG y del Tipo
+-- =============================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Movimiento_Cereal_GetByCtgYTipo') AND type in (N'P', N'PC'))
+	DROP PROCEDURE dbo.usp_Movimiento_Cereal_GetByCtgYTipo
+GO
+
+CREATE PROCEDURE usp_Movimiento_Cereal_GetByCtgYTipo
+	@Ctg bigint,
+	@Tipo char(1)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	SELECT IDMovimiento_Cereal, Tipo, ComprobanteNumero, ComprobanteNumeroConFormato, IDCartaPorte_Talonario, CTGNumero, FechaCarga, IDEntidad_Titular, IDEntidad_Intermediario, IDEntidad_RemitenteComercial, IDEntidad_Corredor, IDEntidad_Entregador, IDEntidad_Destinatario, IDEntidad_Destino, IDEntidad_Transportista, IDEntidad_Chofer, IDCosecha, IDCereal, IDContrato, PesoBruto, PesoTara, PesoNeto, Volatil, Humedad, Zaranda, MermaVolatilKilogramo, MermaHumedadPorcentaje, MermaHumedadKilogramo, MermaZarandaKilogramo, PesoFinal, IDOrigenDestino_Origen, IDOrigenDestino_Destino, CTGCancelacion, TransporteDominioCamion, TransporteDominioAcoplado, TransporteKilometro, TransporteTarifaReferencia, TransporteTarifa, FechaHoraArribo, FechaHoraDescarga, DeclaraIPRO, IDCartaPorte_MotivoAnulacion, Notas, Calculo_TarifaIndice, IDUsuarioCreacion, FechaHoraCreacion, IDUsuarioModificacion, FechaHoraModificacion, FechaHoraLiquidacionServicio, FechaHoraEnvioBolsaTech, Certificado, KilogramoAplicado
+		FROM Movimiento_Cereal
+		WHERE CTGNumero = @Ctg AND Tipo = @Tipo
+END
+GO
+
+
+
+-- =============================================
+-- Author:		Tomás A. Cardoner
 -- Create date: 2013-08-28
 -- Modification: 2021-05-19 - Se agregó el redondeo de kgs en los cálculos
 -- Description:	Calcula las mermas para un Movimiento de Cereal

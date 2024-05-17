@@ -1,7 +1,9 @@
 ﻿using CardonerSistemas;
+using CardonerSistemas.Database.Ado;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -12,7 +14,7 @@ namespace CS_Importador_de_cartas_de_porte
 
         #region Declaraciones
 
-        internal enum ResultadosProcesamiento
+        internal enum ResultadosProcesamiento : byte
         {
             Agregada,
             Modificada,
@@ -37,24 +39,63 @@ namespace CS_Importador_de_cartas_de_porte
 
         #region Procesamiento general
 
-        internal static ResultadosProcesamiento Procesar(string carpetaOrigen, string archivo, byte idCosecha, Database.Database database)
+        internal static List<ResultadosProcesamiento> Procesar(string carpetaOrigen, string archivo, byte idCosecha, SqlServer database)
         {
-            CartaDePorte cartaDePorte = new CartaDePorte();
-            Database.Movimiento_Cereal movimiento_Cereal = new Database.Movimiento_Cereal();
-
-            cartaDePorte.ArchivoNombre = archivo;
+            List<ResultadosProcesamiento> resultadosProcesamientos = new List<ResultadosProcesamiento>();
+            CartaDePorte cartaDePorte = new CartaDePorte
+            {
+                ArchivoNombre = archivo
+            };
 
             if (!AbrirArchivoYLeerTexto(carpetaOrigen, archivo, cartaDePorte))
             {
-                return ResultadosProcesamiento.Error;
+                resultadosProcesamientos.Add(ResultadosProcesamiento.Error);
+                return resultadosProcesamientos;
             }
 
-            if (!ConvertirDatosAObjetoDestino(cartaDePorte, movimiento_Cereal, idCosecha, database))
+            if (!cartaDePorte.EsEntrada && !cartaDePorte.EsSalida)
             {
-                return ResultadosProcesamiento.Error;
+                MessageBox.Show($"CPE nº {cartaDePorte.Numero}: No corresponde a una entrada o salida a ninguna de las plantas.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                resultadosProcesamientos.Add(ResultadosProcesamiento.SinCambios);
+                return resultadosProcesamientos;
             }
-
-            return VerificarSiExisteCartaCompararDatosYActualizar(database, movimiento_Cereal);
+            if (cartaDePorte.EsEntrada)
+            {
+                Database.MovimientoCereal movimientoCereal = new Database.MovimientoCereal
+                {
+                    Tipo = Constantes.MovimientoTipoEntrada
+                };
+                if (!ConvertirDatosAObjetoDestino(cartaDePorte, movimientoCereal, idCosecha, database))
+                {
+                    resultadosProcesamientos.Add(ResultadosProcesamiento.Error);
+                    return resultadosProcesamientos;
+                }
+                ResultadosProcesamiento resultado = VerificarSiExisteCartaCompararDatosYActualizar(database, movimientoCereal);
+                resultadosProcesamientos.Add(resultado);
+                if (resultado == ResultadosProcesamiento.Error)
+                {
+                    return resultadosProcesamientos;
+                }
+            }
+            if (cartaDePorte.EsSalida)
+            {
+                Database.MovimientoCereal movimientoCereal = new Database.MovimientoCereal
+                {
+                    Tipo = Constantes.MovimientoTipoSalida
+                };
+                if (!ConvertirDatosAObjetoDestino(cartaDePorte, movimientoCereal, idCosecha, database))
+                {
+                    resultadosProcesamientos.Add(ResultadosProcesamiento.Error);
+                    return resultadosProcesamientos;
+                }
+                ResultadosProcesamiento resultado = VerificarSiExisteCartaCompararDatosYActualizar(database, movimientoCereal);
+                resultadosProcesamientos.Add(resultado);
+                if (resultado == ResultadosProcesamiento.Error)
+                {
+                    return resultadosProcesamientos;
+                }
+            }
+            return resultadosProcesamientos;
         }
 
         #endregion
@@ -210,7 +251,7 @@ namespace CS_Importador_de_cartas_de_porte
             return valor;
         }
 
-        private static int? ProcesarEntidad(Database.Database database, string valor, TiposEntidad tipoEntidad)
+        private static int? ProcesarEntidad(SqlServer database, string valor, TiposEntidad tipoEntidad)
         {
             if (!string.IsNullOrWhiteSpace(valor))
             {
@@ -225,7 +266,7 @@ namespace CS_Importador_de_cartas_de_porte
 
                     // Busco la entidad en la base de datos
                     Database.Entidad entidad = new Database.Entidad();
-                    if (!entidad.ObtenerPorCuit(database, cuitLong))
+                    if (!Database.EntidadMetodos.ObtenerPorCuit(database, cuitLong, entidad))
                     {
                         return null;
                     }
@@ -285,7 +326,7 @@ namespace CS_Importador_de_cartas_de_porte
                         // Si corresponde, actualizo
                         if (actualizar)
                         {
-                            entidad.Actualizar(database);
+                            Database.EntidadMetodos.Actualizar(database, entidad);
                         }
                     }
                     else
@@ -326,7 +367,7 @@ namespace CS_Importador_de_cartas_de_porte
                                 break;
                         }
                         entidad.Activo = true;
-                        entidad.Actualizar(database);
+                        Database.EntidadMetodos.Actualizar(database, entidad);
                     }
                     return entidad.IDEntidad;
                 }
@@ -338,39 +379,39 @@ namespace CS_Importador_de_cartas_de_porte
 
         #region Conversión de datos
 
-        private static bool ConvertirDatosAObjetoDestino(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal, byte idCosecha, Database.Database database)
+        private static bool ConvertirDatosAObjetoDestino(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal, byte idCosecha, SqlServer database)
         {
-            if (!ConvertiDatosAObjetoDestinoEncabezado(cartaDePorte, movimiento_Cereal))
+            if (!ConvertiDatosAObjetoDestinoEncabezado(cartaDePorte, movimientoCereal))
             {
                 return false;
             }
 
-            if (!ConvertiDatosAObjetoDestinoSeccionA(cartaDePorte, movimiento_Cereal, database))
+            if (!ConvertiDatosAObjetoDestinoSeccionA(cartaDePorte, movimientoCereal, database))
             {
                 return false;
             }
 
-            if (!ConvertiDatosAObjetoDestinoSeccionB(cartaDePorte, movimiento_Cereal, idCosecha, database))
+            if (!ConvertiDatosAObjetoDestinoSeccionB(cartaDePorte, movimientoCereal, idCosecha, database))
             {
                 return false;
             }
 
-            if (!ConvertiDatosAObjetoDestinoSeccionC(cartaDePorte, movimiento_Cereal, database))
+            if (!ConvertiDatosAObjetoDestinoSeccionC(cartaDePorte, movimientoCereal, database))
             {
                 return false;
             }
 
-            if (!ConvertiDatosAObjetoDestinoSeccionD(cartaDePorte, movimiento_Cereal, database))
+            if (!ConvertiDatosAObjetoDestinoSeccionD(cartaDePorte, movimientoCereal, database))
             {
                 return false;
             }
 
-            if (!ConvertiDatosAObjetoDestinoSeccionE(cartaDePorte, movimiento_Cereal))
+            if (!ConvertiDatosAObjetoDestinoSeccionE(cartaDePorte, movimientoCereal))
             {
                 return false;
             }
 
-            if (!ConvertiDatosAObjetoDestinoSeccionG(cartaDePorte, movimiento_Cereal))
+            if (!ConvertiDatosAObjetoDestinoSeccionG(cartaDePorte, movimientoCereal))
             {
                 return false;
             }
@@ -378,24 +419,24 @@ namespace CS_Importador_de_cartas_de_porte
             // Motivo de anulación
             if (cartaDePorte.ArchivoNombre.Contains(Constantes.ArchivosSufijoAnulada))
             {
-                movimiento_Cereal.IDCartaPorte_MotivoAnulacion = Properties.Settings.Default.IdCartaPorteMotivoAnulacion;
+                movimientoCereal.IDCartaPorte_MotivoAnulacion = Properties.Settings.Default.IdCartaPorteMotivoAnulacion;
             }
 
             // Certificado
-            if (movimiento_Cereal.Tipo == Constantes.MovimientoTipoEntrada)
+            if (movimientoCereal.Tipo == Constantes.MovimientoTipoEntrada)
             {
-                movimiento_Cereal.Certificado = false;
+                movimientoCereal.Certificado = false;
             }
 
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoEncabezado(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal)
+        private static bool ConvertiDatosAObjetoDestinoEncabezado(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal)
         {
             // Comprobante número
             if (!string.IsNullOrWhiteSpace(cartaDePorte.Numero) && long.TryParse(cartaDePorte.Numero.Trim().Replace("-", ""), out long longTemp))
             {
-                movimiento_Cereal.ComprobanteNumero = longTemp;
+                movimientoCereal.ComprobanteNumero = longTemp;
             }
 
             // CTG
@@ -403,96 +444,86 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 if (long.TryParse(cartaDePorte.Ctg, out longTemp))
                 {
-                    movimiento_Cereal.CTGNumero = longTemp;
+                    movimientoCereal.CTGNumero = longTemp;
                     if (longTemp == 0)
                     {
-                        MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return false;
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se pudo obtener el CTG.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
             // Fecha de carga
             if (!(string.IsNullOrWhiteSpace(cartaDePorte.Fecha) || !DateTime.TryParse(cartaDePorte.Fecha, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out DateTime datetimeTemp)))
             {
-                movimiento_Cereal.FechaCarga = datetimeTemp;
+                movimientoCereal.FechaCarga = datetimeTemp;
             }
 
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoSeccionA(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal, Database.Database database)
+        private static bool ConvertiDatosAObjetoDestinoSeccionA(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal, SqlServer database)
         {
             // Entidad titular
-            movimiento_Cereal.IDEntidad_Titular = ProcesarEntidad(database, cartaDePorte.TitularCartaDePorte, TiposEntidad.Titular).Value;
-
-            // Tipo de carta de acuerdo al Cuit del destinatario
-            if (movimiento_Cereal.IDEntidad_Titular == Properties.Settings.Default.IdEntidadDestinatarioLocal)
-            {
-                movimiento_Cereal.Tipo = Constantes.MovimientoTipoSalida;
-            }
-            else
-            {
-                movimiento_Cereal.Tipo = Constantes.MovimientoTipoEntrada;
-            }
+            movimientoCereal.IDEntidad_Titular = ProcesarEntidad(database, cartaDePorte.TitularCartaDePorte, TiposEntidad.Titular).Value;
 
             // Entidad intermediario y entidad remitente comercial
             if (!string.IsNullOrWhiteSpace(cartaDePorte.RemitenteComercialProductor) && !string.IsNullOrWhiteSpace(cartaDePorte.RteComercialVentaPrimaria))
             {
                 // Entidad intermediario
-                movimiento_Cereal.IDEntidad_Intermediario = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.Intermediario);
+                movimientoCereal.IDEntidad_Intermediario = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.Intermediario);
 
                 // Entidad remitente comercial
-                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
+                movimientoCereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
             }
             else if (!string.IsNullOrWhiteSpace(cartaDePorte.RemitenteComercialProductor))
             {
                 // Entidad remitente comercial
-                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.RemitenteComercial);
+                movimientoCereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RemitenteComercialProductor, TiposEntidad.RemitenteComercial);
             }
             else if (!string.IsNullOrWhiteSpace(cartaDePorte.RteComercialVentaPrimaria))
             {
                 // Entidad remitente comercial
-                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
+                movimientoCereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaPrimaria, TiposEntidad.RemitenteComercial);
             }
             else if (!string.IsNullOrWhiteSpace(cartaDePorte.RteComercialVentaSecundaria))
             {
                 // Entidad remitente comercial
-                movimiento_Cereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaSecundaria, TiposEntidad.RemitenteComercial);
+                movimientoCereal.IDEntidad_RemitenteComercial = ProcesarEntidad(database, cartaDePorte.RteComercialVentaSecundaria, TiposEntidad.RemitenteComercial);
             }
 
             // Entidad corredor
-            movimiento_Cereal.IDEntidad_Corredor = ProcesarEntidad(database, cartaDePorte.CorredorVentaPrimaria, TiposEntidad.Corredor);
+            movimientoCereal.IDEntidad_Corredor = ProcesarEntidad(database, cartaDePorte.CorredorVentaPrimaria, TiposEntidad.Corredor);
 
             // Entidad entregador
-            movimiento_Cereal.IDEntidad_Entregador = ProcesarEntidad(database, cartaDePorte.RepresentanteEntregador, TiposEntidad.Entregador);
+            movimientoCereal.IDEntidad_Entregador = ProcesarEntidad(database, cartaDePorte.RepresentanteEntregador, TiposEntidad.Entregador);
 
             // Entidad destinatario
-            movimiento_Cereal.IDEntidad_Destinatario = ProcesarEntidad(database, cartaDePorte.Destinatario, TiposEntidad.Destinatario);
+            movimientoCereal.IDEntidad_Destinatario = ProcesarEntidad(database, cartaDePorte.Destinatario, TiposEntidad.Destinatario);
 
             // Entidad destino
-            movimiento_Cereal.IDEntidad_Destino = ProcesarEntidad(database, cartaDePorte.Destino, TiposEntidad.Destino);
+            movimientoCereal.IDEntidad_Destino = ProcesarEntidad(database, cartaDePorte.Destino, TiposEntidad.Destino);
 
             // Entidad transportista
-            movimiento_Cereal.IDEntidad_Transportista = ProcesarEntidad(database, cartaDePorte.EmpresaTransportista, TiposEntidad.Transportista);
+            movimientoCereal.IDEntidad_Transportista = ProcesarEntidad(database, cartaDePorte.EmpresaTransportista, TiposEntidad.Transportista);
 
             // Entidad chofer
-            movimiento_Cereal.IDEntidad_Chofer = ProcesarEntidad(database, cartaDePorte.Chofer, TiposEntidad.Chofer);
+            movimientoCereal.IDEntidad_Chofer = ProcesarEntidad(database, cartaDePorte.Chofer, TiposEntidad.Chofer);
 
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoSeccionB(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal, byte idCosecha, Database.Database database)
+        private static bool ConvertiDatosAObjetoDestinoSeccionB(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal, byte idCosecha, SqlServer database)
         {
             int intTemp;
 
@@ -500,18 +531,18 @@ namespace CS_Importador_de_cartas_de_porte
             if (!string.IsNullOrWhiteSpace(cartaDePorte.GranoEspecie))
             {
                 Database.Cereal cereal = new Database.Cereal();
-                if (!cereal.ObtenerPorNombre(database, cartaDePorte.GranoEspecie))
+                if (!Database.CerealMetodos.ObtenerPorNombre(database, cartaDePorte.GranoEspecie, cereal))
                 {
                     return false;
                 }
                 if (cereal.IsFound)
                 {
-                    movimiento_Cereal.IDCereal = cereal.IDCereal;
-                    movimiento_Cereal.Volatil = cereal.MermaVolatil;
+                    movimientoCereal.IDCereal = cereal.IDCereal;
+                    movimientoCereal.Volatil = cereal.MermaVolatil;
                 }
                 else
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el cereal.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se encontró el cereal.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -519,44 +550,44 @@ namespace CS_Importador_de_cartas_de_porte
             // Cosecha
             if (string.IsNullOrWhiteSpace(cartaDePorte.Campania))
             { 
-                movimiento_Cereal.IDCosecha = idCosecha;
+                movimientoCereal.IDCosecha = idCosecha;
             }
             else
             {
                 Database.Cosecha cosecha = new Database.Cosecha();
-                if (!cosecha.ObtenerPorCodigoOncca(database, cartaDePorte.Campania))
+                if (!Database.CosechaMetodos.ObtenerPorCodigoOncca(database, cartaDePorte.Campania, cosecha))
                 {
                     return false;
                 }
                 if (cosecha.IsFound)
                 {
-                    movimiento_Cereal.IDCosecha = cosecha.IDCosecha;
+                    movimientoCereal.IDCosecha = cosecha.IDCosecha;
                 }
                 else
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró la cosecha.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se encontró la cosecha.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
 
             // Pesaje
-            if (movimiento_Cereal.Tipo == Constantes.MovimientoTipoEntrada)
+            if (movimientoCereal.Tipo == Constantes.MovimientoTipoEntrada)
             {
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoBruto) && int.TryParse(cartaDePorte.DescargaPesoBruto, out intTemp))
                 {
-                    movimiento_Cereal.PesoBruto = intTemp;
+                    movimientoCereal.PesoBruto = intTemp;
                 }
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoTara) && int.TryParse(cartaDePorte.DescargaPesoTara, out intTemp))
                 {
-                    movimiento_Cereal.PesoTara = intTemp;
+                    movimientoCereal.PesoTara = intTemp;
                 }
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.DescargaPesoNeto) && int.TryParse(cartaDePorte.DescargaPesoNeto, out intTemp))
                 {
-                    movimiento_Cereal.PesoNeto = intTemp;
+                    movimientoCereal.PesoNeto = intTemp;
                 }
-                if (movimiento_Cereal.PesoBruto == 0 && movimiento_Cereal.PesoTara == 0 && movimiento_Cereal.PesoNeto == 0)
+                if (movimientoCereal.PesoBruto == 0 && movimientoCereal.PesoTara == 0 && movimientoCereal.PesoNeto == 0)
                 {
-                    MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se detectaron los kilogramos, es posible que esta carta esté anulada o sin confirmar.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se detectaron los kilogramos, es posible que esta carta esté anulada o sin confirmar.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -564,27 +595,27 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoBruto) && int.TryParse(cartaDePorte.PesoBruto, out intTemp))
                 {
-                    movimiento_Cereal.PesoBruto = intTemp;
+                    movimientoCereal.PesoBruto = intTemp;
                 }
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoTara) && int.TryParse(cartaDePorte.PesoTara, out intTemp))
                 {
-                    movimiento_Cereal.PesoTara = intTemp;
+                    movimientoCereal.PesoTara = intTemp;
                 }
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.PesoNeto) && int.TryParse(cartaDePorte.PesoNeto, out intTemp))
                 {
-                    movimiento_Cereal.PesoNeto = intTemp;
+                    movimientoCereal.PesoNeto = intTemp;
                 }
             }
-            if (movimiento_Cereal.PesoBruto - movimiento_Cereal.PesoTara != movimiento_Cereal.PesoNeto)
+            if (movimientoCereal.PesoBruto - movimientoCereal.PesoTara != movimientoCereal.PesoNeto)
             {
-                MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: El peso neto no coincide con el peso bruto - peso tara.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: El peso neto no coincide con el peso bruto - peso tara.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoSeccionC(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal, Database.Database database)
+        private static bool ConvertiDatosAObjetoDestinoSeccionC(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal, SqlServer database)
         {
             // Origen
             if (!string.IsNullOrWhiteSpace(cartaDePorte.ProcedenciaEsUnCampo))
@@ -596,21 +627,21 @@ namespace CS_Importador_de_cartas_de_porte
                         // Buscar por número de planta
                         if (int.TryParse(cartaDePorte.ProcedenciaNumeroPlanta, out int intTemp))
                         {
-                            Database.Entidad_OrigenDestino origen = new Database.Entidad_OrigenDestino();
+                            Database.EntidadOrigenDestino origen = new Database.EntidadOrigenDestino();
                             while (true)
                             {
-                                if (!origen.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Titular, intTemp))
+                                if (!Database.EntidadOrigenDestinoMetodos.ObtenerPorCodigoOncca(database, movimientoCereal.IDEntidad_Titular, intTemp, origen))
                                 {
                                     return false;
                                 }
                                 if (origen.IsFound)
                                 {
-                                    movimiento_Cereal.IDOrigenDestino_Origen = origen.IDOrigenDestino;
+                                    movimientoCereal.IDOrigenDestino_Origen = origen.IDOrigenDestino;
                                     break;
                                 }
                                 else
                                 {
-                                    if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el origen con nº de planta {intTemp} perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                                    if (MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se encontró el origen con nº de planta {intTemp} perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                                     {
                                         break;
                                     }
@@ -626,21 +657,21 @@ namespace CS_Importador_de_cartas_de_porte
                 else
                 {
                     // Ver la forma de establecer Zona Rural, por ahora, seleccionar el primer origen disponible
-                    Database.Entidad_OrigenDestino origen = new Database.Entidad_OrigenDestino();
+                    Database.EntidadOrigenDestino origen = new Database.EntidadOrigenDestino();
                     while (true)
                     {
-                        if (!origen.ObtenerPrimero(database, movimiento_Cereal.IDEntidad_Titular))
+                        if (!Database.EntidadOrigenDestinoMetodos.ObtenerPrimeroSinNumeroPlanta(database, movimientoCereal.IDEntidad_Titular, origen))
                         {
                             return false;
                         }
                         if (origen.IsFound)
                         {
-                            movimiento_Cereal.IDOrigenDestino_Origen = origen.IDOrigenDestino;
+                            movimientoCereal.IDOrigenDestino_Origen = origen.IDOrigenDestino;
                             break;
                         }
                         else
                         {
-                            if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró ningún origen perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                            if (MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se encontró ningún origen perteneciente a {cartaDePorte.TitularCartaDePorte}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                             {
                                 break;
                             }
@@ -652,31 +683,35 @@ namespace CS_Importador_de_cartas_de_porte
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoSeccionD(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal, Database.Database database)
+        private static bool ConvertiDatosAObjetoDestinoSeccionD(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal, SqlServer database)
         {
             // Destino
             if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoEsUnCampo) && cartaDePorte.DestinoEsUnCampo.Trim() == Properties.Settings.Default.DireccionEsUnCampoNo)
             {
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoNumeroPlanta) && movimiento_Cereal.IDEntidad_Destino.HasValue)
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.DestinoNumeroPlanta) && movimientoCereal.IDEntidad_Destino.HasValue)
                 {
                     // Buscar por número de planta
                     if (int.TryParse(cartaDePorte.DestinoNumeroPlanta, out int intTemp))
                     {
-                        Database.Entidad_OrigenDestino destino = new Database.Entidad_OrigenDestino();
+                        Database.EntidadOrigenDestino destino = new Database.EntidadOrigenDestino();
                         while (true)
                         {
-                            if (!destino.ObtenerPorCodigoOncca(database, movimiento_Cereal.IDEntidad_Destino.Value, intTemp))
+                            if (!Database.EntidadOrigenDestinoMetodos.ObtenerPorCodigoOncca(database, movimientoCereal.IDEntidad_Destino.Value, intTemp, destino))
                             {
                                 return false;
                             }
                             if (destino.IsFound)
                             {
-                                movimiento_Cereal.IDOrigenDestino_Destino = destino.IDOrigenDestino;
+                                movimientoCereal.IDOrigenDestino_Destino = destino.IDOrigenDestino;
+                                if (movimientoCereal.Tipo == Constantes.MovimientoTipoEntrada && intTemp == Properties.Settings.Default.NumeroPlantaAceitera)
+                                {
+                                    movimientoCereal.Volatil = null;
+                                }
                                 break;
                             }
                             else
                             {
-                                if (MessageBox.Show($"CPE nº {movimiento_Cereal.ComprobanteNumero}: No se encontró el destino con nº de planta {intTemp} perteneciente a {cartaDePorte.Destino}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                                if (MessageBox.Show($"CPE nº {movimientoCereal.ComprobanteNumero}: No se encontró el destino con nº de planta {intTemp} perteneciente a {cartaDePorte.Destino}.\n\n¿Desea reintentar?", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
                                 {
                                     break;
                                 }
@@ -693,9 +728,8 @@ namespace CS_Importador_de_cartas_de_porte
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoSeccionE(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal)
+        private static bool ConvertiDatosAObjetoDestinoSeccionE(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal)
         {
-            decimal decimalTemp;
             string stringTemp1 = null;
             string stringTemp2 = null;
 
@@ -705,57 +739,55 @@ namespace CS_Importador_de_cartas_de_porte
                 CommonFunctions.Separar2Valores(cartaDePorte.Dominios, CommonFunctions.DominiosSeparador, ref stringTemp1, ref stringTemp2);
                 if (string.IsNullOrWhiteSpace(stringTemp1))
                 {
-                    movimiento_Cereal.TransporteDominioCamion = string.Empty;
+                    movimientoCereal.TransporteDominioCamion = string.Empty;
                 }
                 else
                 {
-                    movimiento_Cereal.TransporteDominioCamion = stringTemp1;
+                    movimientoCereal.TransporteDominioCamion = stringTemp1;
                 }
                 if (string.IsNullOrWhiteSpace(stringTemp2))
                 {
-                    movimiento_Cereal.TransporteDominioAcoplado = string.Empty;
+                    movimientoCereal.TransporteDominioAcoplado = string.Empty;
                 }
                 else
                 {
-                    movimiento_Cereal.TransporteDominioAcoplado = stringTemp2;
+                    movimientoCereal.TransporteDominioAcoplado = stringTemp2;
                 }
             }
 
             // Kilometros
             if (!string.IsNullOrWhiteSpace(cartaDePorte.KmsARecorrer) && short.TryParse(cartaDePorte.KmsARecorrer, out short shortTemp))
             {
-                movimiento_Cereal.TransporteKilometro = shortTemp;
+                movimientoCereal.TransporteKilometro = shortTemp;
             }
 
             // Tarifa de referencia
-            if (!string.IsNullOrWhiteSpace(cartaDePorte.TarifaDeReferencia) && decimal.TryParse(cartaDePorte.TarifaDeReferencia.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimalTemp))
+            if (!string.IsNullOrWhiteSpace(cartaDePorte.TarifaDeReferencia) && decimal.TryParse(cartaDePorte.TarifaDeReferencia.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimal decimalTemp))
             {
-                movimiento_Cereal.TransporteTarifaReferencia = decimalTemp;
+                movimientoCereal.TransporteTarifaReferencia = decimalTemp;
             }
 
             // Tarifa
             if (!string.IsNullOrWhiteSpace(cartaDePorte.Tarifa) && decimal.TryParse(cartaDePorte.Tarifa.Replace(".", Application.CurrentCulture.NumberFormat.NumberDecimalSeparator), out decimalTemp))
             {
-                movimiento_Cereal.TransporteTarifa = decimalTemp;
+                movimientoCereal.TransporteTarifa = decimalTemp;
             }
             return true;
         }
 
-        private static bool ConvertiDatosAObjetoDestinoSeccionG(CartaDePorte cartaDePorte, Database.Movimiento_Cereal movimiento_Cereal)
+        private static bool ConvertiDatosAObjetoDestinoSeccionG(CartaDePorte cartaDePorte, Database.MovimientoCereal movimientoCereal)
         {
-            DateTime datetimeTemp;
-
             // Fechas de arribo y de descarga
-            if (movimiento_Cereal.Tipo == Constantes.MovimientoTipoEntrada)
+            if (movimientoCereal.Tipo == Constantes.MovimientoTipoEntrada)
             {
-                if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaArribo) && DateTime.TryParse(cartaDePorte.FechaArribo, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out datetimeTemp))
+                if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaArribo) && DateTime.TryParse(cartaDePorte.FechaArribo, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out DateTime datetimeTemp))
                 {
                     // Le paso la fecha/hora sin los segundos porque si no, redondea los minutos porque el campo de destino es smalldatetime
-                    movimiento_Cereal.FechaHoraArribo = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0, DateTimeKind.Unspecified);
+                    movimientoCereal.FechaHoraArribo = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0, DateTimeKind.Unspecified);
                 }
                 if (!string.IsNullOrWhiteSpace(cartaDePorte.FechaDescarga) && DateTime.TryParse(cartaDePorte.FechaDescarga, CultureInfo.CreateSpecificCulture("es-AR"), DateTimeStyles.None, out datetimeTemp))
                 {
-                    movimiento_Cereal.FechaHoraDescarga = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0, DateTimeKind.Unspecified);
+                    movimientoCereal.FechaHoraDescarga = new DateTime(datetimeTemp.Year, datetimeTemp.Month, datetimeTemp.Day, datetimeTemp.Hour, datetimeTemp.Minute, 0, DateTimeKind.Unspecified);
                 }
             }
             return true;
@@ -828,10 +860,10 @@ namespace CS_Importador_de_cartas_de_porte
             return valorEnPdf;
         }
 
-        private static ResultadosProcesamiento VerificarSiExisteCartaCompararDatosYActualizar(Database.Database database, Database.Movimiento_Cereal movimiento_CerealEnPdf)
+        private static ResultadosProcesamiento VerificarSiExisteCartaCompararDatosYActualizar(SqlServer database, Database.MovimientoCereal movimiento_CerealEnPdf)
         {
-            Database.Movimiento_Cereal movimiento_CerealEnBD = new Database.Movimiento_Cereal();
-            if (!movimiento_CerealEnBD.ObtenerPorCtg(database, movimiento_CerealEnPdf.CTGNumero.Value))
+            Database.MovimientoCereal movimiento_CerealEnBD = new Database.MovimientoCereal();
+            if (!Database.MovimientoCerealMetodos.ObtenerPorCtgYTipo(database, movimiento_CerealEnPdf.CTGNumero.Value, movimiento_CerealEnPdf.Tipo, movimiento_CerealEnBD))
             {
                 return ResultadosProcesamiento.Error;
             }
@@ -873,7 +905,7 @@ namespace CS_Importador_de_cartas_de_porte
                 movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion = VerificarValores(movimiento_CerealEnBD.IDCartaPorte_MotivoAnulacion, movimiento_CerealEnPdf.IDCartaPorte_MotivoAnulacion, ref actualizar);
                 if (actualizar)
                 {
-                    if (movimiento_CerealEnBD.Actualizar(database))
+                    if (Database.MovimientoCerealMetodos.Actualizar(database, movimiento_CerealEnBD))
                     {
                         return ResultadosProcesamiento.Modificada;
                     }
@@ -890,7 +922,7 @@ namespace CS_Importador_de_cartas_de_porte
             else
             {
                 // La carta no existe, hay que crearla
-                if (movimiento_CerealEnPdf.Actualizar(database))
+                if (Database.MovimientoCerealMetodos.Actualizar(database, movimiento_CerealEnPdf))
                 {
                     return ResultadosProcesamiento.Agregada;
                 }

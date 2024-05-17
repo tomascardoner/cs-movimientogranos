@@ -35,6 +35,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\Import48.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>CS_Importador_de_cartas_de_porte.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -55,25 +58,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\framework-csharp\Error.cs">
+    <Compile Include="..\..\framework-csharp\Database.Ado.SqlServer.cs">
+      <Link>Framework\Database.Ado.SqlServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Database.Config.cs">
+      <Link>Framework\Database.Config.cs</Link>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Database.LoginInfo.cs">
+      <Link>Framework\Database.LoginInfo.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Database.LoginInfo.Designer.cs">
+      <Link>Framework\Database.LoginInfo.Designer.cs</Link>
+      <DependentUpon>Database.LoginInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Database.SelectDatasource.cs">
+      <Link>Framework\Database.SelectDatasource.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Database.SelectDatasource.Designer.cs">
+      <Link>Framework\Database.SelectDatasource.Designer.cs</Link>
+      <DependentUpon>Database.SelectDatasource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Encrypt.StringCipher.cs">
+      <Link>Framework\Encrypt.StringCipher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\framework-csharp\Error.cs">
       <Link>Framework\Error.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\framework-csharp\Graphics.cs">
+    <Compile Include="..\..\framework-csharp\Graphics.cs">
       <Link>Framework\Graphics.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\framework-csharp\My.cs">
+    <Compile Include="..\..\framework-csharp\My.cs">
       <Link>Framework\My.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\framework-csharp\Registry.cs">
+    <Compile Include="..\..\framework-csharp\Registry.cs">
       <Link>Framework\Registry.cs</Link>
     </Compile>
-    <Compile Include="C:\Data\Cardoner Sistemas\Development\framework-csharp\Database.Ado.SqlServer.Values.cs">
+    <Compile Include="..\..\framework-csharp\Database.Ado.SqlServer.Values.cs">
       <Link>Framework\Database.Ado.SqlServer.Values.cs</Link>
     </Compile>
-    <Compile Include="C:\Data\Cardoner Sistemas\Development\framework-csharp\String.cs">
+    <Compile Include="..\..\framework-csharp\String.cs">
       <Link>Framework\String.cs</Link>
     </Compile>
     <Compile Include="Cartas de porte\CartaDePorte.cs" />
+    <Compile Include="Database\CerealMetodos.cs" />
+    <Compile Include="Database\CosechaMetodos.cs" />
+    <Compile Include="Database\EntidadMetodos.cs" />
+    <Compile Include="Database\EntidadOrigenDestinoMetodos.cs" />
+    <Compile Include="Database\MovimientoCerealMetodos.cs" />
     <Compile Include="Parsers\CommonFunctions.cs" />
     <Compile Include="Parsers\ParserV1.cs" />
     <Compile Include="Cartas de porte\CartaDePorteProcesador.cs" />
@@ -86,22 +119,21 @@
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Parsers\ParserV3.cs" />
     <Compile Include="Parsers\ParserV2.cs" />
-    <Compile Include="Parsers\ParserV5 - Copy.cs" />
+    <Compile Include="Parsers\ParserV6.cs" />
     <Compile Include="Parsers\ParserV5.cs" />
     <Compile Include="Parsers\ParserV4.cs" />
     <Compile Include="Sistema\Constantes.cs" />
     <Compile Include="Database\Cereal.cs" />
     <Compile Include="Database\Cosecha.cs" />
-    <Compile Include="Database\Database.cs" />
     <Compile Include="Database\Entidad.cs" />
-    <Compile Include="Database\Entidad_OrigenDestino.cs" />
+    <Compile Include="Database\EntidadOrigenDestino.cs" />
     <Compile Include="Cartas de porte\FormImportarCartasDePorte.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cartas de porte\FormImportarCartasDePorte.Designer.cs">
       <DependentUpon>FormImportarCartasDePorte.cs</DependentUpon>
     </Compile>
-    <Compile Include="Database\Movimiento_Cereal.cs" />
+    <Compile Include="Database\MovimientoCereal.cs" />
     <Compile Include="Sistema\FormMainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +142,14 @@
     </Compile>
     <Compile Include="Sistema\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="..\..\framework-csharp\Database.LoginInfo.resx">
+      <Link>Framework\Database.LoginInfo.resx</Link>
+      <DependentUpon>Database.LoginInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\framework-csharp\Database.SelectDatasource.resx">
+      <Link>Framework\Database.SelectDatasource.resx</Link>
+      <DependentUpon>Database.SelectDatasource.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Cartas de porte\FormImportarCartasDePorte.resx">
       <DependentUpon>FormImportarCartasDePorte.cs</DependentUpon>
     </EmbeddedResource>
@@ -149,5 +189,6 @@
   <ItemGroup>
     <None Include="Resources\Import48.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

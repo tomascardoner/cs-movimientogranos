@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using static CS_Importador_de_cartas_de_porte.CartaDePorteProcesador;
 
 namespace CS_Importador_de_cartas_de_porte
 {
     public partial class FormImportarCartasDePorte : Form
     {
-        string carpetaOrigen;
-        Database.Database database = new Database.Database();
+        private CardonerSistemas.Database.Ado.SqlServer database = new CardonerSistemas.Database.Ado.SqlServer()
+        {
+            ConnectionString = Program.DatabaseConnectionString
+        };
 
         public FormImportarCartasDePorte()
         {
@@ -15,6 +19,11 @@ namespace CS_Importador_de_cartas_de_porte
 
             this.Icon = CardonerSistemas.Graphics.GetIconFromBitmap(Properties.Resources.ImageImport48);
             textboxCarpetaOrigen.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFolder", string.Empty, true);
+            database.Connect();
+
+            comboboxCosecha.ValueMember = "IDCosecha";
+            comboboxCosecha.DisplayMember = "Nombre";
+            comboboxCosecha.DataSource = Database.CosechaMetodos.ObtenerVarias(database);
         }
 
         private void CarpetaOrigenExaminar(object sender, EventArgs e)
@@ -28,15 +37,13 @@ namespace CS_Importador_de_cartas_de_porte
 
         private void BuscarCartasPorte(object sender, EventArgs e)
         {
-            carpetaOrigen = textboxCarpetaOrigen.Text.Trim();
-
-            if (carpetaOrigen == string.Empty)
+            if (string.IsNullOrWhiteSpace(textboxCarpetaOrigen.Text))
             {
                 MessageBox.Show("Debe especificar la ubicación de los archivos.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textboxCarpetaOrigen.Focus();
                 return;
             }
-            if (!Directory.Exists(carpetaOrigen))
+            if (!Directory.Exists(textboxCarpetaOrigen.Text.Trim()))
             {
                 MessageBox.Show("La ubicación de los archivos especificada, no existe.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textboxCarpetaOrigen.Focus();
@@ -52,7 +59,7 @@ namespace CS_Importador_de_cartas_de_porte
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                foreach (string archivoFull in Directory.GetFiles(carpetaOrigen, Constantes.ArchivosPatronBusqueda))
+                foreach (string archivoFull in Directory.GetFiles(textboxCarpetaOrigen.Text.Trim(), Constantes.ArchivosPatronBusqueda))
                 {
                     string archivo = Path.GetFileName(archivoFull);
                     checkedlistboxArchivos.Items.Add(archivo);
@@ -68,15 +75,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             // Abro la conexión a la base de datos
-            if (!database.Connect())
-            {
-                return;
-            }
-
-            // Completo el combobox de cosechas
-            comboboxCosecha.ValueMember = "IDCosecha";
-            comboboxCosecha.DisplayMember = "Nombre";
-            comboboxCosecha.DataSource = database.ObtenerCosechas();
+            database.Connect();
         }
 
         private void ArchivosSeleccionarTodos(object sender, EventArgs e)
@@ -132,7 +131,7 @@ namespace CS_Importador_de_cartas_de_porte
                     // Deseleccionar
                     checkedlistboxArchivos.SetItemChecked(i, false);
                 }
-                else if (accion == 1 | accion == 2)
+                else if (accion == 1 || accion == 2)
                 {
                     // Seleccionar todos o hacia abajo
                     checkedlistboxArchivos.SetItemChecked(i, true);
@@ -166,7 +165,7 @@ namespace CS_Importador_de_cartas_de_porte
             foreach (int index in checkedlistboxArchivos.CheckedIndices)
             {
                 string archivo = (string)checkedlistboxArchivos.Items[index];
-                CartaDePorteProcesador.ResultadosProcesamiento resultado = CartaDePorteProcesador.Procesar(carpetaOrigen, archivo, (byte)comboboxCosecha.SelectedValue, database);
+                List<ResultadosProcesamiento> resultadosProcesamiento = CartaDePorteProcesador.Procesar(textboxCarpetaOrigen.Text.Trim(), archivo, (byte)comboboxCosecha.SelectedValue, database);
                 if (progressbarMain.Value > 0)
                 {
                     progressbarMain.Value--;
@@ -175,25 +174,28 @@ namespace CS_Importador_de_cartas_de_porte
                 progressbarMain.Value ++;
                 Application.DoEvents();
 
-                switch (resultado)
+                foreach (ResultadosProcesamiento resultadoProcesamiento in resultadosProcesamiento)
                 {
-                    case CartaDePorteProcesador.ResultadosProcesamiento.Agregada:
-                        cartasDePorteAgregadas++;
-                        break;
-                    case CartaDePorteProcesador.ResultadosProcesamiento.Modificada:
-                        cartasDePorteActualizadas++;
-                        break;
-                    case CartaDePorteProcesador.ResultadosProcesamiento.SinCambios:
-                        cartasDePorteSinCambios++;
-                        break;
-                    case CartaDePorteProcesador.ResultadosProcesamiento.Error:
-                        EnableControls(true);
-                        ShowProgressControls(false);
-                        Cursor.Current = Cursors.Default;
-                        MostrarResumenDeProceso(cartasDePorteAgregadas, cartasDePorteActualizadas, cartasDePorteSinCambios);
-                        return;
-                    default:
-                        break;
+                    switch (resultadoProcesamiento)
+                    {
+                        case CartaDePorteProcesador.ResultadosProcesamiento.Agregada:
+                            cartasDePorteAgregadas++;
+                            break;
+                        case CartaDePorteProcesador.ResultadosProcesamiento.Modificada:
+                            cartasDePorteActualizadas++;
+                            break;
+                        case CartaDePorteProcesador.ResultadosProcesamiento.SinCambios:
+                            cartasDePorteSinCambios++;
+                            break;
+                        case CartaDePorteProcesador.ResultadosProcesamiento.Error:
+                            EnableControls(true);
+                            ShowProgressControls(false);
+                            Cursor.Current = Cursors.Default;
+                            MostrarResumenDeProceso(cartasDePorteAgregadas, cartasDePorteActualizadas, cartasDePorteSinCambios);
+                            return;
+                        default:
+                            break;
+                    }
                 }
                 checkedlistboxArchivos.SetItemChecked(index, false);
             }
@@ -205,7 +207,7 @@ namespace CS_Importador_de_cartas_de_porte
 
         private void MostrarResumenDeProceso(int agregadas, int actualizadas, int sinCambios)
         {
-            if (agregadas == 0 & actualizadas == 0 & sinCambios == 0)
+            if (agregadas == 0 && actualizadas == 0 && sinCambios == 0)
             {
                 MessageBox.Show("No se procesó ninguna carta de porte.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

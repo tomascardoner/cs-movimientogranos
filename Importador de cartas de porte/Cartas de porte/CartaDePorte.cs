@@ -4,12 +4,13 @@
     {
         // Control
         internal string ArchivoNombre { get; set; }
+        internal bool EsEntrada { get; set; }
+        internal bool EsSalida { get; set; }
 
         // Encabezado
         internal string Fecha { get; set; }
         internal string Numero { get; set; }
         internal string Ctg { get; set; }
-
 
         // Sección A - Intervinientes
         internal string TitularCartaDePorte { get; set; }
@@ -29,7 +30,6 @@
         internal string Chofer { get; set; }
         internal string IntermediarioDeFlete { get; set; }
 
-
         // Sección B - Grano / Especie
         internal string GranoEspecie { get; set; }
         internal string GranoEspecieTipo { get; set; }
@@ -40,14 +40,12 @@
         internal string PesoTara { get; set; }
         internal string PesoNeto { get; set; }
 
-
         // Sección C - Procedencia
         internal string ProcedenciaEsUnCampo { get; set; }
         internal string ProcedenciaNumeroPlanta { get; set; }
         internal string ProcedenciaDireccion { get; set; }
         internal string ProcedenciaLocalidad { get; set; }
         internal string ProcedenciaProvincia { get; set; }
-
 
         // Sección D - Destino de la mercadería
         internal string DestinoEsUnCampo { get; set; }
@@ -56,14 +54,12 @@
         internal string DestinoLocalidad { get; set; }
         internal string DestinoProvincia { get; set; }
 
-
         // Sección E - Datos del transporte
         internal string Dominios { get; set; }
         internal string Partida { get; set; }
         internal string KmsARecorrer { get; set; }
         internal string TarifaDeReferencia { get; set; }
         internal string Tarifa { get; set; }
-
 
         // Sección G - Descarga
         internal string FechaArribo { get; set; }
