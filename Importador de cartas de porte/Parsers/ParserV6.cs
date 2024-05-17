@@ -9,6 +9,7 @@ namespace CS_Importador_de_cartas_de_porte
         #region Declarations
 
         // Comunes
+        private static char[] separators = new char[] { '\n' };
         internal const string Finalizacion = "\n";
 
         // Encabezado
@@ -348,18 +349,18 @@ namespace CS_Importador_de_cartas_de_porte
             const string LocalidadFin = "Provincia: ";
             const string ProvinciaInicio = "Provincia: ";
 
-            string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionC, SeccionD).Split('\n');
-            if (filas[2].Contains(NumeroPlanta))
+            string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionC, SeccionD).Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            if (filas[1].Contains(NumeroPlanta))
             {
-                cartaDePorte.ProcedenciaNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], NumeroPlantaInicio, NumeroPlantaFin);
+                cartaDePorte.ProcedenciaNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[0], NumeroPlantaInicio, NumeroPlantaFin);
             }
             else
             {
                 cartaDePorte.ProcedenciaNumeroPlanta = string.Empty;
             }
-            cartaDePorte.ProcedenciaEsUnCampo = filas[2].Substring(0, 2);
-            cartaDePorte.ProcedenciaLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[3], LocalidadInicio, LocalidadFin);
-            cartaDePorte.ProcedenciaProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[3], ProvinciaInicio);
+            cartaDePorte.ProcedenciaEsUnCampo = filas[1].Substring(0, 2);
+            cartaDePorte.ProcedenciaLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[2], LocalidadInicio, LocalidadFin);
+            cartaDePorte.ProcedenciaProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[2], ProvinciaInicio);
             return true;
         }
 
@@ -373,11 +374,11 @@ namespace CS_Importador_de_cartas_de_porte
             const string LocalidadFin = "Provincia: ";
             const string ProvinciaInicio = "Provincia: ";
 
-            string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionD, SeccionE).Split('\n');
-            cartaDePorte.DestinoEsUnCampo = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[1], EsUnCampoInicio).Substring(0, 2);
-            cartaDePorte.DestinoNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], NumeroPlantaInicio, NumeroPlantaFin);
-            cartaDePorte.DestinoLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[2], LocalidadInicio, LocalidadFin);
-            cartaDePorte.DestinoProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[2], ProvinciaInicio);
+            string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionD, SeccionE).Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            cartaDePorte.DestinoEsUnCampo = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[0], EsUnCampoInicio).Substring(0, 2);
+            cartaDePorte.DestinoNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[0], NumeroPlantaInicio, NumeroPlantaFin);
+            cartaDePorte.DestinoLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], LocalidadInicio, LocalidadFin);
+            cartaDePorte.DestinoProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[1], ProvinciaInicio);
             return true;
         }
 
