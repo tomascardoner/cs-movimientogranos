@@ -1045,7 +1045,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   97976323
+         Format          =   97124355
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -1091,7 +1091,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   97976321
+         Format          =   97124353
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1105,7 +1105,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   97976321
+         Format          =   97124353
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -1120,7 +1120,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CustomFormat    =   "HH:mm"
-         Format          =   97976323
+         Format          =   97124355
          UpDown          =   -1  'True
          CurrentDate     =   40659
       End
@@ -2037,7 +2037,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentX        =   2566
          _ExtentY        =   556
          _Version        =   393216
-         Format          =   97976321
+         Format          =   97124353
          CurrentDate     =   40659
          MaxDate         =   55153
          MinDate         =   40513
@@ -2180,7 +2180,7 @@ Begin VB.Form frmMovimiento_Cereal_Detalle
          _ExtentY        =   556
          _Version        =   393216
          CheckBox        =   -1  'True
-         Format          =   97976321
+         Format          =   97124353
          CurrentDate     =   42934
          MaxDate         =   73415
          MinDate         =   40179
@@ -2405,6 +2405,7 @@ Public Function LoadData() As Boolean
         End If
         
         'PESADAS
+        Call LimpiarPesadas
         If .LoadPesadas Then
             For Index = 1 To IIf(.CMovimiento_Cereal_Pesada.Count > 6, 6, .CMovimiento_Cereal_Pesada.Count)
                 txtPesada(Index - 1).Text = .CMovimiento_Cereal_Pesada(Index).IDPesada
@@ -4287,4 +4288,16 @@ Private Sub Navegar(ByVal Position As String)
         Set recData = Nothing
     End If
     cmdCancelar.SetFocus
+End Sub
+
+Private Sub LimpiarPesadas()
+    Dim Index As Integer
+    
+    For Index = 0 To 5
+        txtPesada(Index).Text = ""
+        txtPesadaCompleta_Ticket(Index).Text = ""
+        txtPesadaCompleta_PesoNeto(Index).Text = ""
+        txtPesadaCompleta_Humedad(Index).Text = ""
+        txtPesadaCompleta_Zaranda(Index).Text = ""
+    Next Index
 End Sub
