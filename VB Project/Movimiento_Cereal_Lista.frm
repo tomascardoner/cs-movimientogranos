@@ -346,7 +346,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   100335617
+            Format          =   96993281
             CurrentDate     =   36950
          End
          Begin MSComCtl2.DTPicker dtpFechaCargaDescarga_Hasta 
@@ -368,7 +368,7 @@ Begin VB.Form frmMovimiento_Cereal_Lista
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Format          =   100335617
+            Format          =   96993281
             CurrentDate     =   36950
          End
          Begin VB.Label lblFechaCargaDescarga 
@@ -1920,7 +1920,10 @@ Private Sub Form_Load()
     Call SetTrueDBGridAppearance
     Call CSM_Parameter_TrueDBGrid.GetSettings(Mid(Me.Name, 4), tdbgrdData)
     
-    mOrderColumn = CSM_Registry.GetValue_FromApplication_LocalMachine("Interface\" & Mid(Me.Name, 4), "Grid_Order_Column", 4, csrdtNumberInteger)
+    mOrderColumn = CSM_Registry.GetValue_FromApplication_LocalMachine("Interface\" & Mid(Me.Name, 4), "Grid_Order_Column", 5, csrdtNumberInteger)
+    If mOrderColumn = 0 Then
+        mOrderColumn = 5
+    End If
     mOrderAscending = CSM_Registry.GetValue_FromApplication_LocalMachine("Interface\" & Mid(Me.Name, 4), "Grid_Order_Ascending", True, csrdtBoolean)
     Call SortColumn(1)
     
