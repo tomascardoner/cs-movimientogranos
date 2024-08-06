@@ -75,7 +75,7 @@ GO
 -- =============================================
 -- Author:		Tomás A. Cardoner
 -- Create date: 2014-01-23
--- Updated: 201-03-22 -
+-- Updated: 2024-08-05 - se corrigió un error ya que restaba lo liquidado del stock físico
 -- Description:	Muestra los saldos de Cereal
 -- =============================================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.usp_Cereal_Saldo') AND type in (N'P', N'PC'))
@@ -131,7 +131,7 @@ BEGIN
 			AND (@FechaHasta IS NULL OR Fecha <= @FechaHasta)
 
 	--STOCK ACTUAL
-	SET @StockActual = ISNULL(@EntradaNeto, 0) - ISNULL(@Salida, 0) - ISNULL(@Liquidado, 0)
+	SET @StockActual = ISNULL(@EntradaNeto, 0) - ISNULL(@Salida, 0)
 			
 	--CERTIFICADOS
 	SELECT @Certificado = SUM(PesoNeto)
