@@ -29,106 +29,142 @@ namespace CS_Importador_de_cartas_de_porte
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonLeerYVerificarCartasPorte = new System.Windows.Forms.Button();
-            this.buttonArchivoCsvExaminar = new System.Windows.Forms.Button();
-            this.textboxArchivoCsv = new System.Windows.Forms.TextBox();
-            this.labelArchivoCsv = new System.Windows.Forms.Label();
-            this.listboxCartasDePorte = new System.Windows.Forms.ListBox();
+            this.ButtonLeerYVerificarCartasPorte = new System.Windows.Forms.Button();
+            this.ButtonArchivoCsvExaminar = new System.Windows.Forms.Button();
+            this.TextBoxArchivoCsv = new System.Windows.Forms.TextBox();
+            this.ListBoxCartasDePorte = new System.Windows.Forms.ListBox();
             this.openfiledialogMain = new System.Windows.Forms.OpenFileDialog();
-            this.progressbarMain = new System.Windows.Forms.ProgressBar();
+            this.ProgressBarMain = new System.Windows.Forms.ProgressBar();
+            this.TableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
+            this.LabelArchivoCsv = new System.Windows.Forms.Label();
+            this.TableLayoutPanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonLeerYVerificarCartasPorte
+            // ButtonLeerYVerificarCartasPorte
             // 
-            this.buttonLeerYVerificarCartasPorte.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLeerYVerificarCartasPorte.Location = new System.Drawing.Point(12, 51);
-            this.buttonLeerYVerificarCartasPorte.Name = "buttonLeerYVerificarCartasPorte";
-            this.buttonLeerYVerificarCartasPorte.Size = new System.Drawing.Size(462, 28);
-            this.buttonLeerYVerificarCartasPorte.TabIndex = 2;
-            this.buttonLeerYVerificarCartasPorte.Text = "Leer y verificar cartas de porte";
-            this.buttonLeerYVerificarCartasPorte.UseVisualStyleBackColor = true;
-            this.buttonLeerYVerificarCartasPorte.Click += new System.EventHandler(this.LeerYVerificarCartasDePorte);
+            this.ButtonLeerYVerificarCartasPorte.AutoSize = true;
+            this.ButtonLeerYVerificarCartasPorte.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.TableLayoutPanelMain.SetColumnSpan(this.ButtonLeerYVerificarCartasPorte, 2);
+            this.ButtonLeerYVerificarCartasPorte.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ButtonLeerYVerificarCartasPorte.Location = new System.Drawing.Point(4, 67);
+            this.ButtonLeerYVerificarCartasPorte.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ButtonLeerYVerificarCartasPorte.Name = "ButtonLeerYVerificarCartasPorte";
+            this.ButtonLeerYVerificarCartasPorte.Size = new System.Drawing.Size(651, 26);
+            this.ButtonLeerYVerificarCartasPorte.TabIndex = 3;
+            this.ButtonLeerYVerificarCartasPorte.Text = "Leer y verificar cartas de porte";
+            this.ButtonLeerYVerificarCartasPorte.UseVisualStyleBackColor = true;
+            this.ButtonLeerYVerificarCartasPorte.Click += new System.EventHandler(this.ButtonLeerYVerificarCartasPorte_Click);
             // 
-            // buttonArchivoCsvExaminar
+            // ButtonArchivoCsvExaminar
             // 
-            this.buttonArchivoCsvExaminar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonArchivoCsvExaminar.Location = new System.Drawing.Point(447, 25);
-            this.buttonArchivoCsvExaminar.Name = "buttonArchivoCsvExaminar";
-            this.buttonArchivoCsvExaminar.Size = new System.Drawing.Size(26, 20);
-            this.buttonArchivoCsvExaminar.TabIndex = 2;
-            this.buttonArchivoCsvExaminar.TabStop = false;
-            this.buttonArchivoCsvExaminar.Text = "...";
-            this.buttonArchivoCsvExaminar.UseVisualStyleBackColor = true;
-            this.buttonArchivoCsvExaminar.Click += new System.EventHandler(this.ArchivoOrigenExaminar);
+            this.ButtonArchivoCsvExaminar.Location = new System.Drawing.Point(216, 4);
+            this.ButtonArchivoCsvExaminar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ButtonArchivoCsvExaminar.Name = "ButtonArchivoCsvExaminar";
+            this.ButtonArchivoCsvExaminar.Size = new System.Drawing.Size(35, 25);
+            this.ButtonArchivoCsvExaminar.TabIndex = 1;
+            this.ButtonArchivoCsvExaminar.TabStop = false;
+            this.ButtonArchivoCsvExaminar.Text = "...";
+            this.ButtonArchivoCsvExaminar.UseVisualStyleBackColor = true;
+            this.ButtonArchivoCsvExaminar.Click += new System.EventHandler(this.ButtonArchivoOrigenExaminar_Click);
             // 
-            // textboxArchivoCsv
+            // TextBoxArchivoCsv
             // 
-            this.textboxArchivoCsv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textboxArchivoCsv.Location = new System.Drawing.Point(12, 25);
-            this.textboxArchivoCsv.MaxLength = 512;
-            this.textboxArchivoCsv.Name = "textboxArchivoCsv";
-            this.textboxArchivoCsv.Size = new System.Drawing.Size(435, 20);
-            this.textboxArchivoCsv.TabIndex = 1;
+            this.TableLayoutPanelMain.SetColumnSpan(this.TextBoxArchivoCsv, 2);
+            this.TextBoxArchivoCsv.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextBoxArchivoCsv.Location = new System.Drawing.Point(4, 37);
+            this.TextBoxArchivoCsv.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TextBoxArchivoCsv.MaxLength = 512;
+            this.TextBoxArchivoCsv.Name = "TextBoxArchivoCsv";
+            this.TextBoxArchivoCsv.Size = new System.Drawing.Size(651, 22);
+            this.TextBoxArchivoCsv.TabIndex = 2;
             // 
-            // labelArchivoCsv
+            // ListBoxCartasDePorte
             // 
-            this.labelArchivoCsv.AutoSize = true;
-            this.labelArchivoCsv.Location = new System.Drawing.Point(12, 9);
-            this.labelArchivoCsv.Name = "labelArchivoCsv";
-            this.labelArchivoCsv.Size = new System.Drawing.Size(165, 13);
-            this.labelArchivoCsv.TabIndex = 0;
-            this.labelArchivoCsv.Text = "Archivo de cartas de porte (*.csv)";
+            this.TableLayoutPanelMain.SetColumnSpan(this.ListBoxCartasDePorte, 2);
+            this.ListBoxCartasDePorte.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListBoxCartasDePorte.FormattingEnabled = true;
+            this.ListBoxCartasDePorte.ItemHeight = 16;
+            this.ListBoxCartasDePorte.Location = new System.Drawing.Point(4, 101);
+            this.ListBoxCartasDePorte.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ListBoxCartasDePorte.Name = "ListBoxCartasDePorte";
+            this.ListBoxCartasDePorte.Size = new System.Drawing.Size(651, 510);
+            this.ListBoxCartasDePorte.TabIndex = 4;
             // 
-            // listboxCartasDePorte
+            // ProgressBarMain
             // 
-            this.listboxCartasDePorte.FormattingEnabled = true;
-            this.listboxCartasDePorte.Location = new System.Drawing.Point(12, 88);
-            this.listboxCartasDePorte.Name = "listboxCartasDePorte";
-            this.listboxCartasDePorte.Size = new System.Drawing.Size(461, 329);
-            this.listboxCartasDePorte.TabIndex = 3;
+            this.TableLayoutPanelMain.SetColumnSpan(this.ProgressBarMain, 2);
+            this.ProgressBarMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ProgressBarMain.Location = new System.Drawing.Point(4, 619);
+            this.ProgressBarMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ProgressBarMain.Name = "ProgressBarMain";
+            this.ProgressBarMain.Size = new System.Drawing.Size(651, 34);
+            this.ProgressBarMain.TabIndex = 5;
+            this.ProgressBarMain.Visible = false;
             // 
-            // progressbarMain
+            // TableLayoutPanelMain
             // 
-            this.progressbarMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressbarMain.Location = new System.Drawing.Point(12, 422);
-            this.progressbarMain.Name = "progressbarMain";
-            this.progressbarMain.Size = new System.Drawing.Size(461, 28);
-            this.progressbarMain.TabIndex = 13;
-            this.progressbarMain.Visible = false;
+            this.TableLayoutPanelMain.ColumnCount = 2;
+            this.TableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.TableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.TableLayoutPanelMain.Controls.Add(this.LabelArchivoCsv, 0, 0);
+            this.TableLayoutPanelMain.Controls.Add(this.ButtonArchivoCsvExaminar, 1, 0);
+            this.TableLayoutPanelMain.Controls.Add(this.TextBoxArchivoCsv, 0, 1);
+            this.TableLayoutPanelMain.Controls.Add(this.ButtonLeerYVerificarCartasPorte, 0, 2);
+            this.TableLayoutPanelMain.Controls.Add(this.ListBoxCartasDePorte, 0, 3);
+            this.TableLayoutPanelMain.Controls.Add(this.ProgressBarMain, 0, 4);
+            this.TableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TableLayoutPanelMain.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.TableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
+            this.TableLayoutPanelMain.Name = "TableLayoutPanelMain";
+            this.TableLayoutPanelMain.RowCount = 5;
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TableLayoutPanelMain.Size = new System.Drawing.Size(659, 657);
+            this.TableLayoutPanelMain.TabIndex = 0;
+            // 
+            // LabelArchivoCsv
+            // 
+            this.LabelArchivoCsv.AutoSize = true;
+            this.LabelArchivoCsv.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LabelArchivoCsv.Location = new System.Drawing.Point(4, 0);
+            this.LabelArchivoCsv.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LabelArchivoCsv.Name = "LabelArchivoCsv";
+            this.LabelArchivoCsv.Size = new System.Drawing.Size(204, 33);
+            this.LabelArchivoCsv.TabIndex = 0;
+            this.LabelArchivoCsv.Text = "Archivo de cartas de porte (*.csv)";
+            this.LabelArchivoCsv.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormVerificarCartasDePorte
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 462);
-            this.Controls.Add(this.progressbarMain);
-            this.Controls.Add(this.listboxCartasDePorte);
-            this.Controls.Add(this.buttonLeerYVerificarCartasPorte);
-            this.Controls.Add(this.buttonArchivoCsvExaminar);
-            this.Controls.Add(this.textboxArchivoCsv);
-            this.Controls.Add(this.labelArchivoCsv);
+            this.ClientSize = new System.Drawing.Size(659, 657);
+            this.Controls.Add(this.TableLayoutPanelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "FormVerificarCartasDePorte";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Verificar C.P.s importadas";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormVerificarCartasDePorte_FormClosing);
+            this.TableLayoutPanelMain.ResumeLayout(false);
+            this.TableLayoutPanelMain.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Button buttonLeerYVerificarCartasPorte;
-        private System.Windows.Forms.Button buttonArchivoCsvExaminar;
-        private System.Windows.Forms.TextBox textboxArchivoCsv;
-        private System.Windows.Forms.Label labelArchivoCsv;
-        private System.Windows.Forms.ListBox listboxCartasDePorte;
+        private System.Windows.Forms.Button ButtonLeerYVerificarCartasPorte;
+        private System.Windows.Forms.Button ButtonArchivoCsvExaminar;
+        private System.Windows.Forms.TextBox TextBoxArchivoCsv;
+        private System.Windows.Forms.ListBox ListBoxCartasDePorte;
         private System.Windows.Forms.OpenFileDialog openfiledialogMain;
-        private System.Windows.Forms.ProgressBar progressbarMain;
+        private System.Windows.Forms.ProgressBar ProgressBarMain;
+        private System.Windows.Forms.TableLayoutPanel TableLayoutPanelMain;
+        private System.Windows.Forms.Label LabelArchivoCsv;
     }
 }

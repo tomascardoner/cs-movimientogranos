@@ -29,64 +29,97 @@ namespace CS_Importador_de_cartas_de_porte
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonImportarCPs = new System.Windows.Forms.Button();
-            this.buttonVerificarCPs = new System.Windows.Forms.Button();
-            this.labelCopyright = new System.Windows.Forms.Label();
+            this.ButtonImportarCPs = new System.Windows.Forms.Button();
+            this.ButtonVerificarCPs = new System.Windows.Forms.Button();
+            this.TableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
+            this.LabelCopyright = new System.Windows.Forms.Label();
+            this.TableLayoutPanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonImportarCPs
+            // ButtonImportarCPs
             // 
-            this.buttonImportarCPs.Location = new System.Drawing.Point(12, 12);
-            this.buttonImportarCPs.Name = "buttonImportarCPs";
-            this.buttonImportarCPs.Size = new System.Drawing.Size(234, 68);
-            this.buttonImportarCPs.TabIndex = 0;
-            this.buttonImportarCPs.Text = "Importar cartas de porte";
-            this.buttonImportarCPs.UseVisualStyleBackColor = true;
-            this.buttonImportarCPs.Click += new System.EventHandler(this.ImportarCPs);
+            this.ButtonImportarCPs.AutoSize = true;
+            this.ButtonImportarCPs.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ButtonImportarCPs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ButtonImportarCPs.Location = new System.Drawing.Point(14, 14);
+            this.ButtonImportarCPs.Margin = new System.Windows.Forms.Padding(4);
+            this.ButtonImportarCPs.Name = "ButtonImportarCPs";
+            this.ButtonImportarCPs.Size = new System.Drawing.Size(297, 111);
+            this.ButtonImportarCPs.TabIndex = 0;
+            this.ButtonImportarCPs.Text = "Importar cartas de porte";
+            this.ButtonImportarCPs.UseVisualStyleBackColor = true;
+            this.ButtonImportarCPs.Click += new System.EventHandler(this.ButtonImportarCPs_Click);
             // 
-            // buttonVerificarCPs
+            // ButtonVerificarCPs
             // 
-            this.buttonVerificarCPs.Location = new System.Drawing.Point(12, 86);
-            this.buttonVerificarCPs.Name = "buttonVerificarCPs";
-            this.buttonVerificarCPs.Size = new System.Drawing.Size(234, 68);
-            this.buttonVerificarCPs.TabIndex = 1;
-            this.buttonVerificarCPs.Text = "Verificar cartas de porte";
-            this.buttonVerificarCPs.UseVisualStyleBackColor = true;
-            this.buttonVerificarCPs.Click += new System.EventHandler(this.VerificarCPs);
+            this.ButtonVerificarCPs.AutoSize = true;
+            this.ButtonVerificarCPs.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ButtonVerificarCPs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ButtonVerificarCPs.Location = new System.Drawing.Point(14, 133);
+            this.ButtonVerificarCPs.Margin = new System.Windows.Forms.Padding(4);
+            this.ButtonVerificarCPs.Name = "ButtonVerificarCPs";
+            this.ButtonVerificarCPs.Size = new System.Drawing.Size(297, 111);
+            this.ButtonVerificarCPs.TabIndex = 1;
+            this.ButtonVerificarCPs.Text = "Verificar cartas de porte";
+            this.ButtonVerificarCPs.UseVisualStyleBackColor = true;
+            this.ButtonVerificarCPs.Click += new System.EventHandler(this.ButtonVerificarCPs_Click);
             // 
-            // labelCopyright
+            // TableLayoutPanelMain
             // 
-            this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelCopyright.Location = new System.Drawing.Point(12, 166);
-            this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(234, 14);
-            this.labelCopyright.TabIndex = 2;
-            this.labelCopyright.Text = "Copyright";
-            this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.TableLayoutPanelMain.ColumnCount = 1;
+            this.TableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TableLayoutPanelMain.Controls.Add(this.ButtonImportarCPs, 0, 0);
+            this.TableLayoutPanelMain.Controls.Add(this.ButtonVerificarCPs, 0, 1);
+            this.TableLayoutPanelMain.Controls.Add(this.LabelCopyright, 0, 2);
+            this.TableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TableLayoutPanelMain.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.TableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
+            this.TableLayoutPanelMain.Name = "TableLayoutPanelMain";
+            this.TableLayoutPanelMain.Padding = new System.Windows.Forms.Padding(10);
+            this.TableLayoutPanelMain.RowCount = 3;
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TableLayoutPanelMain.Size = new System.Drawing.Size(325, 275);
+            this.TableLayoutPanelMain.TabIndex = 0;
+            // 
+            // LabelCopyright
+            // 
+            this.LabelCopyright.AutoSize = true;
+            this.LabelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LabelCopyright.Location = new System.Drawing.Point(14, 248);
+            this.LabelCopyright.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LabelCopyright.Name = "LabelCopyright";
+            this.LabelCopyright.Size = new System.Drawing.Size(297, 17);
+            this.LabelCopyright.TabIndex = 2;
+            this.LabelCopyright.Text = "Copyright";
+            this.LabelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormMainMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(258, 189);
-            this.Controls.Add(this.labelCopyright);
-            this.Controls.Add(this.buttonVerificarCPs);
-            this.Controls.Add(this.buttonImportarCPs);
+            this.ClientSize = new System.Drawing.Size(325, 275);
+            this.Controls.Add(this.TableLayoutPanelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = CardonerSistemas.My.Application.Info.Title;
+            this.Text = "CS-Importador de cartas de porte";
+            this.TableLayoutPanelMain.ResumeLayout(false);
+            this.TableLayoutPanelMain.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button buttonImportarCPs;
-        private System.Windows.Forms.Button buttonVerificarCPs;
-        private System.Windows.Forms.Label labelCopyright;
+        private System.Windows.Forms.Button ButtonImportarCPs;
+        private System.Windows.Forms.Button ButtonVerificarCPs;
+        private System.Windows.Forms.TableLayoutPanel TableLayoutPanelMain;
+        private System.Windows.Forms.Label LabelCopyright;
     }
 }

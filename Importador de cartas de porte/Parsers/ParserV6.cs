@@ -9,7 +9,7 @@ namespace CS_Importador_de_cartas_de_porte
         #region Declarations
 
         // Comunes
-        private static char[] separators = new char[] { '\n' };
+        private static readonly char[] separators = new char[] { '\n' };
         internal const string Finalizacion = "\n";
 
         // Encabezado

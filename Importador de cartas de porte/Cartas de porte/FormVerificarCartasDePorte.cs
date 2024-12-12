@@ -9,11 +9,35 @@ namespace CS_Importador_de_cartas_de_porte
 {
     public partial class FormVerificarCartasDePorte : Form
     {
+
+        #region Declaraciones
+
         string archivoOrigen;
         private CardonerSistemas.Database.Ado.SqlServer database = new CardonerSistemas.Database.Ado.SqlServer()
         {
             ConnectionString = Program.DatabaseConnectionString
         };
+
+        class CartaDePorteEnAfip
+        {
+            public long cpe;
+            public string estado;
+
+            public static CartaDePorteEnAfip FromCsv(string csvLine)
+            {
+                string[] values = csvLine.Split(';');
+                CartaDePorteEnAfip cartaDePorteCsv = new CartaDePorteEnAfip
+                {
+                    cpe = Convert.ToInt64(values[0]),
+                    estado = values[1]
+                };
+                return cartaDePorteCsv;
+            }
+        }
+
+        #endregion Declaraciones
+
+        #region Cosas del form
 
         public FormVerificarCartasDePorte()
         {
@@ -21,45 +45,55 @@ namespace CS_Importador_de_cartas_de_porte
 
             this.Icon = CardonerSistemas.Graphics.GetIconFromBitmap(Properties.Resources.ImageImport48);
             openfiledialogMain.Filter = "Archivo de valores separados por coma (*.csv)|*.csv|Todos los archivos (*.*)|(*.*)";
-            textboxArchivoCsv.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFile", string.Empty, true);
+            TextBoxArchivoCsv.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFile", string.Empty, true);
         }
 
-        private void ArchivoOrigenExaminar(object sender, EventArgs e)
+        private void FormVerificarCartasDePorte_FormClosing(object sender, FormClosingEventArgs e)
         {
-            openfiledialogMain.FileName = textboxArchivoCsv.Text;
+            database.Close();
+            database = null;
+        }
+
+        #endregion Cosas del form
+
+        #region Eventos de los controles
+
+        private void ButtonArchivoOrigenExaminar_Click(object sender, EventArgs e)
+        {
+            openfiledialogMain.FileName = TextBoxArchivoCsv.Text;
             if (openfiledialogMain.ShowDialog(this) == DialogResult.OK)
             {
-                textboxArchivoCsv.Text = openfiledialogMain.FileName;
+                TextBoxArchivoCsv.Text = openfiledialogMain.FileName;
             }
         }
 
-        private void LeerYVerificarCartasDePorte(object sender, EventArgs e)
+        private void ButtonLeerYVerificarCartasPorte_Click(object sender, EventArgs e)
         {
             const string CartaDePorteEstadoAnulada = "AN";
             const string CartaDePorteEstadoConfirmada = "CN";
 
-            archivoOrigen = textboxArchivoCsv.Text.Trim();
+            archivoOrigen = TextBoxArchivoCsv.Text.Trim();
             List<CartaDePorteEnAfip> cartasDePorteEnAfip;
 
             if (archivoOrigen == string.Empty)
             {
                 MessageBox.Show("Debe especificar el archivo de cartas de porte.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                textboxArchivoCsv.Focus();
+                TextBoxArchivoCsv.Focus();
                 return;
             }
             if (!File.Exists(archivoOrigen))
             {
                 MessageBox.Show("El archivo de cartas de porte especificado, no existe.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                textboxArchivoCsv.Focus();
+                TextBoxArchivoCsv.Focus();
                 return;
             }
 
             Cursor.Current = Cursors.WaitCursor;
 
-            listboxCartasDePorte.Items.Clear();
+            ListBoxCartasDePorte.Items.Clear();
 
             // Guardo el archivo en el registro de windows para abrirlo la siguiente vez
-            CardonerSistemas.Registry.SaveUserValueToApplicationFolder(string.Empty, "SourceFile", textboxArchivoCsv.Text.Trim(), true);
+            CardonerSistemas.Registry.SaveUserValueToApplicationFolder(string.Empty, "SourceFile", TextBoxArchivoCsv.Text.Trim(), true);
 
             try
             {
@@ -86,10 +120,10 @@ namespace CS_Importador_de_cartas_de_porte
             }
 
             // Busco cada una de las cartas de porte contra la base de datos
-            progressbarMain.Value = 0;
-            progressbarMain.Maximum = cartasDePorteEnAfip.Count;
+            ProgressBarMain.Value = 0;
+            ProgressBarMain.Maximum = cartasDePorteEnAfip.Count;
             EnableControls(false);
-            progressbarMain.Visible = true;
+            ProgressBarMain.Visible = true;
 
             foreach (CartaDePorteEnAfip cartaDePorteEnAfip  in cartasDePorteEnAfip)
             {
@@ -98,7 +132,7 @@ namespace CS_Importador_de_cartas_de_porte
                 {
                     // Se produjo un error al leer la base de datos
                     EnableControls(true);
-                    progressbarMain.Visible = false;
+                    ProgressBarMain.Visible = false;
                     Cursor.Current = Cursors.Default;
                     return;
                 }
@@ -109,7 +143,7 @@ namespace CS_Importador_de_cartas_de_porte
                     case CartaDePorteEstadoAnulada:
                         if (movimientoCereal.IsFound && movimientoCereal.IDCartaPorte_MotivoAnulacion == null)
                         {
-                            listboxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: está anulada en Afip pero no en CS-Movimiento de Granos.");
+                            ListBoxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: está anulada en Afip pero no en CS-Movimiento de Granos.");
                         }
                         break;
 
@@ -118,12 +152,12 @@ namespace CS_Importador_de_cartas_de_porte
                         {
                             if (movimientoCereal.IDCartaPorte_MotivoAnulacion != null)
                             {
-                                listboxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: está confirmada en Afip y anulada en CS-Movimiento de Granos.");
+                                ListBoxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: está confirmada en Afip y anulada en CS-Movimiento de Granos.");
                             }
                         }
                         else
                         {
-                            listboxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: no existe en CS-Movimiento de Granos.");
+                            ListBoxCartasDePorte.Items.Add($"{cartaDePorteEnAfip.cpe}: no existe en CS-Movimiento de Granos.");
                         }
                         break;
 
@@ -131,20 +165,20 @@ namespace CS_Importador_de_cartas_de_porte
                         break;
                 }
 
-                if (progressbarMain.Value > 0)
+                if (ProgressBarMain.Value > 0)
                 {
-                    progressbarMain.Value--;
-                    progressbarMain.Value++;
+                    ProgressBarMain.Value--;
+                    ProgressBarMain.Value++;
                 }
-                progressbarMain.Value++;
+                ProgressBarMain.Value++;
                 Application.DoEvents();
             }
 
             EnableControls(true);
-            progressbarMain.Visible = false;
+            ProgressBarMain.Visible = false;
             Cursor.Current = Cursors.Default;
 
-            if (listboxCartasDePorte.Items.Count == 0)
+            if (ListBoxCartasDePorte.Items.Count == 0)
             {
                 MessageBox.Show($"Se han verificado {cartasDePorteEnAfip.Count} cartas de porte y todas están correctas.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -154,35 +188,20 @@ namespace CS_Importador_de_cartas_de_porte
             }
         }
 
-        private void FormVerificarCartasDePorte_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            database.Close();
-            database = null;
-        }
+        #endregion Eventos de los controles
+
+        #region Cosas extra
 
         private void EnableControls(bool value)
         {
-            textboxArchivoCsv.Enabled = value;
-            buttonArchivoCsvExaminar.Enabled = value;
-            buttonLeerYVerificarCartasPorte.Enabled = value;
-            listboxCartasDePorte.Enabled = value;
+            TextBoxArchivoCsv.Enabled = value;
+            ButtonArchivoCsvExaminar.Enabled = value;
+            ButtonLeerYVerificarCartasPorte.Enabled = value;
+            ListBoxCartasDePorte.Enabled = value;
         }
+
+        #endregion Cosas extra
+
     }
 
-    class CartaDePorteEnAfip
-    {
-        public long cpe;
-        public string estado;
-
-        public static CartaDePorteEnAfip FromCsv(string csvLine)
-        {
-            string[] values = csvLine.Split(';');
-            CartaDePorteEnAfip cartaDePorteCsv = new CartaDePorteEnAfip
-            {
-                cpe = Convert.ToInt64(values[0]),
-                estado = values[1]
-            };
-            return cartaDePorteCsv;
-        }
-    }
 }

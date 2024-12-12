@@ -9,16 +9,16 @@ namespace CS_Importador_de_cartas_de_porte
             InitializeComponent();
         
             this.Icon = CardonerSistemas.Graphics.GetIconFromBitmap(Properties.Resources.ImageImport48);
-            labelCopyright.Text = CardonerSistemas.My.Application.Info.Copyright;
+            LabelCopyright.Text = CardonerSistemas.My.Application.Info.Copyright;
         }
 
-        private void ImportarCPs(object sender, System.EventArgs e)
+        private void ButtonImportarCPs_Click(object sender, System.EventArgs e)
         {
             FormImportarCartasDePorte formImportarCartasDePorte = new FormImportarCartasDePorte();
             formImportarCartasDePorte.ShowDialog(this);
         }
 
-        private void VerificarCPs(object sender, System.EventArgs e)
+        private void ButtonVerificarCPs_Click(object sender, System.EventArgs e)
         {
             FormVerificarCartasDePorte formVerificarCartasDePorte = new FormVerificarCartasDePorte();
             formVerificarCartasDePorte.ShowDialog(this);

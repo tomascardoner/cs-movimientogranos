@@ -8,61 +8,78 @@ namespace CS_Importador_de_cartas_de_porte
 {
     public partial class FormImportarCartasDePorte : Form
     {
+
+        #region Declaraciones
+
         private CardonerSistemas.Database.Ado.SqlServer database = new CardonerSistemas.Database.Ado.SqlServer()
         {
             ConnectionString = Program.DatabaseConnectionString
         };
+
+        #endregion Declaraciones
+
+        #region Cosas del form
 
         public FormImportarCartasDePorte()
         {
             InitializeComponent();
 
             this.Icon = CardonerSistemas.Graphics.GetIconFromBitmap(Properties.Resources.ImageImport48);
-            textboxCarpetaOrigen.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFolder", string.Empty, true);
+            TextBoxCarpetaOrigen.Text = (string)CardonerSistemas.Registry.LoadUserValueFromApplicationFolder(string.Empty, "SourceFolder", string.Empty, true);
             database.Connect();
 
-            comboboxCosecha.ValueMember = "IDCosecha";
-            comboboxCosecha.DisplayMember = "Nombre";
-            comboboxCosecha.DataSource = Database.CosechaMetodos.ObtenerVarias(database);
+            ComboBoxCosecha.ValueMember = "IDCosecha";
+            ComboBoxCosecha.DisplayMember = "Nombre";
+            ComboBoxCosecha.DataSource = Database.CosechaMetodos.ObtenerVarias(database);
         }
 
-        private void CarpetaOrigenExaminar(object sender, EventArgs e)
+        private void FormImportarCartasDePorte_FormClosing(object sender, FormClosingEventArgs e)
         {
-            folderbrowserdialogMain.SelectedPath = textboxCarpetaOrigen.Text;
-            if (folderbrowserdialogMain.ShowDialog(this) == DialogResult.OK)
+            database.Close();
+            database = null;
+        }
+
+        #endregion Cosas del form
+
+        #region Eventos de los controles
+
+        private void ButtonCarpetaOrigenExaminar_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialogMain.SelectedPath = TextBoxCarpetaOrigen.Text;
+            if (FolderBrowserDialogMain.ShowDialog(this) == DialogResult.OK)
             {
-                textboxCarpetaOrigen.Text = folderbrowserdialogMain.SelectedPath;
+                TextBoxCarpetaOrigen.Text = FolderBrowserDialogMain.SelectedPath;
             }
         }
 
-        private void BuscarCartasPorte(object sender, EventArgs e)
+        private void ButtonBuscarCartasPorte_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textboxCarpetaOrigen.Text))
+            if (string.IsNullOrWhiteSpace(TextBoxCarpetaOrigen.Text))
             {
                 MessageBox.Show("Debe especificar la ubicación de los archivos.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                textboxCarpetaOrigen.Focus();
+                TextBoxCarpetaOrigen.Focus();
                 return;
             }
-            if (!Directory.Exists(textboxCarpetaOrigen.Text.Trim()))
+            if (!Directory.Exists(TextBoxCarpetaOrigen.Text.Trim()))
             {
                 MessageBox.Show("La ubicación de los archivos especificada, no existe.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                textboxCarpetaOrigen.Focus();
+                TextBoxCarpetaOrigen.Focus();
                 return;
             }
 
-            checkedlistboxArchivos.Items.Clear();
+            CheckedListBoxArchivos.Items.Clear();
 
             // Guardo la carpeta en el registro de windows para abrirla la siguiente vez
-            CardonerSistemas.Registry.SaveUserValueToApplicationFolder(string.Empty, "SourceFolder", textboxCarpetaOrigen.Text.Trim(), true);
+            CardonerSistemas.Registry.SaveUserValueToApplicationFolder(string.Empty, "SourceFolder", TextBoxCarpetaOrigen.Text.Trim(), true);
 
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                foreach (string archivoFull in Directory.GetFiles(textboxCarpetaOrigen.Text.Trim(), Constantes.ArchivosPatronBusqueda))
+                foreach (string archivoFull in Directory.GetFiles(TextBoxCarpetaOrigen.Text.Trim(), Constantes.ArchivosPatronBusqueda))
                 {
                     string archivo = Path.GetFileName(archivoFull);
-                    checkedlistboxArchivos.Items.Add(archivo);
+                    CheckedListBoxArchivos.Items.Add(archivo);
                 }
 
                 Cursor.Current = Cursors.Default;
@@ -78,100 +95,64 @@ namespace CS_Importador_de_cartas_de_porte
             database.Connect();
         }
 
-        private void ArchivosSeleccionarTodos(object sender, EventArgs e)
+        private void ButtonArchivosSeleccionarTodos_Click(object sender, EventArgs e)
         {
             CambiarSeleccion(1);
         }
 
-        private void ArchivosSeleccionarHaciaAbajo(object sender, EventArgs e)
+        private void ButtonArchivosSeleccionarHaciaAbajo_Click(object sender, EventArgs e)
         {
             CambiarSeleccion(2);
         }
 
-        private void ArchivosInvertirSeleccion(object sender, EventArgs e)
+        private void ButtonArchivosInvertirSeleccion_Click(object sender, EventArgs e)
         {
             CambiarSeleccion(-1);
         }
 
-        private void ArchivosDeseleccionarTodos(object sender, EventArgs e)
+        private void ButtonArchivosDeseleccionarTodos_Click(object sender, EventArgs e)
         {
             CambiarSeleccion(0);
         }
 
-        private void CambiarSeleccion(short accion)
+        private void CheckBoxCosecha_CheckedChanged(object sender, EventArgs e)
         {
-            int startIndex;
-
-            if (accion == 2)
-            {
-                // Hay que marcar desde el ítem actual hacia abajo
-                if (checkedlistboxArchivos.SelectedIndex > -1)
-                {
-                    startIndex = checkedlistboxArchivos.SelectedIndex;
-                }
-                else
-                {
-                    startIndex = 0;
-                }
-            }
-            else
-            {
-                startIndex = 0;
-            }
-
-            for (int i = startIndex; i < checkedlistboxArchivos.Items.Count; i++)
-            {
-                if (accion == -1)
-                {
-                    // Invertir selección
-                    checkedlistboxArchivos.SetItemChecked(i, !checkedlistboxArchivos.GetItemChecked(i));
-                }
-                else if (accion == 0)
-                {
-                    // Deseleccionar
-                    checkedlistboxArchivos.SetItemChecked(i, false);
-                }
-                else if (accion == 1 || accion == 2)
-                {
-                    // Seleccionar todos o hacia abajo
-                    checkedlistboxArchivos.SetItemChecked(i, true);
-                }
-            }
+            ComboBoxCosecha.Visible = CheckBoxCosecha.Checked;
         }
 
-        private void Importar(object sender, EventArgs e)
+        private void ButtonImportar_Click(object sender, EventArgs e)
         {
             int cartasDePorteAgregadas = 0;
             int cartasDePorteActualizadas = 0;
             int cartasDePorteSinCambios = 0;
 
-            if (checkedlistboxArchivos.CheckedItems.Count == 0)
+            if (CheckedListBoxArchivos.CheckedItems.Count == 0)
             {
                 MessageBox.Show("No hay ninguna carta de porte seleccionada.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            if (comboboxCosecha.SelectedIndex == -1)
+            if (ComboBoxCosecha.SelectedIndex == -1)
             {
                 MessageBox.Show("No hay ninguna cosecha seleccionada.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            progressbarMain.Value = 0;
-            progressbarMain.Maximum = checkedlistboxArchivos.CheckedItems.Count;
+            ProgressBarMain.Value = 0;
+            ProgressBarMain.Maximum = CheckedListBoxArchivos.CheckedItems.Count;
             EnableControls(false);
             ShowProgressControls(true);
 
-            foreach (int index in checkedlistboxArchivos.CheckedIndices)
+            foreach (int index in CheckedListBoxArchivos.CheckedIndices)
             {
-                string archivo = (string)checkedlistboxArchivos.Items[index];
-                List<ResultadosProcesamiento> resultadosProcesamiento = CartaDePorteProcesador.Procesar(textboxCarpetaOrigen.Text.Trim(), archivo, (byte)comboboxCosecha.SelectedValue, database);
-                if (progressbarMain.Value > 0)
+                string archivo = (string)CheckedListBoxArchivos.Items[index];
+                List<ResultadosProcesamiento> resultadosProcesamiento = CartaDePorteProcesador.Procesar(TextBoxCarpetaOrigen.Text.Trim(), archivo, (byte)ComboBoxCosecha.SelectedValue, database);
+                if (ProgressBarMain.Value > 0)
                 {
-                    progressbarMain.Value--;
-                    progressbarMain.Value++;
+                    ProgressBarMain.Value--;
+                    ProgressBarMain.Value++;
                 }
-                progressbarMain.Value ++;
+                ProgressBarMain.Value ++;
                 Application.DoEvents();
 
                 foreach (ResultadosProcesamiento resultadoProcesamiento in resultadosProcesamiento)
@@ -197,7 +178,7 @@ namespace CS_Importador_de_cartas_de_porte
                             break;
                     }
                 }
-                checkedlistboxArchivos.SetItemChecked(index, false);
+                CheckedListBoxArchivos.SetItemChecked(index, false);
             }
             EnableControls(true);
             ShowProgressControls(false);
@@ -205,7 +186,77 @@ namespace CS_Importador_de_cartas_de_porte
             MostrarResumenDeProceso(cartasDePorteAgregadas, cartasDePorteActualizadas, cartasDePorteSinCambios);
         }
 
-        private void MostrarResumenDeProceso(int agregadas, int actualizadas, int sinCambios)
+        #endregion Eventos de los controles
+
+        #region Cosas extra
+
+        private void CambiarSeleccion(short accion)
+        {
+            int startIndex;
+
+            if (accion == 2)
+            {
+                // Hay que marcar desde el ítem actual hacia abajo
+                if (CheckedListBoxArchivos.SelectedIndex > -1)
+                {
+                    startIndex = CheckedListBoxArchivos.SelectedIndex;
+                }
+                else
+                {
+                    startIndex = 0;
+                }
+            }
+            else
+            {
+                startIndex = 0;
+            }
+
+            for (int i = startIndex; i < CheckedListBoxArchivos.Items.Count; i++)
+            {
+                if (accion == -1)
+                {
+                    // Invertir selección
+                    CheckedListBoxArchivos.SetItemChecked(i, !CheckedListBoxArchivos.GetItemChecked(i));
+                }
+                else if (accion == 0)
+                {
+                    // Deseleccionar
+                    CheckedListBoxArchivos.SetItemChecked(i, false);
+                }
+                else if (accion == 1 || accion == 2)
+                {
+                    // Seleccionar todos o hacia abajo
+                    CheckedListBoxArchivos.SetItemChecked(i, true);
+                }
+            }
+        }
+
+        private void EnableControls(bool value)
+        {
+            TextBoxCarpetaOrigen.Enabled = value;
+            ButtonCarpetaOrigenExaminar.Enabled = value;
+            ButtonBuscarCartasPorte.Enabled = value;
+            CheckedListBoxArchivos.Enabled = value;
+            ButtonArchivosSeleccionarTodos.Enabled = value;
+            ButtonArchivosSeleccionarHaciaAbajo.Enabled = value;
+            ButtonArchivosInvertirSeleccion.Enabled = value;
+            ButtonArchivosDeseleccionarTodos.Enabled = value;
+            ComboBoxCosecha.Enabled = value;
+            ButtonImportar.Enabled = value;
+
+            ButtonImportar.Focus();
+        }
+
+        private void ShowProgressControls(bool value)
+        {
+            ButtonArchivosSeleccionarTodos.Visible = !value;
+            ButtonArchivosSeleccionarHaciaAbajo.Visible = !value;
+            ButtonArchivosInvertirSeleccion.Visible = !value;
+            ButtonArchivosDeseleccionarTodos.Visible = !value;
+            ProgressBarMain.Visible = value;
+        }
+
+        private static void MostrarResumenDeProceso(int agregadas, int actualizadas, int sinCambios)
         {
             if (agregadas == 0 && actualizadas == 0 && sinCambios == 0)
             {
@@ -229,35 +280,7 @@ namespace CS_Importador_de_cartas_de_porte
             }
         }
 
-        private void FormImportarCartasDePorte_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            database.Close();
-            database = null;
-        }
+        #endregion Cosas extra
 
-        private void EnableControls(bool value)
-        {
-            textboxCarpetaOrigen.Enabled = value;
-            buttonCarpetaOrigenExaminar.Enabled = value;
-            buttonBuscarCartasPorte.Enabled = value;
-            checkedlistboxArchivos.Enabled = value;
-            buttonArchivosSeleccionarTodos.Enabled = value;
-            buttonArchivosSeleccionarHaciaAbajo.Enabled = value;
-            buttonArchivosInvertirSeleccion.Enabled = value;
-            buttonArchivosDeseleccionarTodos.Enabled = value;
-            comboboxCosecha.Enabled = value;
-            buttonImportar.Enabled = value;
-
-            buttonImportar.Focus();
-        }
-
-        private void ShowProgressControls(bool value)
-        {
-            buttonArchivosSeleccionarTodos.Visible = !value;
-            buttonArchivosSeleccionarHaciaAbajo.Visible = !value;
-            buttonArchivosInvertirSeleccion.Visible = !value;
-            buttonArchivosDeseleccionarTodos.Visible = !value;
-            progressbarMain.Visible = value;
-        }
     }
 }

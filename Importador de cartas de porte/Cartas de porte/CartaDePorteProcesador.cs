@@ -238,6 +238,7 @@ namespace CS_Importador_de_cartas_de_porte
 
                 // Reemplazo los valores posibles de Sociedad de Responsabilidad Limitada
                 valor = valor.ReplaceEnd(" S R L", " S.R.L.");
+                valor = valor.ReplaceEnd(" SRL", " S.R.L.");
                 valor = valor.ReplaceEnd(" SOCIEDAD DE RESPONSABILIDAD LIMITADA", " S.R.L.");
                 valor = valor.ReplaceEnd(" CIA S.R.L.", " CIA. S.R.L.");
 
