@@ -2,6 +2,6 @@
 {
     internal interface IParser
     {
-        bool ProcesarTexto(string texto, CartaDePorte cartaDePorte, int index);
+        CommonFunctions.ProcesarTextoResultados ProcesarTexto(string texto, CartaDePorte cartaDePorte, int index);
     }
 }

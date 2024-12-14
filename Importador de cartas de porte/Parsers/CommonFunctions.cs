@@ -6,6 +6,13 @@
         internal const string CuitYNombreSeparador = " - ";
         internal const string DominiosSeparador = " - ";
 
+        internal enum ProcesarTextoResultados
+        {
+            Ok,
+            FormatError,
+            EntradaSinDescarga
+        }
+
         internal static string ObtenerTextoDesdeDelimitador(string texto, string delimitador)
         {
             int inicioDelimitador = texto.IndexOf(delimitador);

@@ -151,10 +151,17 @@ namespace CS_Importador_de_cartas_de_porte
             if (texto.StartsWith(Constantes.CartaPorteVersion1TextoInicio))
             {
                 parser = new ParserV1();
-                if (!parser.ProcesarTexto(texto, cartaDePorte, Constantes.CartaPorteVersion1TextoInicio.Length))
+                switch (parser.ProcesarTexto(texto, cartaDePorte, Constantes.CartaPorteVersion1TextoInicio.Length))
                 {
-                    MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
+                    case CommonFunctions.ProcesarTextoResultados.Ok:
+                        return true;
+                    case CommonFunctions.ProcesarTextoResultados.FormatError:
+                        MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return false;
+                    case CommonFunctions.ProcesarTextoResultados.EntradaSinDescarga:
+                        return false;
+                    default:
+                        return false;
                 }
             }
             else if (texto.StartsWith(Constantes.CartaPorteVersion2_3_4_5_6TextoInicio))
@@ -190,10 +197,17 @@ namespace CS_Importador_de_cartas_de_porte
                 {
                     parser = new ParserV2();
                 }
-                if (!parser.ProcesarTexto(texto, cartaDePorte, 1))
+                switch (parser.ProcesarTexto(texto, cartaDePorte, 1))
                 {
-                    MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
+                    case CommonFunctions.ProcesarTextoResultados.Ok:
+                        return true;
+                    case CommonFunctions.ProcesarTextoResultados.FormatError:
+                        MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return false;
+                    case CommonFunctions.ProcesarTextoResultados.EntradaSinDescarga:
+                        return false;
+                    default:
+                        return false;
                 }
             }
             else
@@ -201,8 +215,6 @@ namespace CS_Importador_de_cartas_de_porte
                 MessageBox.Show("El texto de la carta de porte no tiene el formato esperado.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-
-            return true;
         }
 
         #endregion

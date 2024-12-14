@@ -83,41 +83,41 @@ namespace CS_Importador_de_cartas_de_porte
 
         #endregion
 
-        public bool ProcesarTexto(string texto, CartaDePorte cartaDePorte, int index)
+        public CommonFunctions.ProcesarTextoResultados ProcesarTexto(string texto, CartaDePorte cartaDePorte, int index)
         {
             if (!ProcesarTextoEncabezado(texto, cartaDePorte, ref index))
             {
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.FormatError;
             }
             if (!ProcesarTextoSeccionA(texto, cartaDePorte, ref index))
             {
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.FormatError;
             }
             if (!ProcesarTextoSeccionB(texto, cartaDePorte, ref index))
             {
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.FormatError;
             }
             if (!ProcesarTextoSeccionC(texto, cartaDePorte, ref index))
             {
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.FormatError;
             }
             if (!ProcesarTextoSeccionD(texto, cartaDePorte, ref index))
             {
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.FormatError;
             }
             if (!ProcesarTextoSeccionE(texto, cartaDePorte, ref index))
             {
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.FormatError;
             }
 
             // Si es una carta de salida, no proceso la sección de descarga
             if (cartaDePorte.TitularCartaDePorte.Substring(0, 11) != Properties.Settings.Default.CuitEntidadDestinatarioLocal && !ProcesarTextoSeccionG(texto, cartaDePorte, ref index))
             {
                 MessageBox.Show($"CPE nº {cartaDePorte.Numero}: Es una carta de porte de entrada pero no tiene los datos de descarga.", CardonerSistemas.My.Application.Info.Title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
+                return CommonFunctions.ProcesarTextoResultados.EntradaSinDescarga;
             }
 
-            return true;
+            return CommonFunctions.ProcesarTextoResultados.Ok;
         }
 
         // Encabezado
