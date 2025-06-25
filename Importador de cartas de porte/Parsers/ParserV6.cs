@@ -433,15 +433,20 @@ namespace CS_Importador_de_cartas_de_porte
             cartaDePorte.Partida = valorEncontrado;
 
             // Tarifa de referencia
+            // A partir del 22 o 23 de junio de 2025, se quitó el campo "Tarifa de Referencia" y se dejó solo "Tarifa"
+            // por lo que se debe modificar el prefijo de la tarifa si la de referencia no existe
+            int indexSaved = index;
+            string usarTarifaPrefijo = TarifaPrefijo;
             valorEncontrado = CommonFunctions.ObtenerValor(texto, TarifaDeReferenciaPrefijo, ref index, TarifaDeReferenciaSufijo);
             if (index == -1)
             {
-                return false;
+                index = indexSaved; // Restaurar el índice si no se encontró la tarifa de referencia
+                usarTarifaPrefijo = TarifaPrefijo + "\n";
             }
             cartaDePorte.TarifaDeReferencia = valorEncontrado;
 
             // Tarifa
-            valorEncontrado = CommonFunctions.ObtenerValor(texto, TarifaPrefijo, ref index, Finalizacion);
+            valorEncontrado = CommonFunctions.ObtenerValor(texto, usarTarifaPrefijo, ref index, Finalizacion);
             if (index == -1)
             {
                 return false;
