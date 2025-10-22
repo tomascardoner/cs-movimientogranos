@@ -375,10 +375,20 @@ namespace CS_Importador_de_cartas_de_porte
             const string ProvinciaInicio = "Provincia: ";
 
             string[] filas = CommonFunctions.ObtenerTextoEntreDelimitadores(texto, SeccionD, SeccionE).Split(separators, StringSplitOptions.RemoveEmptyEntries);
-            cartaDePorte.DestinoEsUnCampo = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[0], EsUnCampoInicio).Substring(0, 2);
-            cartaDePorte.DestinoNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[0], NumeroPlantaInicio, NumeroPlantaFin);
-            cartaDePorte.DestinoLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], LocalidadInicio, LocalidadFin);
-            cartaDePorte.DestinoProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[1], ProvinciaInicio);
+            if (filas[0].IndexOf(EsUnCampoInicio) == -1)
+            {
+                cartaDePorte.DestinoEsUnCampo = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[1], EsUnCampoInicio).Substring(0, 2);
+                cartaDePorte.DestinoNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], NumeroPlantaInicio, NumeroPlantaFin);
+                cartaDePorte.DestinoLocalidad = CommonFunctions.ObtenerTextoDesdeDelimitador(filas[2], LocalidadInicio);
+                cartaDePorte.DestinoProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[3], ProvinciaInicio);
+            }
+            else
+            {
+                cartaDePorte.DestinoEsUnCampo = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[0], EsUnCampoInicio).Substring(0, 2);
+                cartaDePorte.DestinoNumeroPlanta = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[0], NumeroPlantaInicio, NumeroPlantaFin);
+                cartaDePorte.DestinoLocalidad = CommonFunctions.ObtenerTextoLimpioEntreDelimitadores(filas[1], LocalidadInicio, LocalidadFin);
+                cartaDePorte.DestinoProvincia = CommonFunctions.ObtenerTextoLimpioDesdeDelimitador(filas[1], ProvinciaInicio);
+            }
             return true;
         }
 
