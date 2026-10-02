@@ -174,7 +174,14 @@ namespace CS_Importador_de_cartas_de_porte
                     }
                     else if(texto.Contains(Constantes.CartaPorteVersion4Texto))
                     {
-                        parser = new ParserV4();
+                        if (texto.Contains(Constantes.CartaPorteVersion7Texto))
+                        {
+                            parser = new ParserV7();
+                        }
+                        else
+                        {
+                            parser = new ParserV4();
+                        }
                     }
                     else if (texto.Contains(Constantes.CartaPorteVersion5_6Texto))
                     {

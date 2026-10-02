@@ -16,6 +16,7 @@
         internal const string CartaPorteVersion4Texto = "Grano / especie:";
         internal const string CartaPorteVersion5_6Texto = "Campaña:";
         internal const string CartaPorteVersion5Texto = "Es un campo: Dirección:";
+        internal const string CartaPorteVersion7Texto = "Grano / especie: Tipo:";
 
     }
 }
